@@ -1,20 +1,29 @@
 package client;
 
+import common.Lobby;
 import common.UserData;
+import common.response.*;
+import client.model.ClientModelRoot;
+import client.model.observable.IStateChange;
+import client.proxy.ServerProxy;
 
 public class ModelFacade {
   //Singleton structure
 	public static ModelFacade SINGLETON = new ModelFacade();
-	private ModelFacade() { }
+	private ModelFacade() {
+		modelRoot = new ClientModelRoot();
+	}
 	
   //variables
-  ClientModelRoot modelRoot = new ClientModelRoot();
+  ClientModelRoot modelRoot;
 
   //methods
   public boolean register(UserData userData) {
     LoginResponse result = ServerProxy.SINGLETON.register(userData);
 
     if (result.getException() == null) {
+      modelRoot.setUserData(userData);
+      modelRoot.addAuthenticationToken(result.getAuthToken());
       return true;
     }
     else {
@@ -22,46 +31,61 @@ public class ModelFacade {
     }
   }
 
-	public boolean login(UserData userData) {
-		LoginResponse result = ServerProxy.SINGLETON.login(userData);
+  public boolean login(UserData userData) {
+	LoginResponse result = ServerProxy.SINGLETON.login(userData);
     
-    if (result.getException() == null) {
+	if (result.getException() == null) {
+	  modelRoot.setUserData(userData);
+	  modelRoot.addAuthenticationToken(result.getAuthToken());
       return true;
     }
     else {
       return false;
     }
-	}
-
-  public void saveLoginData() {
-    return;
   }
   
-  public void updateObservable(state change) {
-    return;
+  public void updateObservable(IStateChange change) {
+    modelRoot.updateObservable(change);
   }
 
-  public boolean joinLobby(Lobby id) {
-    return false;
+  public boolean joinLobby(String id) {
+	  JoinLobbyResponse result = ServerProxy.SINGLETON.joinLobby(id);
+	    
+		if (result.getException() == null) {
+	      return true;
+	    }
+	    else {
+	      return false;
+	    }
   }
 
-  public boolean createLobby(Lobby Data) {
-    return false;
-  }
-
-  public void saveLobbyData(Lobby Data) {
-    return;
+  public boolean createLobby(Lobby lobby) {
+	  JoinLobbyResponse result = ServerProxy.SINGLETON.createLobby(lobby);
+	    
+		if (result.getException() == null) {
+	      return true;
+	    }
+	    else {
+	      return false;
+	    }
   }
 
   public boolean logout() {
-    return false;
+	  LogoutResponse result = ServerProxy.SINGLETON.logout();
+	    
+		if (result.getException() == null) {
+	      return true;
+	    }
+	    else {
+	      return false;
+	    }
   }
 
   public boolean startGame(Lobby id) {
     return false;
   }
 
-  public boolean leaveLobby(User id) {
+  public boolean leaveLobby(UserData user) {
     return false;
   }
 
@@ -69,7 +93,7 @@ public class ModelFacade {
     return false;
   }
 
-  public boolean takeTurn(Player id) {
+  public boolean takeTurn(String playerId) {
     return false;
   }
 }

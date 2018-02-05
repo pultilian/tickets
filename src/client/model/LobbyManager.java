@@ -3,16 +3,15 @@ package client.model;
 import java.util.Map;
 
 import common.Lobby;
-import common.LobbyId;
 
 public class LobbyManager {
-	private Map<LobbyId, Lobby> lobbyList;
+	private Map<String, Lobby> lobbyList;
 	
-	public void updateLobbyList(Map<LobbyId, Lobby> lobbyList) {
+	public void updateLobbyList(Map<String, Lobby> lobbyList) {
 		this.lobbyList = lobbyList;
 	}
 	
-	public Lobby getLobby(LobbyId id) {
+	public Lobby getLobby(String id) {
 		return lobbyList.get(id);
 	}
 }
