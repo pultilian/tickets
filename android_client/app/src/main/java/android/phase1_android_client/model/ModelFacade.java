@@ -3,8 +3,7 @@ package android.phase1_android_client.model;
 import android.phase1_android_client.model.observable.I_StateChange;
 import android.phase1_android_client.proxy.ServerProxy;
 
-import common.LobbyId;
-import common.UserData;
+import common.*;
 import common.response.*;
 
 public class ModelFacade {
@@ -18,7 +17,7 @@ public class ModelFacade {
     ClientModelRoot modelRoot = new ClientModelRoot();
 
     //methods
-    public boolean register(UserData userData) {
+    public boolean register(UserData userData) throws Exception {
         LoginResponse result = ServerProxy.SINGLETON.register(userData.getUsername(), userData.getPassword());
 
         if (result.getException() == null) {
@@ -66,15 +65,15 @@ public class ModelFacade {
         return false;
     }
 
-    public boolean leaveLobby(UserId id) {
-        return false;
-    }
+//    public boolean leaveLobby(UserId id) {
+//        return false;
+//    }
 
     public boolean addGuest(LobbyId id) {
         return false;
     }
 
-    public boolean takeTurn(PlayerId id) {
-        return false;
-    }
+//    public boolean takeTurn(PlayerId id) {
+//        return false;
+//    }
 }
