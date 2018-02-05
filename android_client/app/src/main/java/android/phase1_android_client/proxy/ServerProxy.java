@@ -1,24 +1,43 @@
-package client.proxy;
+package android.phase1_android_client.proxy;
 
 
-
+import common.IServer;
+import common.response.*;
 
 public class ServerProxy implements IServer {
-  public LoginResponse login(String username, String password) {
-    
-  }
+    public static ServerProxy SINGLETON = new ServerProxy();
+    private ServerProxy() {}
 
-  public LoginResponse register(String username, String password);
 
-  public JoinLobbyResponse joinLobby(String lobbyID);
+    public LoginResponse login(String username, String password) {
+        return null;
+    }
 
-  public LogoutResponse logout();
+    public LoginResponse register(String username, String password) {
+        return null;
+    }
 
-  public StartGameResponse startGame(String lobbyID);
+    public JoinLobbyResponse joinLobby(String lobbyID) {
+        return null;
+    }
 
-  public LeaveLobbyResponse leaveLobby(String lobbyID);
+    public LogoutResponse logout() {
+        return null;
+    }
 
-  public AddGuestResponse addGuest(String lobbyID);
+    public StartGameResponse startGame(String lobbyID) {
+        return null;
+    }
 
-  public PlayerTurnResponse takeTurn(String playerID);
+    public LeaveLobbyResponse leaveLobby(String lobbyID) {
+        return null;
+    }
+
+    public AddGuestResponse addGuest(String lobbyID) {
+        return null;
+    }
+
+    public PlayerTurnResponse takeTurn(String playerID) {
+        return null;
+    }
 }
