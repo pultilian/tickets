@@ -1,6 +1,9 @@
 /**
  * Created by Pultilian on 1/22/2018.
  */
+package common;
+
+
 public class Command implements ICommand {
 
     public String getCommand() {

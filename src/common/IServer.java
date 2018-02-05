@@ -4,11 +4,13 @@ import common.response.*;
 
 public interface IServer {
 
-    public LoginResponse login(String username, String password);
+    public LoginResponse login(UserData userData);
 
-    public LoginResponse register(String username, String password);
+    public LoginResponse register(UserData userData);
 
     public JoinLobbyResponse joinLobby(String lobbyID);
+    
+    public JoinLobbyResponse createLobby(Lobby lobby);
 
     public LogoutResponse logout();
 

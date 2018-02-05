@@ -1,10 +1,11 @@
 package client.gui.presenters;
 
-import client.model.observable.I_Observer;
-import client.model.ModelFacade;
+import client.model.observable.IObserver;
+import common.UserData;
+import client.ModelFacade;
 
 
-public class LoginPresenter implements I_Observer {
+public class LoginPresenter implements IObserver {
 
   public void register() {
     UserData registerData;
@@ -21,13 +22,13 @@ public class LoginPresenter implements I_Observer {
 
   //function from I_Observer
   @Override
-  public void updateObservable(I_StateChange state) {
+  public void updateObservable(IStateChange state) {
     return;
   }
 
   //function from I_Observer
   @Override
-  public void notify(I_StateChange state) {
+  public void notify(IStateChange state) {
     return;
   }
 
