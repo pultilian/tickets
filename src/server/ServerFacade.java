@@ -1,8 +1,10 @@
 package server;
 
 import common.IServer;
+import common.Lobby;
+import common.UserData;
 import common.response.*;
-import server.model.UserData;
+import server.model.AllUsers;
 
 public class ServerFacade implements IServer {
 
@@ -11,28 +13,33 @@ public class ServerFacade implements IServer {
     private ServerFacade(){}
 
     @Override
-    public LoginResponse login(String username, String password) {
-        if (UserData.SINGLETON.verifyLogin(username, password)){
-            String authToken = UserData.SINGLETON.createAuthToken(username);
-            return new LoginResponse("Welcome, " + username, authToken);
+    public LoginResponse login(UserData userData) {
+        if (AllUsers.SINGLETON.verifyLogin(userData.getUsername(), userData.getPassword())){
+            String authToken = AllUsers.SINGLETON.createAuthToken(userData.getUsername());
+            return new LoginResponse("Welcome, " + userData.getUsername(), authToken);
         }
         else return new LoginResponse(new Exception("Username or password is incorrect."));
     }
 
     @Override
-    public LoginResponse register(String username, String password) {
-        if (UserData.SINGLETON.getUsername(username) != null){
+    public LoginResponse register(UserData userData) {
+        if (AllUsers.SINGLETON.getUsername(userData.getUsername()) != null){
             return new LoginResponse(new Exception("Username already exists."));
         }
         else{
-            UserData.SINGLETON.addUser(username, password);
-            String authToken = UserData.SINGLETON.createAuthToken(username);
-            return new LoginResponse("Welcome, " + username, authToken);
+            AllUsers.SINGLETON.addUser(userData.getUsername(), userData.getPassword());
+            String authToken = AllUsers.SINGLETON.createAuthToken(userData.getUsername());
+            return new LoginResponse("Welcome, " + userData.getUsername(), authToken);
         }
     }
 
     @Override
     public JoinLobbyResponse joinLobby(String lobbyID) {
+        return null;
+    }
+
+    @Override
+    public JoinLobbyResponse createLobby(Lobby lobby) {
         return null;
     }
 

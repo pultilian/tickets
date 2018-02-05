@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class UserData {
+public class AllUsers {
 
-    public static UserData SINGLETON = new UserData();
+    public static AllUsers SINGLETON = new AllUsers();
 
     private Map<String, String> usernamePassword;
     private Map<String, String> authTokenUsername;
 
-    private UserData(){
+    private AllUsers(){
         usernamePassword = new HashMap<>();
         authTokenUsername = new HashMap<>();
     }
