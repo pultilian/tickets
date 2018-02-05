@@ -18,7 +18,7 @@ public class ModelFacade {
   ClientModelRoot modelRoot;
 
   //methods
-  public boolean register(UserData userData) {
+  public boolean register(UserData userData) throws Exception {
     LoginResponse result = ServerProxy.SINGLETON.register(userData);
 
     if (result.getException() == null) {
@@ -27,6 +27,7 @@ public class ModelFacade {
       return true;
     }
     else {
+      throw result.getException();
       return false;
     }
   }
