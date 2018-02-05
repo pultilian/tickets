@@ -3,8 +3,9 @@ package client.model;
 import java.util.Map;
 
 import common.Lobby;
-import common.LobbyId;
 import common.UserData;
+import client.model.observable.ClientObservable;
+import client.model.observable.IStateChange;
 
 public class ClientModelRoot {
 	private ClientObservable observable;
@@ -12,11 +13,11 @@ public class ClientModelRoot {
 	private UserData userData;
 	private Game currentGame;
 	
-	public void updateObservable() {
-		observable.notify();
+	public void updateObservable(IStateChange change) {
+		//
 	}
 	
-	public void updateLobbyList(Map<LobbyId, Lobby> lobbyList) {
+	public void updateLobbyList(Map<String, Lobby> lobbyList) {
 		lobbyManager.updateLobbyList(lobbyList);
 	}
 	
@@ -30,5 +31,9 @@ public class ClientModelRoot {
 	
 	public Game getGame() {
 		return currentGame;
+	}
+
+	public void setUserData(UserData userData) {
+		this.userData = userData;
 	}
 }

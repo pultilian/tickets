@@ -1,6 +1,8 @@
 /** I CLIENT PROXY
  * Client Proxy Interface
  */
+package common;
+
 public interface IClientProxy {
     static IClientProxy INSTANCE = null;
     public IClientProxy getInstance();

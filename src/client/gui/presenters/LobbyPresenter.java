@@ -1,13 +1,13 @@
 package client.gui.presenters;
 
-import client.model.observable.I_Observer;
+import client.model.observable.IObserver;
 
-public class LobbyPresenter implements I_Observer {
+public class LobbyPresenter implements IObserver {
   
-  public void notify(I_StateChange state) {
+  public void notify(IStateChange state) {
     return;
   }
-  public void updateObservable(I_StateChange state) {
+  public void updateObservable(IStateChange state) {
     return;
   }
   
