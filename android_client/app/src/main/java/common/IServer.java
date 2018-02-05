@@ -4,19 +4,19 @@ import common.response.*;
 
 public interface IServer {
 
-    public LoginResponse login(String username, String password);
+    LoginResponse login(String username, String password);
 
-    public LoginResponse register(String username, String password);
+    LoginResponse register(String username, String password);
 
-    public JoinLobbyResponse joinLobby(String lobbyID);
+    JoinLobbyResponse joinLobby(String lobbyID);
 
-    public LogoutResponse logout();
+    LogoutResponse logout();
 
-    public StartGameResponse startGame(String lobbyID);
+    StartGameResponse startGame(String lobbyID);
 
-    public LeaveLobbyResponse leaveLobby(String lobbyID);
+    LeaveLobbyResponse leaveLobby(String lobbyID);
 
-    public AddGuestResponse addGuest(String lobbyID);
+    AddGuestResponse addGuest(String lobbyID);
 
-    public PlayerTurnResponse takeTurn(String playerID);
+    PlayerTurnResponse takeTurn(String playerID);
 }
