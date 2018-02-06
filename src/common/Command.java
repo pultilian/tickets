@@ -42,9 +42,7 @@ public class Command implements ICommand {
         this.command = command;
         this.paramTypesJSON = objectToJSON(paramTypes);
     }
-
-
-
+    
     public void execute(){
         try {
             String[] paramTypes = JSONToStrings(this.paramTypesJSON);
