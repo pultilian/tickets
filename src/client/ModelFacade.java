@@ -9,9 +9,11 @@ import client.proxy.ServerProxy;
 
 public class ModelFacade {
   //Singleton structure
-	public static ModelFacade SINGLETON = new ModelFacade();
-	private ModelFacade() {
-		modelRoot = new ClientModelRoot();
+	public static ModelFacade INSTANCE = null;
+	public ModelFacade getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ModelFacade();
+		return INSTANCE;
 	}
 	
   //variables
@@ -19,7 +21,7 @@ public class ModelFacade {
 
   //methods
   public boolean register(UserData userData) throws Exception {
-    LoginResponse result = ServerProxy.SINGLETON.register(userData);
+    LoginResponse result = ServerProxy.getInstance().register(userData);
 
     if (result.getException() == null) {
       modelRoot.setUserData(userData);
@@ -34,7 +36,7 @@ public class ModelFacade {
   }
 
   public boolean login(UserData userData) throws Exception {
-	LoginResponse result = ServerProxy.SINGLETON.login(userData);
+	LoginResponse result = ServerProxy.getInstance().login(userData);
     
 	if (result.getException() == null) {
 	  modelRoot.setUserData(userData);
@@ -47,7 +49,7 @@ public class ModelFacade {
   }
 
   public boolean joinLobby(String id) {
-	  JoinLobbyResponse result = ServerProxy.SINGLETON.joinLobby(id);
+	  JoinLobbyResponse result = ServerProxy.getInstance().joinLobby(id);
 	    
 		if (result.getException() == null) {
 	      return true;
@@ -58,7 +60,7 @@ public class ModelFacade {
   }
 
   public boolean createLobby(Lobby lobby) {
-	  JoinLobbyResponse result = ServerProxy.SINGLETON.createLobby(lobby);
+	  JoinLobbyResponse result = ServerProxy.getInstance().createLobby(lobby);
 	    
 		if (result.getException() == null) {
 	      return true;
@@ -69,7 +71,7 @@ public class ModelFacade {
   }
 
   public boolean logout() {
-	  LogoutResponse result = ServerProxy.SINGLETON.logout();
+	  LogoutResponse result = ServerProxy.getInstance().logout();
 	    
 		if (result.getException() == null) {
 	      return true;

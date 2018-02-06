@@ -9,13 +9,13 @@ public class LoginPresenter implements IObserver {
 
   public void register() {
     UserData registerData;
-    ModelFacade.SINGLETON.register(registerData);
+    ModelFacade.getInstance().register(registerData);
     return;
   }
 
   public void login() {
     UserData loginData;
-    ModelFacade.SINGLETON.login(loginData);
+    ModelFacade.getInstance().login(loginData);
     return;
   }
 
