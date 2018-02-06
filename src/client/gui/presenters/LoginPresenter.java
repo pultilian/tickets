@@ -1,6 +1,7 @@
 package client.gui.presenters;
 
 import client.model.observable.IObserver;
+import client.model.observable.IStateChange;
 import common.UserData;
 import client.ModelFacade;
 

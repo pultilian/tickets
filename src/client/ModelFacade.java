@@ -10,7 +10,7 @@ import client.proxy.ServerProxy;
 public class ModelFacade {
   //Singleton structure
 	public static ModelFacade INSTANCE = null;
-	public ModelFacade getInstance() {
+	public static ModelFacade getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new ModelFacade();
 		return INSTANCE;
