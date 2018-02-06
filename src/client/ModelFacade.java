@@ -18,20 +18,22 @@ public class ModelFacade {
   ClientModelRoot modelRoot;
 
   //methods
-  public boolean register(UserData userData) {
+  public boolean register(UserData userData) throws Exception {
     LoginResponse result = ServerProxy.SINGLETON.register(userData);
 
     if (result.getException() == null) {
       modelRoot.setUserData(userData);
       modelRoot.addAuthenticationToken(result.getAuthToken());
+      //TODO: Figure out how to use StateChange to notify presenters of login
+      //  modelRoot.updateObserable( ... )
       return true;
     }
     else {
-      return false;
+      throw result.getException();
     }
   }
 
-  public boolean login(UserData userData) {
+  public boolean login(UserData userData) throws Exception {
 	LoginResponse result = ServerProxy.SINGLETON.login(userData);
     
 	if (result.getException() == null) {
@@ -40,12 +42,8 @@ public class ModelFacade {
       return true;
     }
     else {
-      return false;
+      throw result.getException();
     }
-  }
-  
-  public void updateObservable(IStateChange change) {
-    modelRoot.updateObservable(change);
   }
 
   public boolean joinLobby(String id) {

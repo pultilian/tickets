@@ -1,16 +1,22 @@
 package client.model.observable;
 
 import java.util.List;
-import java.util.Observable;
 
-public class ClientObservable extends Observable {
+public class ClientObservable {
 	private List<IObserver> observers;
 
-  private void updateObservers(IStateChange change) {
-    return;
-  }
+	public void addObserver(IObserver o) {
+		observers.add(o);
+	}
+	
+	public void removeObserver(IObserver o) {
+		observers.remove(o);
+	}
 
-  private void notify(IStateChange change) {
-    return;
-  }
+	public void notify(IStateChange change) {
+		for (IObserver o:observers) {
+			o.notify(change);
+		}
+		return;
+	}
 }
