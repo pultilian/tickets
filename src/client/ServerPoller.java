@@ -1,3 +1,7 @@
+package client;
+
+import client.model.ClientModelRoot;
+
 /**
  * Created by Pultilian on 2/1/2018.
  */
@@ -12,12 +16,12 @@ public class ServerPoller {
         return (INSTANCE);
     }
 
-    public LobbyState getLobbyState(){
-        return null;
+    public void getLobbyState(){
+
     }
 
-    public GameState getGameState(){
-        return null;
+    public void getGameState(){
+
     }
 
     public void updateGame(){}
