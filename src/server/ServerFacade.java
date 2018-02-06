@@ -8,14 +8,21 @@ import server.model.AllUsers;
 
 public class ServerFacade implements IServer {
 
-    public static ServerFacade SINGLETON = new ServerFacade();
+    private static ServerFacade INSTANCE = null;
+
+    public static ServerFacade getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ServerFacade();
+        }
+        return INSTANCE;
+    }
 
     private ServerFacade(){}
 
     @Override
     public LoginResponse login(UserData userData) {
-        if (AllUsers.SINGLETON.verifyLogin(userData.getUsername(), userData.getPassword())){
-            String authToken = AllUsers.SINGLETON.createAuthToken(userData.getUsername());
+        if (AllUsers.getInstance().verifyLogin(userData.getUsername(), userData.getPassword())){
+            String authToken = AllUsers.getInstance().createAuthToken(userData.getUsername());
             return new LoginResponse("Welcome, " + userData.getUsername(), authToken);
         }
         else return new LoginResponse(new Exception("Username or password is incorrect."));
@@ -23,12 +30,12 @@ public class ServerFacade implements IServer {
 
     @Override
     public LoginResponse register(UserData userData) {
-        if (AllUsers.SINGLETON.getUsername(userData.getUsername()) != null){
+        if (AllUsers.getInstance().getUsername(userData.getUsername()) != null){
             return new LoginResponse(new Exception("Username already exists."));
         }
         else{
-            AllUsers.SINGLETON.addUser(userData.getUsername(), userData.getPassword());
-            String authToken = AllUsers.SINGLETON.createAuthToken(userData.getUsername());
+            AllUsers.getInstance().addUser(userData.getUsername(), userData.getPassword());
+            String authToken = AllUsers.getInstance().createAuthToken(userData.getUsername());
             return new LoginResponse("Welcome, " + userData.getUsername(), authToken);
         }
     }

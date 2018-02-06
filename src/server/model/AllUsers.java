@@ -6,7 +6,14 @@ import java.util.UUID;
 
 public class AllUsers {
 
-    public static AllUsers SINGLETON = new AllUsers();
+    private static AllUsers INSTANCE = null;
+
+    public static AllUsers getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new AllUsers();
+        }
+        return INSTANCE;
+    }
 
     private Map<String, String> usernamePassword;
     private Map<String, String> authTokenUsername;
