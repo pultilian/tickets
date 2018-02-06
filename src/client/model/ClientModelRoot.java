@@ -14,7 +14,7 @@ public class ClientModelRoot {
 	private Game currentGame;
 	
 	public void updateObservable(IStateChange change) {
-		//
+		observable.notify(change);
 	}
 	
 	public void updateLobbyList(Map<String, Lobby> lobbyList) {
