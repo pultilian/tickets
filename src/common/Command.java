@@ -29,11 +29,13 @@ public class Command implements ICommand {
     //private Class<?>[] classes;
     private String command;
     private Object[] parameters;
+    private String[] paramTypes;
 
-    public Command(Object[] parameters, String command){
+    public Command(Object[] parameters, String[] paramTypes, String command){
         this.parameters = parameters;
         //this.classes = classes;
         this.command = command;
+        this.paramTypes = paramTypes;
     }
 
     public void execute(){

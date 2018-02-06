@@ -1,13 +1,18 @@
+package communicators;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import common.Command;
+import server.ServerFacade;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetSocketAddress;
 
 /**
  * Created by Pultilian on 1/31/2018.
@@ -16,7 +21,11 @@ public class ServerCommunicator {
     private CommandHandler commandHandler;
     private ServerFacade server;
 
-    public void startServer(){}
+    public void startServer() throws Exception{
+        HttpServer server = HttpServer.create(new InetSocketAddress(8081), 0);
+        server.createContext("/Command", new CommandHandler());
+        server.setExecutor(null);
+    }
 
     public Command sendCommand(String urlSuffix, Command command){
         return null;
