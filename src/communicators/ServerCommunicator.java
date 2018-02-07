@@ -22,7 +22,7 @@ public class ServerCommunicator {
     private CommandHandler commandHandler;
     private ServerFacade server;
 
-    public void startServer() throws Exception{
+    public void startServer() throws Exception {
         HttpServer server = HttpServer.create(new InetSocketAddress(8081), 0);
         server.createContext("/Command", new CommandHandler());
         server.setExecutor(null);
