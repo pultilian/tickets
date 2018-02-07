@@ -1,79 +1,91 @@
 package communicators;
 
-import client.proxy.ServerProxy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import common.Command;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import common.Command;
+import common.ResultTransferObject;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+
 public class ClientCommunicator {
-    private static ClientCommunicator INSTANCE = null;
 
-    public static ClientCommunicator getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ClientCommunicator();
-        }
-        return (INSTANCE);
-    }
+	// Singleton pattern
+	private static ClientCommunicator INSTANCE = null;
+        public static ClientCommunicator getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new ClientCommunicator();
+		}
+		return INSTANCE;
+	}
 
-    public String encode(Command request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(request);
-    }
+	private static Gson gson = new Gson();
+	private static final String URL_PREFIX = "http://" + ServerCommunicator.SERVER_HOST + ":" + ServerCommunicator.getServerPortNumber();
+	private static final String HTTP_POST = "POST";
 
-    public Command decode(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.fromJson(body, Command.class);
-    }
+	public Object send(Command command) {
+		HttpURLConnection connection = openConnection(ServerCommunicator.COMMAND_DESIGNATOR);
+		sendToServerCommunicator(connection, command);
+		Object result = getResult(connection);
+		return result;
+	}
 
-    private void writeString(String str, OutputStream os) throws IOException {
-        OutputStreamWriter sw = new OutputStreamWriter(os);
-        sw.write(str);
-        sw.flush();
-    }
+	private HttpURLConnection openConnection(String contextIdentifier) {
+		HttpURLConnection connection = null;
+		try {
+			URL url = new URL(URL_PREFIX + contextIdentifier);
+			connection = (HttpURLConnection)url.openConnection();
+			connection.setRequestMethod(HTTP_POST);
+			connection.setDoOutput(true);
+			connection.connect();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return connection;
+	}
 
-    private String readString(InputStream is) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        InputStreamReader sr = new InputStreamReader(is);
-        char[] buf = new char[1024];
-        int len;
-        while ((len = sr.read(buf)) > 0) {
-            sb.append(buf, 0, len);
-        }
-        return sb.toString();
-    }
+	private void sendToServerCommunicator(HttpURLConnection connection, Command command) {
+		try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream())) {
+			gson.toJson(command, writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public Object send(String urlSuffix, Command requestInfo) {
-        try {
-            // Establishes the URL and connects to the server.
-            URL url = new URL("http://127.0.0.1:8081" + urlSuffix);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            try {
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoOutput(true);
-                urlConnection.addRequestProperty("Accept", "application/json");
-                urlConnection.connect();
-                String sendRequest = encode(requestInfo);
+	private Object getResult(HttpURLConnection connection) {
+		Object result = null;
+		try {
+			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				if (connection.getContentLength() == 0) {
+					System.out.println("Server response empty");
+				}
+				else if (connection.getContentLength() == -1) {
+					try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
+						ResultTransferObject transferObject = (ResultTransferObject)gson.fromJson(reader, ResultTransferObject.class);
+						result = transferObject.getResult();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			} else {
+				throw new Exception(String.format("http code %d", connection.getResponseCode()));
+			}
+		} catch (JsonSyntaxException | JsonIOException e) {
+			System.err.println("ERROR: json error getting result from server");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("ERROR: io error getting result from server");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
-                OutputStream requestBody = urlConnection.getOutputStream();
-                writeString(sendRequest, requestBody);
-                requestBody.close();
-
-                if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) { // Connection is successful
-                    InputStream respBody = urlConnection.getInputStream();
-                    String respData = readString(respBody);
-                    Object result = decode(respData);
-                    urlConnection.disconnect();
-                    return result;
-                } else { // Connection Fails
-                    urlConnection.disconnect();
-                    return null;
-                }
-            } catch (Exception e) {}
-        } catch (Exception e) {}
-        return null;
-    }
 }
