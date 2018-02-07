@@ -1,48 +1,92 @@
-package client;
+package client.proxy;
 
-import common.IServer;
 import common.Command;
+import common.response.*;
+import common.IServer;
+import common.Lobby;
+import common.UserData;
 import communicators.ClientCommunicator;
 
 public class ServerProxy implements IServer {
-
-	//Create singleton
 	private static ServerProxy INSTANCE = null;
+	private ClientCommunicator clientCom = ClientCommunicator.getInstance();
+
 	public static ServerProxy getInstance() {
-		if(INSTANCE == null)
+		if (INSTANCE == null) {
 			INSTANCE = new ServerProxy();
-		return INSTANCE;
-	}
-
-	@Override
-	public String toLowerCase(String input) {
-		String[] parameterTypeNames = {String.class.getName()};
-		Object[] parameters = {input};
-		Command command = new Command("toLowerCase", parameterTypeNames, parameters);
-		Object result = ClientCommunicator.getInstance().send(command);
-		return (String)result;
-	}
-
-	@Override
-	public String trim(String input) {
-		String[] parameterTypeNames = {String.class.getName()};
-		Object[] parameters = {input};
-		Command command = new Command("trim", parameterTypeNames, parameters);
-		Object result = ClientCommunicator.getInstance().send(command);
-		return (String)result;
-	}
-
-	@Override
-	public int parseInteger(String input) throws NumberFormatException {
-		String[] parameterTypeNames = {String.class.getName()};
-		Object[] parameters = {input};
-		Command command = new Command("parseInteger", parameterTypeNames, parameters);
-		Object result = ClientCommunicator.getInstance().send(command);
-		try {
-			return (int)result;
-		} catch (ClassCastException e) {
-			throw new NumberFormatException();
 		}
+		return (INSTANCE);
+	}
+	
+	public LoginResponse login(UserData userData) {
+		Object[] parameters = {userData};
+		String[] paramTypes = {"UserData"};
+		Command command = new Command(parameters, paramTypes, "login");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (LoginResponse)returnCommand.getParameters()[0];
 	}
 
+	public LoginResponse register(UserData userData) {
+		Object[] parameters = {userData};
+		String[] paramTypes = {"UserData"};
+		Command command = new Command(parameters, paramTypes, "register");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (LoginResponse)returnCommand.getParameters()[0];
+	}
+
+	public JoinLobbyResponse joinLobby(String lobbyID) {
+		Object[] parameters = {lobbyID};
+		String[] paramTypes = {"String"};
+		Command command = new Command(parameters, paramTypes, "joinLobby");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (JoinLobbyResponse) returnCommand.getParameters()[0];
+	}
+	
+	public JoinLobbyResponse createLobby(Lobby lobby) {
+		Object[] parameters = {lobby};
+		String[] paramTypes = {"Lobby"};
+		Command command = new Command(parameters, paramTypes, "createLobby");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (JoinLobbyResponse) returnCommand.getParameters()[0];
+	}
+
+	public LogoutResponse logout() {
+		Object[] parameters = null;
+		String[] paramTypes = null;
+		Command command = new Command(parameters, paramTypes, "logout");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (LogoutResponse)returnCommand.getParameters()[0];
+	}
+
+	public StartGameResponse startGame(String lobbyID) {
+		Object[] parameters = {lobbyID};
+		String[] paramTypes = {"String"};
+		Command command = new Command(parameters, paramTypes, "startGame");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (StartGameResponse) returnCommand.getParameters()[0];
+	}
+
+	public LeaveLobbyResponse leaveLobby(String lobbyID) {
+		Object[] parameters = {lobbyID};
+		String[] paramTypes = {"String"};
+		Command command = new Command(parameters, paramTypes, "leaveLobby");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (LeaveLobbyResponse) returnCommand.getParameters()[0];
+	}
+
+	public AddGuestResponse addGuest(String lobbyID) {
+		Object[] parameters = {lobbyID};
+		String[] paramTypes = {"String"};
+		Command command = new Command(parameters, paramTypes, "addGuest");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (AddGuestResponse)returnCommand.getParameters()[0];
+	}
+
+	public PlayerTurnResponse takeTurn(String playerID) {
+		Object[] parameters = {playerID};
+		String[] paramTypes = {"String"};
+		Command command = new Command(parameters, paramTypes, "takeTurn");
+		Command returnCommand = clientCom.send("/Command", command);
+		return (PlayerTurnResponse) returnCommand.getParameters()[0];
+	}
 }
