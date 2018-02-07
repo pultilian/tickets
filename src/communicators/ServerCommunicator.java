@@ -6,7 +6,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import common.Command;
-import server.ServerFacade;
 
 
 import java.io.IOException;
@@ -22,11 +21,11 @@ import common.*;
  */
 public class ServerCommunicator {
     private CommandHandler commandHandler;
-    private ServerFacade server;
+    private HttpServer server;
     private Gson gson;
 
     public ServerCommunicator() {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8081), 0);
+        server = HttpServer.create(new InetSocketAddress(8081), 0);
         server.createContext("/Command", new CommandHandler());
         server.setExecutor(null);
 

@@ -10,6 +10,7 @@ import communicators.ClientCommunicator;
 public class ServerProxy implements IServer {
 	private static ServerProxy INSTANCE = null;
 	private ClientCommunicator clientCom = ClientCommunicator.getInstance();
+	private ServerProxy() {}
 
 	public static ServerProxy getInstance() {
 		if (INSTANCE == null) {
@@ -22,7 +23,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = {userData};
 		String[] paramTypes = {"UserData"};
 		Command command = new Command(parameters, paramTypes, "login");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (LoginResponse)returnCommand.getParameters()[0];
 	}
 
@@ -30,7 +31,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = {userData};
 		String[] paramTypes = {"UserData"};
 		Command command = new Command(parameters, paramTypes, "register");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (LoginResponse)returnCommand.getParameters()[0];
 	}
 
@@ -38,7 +39,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = {lobbyID};
 		String[] paramTypes = {"String"};
 		Command command = new Command(parameters, paramTypes, "joinLobby");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (JoinLobbyResponse) returnCommand.getParameters()[0];
 	}
 	
@@ -46,7 +47,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = {lobby};
 		String[] paramTypes = {"Lobby"};
 		Command command = new Command(parameters, paramTypes, "createLobby");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (JoinLobbyResponse) returnCommand.getParameters()[0];
 	}
 
@@ -54,7 +55,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = null;
 		String[] paramTypes = null;
 		Command command = new Command(parameters, paramTypes, "logout");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (LogoutResponse)returnCommand.getParameters()[0];
 	}
 
@@ -62,7 +63,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = {lobbyID};
 		String[] paramTypes = {"String"};
 		Command command = new Command(parameters, paramTypes, "startGame");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (StartGameResponse) returnCommand.getParameters()[0];
 	}
 
@@ -70,7 +71,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = {lobbyID};
 		String[] paramTypes = {"String"};
 		Command command = new Command(parameters, paramTypes, "leaveLobby");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (LeaveLobbyResponse) returnCommand.getParameters()[0];
 	}
 
@@ -78,7 +79,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = {lobbyID};
 		String[] paramTypes = {"String"};
 		Command command = new Command(parameters, paramTypes, "addGuest");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (AddGuestResponse)returnCommand.getParameters()[0];
 	}
 
@@ -86,7 +87,7 @@ public class ServerProxy implements IServer {
 		Object[] parameters = {playerID};
 		String[] paramTypes = {"String"};
 		Command command = new Command(parameters, paramTypes, "takeTurn");
-		Command returnCommand = clientCom.send("/Command", command);
+		Command returnCommand = (Command) clientCom.send("/Command", command);
 		return (PlayerTurnResponse) returnCommand.getParameters()[0];
 	}
 }

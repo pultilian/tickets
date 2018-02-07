@@ -39,6 +39,11 @@ public class Command implements ICommand {
         return gson.fromJson(body, String[].class);
     }
 
+    public Object[] getParameters() {
+        Object[] parameters = JSONToObjects(this.parametersJSON);
+        return parameters;
+    }
+
     public Command(Object[] parameters, String[] paramTypes, String command){
         this.parametersJSON = objectToJSON(parameters);
         this.command = command;
@@ -61,7 +66,7 @@ public class Command implements ICommand {
 
             return result;
         } catch(Exception e){
-
+            System.err.println("in Command.execute(): " + e.toString());
         }
 
         return new Exception("Error within Command.execute()");
