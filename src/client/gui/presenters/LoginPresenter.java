@@ -17,8 +17,7 @@ public class LoginPresenter implements IObserver {
     return;
   }
 
-  public void login() {
-    UserData loginData = null;
+  public void login(UserData loginData) {
     try {
       ModelFacade.getInstance().login(loginData);
     } catch(Exception e) {

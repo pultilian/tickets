@@ -18,13 +18,20 @@ public class Main {
 			printUsage();
 			printOperations();
 		}
+		LoginPresenter presenter = new LoginPresenter();
+		UserData data = new UserData(input1, input2);
 		switch(operation) {
 			case "register":
-				LoginPresenter presenter = new LoginPresenter();
-				UserData data = new UserData(input1, input2);
 				presenter.register(data);
 				System.out.println("User registered");
 				break;
+			case "login":
+				presenter.login(data);
+				System.out.println("Logged in");
+				break;
+			case "--help":
+				printOperations();
+				return;
 			default:
 				System.err.println("ERROR: operation not recognized");
 				printOperations();
@@ -38,9 +45,10 @@ public class Main {
 
 	private static void printOperations() {
 		System.out.println("operations ");
-		System.out.println("  register: if possible, converts input string to integer");
-		System.out.println("    (demonstrated by adding 5 to input)");
+		System.out.println("  register: register a new user to server, get back authentication token");
 		System.out.println("    usage: java client.Main register {username} {password}");
+		System.out.println("  login: login a user that has alredy been registered, get back authentication token");
+		System.out.println("    usage: java client.Main login {username} {password}");
 	}
 
 }
