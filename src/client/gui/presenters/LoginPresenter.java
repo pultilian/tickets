@@ -8,8 +8,7 @@ import client.ModelFacade;
 
 public class LoginPresenter implements IObserver {
 
-  public void register() {
-    UserData registerData = new UserData("spencer", "password");
+  public void register(UserData registerData) {
     try {
       ModelFacade.getInstance().register(registerData);
     } catch(Exception e) {

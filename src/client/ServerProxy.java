@@ -1,4 +1,4 @@
-package client.proxy;
+package client;
 
 import common.Command;
 import common.response.*;
@@ -9,7 +9,7 @@ import communicators.ClientCommunicator;
 
 public class ServerProxy implements IServer {
 	private static ServerProxy INSTANCE = null;
-	private ClientCommunicator clientCom = ClientCommunicator.getInstance();
+	private ClientCommunicator clientCommunicator = ClientCommunicator.getInstance();
 
 	public static ServerProxy getInstance() {
 		if (INSTANCE == null) {
@@ -20,73 +20,73 @@ public class ServerProxy implements IServer {
 	
 	public LoginResponse login(UserData userData) {
 		Object[] parameters = {userData};
-		String[] paramTypes = {"UserData"};
-		Command command = new Command(parameters, paramTypes, "login");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (LoginResponse)returnCommand.getParameters()[0];
+		String[] parameterTypes = {UserData.class.getName()};
+		Command command = new Command("login", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (LoginResponse)result;
 	}
 
 	public LoginResponse register(UserData userData) {
 		Object[] parameters = {userData};
-		String[] paramTypes = {"UserData"};
-		Command command = new Command(parameters, paramTypes, "register");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (LoginResponse)returnCommand.getParameters()[0];
+		String[] parameterTypes = {UserData.class.getName()};
+		Command command = new Command("register", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (LoginResponse)result;
 	}
 
 	public JoinLobbyResponse joinLobby(String lobbyID) {
 		Object[] parameters = {lobbyID};
-		String[] paramTypes = {"String"};
-		Command command = new Command(parameters, paramTypes, "joinLobby");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (JoinLobbyResponse) returnCommand.getParameters()[0];
+		String[] parameterTypes = {String.class.getName()};
+		Command command = new Command("joinLobby", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (JoinLobbyResponse)result;
 	}
 	
 	public JoinLobbyResponse createLobby(Lobby lobby) {
 		Object[] parameters = {lobby};
-		String[] paramTypes = {"Lobby"};
-		Command command = new Command(parameters, paramTypes, "createLobby");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (JoinLobbyResponse) returnCommand.getParameters()[0];
+		String[] parameterTypes = {Lobby.class.getName()};
+		Command command = new Command("createLobby", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (JoinLobbyResponse)result;
 	}
 
 	public LogoutResponse logout() {
-		Object[] parameters = null;
-		String[] paramTypes = null;
-		Command command = new Command(parameters, paramTypes, "logout");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (LogoutResponse)returnCommand.getParameters()[0];
+		Object[] parameters = null; // These may need to be empty arrays rather than null
+		String[] parameterTypes = null;
+		Command command = new Command("logout", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (LogoutResponse)result;
 	}
 
 	public StartGameResponse startGame(String lobbyID) {
 		Object[] parameters = {lobbyID};
-		String[] paramTypes = {"String"};
-		Command command = new Command(parameters, paramTypes, "startGame");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (StartGameResponse) returnCommand.getParameters()[0];
+		String[] parameterTypes = {String.class.getName()};
+		Command command = new Command("startGame", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (StartGameResponse)result;
 	}
 
 	public LeaveLobbyResponse leaveLobby(String lobbyID) {
 		Object[] parameters = {lobbyID};
-		String[] paramTypes = {"String"};
-		Command command = new Command(parameters, paramTypes, "leaveLobby");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (LeaveLobbyResponse) returnCommand.getParameters()[0];
+		String[] parameterTypes = {String.class.getName()};
+		Command command = new Command("leaveLobby", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (LeaveLobbyResponse)result;
 	}
 
 	public AddGuestResponse addGuest(String lobbyID) {
 		Object[] parameters = {lobbyID};
-		String[] paramTypes = {"String"};
-		Command command = new Command(parameters, paramTypes, "addGuest");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (AddGuestResponse)returnCommand.getParameters()[0];
+		String[] parameterTypes = {String.class.getName()};
+		Command command = new Command("addGuest", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (AddGuestResponse)result;
 	}
 
 	public PlayerTurnResponse takeTurn(String playerID) {
 		Object[] parameters = {playerID};
-		String[] paramTypes = {"String"};
-		Command command = new Command(parameters, paramTypes, "takeTurn");
-		Command returnCommand = clientCom.send("/Command", command);
-		return (PlayerTurnResponse) returnCommand.getParameters()[0];
+		String[] parameterTypes = {String.class.getName()};
+		Command command = new Command("takeTurn", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (PlayerTurnResponse)result;
 	}
 }
