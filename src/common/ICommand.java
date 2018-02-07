@@ -3,5 +3,5 @@
  */
 package common;
 public interface ICommand {
-    public void execute();
+    public Object execute();
 }

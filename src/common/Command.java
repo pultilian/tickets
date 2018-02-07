@@ -43,15 +43,21 @@ public class Command implements ICommand {
         this.paramTypesJSON = objectToJSON(paramTypes);
     }
     
-    public void execute(){
+    public Object execute(){
         try {
             String[] paramTypes = JSONToStrings(this.paramTypesJSON);
             Object[] parameters = JSONToObjects(this.parametersJSON);
-            ServerProxy proxy = new ServerProxy();
+
+            IServer server = ServerFacade.getInstance();
+
             Class<?>[] classes = {parameters[0].toString().getClass()};
-            Class<?> receiver = Class.forName("ServerProxy");
+            Class<?> receiver = Class.forName("ServerFacade");
             Method method = receiver.getMethod(command, classes);
-            parameters[0] = method.invoke(proxy, parameters[0]).toString();
+
+            result = method.invoke(proxy, parameters[0]);
+            parameters[0] = result.toString();
+
+            return result;
         } catch(Exception e){
 
         }

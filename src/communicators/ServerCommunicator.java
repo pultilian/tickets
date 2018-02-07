@@ -15,30 +15,40 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 
+import common.*;
+
 /**
  * Created by Pultilian on 1/31/2018.
  */
 public class ServerCommunicator {
     private CommandHandler commandHandler;
     private ServerFacade server;
+    private Gson gson;
 
-    public void startServer() throws Exception {
+    public ServerCommunicator() {
         HttpServer server = HttpServer.create(new InetSocketAddress(8081), 0);
         server.createContext("/Command", new CommandHandler());
         server.setExecutor(null);
+
+        gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
-    public Command sendCommand(String urlSuffix, Command command){
+    public void startServer() throws Exception {
+        server.start();
+    }
+
+    public Command sendCommand(String urlSuffix, Command command) {
+        // 
+        // 
+        // 
         return null;
     }
 
-    public String encode(Command command){
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(command);
+    public String encode(Object response) {
+        return gson.toJson(response);
     }
 
-    public Command decode(String body) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public ICommand decode(String body) {
         return gson.fromJson(body, Command.class);
     }
 
@@ -55,8 +65,7 @@ public class ServerCommunicator {
             String result;
             try {
                 command = decode(string);
-                command.execute();
-                result = encode(command);
+                result = encode(command.execute());
                 data.sendResponseHeaders(200, 0); // for success
                 OutputStream os = data.getResponseBody();
                 os.write(result.getBytes());
