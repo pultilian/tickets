@@ -10,6 +10,8 @@ import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Method;
 
+import server.ServerFacade;
+
 public class Command implements ICommand {
 
     //private Class<?>[] classes;
@@ -54,13 +56,15 @@ public class Command implements ICommand {
             Class<?> receiver = Class.forName("ServerFacade");
             Method method = receiver.getMethod(command, classes);
 
-            result = method.invoke(proxy, parameters[0]);
+            Object result = method.invoke(server, parameters[0]);
             parameters[0] = result.toString();
 
             return result;
         } catch(Exception e){
 
         }
+
+        return new Exception("Error within Command.execute()");
     }
 
 
