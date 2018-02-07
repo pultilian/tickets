@@ -25,9 +25,14 @@ public class ServerCommunicator {
     private Gson gson;
 
     public ServerCommunicator() {
-        server = HttpServer.create(new InetSocketAddress(8081), 0);
-        server.createContext("/Command", new CommandHandler());
-        server.setExecutor(null);
+        try {
+            server = HttpServer.create(new InetSocketAddress(8081), 0);
+            server.createContext("/Command", new CommandHandler());
+            server.setExecutor(null);
+        }
+        catch(IOException io) {
+            System.err.println("Server error: " + io.toString());
+        }
 
         gson = new GsonBuilder().setPrettyPrinting().create();
     }
@@ -47,7 +52,7 @@ public class ServerCommunicator {
         return gson.toJson(response);
     }
 
-    public ICommand decode(String body) {
+    public Command decode(String body) {
         return gson.fromJson(body, Command.class);
     }
 

@@ -40,7 +40,13 @@ public class Command implements ICommand {
     }
 
     public Object[] getParameters() {
-        Object[] parameters = JSONToObjects(this.parametersJSON);
+        Object[] parameters = null;
+        try {
+            parameters = JSONToObjects(this.parametersJSON);
+        }
+        catch(Exception e) {
+            System.err.println("Errors with Command.getParameters(): " + e.toString());
+        }
         return parameters;
     }
 
