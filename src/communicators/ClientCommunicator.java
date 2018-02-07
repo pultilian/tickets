@@ -46,7 +46,7 @@ public class ClientCommunicator {
         return sb.toString();
     }
 
-    public Command send(String urlSuffix, Command requestInfo) {
+    public Object send(String urlSuffix, Command requestInfo) {
         try {
             // Establishes the URL and connects to the server.
             URL url = new URL("http://127.0.0.1:8081" + urlSuffix);
@@ -65,7 +65,7 @@ public class ClientCommunicator {
                 if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) { // Connection is successful
                     InputStream respBody = urlConnection.getInputStream();
                     String respData = readString(respBody);
-                    Command result = decode(respData);
+                    Object result = decode(respData);
                     urlConnection.disconnect();
                     return result;
                 } else { // Connection Fails
