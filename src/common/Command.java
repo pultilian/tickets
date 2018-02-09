@@ -1,62 +1,129 @@
-/**
- * Created by Pultilian on 1/22/2018.
- */
 package common;
 
-
-import client.proxy.ServerProxy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
+import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class Command implements ICommand {
+import com.google.gson.Gson;
 
-    //private Class<?>[] classes;
-    private String command;
-    private String parametersJSON;
-    private String paramTypesJSON;
+import server.ServerFacade;
 
-    public String objectToJSON(Object[] request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(request);
-    }
+public class Command {
 
-    public Object[] JSONToObjects(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.fromJson(body, Object[].class);
-    }
+	private String methodName;
+	private String[] parameterTypeNames;
+	private Object[] parameters = null;
+	private String[] parametersAsJsonStrings;
+	private Class<?>[] parameterTypes;
 
-    public String objectToJSON(String[] request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(request);
-    }
+	private static Gson gson = new Gson();
 
-    public String[] JSONToStrings(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.fromJson(body, String[].class);
-    }
+	public Command(String methodName, String[] parameterTypeNames, Object[] parameters) {
+		this.methodName = methodName;
+		this.parameterTypeNames = parameterTypeNames;
+		createJsonStringsFromParameters(parameters);
+	}
 
-    public Command(Object[] parameters, String[] paramTypes, String command){
-        this.parametersJSON = objectToJSON(parameters);
-        this.command = command;
-        this.paramTypesJSON = objectToJSON(paramTypes);
-    }
-    
-    public Object execute(){
-        try {
-            String[] paramTypes = JSONToStrings(this.paramTypesJSON);
-            Object[] parameters = JSONToObjects(this.parametersJSON);
-            //ServerProxy proxy = new ServerProxy();
-            Class<?>[] classes = {parameters[0].toString().getClass()};
-            //Class<?> receiver = Class.forName("ServerProxy");
-            Method method = ServerFacade.getInstance().getMethod(command, classes);
-            result = method.invoke(ServerFacade.getInstance(), parameters[0]);
-            return result;
-        } catch(Exception e){
-          e.printStackTrace();
-        }
-    }
+	public Command(InputStreamReader reader) {
+		Command temp = (Command)gson.fromJson(reader, Command.class);
+		methodName = temp.getMethodName();
+		parameterTypeNames = temp.getParameterTypeNames();
+		parametersAsJsonStrings = temp.getParametersAsJsonStrings();
+		createParameterTypes();
+		createParametersFromJsonStrings();
+	}
+
+	public String getMethodName() {
+		return methodName;
+	}
+
+	public String[] getParameterTypeNames() {
+		return parameterTypeNames;
+	}
+
+	public Object[] getParameters() {
+		return parameters;
+	}
+
+	public String[] getParametersAsJsonStrings() {
+		return parametersAsJsonStrings;
+	}
+
+	private void createJsonStringsFromParameters(Object[] parameters) {
+		parametersAsJsonStrings = new String[parameters.length];
+		for(int i = 0; i < parameters.length; i++) {
+			parametersAsJsonStrings[i] = gson.toJson(parameters[i]);
+		}
+	}
+
+	private void createParametersFromJsonStrings() {
+		parameters = new Object[parametersAsJsonStrings.length];
+		for(int i = 0; i < parametersAsJsonStrings.length; i++) {
+			parameters[i] = gson.fromJson(parametersAsJsonStrings[i], parameterTypes[i]);
+		}
+	}
+	
+	private void createParameterTypes() {
+		parameterTypes = new Class<?>[parameterTypeNames.length];
+		for(int i = 0; i < parameterTypeNames.length; i++) {
+			try {
+				parameterTypes[i] = getClassFor(parameterTypeNames[i]);
+			} catch (ClassNotFoundException e) {
+				System.err.println("ERROR: unrecognized type name " + parameterTypeNames[i]);
+				e.printStackTrace();
+
+			}
+		}
+	}
 
 
+	private static final Class<?> getClassFor(String className) throws ClassNotFoundException {
+		Class<?> result = null;
+		switch (className) {
+			case "boolean":
+				result = boolean.class; break;
+			case "byte":
+				result = byte.class; break;
+			case "char":
+				result = char.class; break;
+			case "double":
+				result = double.class; break;
+			case "float":
+				result = float.class; break;
+			case "int":
+				result = int.class; break;
+			case "long":
+				result = long.class; break;
+			case "short":
+				result = short.class; break;
+			default:
+				result = Class.forName(className);
+		}
+		return result;
+	}
+
+	public Object execute() {
+		Object result = null;
+		try {
+			Method method = ServerFacade.class.getMethod(methodName, parameterTypes);
+			result = method.invoke(ServerFacade.getInstance(), parameters);
+		} catch (NoSuchMethodException e) {
+			System.err.println("ERROR: no method " + methodName + "exists");
+			e.printStackTrace();
+		} catch (NumberFormatException | InvocationTargetException e) {
+			result = "NUMBERFORMATERROR";
+			System.err.println("ERROR: number format error");
+		} catch (IllegalAccessException e) {
+			System.err.println("ERROR: illegal access");
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			System.err.println("ERROR: security error");
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			System.err.println("ERROR: illegal argument");
+			e.printStackTrace();
+		}	
+		return result;
+	}
+	
 }

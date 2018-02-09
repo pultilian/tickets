@@ -5,7 +5,6 @@ import common.UserData;
 import common.response.*;
 import client.model.ClientModelRoot;
 import client.model.observable.IStateChange;
-import client.proxy.ServerProxy;
 
 public class ModelFacade {
   //Singleton structure
@@ -17,13 +16,14 @@ public class ModelFacade {
 	}
 	
   //variables
-  ClientModelRoot modelRoot;
+  private ClientModelRoot modelRoot = new ClientModelRoot();
 
   //methods
   public boolean register(UserData userData) throws Exception {
     LoginResponse result = ServerProxy.getInstance().register(userData);
 
     if (result.getException() == null) {
+      System.out.println(result.getAuthToken());
       modelRoot.setUserData(userData);
       modelRoot.addAuthenticationToken(result.getAuthToken());
       //TODO: Figure out how to use StateChange to notify presenters of login

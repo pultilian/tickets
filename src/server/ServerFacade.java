@@ -6,9 +6,14 @@ import common.UserData;
 import common.response.*;
 import server.model.AllUsers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ServerFacade implements IServer {
 
     private static ServerFacade INSTANCE = null;
+
+    private List<ClientProxy> clientProxies;
 
     public static ServerFacade getInstance() {
         if (INSTANCE == null) {
@@ -17,25 +22,32 @@ public class ServerFacade implements IServer {
         return INSTANCE;
     }
 
-    private ServerFacade(){}
+    private ServerFacade(){
+        clientProxies = new ArrayList<>();
+    }
 
     @Override
     public LoginResponse login(UserData userData) {
+        if (!AllUsers.getInstance().userExists(userData.getUsername())){
+            return new LoginResponse(new Exception("Username is incorrect."));
+        }
         if (AllUsers.getInstance().verifyLogin(userData.getUsername(), userData.getPassword())){
             String authToken = AllUsers.getInstance().createAuthToken(userData.getUsername());
+            clientProxies.add(new ClientProxy(authToken));
             return new LoginResponse("Welcome, " + userData.getUsername(), authToken);
         }
-        else return new LoginResponse(new Exception("Username or password is incorrect."));
+        else return new LoginResponse(new Exception("Password is incorrect."));
     }
 
     @Override
     public LoginResponse register(UserData userData) {
-        if (AllUsers.getInstance().getUsername(userData.getUsername()) != null){
+        if (AllUsers.getInstance().userExists(userData.getUsername())){
             return new LoginResponse(new Exception("Username already exists."));
         }
         else{
             AllUsers.getInstance().addUser(userData.getUsername(), userData.getPassword());
             String authToken = AllUsers.getInstance().createAuthToken(userData.getUsername());
+            clientProxies.add(new ClientProxy(authToken));
             return new LoginResponse("Welcome, " + userData.getUsername(), authToken);
         }
     }

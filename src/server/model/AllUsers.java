@@ -41,7 +41,8 @@ public class AllUsers {
         return newAuthToken;
     }
 
-    public String getUsername(String authToken){
-        return authTokenUsername.get(authToken);
+    public boolean userExists(String username) {
+        if (usernamePassword.containsKey(username)) return true;
+        else return false;
     }
 }
