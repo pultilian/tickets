@@ -1,4 +1,18 @@
 /bin/
+
+*.com
+*.exe
+*.log
+*.sql
+*.sqlite
+
+
+# OS files
 .classpath
 .project
 .DS_Store
+.DS_Store?
+
+# binaries
+*.idea
+*.class
