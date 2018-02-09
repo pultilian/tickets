@@ -4,7 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/client.iml" filepath="$PROJECT_DIR$/client.iml" />
+<<<<<<< HEAD:client/.idea/modules.xml
       <module fileurl="file://$PROJECT_DIR$/client.iml" filepath="$PROJECT_DIR$/client.iml" />
+=======
+>>>>>>> 239f7bc4712458772697c6b433f3372834f7155b:client/.idea/modules.xml
     </modules>
   </component>
 </project>

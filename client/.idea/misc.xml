@@ -24,7 +24,11 @@
       </value>
     </option>
   </component>
+<<<<<<< HEAD:client/.idea/misc.xml
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+=======
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+>>>>>>> 239f7bc4712458772697c6b433f3372834f7155b:client/.idea/misc.xml
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
