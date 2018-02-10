@@ -1,3 +1,4 @@
+
 package tickets.client.gui.presenters;
 
 import tickets.client.model.observable.IObserver;
@@ -6,7 +7,7 @@ import tickets.common.UserData;
 import tickets.client.ModelFacade;
 
 
-public class LoginPresenter implements IObserver {
+public class LoginPresenter implements ILoginPresenter {
 
   public void register(UserData registerData) {
     try {
