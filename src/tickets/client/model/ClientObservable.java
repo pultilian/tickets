@@ -1,6 +1,9 @@
-package tickets.client.model.observable;
+package tickets.client.model;
 
 import java.util.List;
+
+import tickets.common.IMessage;
+import tickets.common.IObserver;
 
 public class ClientObservable {
 	private List<IObserver> observers;

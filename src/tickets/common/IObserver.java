@@ -1,4 +1,4 @@
-package tickets.client.model.observable;
+package tickets.common;
 
 public interface IObserver {
   /** Called by the Observable to notify observers of some change

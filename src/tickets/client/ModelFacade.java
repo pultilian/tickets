@@ -7,15 +7,18 @@ import tickets.client.model.ClientModelRoot;
 
 public class ModelFacade {
 	//Singleton structure
-	public static ModelFacade INSTANCE = null;
+	private static ModelFacade INSTANCE = null;
 	public static ModelFacade getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new ModelFacade();
 		return INSTANCE;
 	}
+	private ModelFacade() {
+		model = new ClientModelRoot();
+	}
 	
 	//variables
-	private ClientModelRoot modelRoot = new ClientModelRoot();
+	private ClientModelRoot model;
 
 	//methods
 	public boolean register(UserData userData) throws Exception {
@@ -23,8 +26,8 @@ public class ModelFacade {
 
 		if (result.getException() == null) {
 			System.out.println(result.getAuthToken());
-			modelRoot.setUserData(userData);
-			modelRoot.addAuthenticationToken(result.getAuthToken());
+			model.setUserData(userData);
+			model.addAuthenticationToken(result.getAuthToken());
 			return true;
 		} else {
 			throw result.getException();
@@ -35,16 +38,17 @@ public class ModelFacade {
 		LoginResponse result = ServerProxy.getInstance().login(userData);
     
 		if (result.getException() == null) {
-			modelRoot.setUserData(userData);
-			modelRoot.addAuthenticationToken(result.getAuthToken());
+			model.setUserData(userData);
+			model.addAuthenticationToken(result.getAuthToken());
 			return true;
 		} else {
 			throw result.getException();
 		}
 	}
 
-	public boolean joinLobby(String id) throws Exception {
-		JoinLobbyResponse result = ServerProxy.getInstance().joinLobby(id);
+	public boolean joinLobby(String lobbyId) throws Exception {
+		String token = model.getAuthenticationToken();
+		JoinLobbyResponse result = ServerProxy.getInstance().joinLobby(lobbyId, token);
 	    
 		if (result.getException() == null) {
 	      return true;
@@ -54,7 +58,8 @@ public class ModelFacade {
 	}
 
 	public boolean createLobby(Lobby lobby) throws Exception {
-		JoinLobbyResponse result = ServerProxy.getInstance().createLobby(lobby);
+		String token = model.getAuthenticationToken();
+		JoinLobbyResponse result = ServerProxy.getInstance().createLobby(lobby, token);
 	    
 		if (result.getException() == null) {
 	      return true;
@@ -64,7 +69,8 @@ public class ModelFacade {
 	}
 
 	public boolean logout() throws Exception {
-		LogoutResponse result = ServerProxy.getInstance().logout();
+		String token = model.getAuthenticationToken();
+		LogoutResponse result = ServerProxy.getInstance().logout(token);
 	    
 		if (result.getException() == null) {
 	      return true;
@@ -74,7 +80,8 @@ public class ModelFacade {
 	}
 
 	public boolean startGame(String lobbyId) throws Exception {
-		StartGameResponse result = ServerProxy.getInstance().startGame(lobbyId);
+		String token = model.getAuthenticationToken();
+		StartGameResponse result = ServerProxy.getInstance().startGame(lobbyId, token);
 		if (result.getException() == null) {
 			return true;
 		} else {
@@ -83,7 +90,8 @@ public class ModelFacade {
 	}
 
 	public boolean leaveLobby(String lobbyId) throws Exception {
-		LeaveLobbyResponse result = ServerProxy.getInstance().leaveLobby(lobbyId);
+		String token = model.getAuthenticationToken();
+		LeaveLobbyResponse result = ServerProxy.getInstance().leaveLobby(lobbyId, token);
 		if (result.getException() == null) {
 			return true;
 		} else {
@@ -92,7 +100,8 @@ public class ModelFacade {
 	}
 
 	public boolean addGuest(String lobbyId) throws Exception {
-		AddGuestResponse result = ServerProxy.getInstance().addGuest(lobbyId);
+		String token = model.getAuthenticationToken();
+		AddGuestResponse result = ServerProxy.getInstance().addGuest(lobbyId, token);
 		if (result.getException() == null) {
 			return true;
 		} else {
@@ -101,7 +110,8 @@ public class ModelFacade {
 	}
 
 	public boolean takeTurn(String playerId) throws Exception {
-		PlayerTurnResponse result = ServerProxy.getInstance().takeTurn(playerId);
+		String token = model.getAuthenticationToken();
+		PlayerTurnResponse result = ServerProxy.getInstance().takeTurn(playerId, token);
 		if (result.getException() == null) {
 			return true;
 		} else {
