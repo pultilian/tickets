@@ -48,7 +48,7 @@ public class ModelFacade {
   }
 
   public boolean joinLobby(String id) {
-	  JoinLobbyResponse result = ServerProxy.getInstance().joinLobby(id);
+	  JoinLobbyResponse result = ServerProxy.getInstance().joinLobby(id, null);
 	    
 		if (result.getException() == null) {
 	      return true;
@@ -59,7 +59,7 @@ public class ModelFacade {
   }
 
   public boolean createLobby(Lobby lobby) {
-	  JoinLobbyResponse result = ServerProxy.getInstance().createLobby(lobby);
+	  JoinLobbyResponse result = ServerProxy.getInstance().createLobby(lobby, null);
 	    
 		if (result.getException() == null) {
 	      return true;
@@ -70,7 +70,7 @@ public class ModelFacade {
   }
 
   public boolean logout() {
-	  LogoutResponse result = ServerProxy.getInstance().logout();
+	  LogoutResponse result = ServerProxy.getInstance().logout(null);
 	    
 		if (result.getException() == null) {
 	      return true;

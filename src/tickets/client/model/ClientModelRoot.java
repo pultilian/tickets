@@ -2,6 +2,7 @@ package tickets.client.model;
 
 import java.util.Map;
 
+import tickets.common.Game;
 import tickets.common.Lobby;
 import tickets.common.UserData;
 import tickets.client.model.observable.ClientObservable;

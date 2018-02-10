@@ -1,4 +1,4 @@
-package server;
+package tickets.server;
 
 import tickets.common.Command;
 import tickets.common.IClient;
@@ -31,19 +31,19 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void addPlayersToLobbyInList(Lobby lobby, int numToAdd) {
+    public void addPlayerToLobbyInList(Lobby lobby, Player player) {
         unprocessedCommands.add(new Command(
                 "addPlayersToLobbyInList",
-                new String[]{Lobby.class.getName(), int.class.getName()},
-                new Object[]{lobby, numToAdd}));
+                new String[]{Lobby.class.getName(), Player.class.getName()},
+                new Object[]{lobby, player}));
     }
 
     @Override
-    public void removePlayersFromLobbyInList(Lobby lobby, int numToRemove) {
+    public void removePlayerFromLobbyInList(Lobby lobby, Player playerToRemove) {
         unprocessedCommands.add(new Command(
                 "removePlayersFromLobbyInList",
-                new String[]{Lobby.class.getName(), int.class.getName()},
-                new Object[]{lobby, numToRemove}));
+                new String[]{Lobby.class.getName(), Player.class.getName()},
+                new Object[]{lobby, playerToRemove}));
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 import com.google.gson.Gson;
 
-import server.ServerFacade;
+import tickets.server.ServerFacade;
 
 public class Command {
 

@@ -10,12 +10,15 @@ public class Lobby {
 	private List<String> history;
 	private int currentMembers;
 	private int maxMembers;
+	private List<Player> players;;
 	
 	public Lobby(String name, int maxMembers) {
 		this.name = name;
 		this.id = null;
+		currentMembers = 0;
 		this.maxMembers = maxMembers;
-		List<String> history = new ArrayList<String>();
+		history = new ArrayList<>();
+		players = new ArrayList<>();
 	}
 
 	public String getName() {
@@ -38,9 +41,13 @@ public class Lobby {
 		return history;
 	}
 
+	public void addToHistory(String message) { history.add(message); }
+
 	public int getCurrentMembers() {
 		return currentMembers;
 	}
+
+	public void setCurrentMembers(int currentMembers) { this.currentMembers = currentMembers; }
 
 	public int getMaxMembers() {
 		return maxMembers;
@@ -48,5 +55,26 @@ public class Lobby {
 
 	public void setMaxMembers(int maxMembers) {
 		this.maxMembers = maxMembers;
+	}
+
+	public List<Player> getPlayers() { return players; }
+
+	// For when a user leaves a lobby
+	public List<Player> getPlayersWithAuthToken(String authToken){
+		List<Player> result = new ArrayList<>();
+		for (Player player : players) {
+			if (player.getAssociatedAuthToken().equals(authToken)) result.add(player);
+		}
+		return result;
+	}
+
+	public void addPlayer(Player player) {
+		players.add(player);
+		currentMembers++;
+	}
+
+	public void removePlayer(Player player) {
+		players.remove(player);
+		currentMembers--;
 	}
 }

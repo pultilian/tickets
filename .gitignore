@@ -3,13 +3,10 @@
 .idea/
 .gradle/
 *.iml
-
 /out/
 
 # Java generated/utility files
 .class
 .classpath
 .project
-
-/out/
 

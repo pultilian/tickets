@@ -9,7 +9,7 @@ import java.net.URL;
 
 import tickets.common.Command;
 import tickets.common.ResultTransferObject;
-import server.ServerCommunicator;
+import tickets.server.ServerCommunicator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
