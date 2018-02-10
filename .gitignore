@@ -1,13 +1,26 @@
 /bin/
+/out/
+*.iml
 
+# Android and Android Studio files
 .idea/
 .gradle/
-*.iml
-/out/
 
 # Java generated/utility files
 .class
 .classpath
 .project
 
-.DS_Store 
+
+*.com
+*.exe
+*.log
+*.sql
+*.sqlite
+
+
+# OS files
+.classpath
+.project
+.DS_Store
+.DS_Store?
