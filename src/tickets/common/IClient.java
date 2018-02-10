@@ -5,8 +5,8 @@ public interface IClient {
     // FOR CLIENTS IN LOBBY LIST
     public void addLobbyToList(Lobby lobby);
     public void removeLobbyFromList(Lobby lobby);
-    public void addPlayersToLobbyInList(Lobby lobby, int numToAdd);
-    public void removePlayersFromLobbyInList(Lobby lobby, int numToRemove);
+    public void addPlayerToLobbyInList(Lobby lobby, Player playerToAdd);
+    public void removePlayerFromLobbyInList(Lobby lobby, Player player);
 
     // FOR CLIENTS IN A LOBBY
     public void addPlayer(Player player);

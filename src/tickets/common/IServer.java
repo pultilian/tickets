@@ -8,17 +8,17 @@ public interface IServer {
 
     public LoginResponse register(UserData userData);
 
-    public JoinLobbyResponse joinLobby(String lobbyID);
+    public JoinLobbyResponse joinLobby(String lobbyID, String authToken);
     
-    public JoinLobbyResponse createLobby(Lobby lobby);
+    public JoinLobbyResponse createLobby(Lobby lobby, String authToken);
 
-    public LogoutResponse logout();
+    public LogoutResponse logout(String authToken);
 
-    public StartGameResponse startGame(String lobbyID);
+    public StartGameResponse startGame(String lobbyID, String authToken);
 
-    public LeaveLobbyResponse leaveLobby(String lobbyID);
+    public LeaveLobbyResponse leaveLobby(String lobbyID, String authToken);
 
-    public AddGuestResponse addGuest(String lobbyID);
+    public AddGuestResponse addGuest(String lobbyID, String authToken);
 
-    public PlayerTurnResponse takeTurn(String playerID);
+    public PlayerTurnResponse takeTurn(String playerID, String authToken);
 }

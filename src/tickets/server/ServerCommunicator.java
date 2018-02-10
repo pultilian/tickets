@@ -1,4 +1,4 @@
-package server;
+package tickets.server;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
