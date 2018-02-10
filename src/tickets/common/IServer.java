@@ -1,6 +1,6 @@
 package tickets.common;
 
-import common.response.*;
+import tickets.common.response.*;
 
 public interface IServer {
 

@@ -1,11 +1,11 @@
 package tickets.client;
 
-import common.Command;
-import common.response.*;
-import common.IServer;
-import common.Lobby;
-import common.UserData;
-import communicators.ClientCommunicator;
+import tickets.common.Command;
+import tickets.common.response.*;
+import tickets.common.IServer;
+import tickets.common.Lobby;
+import tickets.common.UserData;
+import tickets.client.ClientCommunicator;
 
 public class ServerProxy implements IServer {
 	private static ServerProxy INSTANCE = null;

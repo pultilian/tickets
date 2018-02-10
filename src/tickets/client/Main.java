@@ -1,7 +1,7 @@
 package tickets.client;
 
-import client.gui.presenters.LoginPresenter;
-import common.UserData;
+import tickets.client.gui.presenters.LoginPresenter;
+import tickets.common.UserData;
 
 public class Main {
 

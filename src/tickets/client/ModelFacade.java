@@ -1,10 +1,9 @@
 package tickets.client;
 
-import common.Lobby;
-import common.UserData;
-import common.response.*;
-import client.model.ClientModelRoot;
-import client.model.observable.IStateChange;
+import tickets.common.Lobby;
+import tickets.common.UserData;
+import tickets.common.response.*;
+import tickets.client.model.ClientModelRoot;
 
 public class ModelFacade {
   //Singleton structure

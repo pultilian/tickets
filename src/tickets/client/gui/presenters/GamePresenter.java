@@ -1,14 +1,11 @@
 package tickets.client.gui.presenters;
 
-import client.model.observable.IObserver;
-import client.model.observable.IStateChange;
+import tickets.client.model.observable.IObserver;
+import tickets.client.model.observable.IMessage;
 
 public class GamePresenter implements IObserver {
   
-  public void notify(IStateChange state) {
-    return;
-  }
-  public void updateObservable(IStateChange state) {
+  public void notify(IMessage state) {
     return;
   }
   

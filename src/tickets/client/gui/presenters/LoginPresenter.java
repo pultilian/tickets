@@ -1,9 +1,9 @@
 package tickets.client.gui.presenters;
 
-import client.model.observable.IObserver;
-import client.model.observable.IStateChange;
-import common.UserData;
-import client.ModelFacade;
+import tickets.client.model.observable.IObserver;
+import tickets.client.model.observable.IMessage;
+import tickets.common.UserData;
+import tickets.client.ModelFacade;
 
 
 public class LoginPresenter implements IObserver {
@@ -26,16 +26,7 @@ public class LoginPresenter implements IObserver {
     return;
   }
 
-
-  //function from I_Observer
-  @Override
-  public void updateObservable(IStateChange state) {
-    return;
-  }
-
-  //function from I_Observer
-  @Override
-  public void notify(IStateChange state) {
+  public void notify(IMessage state) {
     return;
   }
 
