@@ -13,9 +13,9 @@ public class ClientObservable {
 		observers.remove(o);
 	}
 
-	public void notify(IStateChange change) {
+	public void notify(IMessage message) {
 		for (IObserver o:observers) {
-			o.notify(change);
+			o.notify(message);
 		}
 		return;
 	}

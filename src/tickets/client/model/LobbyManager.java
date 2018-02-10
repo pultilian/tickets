@@ -2,7 +2,7 @@ package tickets.client.model;
 
 import java.util.Map;
 
-import common.Lobby;
+import tickets.common.Lobby;
 
 public class LobbyManager {
 	private Map<String, Lobby> lobbyList;

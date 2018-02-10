@@ -12,9 +12,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import common.ResultTransferObject;
-import common.Command;
-import server.ServerFacade;
+import tickets.common.ResultTransferObject;
+import tickets.common.Command;
 
 public class ServerCommunicator {
 

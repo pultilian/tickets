@@ -2,10 +2,10 @@ package tickets.client.model;
 
 import java.util.Map;
 
-import common.Lobby;
-import common.UserData;
-import client.model.observable.ClientObservable;
-import client.model.observable.IStateChange;
+import tickets.common.Lobby;
+import tickets.common.UserData;
+import tickets.client.model.observable.ClientObservable;
+import tickets.client.model.observable.IMessage;
 
 public class ClientModelRoot {
 	private ClientObservable observable;
@@ -13,7 +13,7 @@ public class ClientModelRoot {
 	private UserData userData;
 	private Game currentGame;
 	
-	public void updateObservable(IStateChange change) {
+	public void updateObservable(IMessage change) {
 		observable.notify(change);
 	}
 	

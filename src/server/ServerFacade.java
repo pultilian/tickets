@@ -1,9 +1,9 @@
 package server;
 
-import common.IServer;
-import common.Lobby;
-import common.UserData;
-import common.response.*;
+import tickets.common.IServer;
+import tickets.common.Lobby;
+import tickets.common.UserData;
+import tickets.common.response.*;
 import server.model.AllUsers;
 
 import java.util.ArrayList;

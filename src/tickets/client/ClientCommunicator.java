@@ -7,8 +7,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import common.Command;
-import common.ResultTransferObject;
+import tickets.common.Command;
+import tickets.common.ResultTransferObject;
+import server.ServerCommunicator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -44,9 +45,11 @@ public class ClientCommunicator {
 			connection.setRequestMethod(HTTP_POST);
 			connection.setDoOutput(true);
 			connection.connect();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 		return connection;
 	}
 

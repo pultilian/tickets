@@ -1,6 +1,6 @@
 package tickets.client.model.observable;
 
-public interface IStateChange {
+public interface IMessage {
 	
   public int getCurrentStateCode();
   
