@@ -1,9 +1,9 @@
 package server;
 
-import common.Command;
-import common.IClient;
-import common.Lobby;
-import common.Player;
+import tickets.common.Command;
+import tickets.common.IClient;
+import tickets.common.Lobby;
+import tickets.common.Player;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
