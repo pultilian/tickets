@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
     android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-    tools:context="cs_340.client.gui.activities.LoginActivity">
+    tools:context="tickets.client.gui.activities.LoginActivity">
 
     <EditText
         android:id="@+id/username_field"
