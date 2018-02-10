@@ -6,16 +6,15 @@ import tickets.client.model.observable.IMessage;
 
 public interface ILobbyListPresenter extends IObserver {
   
-  public void joinLobby();
-  public void joinLobbyResponse();
+    public void createLobby(Lobby lobby);
 
-  public void createLobby();
-  public void createLobbyResponse();
+    public void joinLobby(String id);
+    public void joinLobbyCallback(boolean success);
 
-  public void login();
-  public void loginResponse();
+    public void logout();
+    public void loginCallback(boolean success);
 
-  // from IObserver
-  public void notify(IMessage state);
+    // from IObserver
+    public void notify(IMessage state);
   
 }

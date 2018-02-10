@@ -18,7 +18,7 @@ public class ModelFacade {
   private ClientModelRoot modelRoot = new ClientModelRoot();
 
   //methods
-  public boolean register(UserData userData) throws Exception {
+  public boolean register(UserData userData, ILoginPresenter callback) throws Exception {
     LoginResponse result = ServerProxy.getInstance().register(userData);
 
     if (result.getException() == null) {

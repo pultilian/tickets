@@ -6,14 +6,14 @@ import tickets.client.model.observable.IMessage;
 
 public interface ILobbyPresenter implements IObserver {
   
-  public void startGame();
-  public void startGameResponse();
+  public void startGame(Lobby id);
+  public void startGameCallback();
 
   public void leaveLobby();
-  public void leaveLobbyResponse();
+  public void leaveLobbyCallback();
 
   public void addGuest();
-  public void addGuestResponse();
+  public void addGuestCallback();
 
   // from IObserver
   public void notify(IMessage state);
