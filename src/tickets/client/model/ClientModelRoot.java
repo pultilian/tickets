@@ -14,10 +14,13 @@ public class ClientModelRoot {
 	private UserData userData;
 	private Game currentGame;
 	
-	public void updateObservable(IMessage change) {
-		observable.notify(change);
+	//Observer pattern methods
+	public void linkObserver(IObserver observer) {
+		observable.linkObserver(observer);
+		return;
 	}
 	
+	//Data model methods
 	public void updateLobbyList(Map<String, Lobby> lobbyList) {
 		lobbyManager.updateLobbyList(lobbyList);
 	}

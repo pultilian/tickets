@@ -11,16 +11,23 @@ import tickets.client.ModelFacade;
 
 public class LoginPresenter implements ILoginPresenter {
 	private IHolderActivity holder;
+	private ClientObservable observable;
 
 	public LoginPresenter(IHolderActivity setHolder) {
 		holder = setHolder;
+		ModelFacade.getInstance().linkObserver(this);
 	}
 
+//----------------------------------------------------------------------------
+//	interface methods
+
+	@Override
 	public void register(UserData registerData) {
 		ModelFacade.getInstance().register(registerData);
 		return;
 	}
 
+	@Override
 	public void login(UserData loginData) {
 		try {
 			ModelFacade.getInstance().login(loginData);
@@ -30,6 +37,7 @@ public class LoginPresenter implements ILoginPresenter {
 		return;
 	}
 
+	@Override
 	public void notify(IMessage state) {
 		switch(state.getClass()) {
 			case ClientStateChange.class:
@@ -46,6 +54,15 @@ public class LoginPresenter implements ILoginPresenter {
 		}
 		return;
 	}
+
+	@Override
+	public void setObservable(ClientObservable setObservable) {
+		observable = setObservable;
+		return;
+	}
+
+//----------------------------------------------------------------------------
+//	private methods
 
 	private void checkClientStateFlag(ClientStateChange.ClientState flag) {
 		switch (flag) {

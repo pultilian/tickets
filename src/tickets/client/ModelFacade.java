@@ -25,16 +25,29 @@ public class ModelFacade {
 	private ClientModelRoot modelRoot;
 	private AsyncManager asyncManager;
 
-	//methods
+//----------------------------------------------------------------------------
+//	methods
 
-	//mirror the server interface to the presenters
-	//calls are made on the ServerProxy via AsyncTask objects
+//-------------------------------------------------
+//		model methods
+
+	public void linkObserver(IObserver observer) {
+		modelRoot.updateObservable();
+		return;
+	}
+
+//-------------------------------------------------
+//		server interface methods
+//
+//mirror the server interface to the presenters
+//calls are made on the ServerProxy via AsyncTask objects
+	
 	public void register(UserData userData) {
 		asyncManager.register(userData);
 		return;
 	}
 
-	public void login(UserData userData) throws Exception {
+	public void login(UserData userData) {
 		asyncManager.login(userData);
 		return;
 	}
