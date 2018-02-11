@@ -3,43 +3,40 @@ package tickets.client.async;
 
 // import android.os.AsyncTask;
 
-import tickets.client.ServerProxy;
-import tickets.client.gui.presenters.ILoginPresenter;
 import tickets.common.UserData;
-import tickets.common.response.LoginResponse;
+import tickets.common.response.JoinLobbyResponse;
+
+import tickets.client.ServerProxy;
+import tickets.client.model.ClientModelRoot;
 
 
 class StartGameAsync /*extends AsyncTask<String, B, JoinLobbyResponse>*/ {
-    ServerProxy proxy;
-    ILobbyListPresenter callback;
-    String authToken;
+    ClientModelRoot modelRoot;
 
-
-    public StartGameAsync(ServerProxy setProxy, ILobbyListPresenter setCallback, String setAuth) {
-        proxy = setProxy;
-        callback = setCallback;
-        authToken = setAuth;
+    public StartGameAsync(ClientModelRoot root) {
+        modelRoot = root;
     }
 
+    public void execute(String... args) {}
+
     // @Override
-    JoinLobbyResponse doInBackground(LobbyData... id) {
-        if (data.length != 1) {
-            throw new Exception("Invalid user data passed to CreateLobbyAsync.doInBackground()");
+    JoinLobbyResponse doInBackground(String... data) {
+        if (data.length != 2) {
+            AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
+            return new JoinLobbyResponse(error);
         }
-        
-        JoinLobbyResponse response = proxy.joinLobby(id, authToken);
-        
+
+        String id = data[0];
+        String authToken = data[1];
+
+        JoinLobbyResponse response = ServerProxy.getInstance().joinLobby(id, authToken);
         return response;
     }
 
     // @Override
-    /* B */ Object onPostExecute(/* C */ JoinLobbyResponse response) {
-        // should the presenter save data to the model?
-        // or should this have a callback to ModelFacade
-        // so the ModelFacade will save it?
-        callback.joinLobbyCallback(false);
-        
-        return /* B */ Object;
+    void onPostExecute(JoinLobbyResponse response) {
+        //
+        return;
     }
 
 }

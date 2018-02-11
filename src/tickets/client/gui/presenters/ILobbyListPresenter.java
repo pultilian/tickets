@@ -1,8 +1,10 @@
 
 package tickets.client.gui.presenters;
 
-import tickets.client.model.observable.IObserver;
-import tickets.client.model.observable.IMessage;
+import tickets.common.Lobby;
+
+import tickets.client.model.observable.*;
+
 
 public interface ILobbyListPresenter extends IObserver {
 

@@ -1,5 +1,5 @@
 
-package tickets.client.glu.presenters;
+package tickets.client.gui.presenters;
 
 //An interface that Android activities must implement to interact with Presenters
 public interface IHolderActivity {

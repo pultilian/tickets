@@ -3,10 +3,9 @@ package tickets.client.gui.presenters;
 
 import tickets.common.UserData;
 
-import tickets.client.model.observable.IObserver;
-import tickets.client.model.observable.IMessage;
-import tickets.client.model.observable.ClientStateChange;
+import tickets.client.model.observable.*;
 import tickets.client.ModelFacade;
+import tickets.client.gui.presenters.IHolderActivity;
 
 
 public class LoginPresenter implements ILoginPresenter {
@@ -39,20 +38,19 @@ public class LoginPresenter implements ILoginPresenter {
 
 	@Override
 	public void notify(IMessage state) {
-		switch(state.getClass()) {
-			case ClientStateChange.class:
-				ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();
-				checkClientStateFlag(flag);
-				break;
-			case ExceptionMessage.class:
-				Exception e = (Exception) state.getMessage();
-				holder.toastException(e);
-				break;
-			default:
-				Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
-				holder.toastException(err);
-				break;
+		if (state.getClass() == ClientStateChange.class) {
+			ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();
+			checkClientStateFlag(flag);
 		}
+		else if (state.getClass() == ExceptionMessage.class) {
+			Exception e = (Exception) state.getMessage();
+			holder.toastException(e);
+		}
+		else {
+			Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
+			holder.toastException(err);
+		}
+
 		return;
 	}
 
@@ -67,16 +65,16 @@ public class LoginPresenter implements ILoginPresenter {
 
 	private void checkClientStateFlag(ClientStateChange.ClientState flag) {
 		switch (flag) {
-			case ClientStateChange.ClientState.login:
-				holder.makeTransition(IHolderActivity.Transition toLobbyList);
+			case login:
+				holder.makeTransition(IHolderActivity.Transition.toLobbyList);
 				break;
-			case ClientStateChange.ClientState.lobbylist:
+			case lobbylist:
 				//do nothing
 				break;
-			case ClientStateChange.ClientState.lobby:
+			case lobby:
 				//do nothing
 				break;
-			case ClientStateChange.ClientState.game:
+			case game:
 				//do nothing
 				break;
 			default:

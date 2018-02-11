@@ -8,6 +8,7 @@ import tickets.common.Player;
 import tickets.common.UserData;
 import tickets.common.response.*;
 import tickets.server.model.AllUsers;
+import tickets.common.response.data.*;
 
 import java.util.*;
 
@@ -173,6 +174,21 @@ public class ServerFacade implements IServer {
 
     @Override
     public PlayerTurnResponse takeTurn(String playerID, String authToken) {
+        return null;
+    }
+
+    @Override
+    public LobbyListData getAllLobbies(String authToken) {
+        return null;
+    }
+
+    @Override
+    public LobbyData getLobbyData(String lobbyID, String authToken) {
+        return null;
+    }
+
+    @Override
+    public ClientUpdate getClientUpdate(String authToken) {
         return null;
     }
 

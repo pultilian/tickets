@@ -7,20 +7,23 @@ import tickets.common.UserData;
 import tickets.common.response.LoginResponse;
 
 import tickets.client.ServerProxy;
-import tickets.client.model.CLientModelRoot;
+import tickets.client.model.ClientModelRoot;
+import tickets.client.model.observable.*;
 
 
 class RegisterAsync /*extends AsyncTask<UserData, Void, LoginResponse>*/ {
-	ClientModelRoot root;
+	ClientModelRoot modelRoot;
 
-	public RegisterAsync(CLientModelRoot setRoot) {
-		root = setRoot;
+	public RegisterAsync(ClientModelRoot root) {
+		modelRoot = root;
 	}
+
+	public void execute(UserData... args) {}
 
 	// @Override
 	public LoginResponse doInBackground(UserData... data) {
 		if (data.length != 1) {
-			error = new AsyncException(this, "invalid execute() parameters");
+			AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
 			return new LoginResponse(error);
 		}
 
@@ -31,16 +34,17 @@ class RegisterAsync /*extends AsyncTask<UserData, Void, LoginResponse>*/ {
 	// @Override
 	public void onPostExecute(LoginResponse response) {
 		if (response.getException() == null) {
-			modelRoot.setUserData(userData);
 			modelRoot.addAuthenticationToken(response.getAuthToken());
 
-			ClientStateChange state = new ClientStateChange(ClientStateChange.CLientState.lobbylist);
-			modelRoot.updateObserable(state);
+			ClientStateChange.ClientState stateVal;
+			stateVal = ClientStateChange.ClientState.lobbylist;
+			ClientStateChange state = new ClientStateChange(stateVal);
+			modelRoot.updateObservable(state);
 		}
 		else {
-			// throw response.getException();
-			ExceptionMessage ex = new ExceptionMessage(response.getException());
-			modelRoot.updateObservable(ex);
+			Exception ex = response.getException();
+			ExceptionMessage msg = new ExceptionMessage(ex);
+			modelRoot.updateObservable(msg);
 		}	
 
 		return;

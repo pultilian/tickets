@@ -5,8 +5,10 @@ import java.util.List;
 public class ClientObservable {
 	private List<IObserver> observers;
 
-	public void addObserver(IObserver o) {
-		observers.add(o);
+	public void linkObserver(IObserver observer) {
+		observer.setObservable(this);
+		observers.add(observer);
+		return;
 	}
 	
 	public void removeObserver(IObserver o) {
@@ -14,7 +16,7 @@ public class ClientObservable {
 	}
 
 	public void notify(IMessage message) {
-		for (IObserver o:observers) {
+		for (IObserver o : observers) {
 			o.notify(message);
 		}
 		return;

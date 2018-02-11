@@ -1,4 +1,9 @@
-package tickets.client.asynk;
+package tickets.client.async;
+
+import tickets.common.Lobby;
+import tickets.common.UserData;
+
+import tickets.client.model.ClientModelRoot;
 
 // AsyncTask<Params, Progress, Result>
 //
@@ -50,5 +55,23 @@ public class AsyncManager {
 		task.execute();
 		return;
 	}
+
+	public void startGame(Lobby id) {
+		StartGameAsync task = new StartGameAsync(root);
+		task.execute();
+		return;
+	}
+
+	public void leaveLobby(UserData user) {
+		return;
+	}
 	
+	public void addGuest(Lobby id) {
+		return;
+	}
+
+	public void takeTurn(String playerID) {
+		return;
+	}
+
 }

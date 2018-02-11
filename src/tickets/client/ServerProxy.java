@@ -2,9 +2,11 @@ package tickets.client;
 
 import tickets.common.Command;
 import tickets.common.response.*;
+import tickets.common.response.data.*;
 import tickets.common.IServer;
 import tickets.common.Lobby;
 import tickets.common.UserData;
+
 import tickets.client.ClientCommunicator;
 
 public class ServerProxy implements IServer {
@@ -12,7 +14,7 @@ public class ServerProxy implements IServer {
 	private static ServerProxy INSTANCE = null;
 
 	private ServerProxy() {
-		clientCommunicator =  = ClientCommunicator.getInstance();
+		clientCommunicator = ClientCommunicator.getInstance();
 	}
 	
 	public static ServerProxy getInstance() {
@@ -96,4 +98,29 @@ public class ServerProxy implements IServer {
 		Object result = clientCommunicator.send(command);
 		return (PlayerTurnResponse)result;
 	}
+
+
+  public LobbyListData getAllLobbies(String authToken) {
+  	Object[] parameters = {authToken};
+  	String[] parameterTypes = {String.class.getName()};
+  	Command command = new Command("getAllLobbies", parameterTypes, parameters);
+  	Object result = clientCommunicator.send(command);
+  	return (LobbyListData)result;
+  }
+
+  public LobbyData getLobbyData(String lobbyID, String authToken) {
+  	Object[] parameters = {lobbyID, authToken};
+  	String[] parameterTypes = {String.class.getName(), String.class.getName()};
+  	Command command = new Command("getLobbyData", parameterTypes, parameters);
+  	Object result = clientCommunicator.send(command);
+  	return (LobbyData)result;
+  }
+
+  public ClientUpdate getClientUpdate(String authToken) {
+  	Object[] parameters = {authToken};
+  	String[] parameterTypes = {String.class.getName()};
+  	Command command = new Command("getClientUpdate", parameterTypes, parameters);
+  	Object result = clientCommunicator.send(command);
+  	return (ClientUpdate)result;
+  }
 }

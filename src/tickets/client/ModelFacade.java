@@ -3,8 +3,11 @@ package tickets.client;
 import tickets.common.Lobby;
 import tickets.common.UserData;
 import tickets.common.response.*;
+
 import tickets.client.model.ClientModelRoot;
+import tickets.client.model.observable.*;
 import tickets.client.async.*;
+
 
 public class ModelFacade {
 	//Singleton structure
@@ -32,7 +35,7 @@ public class ModelFacade {
 //		model methods
 
 	public void linkObserver(IObserver observer) {
-		modelRoot.updateObservable();
+		modelRoot.linkObserver(observer);
 		return;
 	}
 
@@ -43,11 +46,13 @@ public class ModelFacade {
 //calls are made on the ServerProxy via AsyncTask objects
 
 	public void register(UserData userData) {
+		modelRoot.setUserData(userData);
 		asyncManager.register(userData);
 		return;
 	}
 
 	public void login(UserData userData) {
+		modelRoot.setUserData(userData);
 		asyncManager.login(userData);
 		return;
 	}

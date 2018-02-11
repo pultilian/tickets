@@ -1,7 +1,11 @@
+
 package tickets.client;
 
-import tickets.client.gui.presenters.LoginPresenter;
 import tickets.common.UserData;
+
+import tickets.client.gui.presenters.LoginPresenter;
+import tickets.client.gui.presenters.IHolderActivity;
+
 
 public class Main {
 
@@ -18,7 +22,7 @@ public class Main {
 			printUsage();
 			printOperations();
 		}
-		LoginPresenter presenter = new LoginPresenter();
+		LoginPresenter presenter = new LoginPresenter(new StubHolder());
 		UserData data = new UserData(input1, input2);
 		switch(operation) {
 			case "register":
@@ -51,4 +55,11 @@ public class Main {
 		System.out.println("    usage: java client.Main login {username} {password}");
 	}
 
+
+
+	public static class StubHolder implements IHolderActivity {
+		public void makeTransition(Transition toActivity) {return;}
+    public void toastMessage(String message)  {return;}
+		public void toastException(Exception e)  {return;}
+	}
 }

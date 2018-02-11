@@ -5,11 +5,11 @@ class AsyncException extends Exception {
         super("An error occured in an AsyncTask");
     }
 
-    public AsyncException(AsyncTask task) {
-        super("An error occurred in " + task.getClass().toString());
+    public AsyncException(Class task) {
+        super("An error occurred in " + task.toString());
     }
 
-    public AsyncException(AsyncTask task, String msg) {
-        super("An error occurred in " + task.getClass().toString() + ": " + msg);
+    public AsyncException(Class task, String msg) {
+        super("An error occurred in " + task.toString() + ": " + msg);
     }
 }

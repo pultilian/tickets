@@ -5,8 +5,8 @@ import java.util.Map;
 import tickets.common.Game;
 import tickets.common.Lobby;
 import tickets.common.UserData;
-import tickets.client.model.observable.ClientObservable;
-import tickets.client.model.observable.IMessage;
+
+import tickets.client.model.observable.*;
 
 public class ClientModelRoot {
 	private ClientObservable observable;
@@ -22,6 +22,11 @@ public class ClientModelRoot {
 	}
 	
 	//Observer pattern methods
+	public void updateObservable(IMessage state) {
+		observable.notify(state);
+		return;
+	}
+
 	public void linkObserver(IObserver observer) {
 		observable.linkObserver(observer);
 		return;

@@ -8,19 +8,22 @@ import tickets.common.response.LoginResponse;
 
 import tickets.client.ServerProxy;
 import tickets.client.model.ClientModelRoot;
+import tickets.client.model.observable.*;
 
 
 class LoginAsync /*extends AsyncTask<UserData, Void, LoginResponse>*/ {
-	ClientModelRoot root;
+	ClientModelRoot modelRoot;
 
 	public LoginAsync(ClientModelRoot setRoot) {
-		root = setRoot;
+		modelRoot = setRoot;
 	}
+
+	public void execute(UserData... args) {}
 
 	// @Override
 	public LoginResponse doInBackground(UserData... data) {
 		if (data.length != 1) {
-			error = new AsyncException(this, "invalid execute() parameters");
+			AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
 			return new LoginResponse(error);
 		}
 		
@@ -31,17 +34,17 @@ class LoginAsync /*extends AsyncTask<UserData, Void, LoginResponse>*/ {
 	// @Override
 	public void onPostExecute(LoginResponse response) {
 		if (response.getException() == null) {
-			modelRoot.setUserData(userData);
 			modelRoot.addAuthenticationToken(response.getAuthToken());
 
-			stateVal = ClientStateChange.CLientState.lobbylist;
+			ClientStateChange.ClientState stateVal;
+			stateVal = ClientStateChange.ClientState.lobbylist;
 			ClientStateChange state = new ClientStateChange(stateVal);
-			modelRoot.updateObserable(state);
+			modelRoot.updateObservable(state);
 		}
 		else {
 			Exception ex = response.getException();
-			ExceptionMessage ex = new ExceptionMessage(ex);
-			modelRoot.updateObservable(ex);
+			ExceptionMessage msg = new ExceptionMessage(ex);
+			modelRoot.updateObservable(msg);
 		}
 
 		return;
