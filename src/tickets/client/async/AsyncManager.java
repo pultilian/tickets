@@ -38,39 +38,53 @@ public class AsyncManager {
 		return;
 	}
 
-	public void joinLobby(String id, String auth) {
+	public void joinLobby(String id, String authToken) {
 		JoinLobbyAsync task = new JoinLobbyAsync(root);
-		task.execute(id, auth);
+		task.execute(id, authToken);
 		return;
 	}
 
-	public void createLobby(Lobby lobby) {
+	public void createLobby(Lobby lobby, String authToken) {
 		CreateLobbyAsync task = new CreateLobbyAsync(root);
-		task.execute(lobby);
+		task.execute(lobby, authToken);
 		return;
 	}
 
-	public void logout() {
+	public void logout(String authToken) {
 		LogoutAsync task = new LogoutAsync(root);
-		task.execute();
+		task.execute(authToken);
 		return;
 	}
 
-	public void startGame(Lobby id) {
+	public void startGame(String lobbyID, String authToken) {
 		StartGameAsync task = new StartGameAsync(root);
-		task.execute();
+		task.execute(lobbyID, authToken);
 		return;
 	}
 
-	public void leaveLobby(UserData user) {
+	public void leaveLobby(String lobbyID, String authToken) {
+		LeaveLobbyAsync task = new LeaveLobbyAsync(root);
+		task.execute(lobbyID, authToken);
 		return;
 	}
 	
-	public void addGuest(Lobby id) {
+	public void addGuest(String lobbyID, String authToken) {
 		return;
 	}
 
-	public void takeTurn(String playerID) {
+	public void takeTurn(String playerID, String authToken) {
+		return;
+	}
+
+	public void getAllLobbies(String authToken) {
+		GetAllLobbiesAsync task = new GetAllLobbiesAsync(root);
+		task.execute(authToken);
+		return;
+	}
+
+	public void getLobbyData(String lobbyID, String authToken) {
+		GetLobbyDataAsync task = new GetLobbyDataAsync(root);
+		task.execute(lobbyID, authToken);
 		return;
 	}
 

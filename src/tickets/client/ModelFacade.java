@@ -32,7 +32,7 @@ public class ModelFacade {
 //	methods
 
 //-------------------------------------------------
-//		model methods
+//		model root methods
 
 	public void linkObserver(IObserver observer) {
 		modelRoot.linkObserver(observer);
@@ -57,38 +57,57 @@ public class ModelFacade {
 		return;
 	}
 
-	public void joinLobby(String id) {
-		asyncManager.joinLobby(id, modelRoot.getAuthenticationToken());
+	public void joinLobby(String lobbyID) {
+		String authToken = modelRoot.getAuthenticationToken();
+		asyncManager.joinLobby(lobbyID, authToken);
 		return;
 	}
 
 	public void createLobby(Lobby lobby) {
-		asyncManager.createLobby(lobby);
+		String authToken = modelRoot.getAuthenticationToken();
+		asyncManager.createLobby(lobby, authToken);
 		return;
 	}
 
 	public void logout() {
-		asyncManager.logout();
+		String authToken = modelRoot.getAuthenticationToken();
+		asyncManager.logout(authToken);
 		return;
 	}
 
-	public void startGame(Lobby id) {
-		asyncManager.startGame(id);
+	public void startGame(String lobbyID) {
+		String authToken = modelRoot.getAuthenticationToken();
+		asyncManager.startGame(lobbyID, authToken);
 		return;
 	}
 
-	public void leaveLobby(UserData user) {
-		asyncManager.leaveLobby(user);
+	public void leaveLobby(String lobbyID) {
+		String authToken = modelRoot.getAuthenticationToken();
+		asyncManager.leaveLobby(lobbyID, authToken);
 		return;
 	}
 
-	public void addGuest(Lobby id) {
-		asyncManager.addGuest(id);
+	public void addGuest(String lobbyID) {
+		String authToken = modelRoot.getAuthenticationToken();
+		asyncManager.addGuest(lobbyID, authToken);
 		return;
 	}
 
-	public void takeTurn(String playerId) {
-		asyncManager.takeTurn(playerId);
+	public void takeTurn(String playerID) {
+		String authToken = modelRoot.getAuthenticationToken();
+		asyncManager.takeTurn(playerID, authToken);
 		return;
 	}
+
+	public void getAllLobbies() {
+		String authToken = modelRoot.getAuthenticationToken();
+		asyncManager.getAllLobbies(authToken);
+		return;
+	}
+
+  public void getLobbyData(String lobbyID) {
+  	String authToken = modelRoot.getAuthenticationToken();
+  	asyncManager.getLobbyData(lobbyID, authToken);
+  	return;
+  }
 }

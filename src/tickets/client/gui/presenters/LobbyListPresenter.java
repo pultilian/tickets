@@ -66,17 +66,18 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 //	private methods
 
 	private void checkClientStateFlag(ClientStateChange.ClientState flag) {
+		IHolderActivity.Transition transition;
 		switch (flag) {
 			case login:
-				//do nothing
+				transition = IHolderActivity.Transition.toLogin;
+				holder.makeTransition(transition);
 				break;
 			case lobbylist:
 				//do nothing
 				break;
 			case lobby:
-				IHolderActivity.Transition value;
-				value = IHolderActivity.Transition.toLobby;
-				holder.makeTransition(value);
+				transition = IHolderActivity.Transition.toLobby;
+				holder.makeTransition(transition);
 				break;
 			case game:
 				//do nothing
@@ -86,6 +87,7 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 				holder.toastException(err);
 				break;
 		}
+		return;
 	}
 
 }
