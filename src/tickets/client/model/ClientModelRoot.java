@@ -3,12 +3,12 @@ package tickets.client.model;
 import java.util.Map;
 
 import tickets.common.Game;
+import tickets.common.IMessage;
 import tickets.common.Lobby;
 import tickets.common.UserData;
-import tickets.client.model.observable.ClientObservable;
-import tickets.client.model.observable.IMessage;
 
 public class ClientModelRoot {
+
 	private ClientObservable observable;
 	private LobbyManager lobbyManager;
 	private UserData userData;
@@ -24,6 +24,10 @@ public class ClientModelRoot {
 	
 	public void addAuthenticationToken(String token) {
 		userData.setAuthenticationToken(token);
+	}
+	
+	public String getAuthenticationToken() {
+		return userData.getAuthenticationToken();
 	}
 	
 	public void addGame(Game game) {
