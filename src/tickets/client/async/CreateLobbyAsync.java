@@ -33,10 +33,12 @@ class CreateLobbyAsync /*extends AsyncTask<Object, Void, JoinLobbyResponse>*/ {
 	// @Override
 	public void onPostExecute(JoinLobbyResponse response) {
 		if (response.getException() == null) {
-			Lobby currentLobby = modelRoot.getLobby(response.getLobbyID());
-			currentLobby.setHistory(response.getHistory());
-			modelRoot.setCurrentLobby(currentLobby);
-			
+			//Since the created lobby isn't 
+			//
+			// Lobby currentLobby = modelRoot.getLobby(response.getLobbyID());
+			// currentLobby.setHistory(response.getHistory());
+			// modelRoot.setCurrentLobby(currentLobby);
+
 			stateVal = ClientStateChange.ClientState.lobby;
 			ClientStateChange state = new ClientStateChange(stateVal);
 			modelRoot.updateObservable(state);
