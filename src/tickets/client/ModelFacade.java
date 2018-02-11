@@ -4,95 +4,73 @@ import tickets.common.Lobby;
 import tickets.common.UserData;
 import tickets.common.response.*;
 import tickets.client.model.ClientModelRoot;
+import tickets.client.async.*;
 
 public class ModelFacade {
-  //Singleton structure
+	//Singleton structure
 	public static ModelFacade INSTANCE = null;
+
+	private ModelFacade() {
+		modelRoot = new ClientModelRoot();
+		asyncManager = new AsyncManager(modelRoot);
+	}
+
 	public static ModelFacade getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new ModelFacade();
 		return INSTANCE;
 	}
 	
-  //variables
-  private ClientModelRoot modelRoot = new ClientModelRoot();
+	//variables
+	private ClientModelRoot modelRoot;
+	private AsyncManager asyncManager;
 
-  //methods
-  public boolean register(UserData userData, ILoginPresenter callback) throws Exception {
-    LoginResponse result = ServerProxy.getInstance().register(userData);
+	//methods
 
-    if (result.getException() == null) {
-      System.out.println(result.getAuthToken());
-      modelRoot.setUserData(userData);
-      modelRoot.addAuthenticationToken(result.getAuthToken());
-      //TODO: Figure out how to use StateChange to notify presenters of login
-      //  modelRoot.updateObserable( ... )
-      return true;
-    }
-    else {
-      throw result.getException();
-    }
-  }
+	//mirror the server interface to the presenters
+	//calls are made on the ServerProxy via AsyncTask objects
+	public void register(UserData userData) {
+		asyncManager.register(userData);
+		return;
+	}
 
-  public boolean login(UserData userData) throws Exception {
-	LoginResponse result = ServerProxy.getInstance().login(userData);
-    
-	if (result.getException() == null) {
-	  modelRoot.setUserData(userData);
-	  modelRoot.addAuthenticationToken(result.getAuthToken());
-      return true;
-    }
-    else {
-      throw result.getException();
-    }
-  }
+	public void login(UserData userData) throws Exception {
+		asyncManager.login(userData);
+		return;
+	}
 
-  public boolean joinLobby(String id) {
-	  JoinLobbyResponse result = ServerProxy.getInstance().joinLobby(id, null);
-	    
-		if (result.getException() == null) {
-	      return true;
-	    }
-	    else {
-	      return false;
-	    }
-  }
+	public void joinLobby(String id) {
+		asyncManager.joinLobby(id);
+		return;
+	}
 
-  public boolean createLobby(Lobby lobby) {
-	  JoinLobbyResponse result = ServerProxy.getInstance().createLobby(lobby, null);
-	    
-		if (result.getException() == null) {
-	      return true;
-	    }
-	    else {
-	      return false;
-	    }
-  }
+	public void createLobby(Lobby lobby) {
+		asyncManager.createLobby(lobby);
+		return;
+	}
 
-  public boolean logout() {
-	  LogoutResponse result = ServerProxy.getInstance().logout(null);
-	    
-		if (result.getException() == null) {
-	      return true;
-	    }
-	    else {
-	      return false;
-	    }
-  }
+	public void logout() {
+		asyncManager.logout();
+		return;
+	}
 
-  public boolean startGame(Lobby id) {
-    return false;
-  }
+	public void startGame(Lobby id) {
+		asyncManager.startGame(id);
+		return;
+	}
 
-  public boolean leaveLobby(UserData user) {
-    return false;
-  }
+	public void leaveLobby(UserData user) {
+		asyncManager.leaveLobby(user);
+		return;
+	}
 
-  public boolean addGuest(Lobby id) {
-    return false;
-  }
+	public void addGuest(Lobby id) {
+		asyncManager.addGuest(id);
+		return;
+	}
 
-  public boolean takeTurn(String playerId) {
-    return false;
-  }
+	public void takeTurn(String playerId) {
+		asyncManager.takeTurn(playerId);
+		return;
+	}
 }

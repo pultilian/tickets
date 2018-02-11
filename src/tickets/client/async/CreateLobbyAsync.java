@@ -9,7 +9,7 @@ import tickets.common.UserData;
 import tickets.common.response.LoginResponse;
 
 
-public class CreateLobbyAsync /*extends AsyncTask<LobbyData, B, JoinLobbyResponse>*/ {
+class CreateLobbyAsync /*extends AsyncTask<LobbyData, B, JoinLobbyResponse>*/ {
     ServerProxy proxy;
     ILobbyListPresenter callback;
 

@@ -9,7 +9,7 @@ import tickets.common.UserData;
 import tickets.common.response.LoginResponse;
 
 
-public class StartGameAsync /*extends AsyncTask<String, B, JoinLobbyResponse>*/ {
+class StartGameAsync /*extends AsyncTask<String, B, JoinLobbyResponse>*/ {
     ServerProxy proxy;
     ILobbyListPresenter callback;
     String authToken;
@@ -22,7 +22,7 @@ public class StartGameAsync /*extends AsyncTask<String, B, JoinLobbyResponse>*/ 
     }
 
     // @Override
-    public JoinLobbyResponse doInBackground(LobbyData... id) {
+    JoinLobbyResponse doInBackground(LobbyData... id) {
         if (data.length != 1) {
             throw new Exception("Invalid user data passed to CreateLobbyAsync.doInBackground()");
         }
@@ -33,7 +33,7 @@ public class StartGameAsync /*extends AsyncTask<String, B, JoinLobbyResponse>*/ 
     }
 
     // @Override
-    public /* B */ Object onPostExecute(/* C */ JoinLobbyResponse response) {
+    /* B */ Object onPostExecute(/* C */ JoinLobbyResponse response) {
         // should the presenter save data to the model?
         // or should this have a callback to ModelFacade
         // so the ModelFacade will save it?

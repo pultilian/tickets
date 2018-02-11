@@ -3,41 +3,47 @@ package tickets.client.async;
 
 // import android.os.AsyncTask;
 
-import tickets.client.ServerProxy;
-import tickets.client.gui.presenters.ILoginPresenter;
 import tickets.common.UserData;
 import tickets.common.response.LoginResponse;
 
-
-public class RegisterAsync /*extends AsyncTask<UserData, B, LoginResponse>*/ {
-    ServerProxy proxy;
-    ILoginPresenter callback;
+import tickets.client.ServerProxy;
+import tickets.client.model.CLientModelRoot;
 
 
-    public RegisterAsync(ServerProxy setProxy, ILoginPresenter setCallback) {
-        proxy = setProxy;
-        callback = setCallback;
-    }
+class RegisterAsync /*extends AsyncTask<UserData, Void, LoginResponse>*/ {
+	ClientModelRoot root;
 
-    // @Override
-    public LoginResponse doInBackground(UserData... data) {
-        if (data.length != 1) {
-            throw new Exception("Invalid user data passed to RegisterAsync.doInBackground()");
-        }
-        
-        LoginResponse response = proxy.register(data[0]);
-        
-        return response;
-    }
+	public RegisterAsync(CLientModelRoot setRoot) {
+		root = setRoot;
+	}
 
-    // @Override
-    public /* B */ Object onPostExecute(/* C */ Object val) {
-        // should the presenter save data to the model?
-        // or should this have a callback to ModelFacade
-        // so the ModelFacade will save it?
-        callback.registerCallback(false);
-        
-        return /* B */ Object;
-    }
+	// @Override
+	public LoginResponse doInBackground(UserData... data) {
+		if (data.length != 1) {
+			error = new AsyncException(this, "invalid execute() parameters");
+			return new LoginResponse(error);
+		}
+
+		LoginResponse response = ServerProxy.getInstance().register(data[0]);	
+		return response;
+	}
+
+	// @Override
+	public void onPostExecute(LoginResponse response) {
+		if (response.getException() == null) {
+			modelRoot.setUserData(userData);
+			modelRoot.addAuthenticationToken(response.getAuthToken());
+
+			ClientStateChange state = new ClientStateChange(ClientStateChange.CLientState.lobbylist);
+			modelRoot.updateObserable(state);
+		}
+		else {
+			// throw response.getException();
+			ExceptionMessage ex = new ExceptionMessage(response.getException());
+			modelRoot.updateObservable(ex);
+		}	
+
+		return;
+	}
 
 }

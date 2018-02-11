@@ -9,13 +9,12 @@ import tickets.client.ModelFacade;
 
 public interface ILoginPresenter implements IObserver {
 
-  public void register(UserData registerData);
-  public void registerCallback(boolean success);
+	public void setHolder(IHolderActivity holder);
 
-  public void login(UserData loginData);
-  public void loginCallback(boolean success);
+	public void register(UserData registerData);
+	public void login(UserData loginData);
 
-  // from IObserver
-  public void notify(IMessage state);
+	// from IObserver
+	public void notify(IMessage state);
 
 }
