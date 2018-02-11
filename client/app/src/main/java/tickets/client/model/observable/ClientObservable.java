@@ -4,13 +4,19 @@ import java.util.List;
 import java.util.Observable;
 
 public class ClientObservable extends Observable {
-	private List<IObserver> observers;
+	private List<IObserver> allObservers;
 
-  private void updateObservers(IStateChange change) {
-    return;
-  }
+	public void linkObserver(IObserver observer) {
+		observer.setObservable(this);
+		observers.add(observer);
+		return;
+	}
 
-  private void notify(IStateChange change) {
-    return;
-  }
+	private void updateObservers(IStateChange change) {
+		return;
+	}
+
+	private void notify(IStateChange change) {
+		return;
+	}
 }

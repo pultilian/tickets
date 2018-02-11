@@ -12,7 +12,14 @@ public class ClientModelRoot {
 	private ClientObservable observable;
 	private LobbyManager lobbyManager;
 	private UserData userData;
+
+	private Lobby currentLobby;
 	private Game currentGame;
+
+	public ClientModelRoot() {
+		observable = new ClientObservable();
+		lobbyManager = new LobbyManager();
+	}
 	
 	//Observer pattern methods
 	public void linkObserver(IObserver observer) {
@@ -28,9 +35,23 @@ public class ClientModelRoot {
 	public void addAuthenticationToken(String token) {
 		userData.setAuthenticationToken(token);
 	}
+
+	public String getAuthenticationToken() {
+		return userData.getAuthenticationToken();
+	}
 	
+	public void setCurrentLobby(Lobby current) {
+		currentLobby = current;
+		return;
+	}
+
+	public Lobby getLobby(String lobbyId) {
+		return lobbyManager.getLobby(lobbyId);
+	}
+
 	public void addGame(Game game) {
 		currentGame = game;
+		return;
 	}
 	
 	public Game getGame() {

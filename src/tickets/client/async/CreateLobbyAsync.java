@@ -9,38 +9,45 @@ import tickets.common.UserData;
 import tickets.common.response.LoginResponse;
 
 
-class CreateLobbyAsync /*extends AsyncTask<LobbyData, B, JoinLobbyResponse>*/ {
-    ServerProxy proxy;
-    ILobbyListPresenter callback;
+class CreateLobbyAsync /*extends AsyncTask<Object, Void, JoinLobbyResponse>*/ {
+	ClientModelRoot root;
 
+	public CreateLobbyAsync(ClientModelRoot setRoot) {
+		root = setRoot;
+	}
 
-    public CreateLobbyAsync(ServerProxy setProxy, ILobbyListPresenter setCallback) {
-        proxy = setProxy;
-        callback = setCallback;
-    }
+	// @Override
+	public JoinLobbyResponse doInBackground(Object... data) {
+		if (data.length != 2) {
+			error = new AsyncException(this, "invalid execute() parameters");
+			return new JoinLobbyResponse(error);
+		}
 
-    // @Override
-    public JoinLobbyResponse doInBackground(LobbyData... data) {
-        if (data.length != 1) {
-            throw new Exception("Invalid user data passed to CreateLobbyAsync.doInBackground()");
-        }
+		Lobby lobby = (Lobby) data[0];
+		String auth = (String) data[1];
+		JoinLobbyResponse response = proxy.joinLobby(lobbyId, auth);
+		
+		return response;
+	}
 
-        String lobbyId = data[0].getId();
-        String auth = data[0].getAuth();
-        
-        JoinLobbyResponse response = proxy.joinLobby(lobbyId, auth);
-        
-        return response;
-    }
-
-    // @Override
-    public /* B */ Object onPostExecute(/* C */ JoinLobbyResponse response) {
-        // should the presenter save data to the model?
-        // or should this have a callback to ModelFacade
-        // so the ModelFacade will save it?
-        callback.joinLobbyCallback(false);
-        
-        return /* B */ Object;
-    }
+	// @Override
+	public void onPostExecute(JoinLobbyResponse response) {
+		if (response.getException() == null) {
+			Lobby currentLobby = modelRoot.getLobby(response.getLobbyID());
+			currentLobby.setHistory(response.getHistory());
+			modelRoot.setCurrentLobby(currentLobby);
+			
+			stateVal = ClientStateChange.ClientState.lobby;
+			ClientStateChange state = new ClientStateChange(stateVal);
+			modelRoot.updateObservable(state);
+		}
+		else {
+			Exception ex = response.getException();
+			ExceptionMessage ex = new ExceptionMessage(ex);
+			modelRoot.updateObservable(ex);
+		}
+		
+		return;
+	}
 
 }

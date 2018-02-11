@@ -1,3 +1,4 @@
+
 package tickets.common;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class Lobby {
 	private List<String> history;
 	private int currentMembers;
 	private int maxMembers;
-	private List<Player> players;;
+	private List<Player> players;
 	
 	public Lobby(String name, int maxMembers) {
 		this.name = name;
@@ -43,9 +44,9 @@ public class Lobby {
 
 	public void addToHistory(String message) { history.add(message); }
 
-	public int getCurrentMembers() {
-		return currentMembers;
-	}
+	public void setHistory(List<String> setHistory) { history = setHistory;	}
+
+	public int getCurrentMembers() { return currentMembers; }
 
 	public void setCurrentMembers(int currentMembers) { this.currentMembers = currentMembers; }
 

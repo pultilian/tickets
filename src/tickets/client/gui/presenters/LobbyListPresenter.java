@@ -40,7 +40,8 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 				//
 				break;
 			case ExceptionMessage.class:
-				//
+				Exception e = (Exception) state.getMessage();
+				holder.toastException(e);
 				break;
 			default:
 				Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());

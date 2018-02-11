@@ -41,7 +41,7 @@ public class ModelFacade {
 //
 //mirror the server interface to the presenters
 //calls are made on the ServerProxy via AsyncTask objects
-	
+
 	public void register(UserData userData) {
 		asyncManager.register(userData);
 		return;
@@ -53,7 +53,7 @@ public class ModelFacade {
 	}
 
 	public void joinLobby(String id) {
-		asyncManager.joinLobby(id);
+		asyncManager.joinLobby(id, modelRoot.getAuthenticationToken());
 		return;
 	}
 

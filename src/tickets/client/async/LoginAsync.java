@@ -34,12 +34,13 @@ class LoginAsync /*extends AsyncTask<UserData, Void, LoginResponse>*/ {
 			modelRoot.setUserData(userData);
 			modelRoot.addAuthenticationToken(response.getAuthToken());
 
-			ClientStateChange state = new ClientStateChange(ClientStateChange.CLientState.lobbylist);
+			stateVal = ClientStateChange.CLientState.lobbylist;
+			ClientStateChange state = new ClientStateChange(stateVal);
 			modelRoot.updateObserable(state);
 		}
 		else {
-			// throw response.getException();
-			ExceptionMessage ex = new ExceptionMessage(response.getException());
+			Exception ex = response.getException();
+			ExceptionMessage ex = new ExceptionMessage(ex);
 			modelRoot.updateObservable(ex);
 		}
 

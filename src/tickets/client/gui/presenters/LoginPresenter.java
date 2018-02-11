@@ -45,7 +45,8 @@ public class LoginPresenter implements ILoginPresenter {
 				checkClientStateFlag(flag);
 				break;
 			case ExceptionMessage.class:
-				holder.toastException(state.getMessage());
+				Exception e = (Exception) state.getMessage();
+				holder.toastException(e);
 				break;
 			default:
 				Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());

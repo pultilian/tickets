@@ -15,23 +15,40 @@ package tickets.client.asynk;
 
 // creates and manages AsyncTask objects for communicating with the server over the network
 public class AsyncManager {
-    private ClientModelRoot root;
+	private ClientModelRoot root;
 
-    public AsyncManager(ClientModelRoot setRoot) {
-        root = setRoot;
-    }
+	public AsyncManager(ClientModelRoot setRoot) {
+		root = setRoot;
+	}
 
-    public void register(UserData userData) {
-        RegisterTask task = new RegisterTask(root);
-        task.execute(userData);
-        return;
-    }
+	public void register(UserData userData) {
+		RegisterAsync task = new RegisterAsync(root);
+		task.execute(userData);
+		return;
+	}
 
-    public void login(UserData userData) {
-        LoginTask task = new LoginTask(root);
-        task.execute(userData);
-        return;
-    }
+	public void login(UserData userData) {
+		LoginAsync task = new LoginAsync(root);
+		task.execute(userData);
+		return;
+	}
 
-    
+	public void joinLobby(String id, String auth) {
+		JoinLobbyAsync task = new JoinLobbyAsync(root);
+		task.execute(id, auth);
+		return;
+	}
+
+	public void createLobby(Lobby lobby) {
+		CreateLobbyAsync task = new CreateLobbyAsync(root);
+		task.execute(lobby);
+		return;
+	}
+
+	public void logout() {
+		LogoutAsync task = new LogoutAsync(root);
+		task.execute();
+		return;
+	}
+	
 }
