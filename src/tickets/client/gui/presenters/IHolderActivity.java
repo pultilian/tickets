@@ -11,7 +11,7 @@ public interface IHolderActivity {
 		toLogin, toLobbyList, toLobby, toGame
 	}
 
-    public void toastMessage(String message);
+  public void toastMessage(String message);
 	public void toastException(Exception e);
 	
 }

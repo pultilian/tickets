@@ -1,6 +1,8 @@
 
 package tickets.client.gui.presenters;
 
+import java.util.Map;
+
 import tickets.common.Lobby;
 
 import tickets.client.*;
@@ -19,6 +21,11 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 
 //----------------------------------------------------------------------------
 //	interface methods
+
+	@Override
+	public Map<String, Lobby> getLobbyList() {
+		return ModelFacade.getLobbyList();
+	}
 
 	@Override
 	public void createLobby(Lobby lobby) {

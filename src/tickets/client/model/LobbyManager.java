@@ -6,6 +6,10 @@ import tickets.common.Lobby;
 
 public class LobbyManager {
 	private Map<String, Lobby> lobbyList;
+
+	public Map<String, Lobby> getLobbyList() {
+		return lobbyList;
+	}
 	
 	public void updateLobbyList(Map<String, Lobby> lobbyList) {
 		this.lobbyList = lobbyList;

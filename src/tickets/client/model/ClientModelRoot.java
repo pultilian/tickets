@@ -33,6 +33,10 @@ public class ClientModelRoot {
 	}
 	
 	//Data model methods
+	public Map<String, Lobby> getLobbyList() {
+		return lobbyManager.getLobbyList();
+	}
+
 	public void updateLobbyList(Map<String, Lobby> lobbyList) {
 		lobbyManager.updateLobbyList(lobbyList);
 	}
