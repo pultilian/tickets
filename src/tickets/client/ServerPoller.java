@@ -1,5 +1,8 @@
 package tickets.client;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import tickets.common.Command;
 import tickets.common.IMessage;
 import tickets.common.IObserver;
@@ -13,34 +16,29 @@ import tickets.common.response.ClientUpdate;
  */
 public class ServerPoller implements IObserver {
 	private IObservable observable;
-    private ClientState clientState;
     private String lastCommand;
+    private Timer timer;
+    private ClientState clientState;
 
-
-	//Singleton
-    private static ServerPoller INSTANCE = null;
-    public static ServerPoller getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ServerPoller();
-        }
-        return (INSTANCE);
-    }
-
-    private ServerPoller() {
+    public ServerPoller() {
         ModelFacade.getInstance().linkObserver(this);
         clientState = null;
         lastCommand = null;
-        return;
+        timer = new Timer();
+        timer.schedule(CheckServer, 0, 1000);
     }
     
-    //Should be called asynchronously, every second
-    public void checkServer() {
-    	String token = ModelFacade.getInstance().getAuthToken();
-    	ClientUpdate updates = ServerProxy.getInstance().updateClient(lastCommand, token);
-    	for(Command c:updates.getCommands()){
-    		c.execute(ModelFacade.getInstance());
+    private TimerTask CheckServer = new TimerTask() {
+	    String token = ModelFacade.getInstance().getAuthToken();
+	    
+    	@Override
+    	public void run(){
+    	    ClientUpdate updates = ServerProxy.getInstance().updateClient(lastCommand, token);
+    	    for(Command c:updates.getCommands()){
+    	    	c.execute(ModelFacade.getInstance());
+    	    }
     	}
-    }
+    };    
     
     @Override
 	public void notify(IMessage message) {
