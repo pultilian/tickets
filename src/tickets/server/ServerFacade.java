@@ -86,6 +86,7 @@ public class ServerFacade implements IServer {
     @Override
     public JoinLobbyResponse createLobby(Lobby lobby, String authToken) {
         if (getProxy(authToken) == null) return new JoinLobbyResponse(new Exception("You are not an authorized user!"));
+        if (lobbyNameExists(lobby.getName())) return new JoinLobbyResponse(new Exception("Lobby name already exists."));
 
         // Update the server model
         AllLobbies.getInstance().addLobby(lobby);
@@ -217,7 +218,9 @@ public class ServerFacade implements IServer {
         Map<Command, String> commandIDs = client.getCommandIDs();
 
         // Remove commands until the last received command
-        while ((commands.peek() != null) && (!commandIDs.get(commands.peek()).equals(lastReceivedCommandID))) {
+        while ((lastReceivedCommandID != null) &&
+                (commands.peek() != null) &&
+                (!commandIDs.get(commands.peek()).equals(lastReceivedCommandID))) {
             commandIDs.remove(commands.peek());
             commands.remove();
         }
@@ -235,6 +238,13 @@ public class ServerFacade implements IServer {
     }
 
     // PRIVATE HELPER METHODS------------------------------------------------------------------------------------------
+
+    private boolean lobbyNameExists(String lobbyName) {
+        for (Lobby lobby : AllLobbies.getInstance().getAllLobbies()) {
+            if (lobby.getName().equals(lobbyName)) return true;
+        }
+        return false;
+    }
 
     private ClientProxy getProxy(String authToken) {
         for (ClientProxy proxy : clientsInLobbyList) {
