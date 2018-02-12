@@ -1,8 +1,10 @@
 package tickets.client;
 
+import tickets.common.Command;
 import tickets.common.IMessage;
 import tickets.common.IObserver;
 import tickets.common.ClientStateChange.ClientState;
+import tickets.common.response.ClientUpdate;
 /**
  * Created by Pultilian on 2/1/2018.
  */
@@ -19,40 +21,18 @@ public class ServerPoller implements IObserver {
     
     //State management
     private ClientState clientState = null;
+    private String lastCommand = null;
     
     //Should be called asynchronously, every second
-    private void checkServer() {
-    	switch(clientState) {
-    		case login:
-    			break;
-    		case lobbylist:
-    			checkLobbyList();
-    			break;
-    		case lobby:
-    			checkLobbyState();
-    			break;
-    		case game:
-    			checkGameState();
-    			break;
-    		default:
-    			break;
+    public void checkServer() {
+    	String token = ModelFacade.getInstance().authenticate();
+    	ClientUpdate updates = ServerProxy.getInstance().updateClient(lastCommand, token);
+    	for(Command c:updates.getCommands()){
+    		c.execute(ModelFacade.class);
     	}
     }
     
-    private void checkLobbyList() {
-		//Call function of server proxy or client communicator
-		
-	}
 
-	public void checkLobbyState(){
-		//Call function of server proxy or client communicator
-    }
-
-    public void checkGameState(){
-    	//Call function of server proxy or client communicator
-    }
-
-	@Override
 	public void notify(IMessage message) {
 		switch(message.getClass().getName()) {
 			case "ClientStateChange":
