@@ -1,53 +1,115 @@
-
 package tickets.client;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import tickets.common.Game;
+import tickets.common.IClient;
 import tickets.common.Lobby;
+import tickets.common.Player;
 import tickets.common.UserData;
+import tickets.common.response.*;
+import tickets.common.IObserver;
+import tickets.common.IMessage;
 
-import tickets.client.model.ClientModelRoot;
-import tickets.client.model.observable.*;
 import tickets.client.async.*;
+import tickets.client.model.ClientObservable;
+import tickets.client.model.LobbyManager;
 
 
-public class ModelFacade {
-    //Singleton structure
-    public static ModelFacade INSTANCE = null;
+public class ModelFacade implements IClient {
+//----------------------------------------------------------------------------
+//	Singleton structure
 
-    private ModelFacade() {
-        modelRoot = new ClientModelRoot();
-        asyncManager = new AsyncManager(modelRoot);
-    }
+	private static ModelFacade INSTANCE = null;
+	public static ModelFacade getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ModelFacade();
+		return INSTANCE;
+	}
+	private ModelFacade() {
+		asyncManager = new AsyncManager(this);
 
-    public static ModelFacade getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new ModelFacade();
-        return INSTANCE;
-    }
+		observable = new ClientObservable();
+		lobbyManager = new LobbyManager();
+		localPlayers = new ArrayList<>();
+	}
+	
+//----------------------------------------------------------------------------
+//	member variables
 
-    //variables
-    private ClientModelRoot modelRoot;
-    private AsyncManager asyncManager;
+	private AsyncManager asyncManager;
+	private ClientObservable observable;
+	private LobbyManager lobbyManager;
+	private Lobby currentLobby;
+	private UserData userData;
+	private Game currentGame;
+	private List<Player> localPlayers;
 
 //----------------------------------------------------------------------------
 //	methods
 
 //-------------------------------------------------
-//		model root methods
+//	model interface methods
 
-    public void linkObserver(IObserver observer) {
-        modelRoot.linkObserver(observer);
-        return;
-    }
+//Observer pattern
+	public void updateObservable(IMessage state) {
+		observable.notify(state);
+		return;
+	}
 
-    public Map<String, Lobby> getLobbyList() {
-        return modelRoot.getLobbyList();
-    }
+//Observer pattern
+	public void linkObserver(IObserver observer) {
+		observable.linkObserver(observer);
+		return;
+	}
 
-    public Lobby getLobby() {
-        return modelRoot.getCurrentLobby();
-    }
+//User Data access
+	public void setUserData(UserData userData) {
+		this.userData = userData;
+	}
+
+	public void addAuthToken(String token) {
+		userData.setAuthenticationToken(token);
+	}
+
+	public String getAuthToken() {
+		return userData.getAuthenticationToken();
+	}
+
+//Lobby Data access
+	public void updateLobbyList(Map<String, Lobby> lobbyList) {
+		lobbyManager.updateLobbyList(lobbyList);
+	}
+
+	public Map<String, Lobby> getLobbyList() {
+		return lobbyManager.getLobbyList();
+	}
+
+	public void setCurrentLobby(Lobby lobby) {
+		currentLobby = lobby;
+		return;
+	}
+
+	public Lobby getLobby() {
+		return currentLobby;
+	}
+
+  public Lobby getLobby(String lobbyID) {
+  	return lobbyManager.getLobby(lobbyID);
+  }
+
+	
+//Game data access
+	public void addGame(Game game) {
+		currentGame = game;
+		return;
+	}
+	
+	public Game getGame() {
+		return currentGame;
+	}
 
 //-------------------------------------------------
 //		server interface methods
@@ -55,69 +117,85 @@ public class ModelFacade {
 //mirror the server interface to the presenters
 //calls are made on the ServerProxy via AsyncTask objects
 
-    public void register(UserData userData) {
-        modelRoot.setUserData(userData);
-        asyncManager.register(userData);
-        return;
-    }
+	public void register(UserData userData) {
+		setUserData(userData);
+		asyncManager.register(userData);
+		return;
+	}
 
-    public void login(UserData userData) {
-        modelRoot.setUserData(userData);
-        asyncManager.login(userData);
-        return;
-    }
+	public void login(UserData userData) {
+		setUserData(userData);
+		asyncManager.login(userData);
+		return;
+	}
 
-    public void joinLobby(String lobbyID) {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.joinLobby(lobbyID, authToken);
-        return;
-    }
+	public void joinLobby(String lobbyID) {
+		asyncManager.joinLobby(lobbyID, getAuthToken());
+		return;
+	}
 
-    public void createLobby(Lobby lobby) {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.createLobby(lobby, authToken);
-        return;
-    }
+	public void createLobby(Lobby lobby) {
+		asyncManager.createLobby(lobby, getAuthToken());
+		return;
+	}
 
-    public void logout() {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.logout(authToken);
-        return;
-    }
+	public void logout() {
+		asyncManager.logout(getAuthToken());
+		return;
+	}
 
-    public void startGame(String lobbyID) {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.startGame(lobbyID, authToken);
-        return;
-    }
+	public void startGame(String lobbyID) {
+		asyncManager.startGame(lobbyID, getAuthToken());
+		return;
+	}
 
-    public void leaveLobby(String lobbyID) {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.leaveLobby(lobbyID, authToken);
-        return;
-    }
+	public void leaveLobby(String lobbyID) {
+		asyncManager.leaveLobby(lobbyID, getAuthToken());
+		return;
+	}
 
-    public void addGuest(String lobbyID) {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.addGuest(lobbyID, authToken);
-        return;
-    }
+	public void addGuest(String lobbyID) {
+		asyncManager.addGuest(lobbyID, getAuthToken());
+		return;
+	}
 
-    public void takeTurn(String playerID) {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.takeTurn(playerID, authToken);
-        return;
-    }
+	public void takeTurn(String playerID) {
+		asyncManager.takeTurn(playerID, getAuthToken());
+		return;
+	}
 
-    public void getAllLobbies() {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.getAllLobbies(authToken);
-        return;
-    }
+//-------------------------------------------------
+//		IClient interface methods
+//
+//Represents the client to the server.
+//These methods are called when commands are retrieved
+//	by the poller from the Server.
 
-    public void getLobbyData(String lobbyID) {
-        String authToken = modelRoot.getAuthenticationToken();
-        asyncManager.getLobbyData(lobbyID, authToken);
-        return;
-    }
+//TO BE IMPLEMENTED
+	public void addLobbyToList(Lobby lobby) {
+		lobbyManager.addLobby(lobby);
+	}
+	public void removeLobbyFromList(Lobby lobby) {
+		lobbyManager.removeLobby(lobby);
+	}
+	public void addPlayerToLobbyInList(Lobby lobby, Player playerToAdd) {
+		lobbyManager.addPlayer(lobby, playerToAdd);
+	}
+	public void removePlayerFromLobbyInList(Lobby lobby, Player player) {
+		lobbyManager.removePlayer(lobby, player);
+	}
+	public void addPlayer(Player player) {
+		localPlayers.add(player);
+	}
+	public void removePlayer(Player player) {
+		localPlayers.remove(player);
+	}
+	public void startGame() {
+		return;
+	}
+	public void endCurrentTurn() {
+		return;
+	}
+
+
 }
