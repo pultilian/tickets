@@ -102,11 +102,11 @@ public class Command {
 		return result;
 	}
 
-	public Object execute() {
+	public Object execute(Object facade) {
 		Object result = null;
 		try {
-			Method method = ServerFacade.class.getMethod(methodName, parameterTypes);
-			result = method.invoke(ServerFacade.getInstance(), parameters);
+			Method method = facade.getClass().getMethod(methodName, parameterTypes);
+			result = method.invoke(facade, parameters);
 		} catch (NoSuchMethodException e) {
 			System.err.println("ERROR: no method " + methodName + "exists");
 			e.printStackTrace();
