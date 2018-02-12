@@ -21,4 +21,6 @@ public interface IServer {
     public AddGuestResponse addGuest(String lobbyID, String authToken);
 
     public PlayerTurnResponse takeTurn(String playerID, String authToken);
+
+    public ClientUpdate updateClient(String lastReceivedCommandID, String authToken);
 }

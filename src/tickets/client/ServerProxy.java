@@ -52,7 +52,7 @@ public class ServerProxy implements IServer {
 
 	public LogoutResponse logout(String authToken) {
 		Object[] parameters = {authToken};
-		String[] parameterTypes = null;
+		String[] parameterTypes = {String.class.getName()};
 		Command command = new Command("logout", parameterTypes, parameters);
 		Object result = clientCommunicator.send(command);
 		return (LogoutResponse)result;
@@ -88,5 +88,13 @@ public class ServerProxy implements IServer {
 		Command command = new Command("takeTurn", parameterTypes, parameters);
 		Object result = clientCommunicator.send(command);
 		return (PlayerTurnResponse)result;
+	}
+
+	public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
+		Object[] parameters = {lastReceivedCommandID, authToken};
+		String[] parameterTypes = {String.class.getName(), String.class.getName()};
+		Command command = new Command("updateClient", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (ClientUpdate) result;
 	}
 }

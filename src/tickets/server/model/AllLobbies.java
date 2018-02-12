@@ -44,4 +44,6 @@ public class AllLobbies {
         }
         return null;
     }
+
+    public List<Lobby> getAllLobbies(){ return lobbies; }
 }

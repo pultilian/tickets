@@ -5,4 +5,6 @@ public class PlayerTurnResponse extends Response {
     public PlayerTurnResponse(Exception exception) {
         super(exception);
     }
+
+    public PlayerTurnResponse(){}
 }

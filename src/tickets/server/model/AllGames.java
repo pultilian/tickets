@@ -23,4 +23,11 @@ public class AllGames {
     }
 
     public void addGame(Game game){ games.add(game); }
+
+    public Game getGame(String gameID){
+        for (Game game : games){
+            if (game.getGameId().equals(gameID)) return game;
+        }
+        return null;
+    }
 }
