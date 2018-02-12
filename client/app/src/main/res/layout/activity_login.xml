@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_title"
+    android:screenOrientation="landscape">
+
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="39dp"
+        android:layout_marginStart="39dp"
+        android:text="Register" />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/register_button"
+        android:layout_alignLeft="@+id/register_button"
+        android:layout_alignStart="@+id/register_button"
+        android:text="Login" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/password"
+        android:layout_alignLeft="@+id/password"
+        android:layout_alignStart="@+id/password"
+        android:layout_marginBottom="13dp"
+        android:background="#FFFFFF"
+        android:hint="username"
+        android:paddingLeft="10dp" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/login_button"
+        android:layout_alignLeft="@+id/login_button"
+        android:layout_alignStart="@+id/login_button"
+        android:layout_marginBottom="11dp"
+        android:background="#FFFFFF"
+        android:hint="password"
+        android:paddingLeft="10dp" />
+
+</RelativeLayout>
+
+<!--<RelativeLayout-->
+<!--android:id="@+id/relativeLayout"-->
+<!--android:layout_width="0dp"-->
+<!--android:layout_height="0dp"-->
+<!--android:layout_marginBottom="8dp"-->
+<!--android:layout_marginEnd="8dp"-->
+<!--android:layout_marginStart="8dp"-->
+<!--android:layout_marginTop="8dp">-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toTopOf="parent"-->

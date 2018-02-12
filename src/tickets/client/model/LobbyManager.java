@@ -8,6 +8,10 @@ import tickets.common.Player;
 
 public class LobbyManager {
 	private Map<String, Lobby> lobbyList;
+
+	public Map<String, Lobby> getLobbyList() {
+		return lobbyList;
+	}
 	
 	public LobbyManager() {
 		lobbyList = new HashMap<>();

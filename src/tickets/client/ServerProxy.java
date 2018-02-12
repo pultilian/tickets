@@ -5,18 +5,26 @@ import tickets.common.response.*;
 import tickets.common.IServer;
 import tickets.common.Lobby;
 import tickets.common.UserData;
+
 import tickets.client.ClientCommunicator;
 
 public class ServerProxy implements IServer {
+	//Singleton structure
 	private static ServerProxy INSTANCE = null;
-	private ClientCommunicator clientCommunicator = ClientCommunicator.getInstance();
 
+	private ServerProxy() {
+		clientCommunicator = ClientCommunicator.getInstance();
+	}
+	
 	public static ServerProxy getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new ServerProxy();
 		}
 		return (INSTANCE);
 	}
+	
+	//member variables
+	private ClientCommunicator clientCommunicator;
 	
 	public LoginResponse login(UserData userData) {
 		Object[] parameters = {userData};
