@@ -2,6 +2,7 @@
 package tickets.client.gui.presenters;
 
 import tickets.client.model.observable.*;
+import tickets.client.ModelFacade;
 
 public class GamePresenter implements IGamePresenter {
   private ClientObservable observable;

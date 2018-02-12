@@ -13,6 +13,7 @@ public class LobbyPresenter implements ILobbyPresenter {
 
   public LobbyPresenter(IHolderActivity setHolder) {
     holder = setHolder;
+    ModelFacade.getInstance().linkObserver(this);
   }
 
 //----------------------------------------------------------------------------

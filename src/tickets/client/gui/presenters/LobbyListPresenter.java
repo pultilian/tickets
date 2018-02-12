@@ -8,6 +8,7 @@ import tickets.common.Lobby;
 import tickets.client.*;
 import tickets.client.model.observable.*;
 import tickets.client.gui.presenters.IHolderActivity;
+import tickets.client.ModelFacade;
 
 
 public class LobbyListPresenter implements ILobbyListPresenter {
