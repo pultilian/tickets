@@ -20,6 +20,11 @@ public class LobbyPresenter implements ILobbyPresenter {
 //  interface methods
 
   @Override
+  public Lobby getLobby() {
+    return ModelFacade.getInstance().getLobby();
+  }
+
+  @Override
   public void startGame(String lobbyID) {
     ModelFacade.getInstance().startGame(lobbyID);
     return;

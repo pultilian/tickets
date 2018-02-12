@@ -1,3 +1,4 @@
+
 package tickets.client;
 
 import tickets.common.Lobby;
@@ -37,6 +38,14 @@ public class ModelFacade {
 	public void linkObserver(IObserver observer) {
 		modelRoot.linkObserver(observer);
 		return;
+	}
+
+	public Map<String, Lobby> getLobbyList() {
+		return modelRoot.getLobbyList();
+	}
+
+	public Lobby getLobby() {
+		return modelRoot.getCurrentLobby();
 	}
 
 //-------------------------------------------------

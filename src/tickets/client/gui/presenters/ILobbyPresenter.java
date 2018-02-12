@@ -7,6 +7,8 @@ import tickets.client.model.observable.*;
 
 
 public interface ILobbyPresenter extends IObserver {
+
+	public Lobby getLobby();
   
   public void startGame(String lobbyID);
   public void leaveLobby(String lobbyID);

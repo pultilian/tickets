@@ -54,6 +54,10 @@ public class ClientModelRoot {
 		return;
 	}
 
+	public Lobby getCurrentLobby() {
+		return currentLobby;
+	}
+
 	public Lobby getLobby(String lobbyId) {
 		return lobbyManager.getLobby(lobbyId);
 	}
