@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 import com.google.gson.Gson;
 
-import tickets.common.IServer;
+import tickets.server.ServerFacade;
 
 public class Command {
 
@@ -102,20 +102,20 @@ public class Command {
 		return result;
 	}
 
-	public Object execute() {
+	public Object execute(Object facade) {
 		Object result = null;
 		try {
-			Method method = IServer.class.getMethod(methodName, parameterTypes);
-//			result = method.invoke(IServer.getInstance(), parameters);
+			Method method = facade.getClass().getMethod(methodName, parameterTypes);
+			result = method.invoke(facade, parameters);
 		} catch (NoSuchMethodException e) {
 			System.err.println("ERROR: no method " + methodName + "exists");
 			e.printStackTrace();
-//		} catch (NumberFormatException | InvocationTargetException e) {
-//			result = "NUMBERFORMATERROR";
-//			System.err.println("ERROR: number format error");
-//		} catch (IllegalAccessException e) {
-//			System.err.println("ERROR: illegal access");
-//			e.printStackTrace();
+		} catch (NumberFormatException | InvocationTargetException e) {
+			result = "NUMBERFORMATERROR";
+			System.err.println("ERROR: number format error");
+		} catch (IllegalAccessException e) {
+			System.err.println("ERROR: illegal access");
+			e.printStackTrace();
 		} catch (SecurityException e) {
 			System.err.println("ERROR: security error");
 			e.printStackTrace();
