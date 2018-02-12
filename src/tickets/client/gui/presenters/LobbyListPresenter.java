@@ -4,16 +4,20 @@ package tickets.client.gui.presenters;
 import java.util.Map;
 
 import tickets.common.Lobby;
+import tickets.common.IMessage;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
+import tickets.common.IObserver;
+import tickets.common.IObservable;
 
 import tickets.client.*;
-import tickets.client.model.observable.*;
 import tickets.client.gui.presenters.IHolderActivity;
 import tickets.client.ModelFacade;
 
 
 public class LobbyListPresenter implements ILobbyListPresenter {
 	private IHolderActivity holder;
-	private ClientObservable observable;
+	private IObservable observable;
 
 	public LobbyListPresenter(IHolderActivity setHolder) {
 		holder = setHolder;
@@ -25,7 +29,7 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 
 	@Override
 	public Map<String, Lobby> getLobbyList() {
-		return ModelFacade.getLobbyList();
+		return ModelFacade.getInstance().getLobbyList();
 	}
 
 	@Override
@@ -65,7 +69,7 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 	}
 
 	@Override
-	public void setObservable(ClientObservable setObservable) {
+	public void setObservable(IObservable setObservable) {
 		observable = setObservable;
 		return;
 	}
@@ -97,5 +101,4 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 		}
 		return;
 	}
-
 }

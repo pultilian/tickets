@@ -1,10 +1,9 @@
 package tickets.common;
 
 import tickets.common.response.*;
-import tickets.common.response.data.*;
 
 public interface IServer {
-	//Client actions
+  //Client actions
   public LoginResponse login(UserData userData);
   public LoginResponse register(UserData userData);
   public JoinLobbyResponse joinLobby(String lobbyID, String authToken);
@@ -15,8 +14,6 @@ public interface IServer {
   public AddGuestResponse addGuest(String lobbyID, String authToken);
   public PlayerTurnResponse takeTurn(String playerID, String authToken);
 
-  //Data fetching
-  public LobbyListData getAllLobbies(String authToken);
-  public LobbyData getLobbyData(String lobbyID, String authToken);
-  public ClientUpdate getClientUpdate(String authToken);
+  //Poller response object
+  public ClientUpdate updateClient(String lastReceivedCommandID, String authToken);
 }

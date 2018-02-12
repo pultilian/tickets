@@ -1,51 +1,115 @@
 
 package tickets.client;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import tickets.common.Game;
+import tickets.common.IClient;
 import tickets.common.Lobby;
+import tickets.common.Player;
 import tickets.common.UserData;
 import tickets.common.response.*;
+import tickets.common.IObserver;
+import tickets.common.IMessage;
 
-import tickets.client.model.ClientModelRoot;
-import tickets.client.model.observable.*;
 import tickets.client.async.*;
+import tickets.client.model.ClientObservable;
+import tickets.client.model.LobbyManager;
 
 
-public class ModelFacade {
-	//Singleton structure
-	public static ModelFacade INSTANCE = null;
+public class ModelFacade implements IClient {
+//----------------------------------------------------------------------------
+//	Singleton structure
 
-	private ModelFacade() {
-		modelRoot = new ClientModelRoot();
-		asyncManager = new AsyncManager(modelRoot);
-	}
-
+	private static ModelFacade INSTANCE = null;
 	public static ModelFacade getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new ModelFacade();
 		return INSTANCE;
 	}
+	private ModelFacade() {
+		asyncManager = new AsyncManager(this);
+
+		observable = new ClientObservable();
+		lobbyManager = new LobbyManager();
+		localPlayers = new ArrayList<>();
+	}
 	
-	//variables
-	private ClientModelRoot modelRoot;
+//----------------------------------------------------------------------------
+//	member variables
+
 	private AsyncManager asyncManager;
+	private ClientObservable observable;
+	private LobbyManager lobbyManager;
+	private Lobby currentLobby;
+	private UserData userData;
+	private Game currentGame;
+	private List<Player> localPlayers;
 
 //----------------------------------------------------------------------------
 //	methods
 
 //-------------------------------------------------
-//		model root methods
+//	model interface methods
 
-	public void linkObserver(IObserver observer) {
-		modelRoot.linkObserver(observer);
+//Observer pattern
+	public void updateObservable(IMessage state) {
+		observable.notify(state);
 		return;
 	}
 
+//Observer pattern
+	public void linkObserver(IObserver observer) {
+		observable.linkObserver(observer);
+		return;
+	}
+
+//User Data access
+	public void setUserData(UserData userData) {
+		this.userData = userData;
+	}
+
+	public void addAuthToken(String token) {
+		userData.setAuthenticationToken(token);
+	}
+
+	public String getAuthToken() {
+		return userData.getAuthenticationToken();
+	}
+
+//Lobby Data access
+	public void updateLobbyList(Map<String, Lobby> lobbyList) {
+		lobbyManager.updateLobbyList(lobbyList);
+	}
+
 	public Map<String, Lobby> getLobbyList() {
-		return modelRoot.getLobbyList();
+		return lobbyManager.getLobbyList();
+	}
+
+	public void setCurrentLobby(Lobby lobby) {
+		currentLobby = lobby;
+		return;
 	}
 
 	public Lobby getLobby() {
-		return modelRoot.getCurrentLobby();
+		return currentLobby;
+	}
+
+  public Lobby getLobby(String lobbyID) {
+  	return lobbyManager.getLobby(lobbyID);
+  }
+
+	
+//Game data access
+	public void addGame(Game game) {
+		currentGame = game;
+		return;
+	}
+	
+	public Game getGame() {
+		return currentGame;
 	}
 
 //-------------------------------------------------
@@ -55,68 +119,84 @@ public class ModelFacade {
 //calls are made on the ServerProxy via AsyncTask objects
 
 	public void register(UserData userData) {
-		modelRoot.setUserData(userData);
+		setUserData(userData);
 		asyncManager.register(userData);
 		return;
 	}
 
 	public void login(UserData userData) {
-		modelRoot.setUserData(userData);
+		setUserData(userData);
 		asyncManager.login(userData);
 		return;
 	}
 
 	public void joinLobby(String lobbyID) {
-		String authToken = modelRoot.getAuthenticationToken();
-		asyncManager.joinLobby(lobbyID, authToken);
+		asyncManager.joinLobby(lobbyID, getAuthToken());
 		return;
 	}
 
 	public void createLobby(Lobby lobby) {
-		String authToken = modelRoot.getAuthenticationToken();
-		asyncManager.createLobby(lobby, authToken);
+		asyncManager.createLobby(lobby, getAuthToken());
 		return;
 	}
 
 	public void logout() {
-		String authToken = modelRoot.getAuthenticationToken();
-		asyncManager.logout(authToken);
+		asyncManager.logout(getAuthToken());
 		return;
 	}
 
 	public void startGame(String lobbyID) {
-		String authToken = modelRoot.getAuthenticationToken();
-		asyncManager.startGame(lobbyID, authToken);
+		asyncManager.startGame(lobbyID, getAuthToken());
 		return;
 	}
 
 	public void leaveLobby(String lobbyID) {
-		String authToken = modelRoot.getAuthenticationToken();
-		asyncManager.leaveLobby(lobbyID, authToken);
+		asyncManager.leaveLobby(lobbyID, getAuthToken());
 		return;
 	}
 
 	public void addGuest(String lobbyID) {
-		String authToken = modelRoot.getAuthenticationToken();
-		asyncManager.addGuest(lobbyID, authToken);
+		asyncManager.addGuest(lobbyID, getAuthToken());
 		return;
 	}
 
 	public void takeTurn(String playerID) {
-		String authToken = modelRoot.getAuthenticationToken();
-		asyncManager.takeTurn(playerID, authToken);
+		asyncManager.takeTurn(playerID, getAuthToken());
 		return;
 	}
 
-	public void getAllLobbies() {
-		String authToken = modelRoot.getAuthenticationToken();
-		asyncManager.getAllLobbies(authToken);
+//-------------------------------------------------
+//		IClient interface methods
+//
+//Represents the client to the server.
+//These methods are called when commands are retrieved
+//	by the poller from the Server.
+
+//TO BE IMPLEMENTED
+	public void addLobbyToList(Lobby lobby) {
+		return;
+	}
+	public void removeLobbyFromList(Lobby lobby) {
+		return;
+	}
+	public void addPlayerToLobbyInList(Lobby lobby, Player playerToAdd) {
+		return;
+	}
+	public void removePlayerFromLobbyInList(Lobby lobby, Player player) {
+		return;
+	}
+	public void addPlayer(Player player) {
+		return;
+	}
+	public void removePlayer(Player player) {
+		return;
+	}
+	public void startGame() {
+		return;
+	}
+	public void endCurrentTurn() {
 		return;
 	}
 
-  public void getLobbyData(String lobbyID) {
-  	String authToken = modelRoot.getAuthenticationToken();
-  	asyncManager.getLobbyData(lobbyID, authToken);
-  	return;
-  }
+
 }

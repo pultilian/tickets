@@ -5,15 +5,18 @@ package tickets.client.async;
 
 import tickets.common.UserData;
 import tickets.common.response.JoinLobbyResponse;
+import tickets.common.IMessage;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
-import tickets.client.model.ClientModelRoot;
+import tickets.client.ModelFacade;
 
 
 class StartGameAsync /*extends AsyncTask<String, B, JoinLobbyResponse>*/ {
-    ClientModelRoot modelRoot;
+    ModelFacade modelRoot;
 
-    public StartGameAsync(ClientModelRoot root) {
+    public StartGameAsync(ModelFacade root) {
         modelRoot = root;
     }
 

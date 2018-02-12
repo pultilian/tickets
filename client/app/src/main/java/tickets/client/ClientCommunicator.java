@@ -17,8 +17,8 @@ import com.google.gson.JsonSyntaxException;
 
 public class ClientCommunicator {
     //TODO: set these values
-	private static final String SERVER_HOST = "";
-	private static final String PORT_NUMBER = "";
+	private static final String SERVER_HOST = "10.24.218.76";
+	private static final String PORT_NUMBER = "8080";
 	private static final String COMMAND_DESIGNATOR = "/command";
 
     // Singleton pattern

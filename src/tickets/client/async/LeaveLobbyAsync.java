@@ -2,16 +2,18 @@
 package tickets.client.async;
 
 import tickets.common.response.LeaveLobbyResponse;
+import tickets.common.IMessage;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
 
-import tickets.client.model.ClientModelRoot;
+import tickets.client.ModelFacade;
 import tickets.client.ServerProxy;
-import tickets.client.model.observable.*;
 
 
 public class LeaveLobbyAsync /*extends AsyncTask<String, Void, LeaveLobbyResponse>*/ {
-	ClientModelRoot modelRoot;
+	ModelFacade modelRoot;
 
-	public LeaveLobbyAsync(ClientModelRoot setRoot) {
+	public LeaveLobbyAsync(ModelFacade setRoot) {
 		modelRoot = setRoot;
 	}
 

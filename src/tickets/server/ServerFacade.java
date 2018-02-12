@@ -1,14 +1,10 @@
 package tickets.server;
 
-import tickets.common.Game;
+import tickets.common.*;
+import tickets.server.model.AllGames;
 import tickets.server.model.AllLobbies;
-import tickets.common.IServer;
-import tickets.common.Lobby;
-import tickets.common.Player;
-import tickets.common.UserData;
 import tickets.common.response.*;
 import tickets.server.model.AllUsers;
-import tickets.common.response.data.*;
 
 import java.util.*;
 
@@ -38,7 +34,7 @@ public class ServerFacade implements IServer {
         if (AllUsers.getInstance().verifyLogin(userData.getUsername(), userData.getPassword())){
             String authToken = AllUsers.getInstance().getAuthToken(userData.getUsername());
             clientsInLobbyList.add(new ClientProxy(authToken));
-            return new LoginResponse("Welcome, " + userData.getUsername(), authToken);
+            return new LoginResponse("Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
         }
         else if (!AllUsers.getInstance().userExists(userData.getUsername())){
             return new LoginResponse(new Exception("Username is incorrect."));
@@ -54,12 +50,14 @@ public class ServerFacade implements IServer {
         else{
             String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
-            return new LoginResponse("Welcome, " + userData.getUsername(), authToken);
+            return new LoginResponse("Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
         }
     }
 
     @Override
     public JoinLobbyResponse joinLobby(String lobbyID, String authToken) {
+        if (getProxy(authToken) == null) return new JoinLobbyResponse(new Exception("You are not an authorized user!"));
+
         Lobby lobby = AllLobbies.getInstance().getLobby(lobbyID);
         if (lobby == null) return new JoinLobbyResponse(new Exception("Lobby does not exist."));
         else if (lobby.getCurrentMembers() == lobby.getMaxMembers()) return new JoinLobbyResponse(new Exception("Lobby is full."));
@@ -81,12 +79,15 @@ public class ServerFacade implements IServer {
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
                 client.addPlayer(player);
             }
-            return new JoinLobbyResponse(lobbyID, lobby.getHistory());
+            return new JoinLobbyResponse(lobby);
         }
     }
 
     @Override
     public JoinLobbyResponse createLobby(Lobby lobby, String authToken) {
+        if (getProxy(authToken) == null) return new JoinLobbyResponse(new Exception("You are not an authorized user!"));
+        if (lobbyNameExists(lobby.getName())) return new JoinLobbyResponse(new Exception("Lobby name already exists."));
+
         // Update the server model
         AllLobbies.getInstance().addLobby(lobby);
 
@@ -99,11 +100,13 @@ public class ServerFacade implements IServer {
         for (ClientProxy client : clientsInLobbyList) {
             client.addLobbyToList(lobby);
         }
-        return new JoinLobbyResponse(lobby.getId(), lobby.getHistory());
+        return new JoinLobbyResponse(lobby);
     }
 
     @Override
     public LogoutResponse logout(String authToken) {
+        if (getProxy(authToken) == null) return new LogoutResponse(new Exception("You are not an authorized user!"));
+
         ClientProxy client = getProxy(authToken);
         clientsInLobbyList.remove(client);
         return new LogoutResponse("Logout successful");
@@ -111,21 +114,36 @@ public class ServerFacade implements IServer {
 
     @Override
     public StartGameResponse startGame(String lobbyID, String authToken) {
+        if (getProxy(authToken) == null) return new StartGameResponse(new Exception("You are not an authorized user!"));
+
         Lobby lobby = AllLobbies.getInstance().getLobby(lobbyID);
         if (lobby == null) return new StartGameResponse(new Exception("Lobby does not exist."));
         else {
-            // Update relevant clients
+            // Update server model
+            AllLobbies.getInstance().removeLobby(lobbyID);
+            Game game = new Game(UUID.randomUUID().toString());
+            AllGames.getInstance().addGame(game);
+
+            // Update relevant clients and move clients from lobby to game
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
                 // The current client will receive a start game response instead of this command.
                 if (!client.getAuthToken().equals(authToken)) client.startGame();
+                clientsInALobby.remove(client);
+                clientsInAGame.put(client, game);
             }
-            Game game = new Game(UUID.randomUUID().toString());
+            for (ClientProxy client: clientsInLobbyList) {
+                client.removeLobbyFromList(lobby);
+            }
+
+            AllGames.getInstance().addGame(game);
             return new StartGameResponse(game.getGameId());
         }
     }
 
     @Override
     public LeaveLobbyResponse leaveLobby(String lobbyID, String authToken) {
+        if (getProxy(authToken) == null) return new LeaveLobbyResponse(new Exception("You are not an authorized user!"));
+
         Lobby lobby = AllLobbies.getInstance().getLobby(lobbyID);
         if (lobby == null) return new LeaveLobbyResponse(new Exception("Lobby does not exist."));
         else {
@@ -146,12 +164,14 @@ public class ServerFacade implements IServer {
                     client.removePlayerFromLobbyInList(lobby, player);
                 }
             }
-            return new LeaveLobbyResponse("You have left the lobby.");
+            return new LeaveLobbyResponse("You have left the lobby.", AllLobbies.getInstance().getAllLobbies());
         }
     }
 
     @Override
     public AddGuestResponse addGuest(String lobbyID, String authToken) {
+        if (getProxy(authToken) == null) return new AddGuestResponse(new Exception("You are not an authorized user!"));
+
         Lobby lobby = AllLobbies.getInstance().getLobby(lobbyID);
         if (lobby == null) return new AddGuestResponse(new Exception("Lobby does not exist."));
         else if (lobby.getCurrentMembers() == lobby.getMaxMembers()) return new AddGuestResponse(new Exception("Lobby is full."));
@@ -174,25 +194,57 @@ public class ServerFacade implements IServer {
 
     @Override
     public PlayerTurnResponse takeTurn(String playerID, String authToken) {
-        return null;
+        if (getProxy(authToken) == null) return new PlayerTurnResponse(new Exception("You are not an authorized user!"));
+
+        Game game = clientsInAGame.get(getProxy(authToken));
+        if (game == null) return new PlayerTurnResponse(new Exception("Game does not exist."));
+        else {
+            // Update server model (COMING SOON IN THE NEXT PHASE)
+
+            // Update relevant clients
+            for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                // The current client will receive a player turn response instead of this command.
+                if (!client.getAuthToken().equals(authToken)) client.endCurrentTurn();
+            }
+
+            return new PlayerTurnResponse();
+        }
     }
 
     @Override
-    public LobbyListData getAllLobbies(String authToken) {
-        return null;
-    }
+    public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
+        ClientProxy client = getProxy(authToken);
+        Queue<Command> commands = client.getUnprocessedCommands();
+        Map<Command, String> commandIDs = client.getCommandIDs();
 
-    @Override
-    public LobbyData getLobbyData(String lobbyID, String authToken) {
-        return null;
-    }
+        // Remove commands until the last received command
+        while ((lastReceivedCommandID != null) &&
+                (commands.peek() != null) &&
+                (!commandIDs.get(commands.peek()).equals(lastReceivedCommandID))) {
+            commandIDs.remove(commands.peek());
+            commands.remove();
+        }
 
-    @Override
-    public ClientUpdate getClientUpdate(String authToken) {
-        return null;
+        // Update the client proxy
+        client.setCommandIDs(commandIDs);
+        client.setUnprocessedCommands(commands);
+
+        if (commands.peek() == null) return new ClientUpdate(null, lastReceivedCommandID);
+        else {
+            Command lastCommand = (Command) commands.toArray()[commands.toArray().length - 1];
+            String lastID = commandIDs.get(lastCommand);
+            return new ClientUpdate(commands, lastID);
+        }
     }
 
     // PRIVATE HELPER METHODS------------------------------------------------------------------------------------------
+
+    private boolean lobbyNameExists(String lobbyName) {
+        for (Lobby lobby : AllLobbies.getInstance().getAllLobbies()) {
+            if (lobby.getName().equals(lobbyName)) return true;
+        }
+        return false;
+    }
 
     private ClientProxy getProxy(String authToken) {
         for (ClientProxy proxy : clientsInLobbyList) {
@@ -214,6 +266,16 @@ public class ServerFacade implements IServer {
 
         for (Map.Entry<ClientProxy, Lobby> entry : clientsInALobby.entrySet()) {
             if (entry.getValue().equals(lobby)) result.add(entry.getKey());
+        }
+        return result;
+    }
+
+    private List<ClientProxy> getClientsInGame(String gameID) {
+        Game game = AllGames.getInstance().getGame(gameID);
+        List<ClientProxy> result = new ArrayList<>();
+
+        for (Map.Entry<ClientProxy, Game> entry : clientsInAGame.entrySet()) {
+            if (entry.getValue().equals(game)) result.add(entry.getKey());
         }
         return result;
     }

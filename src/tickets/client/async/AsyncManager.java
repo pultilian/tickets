@@ -3,7 +3,7 @@ package tickets.client.async;
 import tickets.common.Lobby;
 import tickets.common.UserData;
 
-import tickets.client.model.ClientModelRoot;
+import tickets.client.ModelFacade;
 
 // AsyncTask<Params, Progress, Result>
 //
@@ -20,9 +20,9 @@ import tickets.client.model.ClientModelRoot;
 
 // creates and manages AsyncTask objects for communicating with the server over the network
 public class AsyncManager {
-	private ClientModelRoot root;
+	private ModelFacade root;
 
-	public AsyncManager(ClientModelRoot setRoot) {
+	public AsyncManager(ModelFacade setRoot) {
 		root = setRoot;
 	}
 
@@ -76,16 +76,16 @@ public class AsyncManager {
 		return;
 	}
 
-	public void getAllLobbies(String authToken) {
-		GetAllLobbiesAsync task = new GetAllLobbiesAsync(root);
-		task.execute(authToken);
-		return;
-	}
+	// public void getAllLobbies(String authToken) {
+	// 	GetAllLobbiesAsync task = new GetAllLobbiesAsync(root);
+	// 	task.execute(authToken);
+	// 	return;
+	// }
 
-	public void getLobbyData(String lobbyID, String authToken) {
-		GetLobbyDataAsync task = new GetLobbyDataAsync(root);
-		task.execute(lobbyID, authToken);
-		return;
-	}
+	// public void getLobbyData(String lobbyID, String authToken) {
+	// 	GetLobbyDataAsync task = new GetLobbyDataAsync(root);
+	// 	task.execute(lobbyID, authToken);
+	// 	return;
+	// }
 
 }

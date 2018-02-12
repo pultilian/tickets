@@ -2,13 +2,17 @@
 package tickets.client.gui.presenters;
 
 import tickets.common.Lobby;
+import tickets.common.IMessage;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
+import tickets.common.IObserver;
+import tickets.common.IObservable;
 
-import tickets.client.model.observable.*;
 import tickets.client.ModelFacade;
 
 
 public class LobbyPresenter implements ILobbyPresenter {
-  private ClientObservable observable;
+  private IObservable observable;
   private IHolderActivity holder;
 
   public LobbyPresenter(IHolderActivity setHolder) {
@@ -41,6 +45,7 @@ public class LobbyPresenter implements ILobbyPresenter {
     ModelFacade.getInstance().addGuest(lobbyID);
     return;
   }
+  
 
   @Override
   public void notify(IMessage state) {
@@ -60,7 +65,7 @@ public class LobbyPresenter implements ILobbyPresenter {
   }
 
   @Override
-  public void setObservable(ClientObservable setObservable) {
+  public void setObservable(IObservable setObservable) {
     observable = setObservable;
     return;
   }

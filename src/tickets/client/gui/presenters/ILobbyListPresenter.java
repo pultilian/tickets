@@ -4,8 +4,9 @@ package tickets.client.gui.presenters;
 import java.util.Map;
 
 import tickets.common.Lobby;
-
-import tickets.client.model.observable.*;
+import tickets.common.IMessage;
+import tickets.common.IObserver;
+import tickets.common.IObservable;
 
 
 public interface ILobbyListPresenter extends IObserver {
@@ -18,5 +19,5 @@ public interface ILobbyListPresenter extends IObserver {
 
 	// from IObserver
 	public void notify(IMessage state);
-	public void setObservable(ClientObservable setObservable);
+	public void setObservable(IObservable setObservable);
 }

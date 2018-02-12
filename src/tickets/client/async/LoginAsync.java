@@ -5,16 +5,18 @@ package tickets.client.async;
 
 import tickets.common.UserData;
 import tickets.common.response.LoginResponse;
+import tickets.common.IMessage;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
-import tickets.client.model.ClientModelRoot;
-import tickets.client.model.observable.*;
+import tickets.client.ModelFacade;
 
 
 class LoginAsync /*extends AsyncTask<UserData, Void, LoginResponse>*/ {
-	ClientModelRoot modelRoot;
+	ModelFacade modelRoot;
 
-	public LoginAsync(ClientModelRoot setRoot) {
+	public LoginAsync(ModelFacade setRoot) {
 		modelRoot = setRoot;
 	}
 
@@ -34,7 +36,7 @@ class LoginAsync /*extends AsyncTask<UserData, Void, LoginResponse>*/ {
 	// @Override
 	public void onPostExecute(LoginResponse response) {
 		if (response.getException() == null) {
-			modelRoot.addAuthenticationToken(response.getAuthToken());
+			modelRoot.addAuthToken(response.getAuthToken());
 
 			ClientStateChange.ClientState stateVal;
 			stateVal = ClientStateChange.ClientState.lobbylist;

@@ -6,17 +6,19 @@ package tickets.client.async;
 import tickets.common.UserData;
 import tickets.common.response.JoinLobbyResponse;
 import tickets.common.Lobby;
+import tickets.common.IMessage;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
 import tickets.client.gui.presenters.ILoginPresenter;
-import tickets.client.model.observable.*;
-import tickets.client.model.ClientModelRoot;
+import tickets.client.ModelFacade;
 
 
 class CreateLobbyAsync /*extends AsyncTask<Object, Void, JoinLobbyResponse>*/ {
-	ClientModelRoot modelRoot;
+	ModelFacade modelRoot;
 
-	public CreateLobbyAsync(ClientModelRoot setRoot) {
+	public CreateLobbyAsync(ModelFacade setRoot) {
 		modelRoot = setRoot;
 	}
 

@@ -1,11 +1,17 @@
 
 package tickets.client.gui.presenters;
 
-import tickets.client.model.observable.*;
+import tickets.common.IMessage;
+import tickets.common.IObserver;
+import tickets.common.IObservable;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
+
 import tickets.client.ModelFacade;
 
+
 public class GamePresenter implements IGamePresenter {
-  private ClientObservable observable;
+  private IObservable observable;
   private IHolderActivity holder;
 
   public GamePresenter(IHolderActivity setHolder) {
@@ -22,7 +28,7 @@ public class GamePresenter implements IGamePresenter {
     return;
   }
   
-  public void setObservable(ClientObservable setObservable) {
+  public void setObservable(IObservable setObservable) {
   	observable = setObservable;
   	return;
   }

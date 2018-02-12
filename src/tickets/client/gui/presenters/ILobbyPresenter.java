@@ -2,8 +2,9 @@
 package tickets.client.gui.presenters;
 
 import tickets.common.Lobby;
-
-import tickets.client.model.observable.*;
+import tickets.common.IMessage;
+import tickets.common.IObserver;
+import tickets.common.IObservable;
 
 
 public interface ILobbyPresenter extends IObserver {
@@ -16,6 +17,6 @@ public interface ILobbyPresenter extends IObserver {
 
   // from IObserver
   public void notify(IMessage state);
-  public void setObservable(ClientObservable setObservable);
+  public void setObservable(IObservable setObservable);
   
 }

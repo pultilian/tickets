@@ -6,17 +6,19 @@ package tickets.client.async;
 import tickets.common.UserData;
 import tickets.common.response.JoinLobbyResponse;
 import tickets.common.Lobby;
+import tickets.common.IMessage;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
 import tickets.client.gui.presenters.ILoginPresenter;
-import tickets.client.model.observable.*;
-import tickets.client.model.ClientModelRoot;
+import tickets.client.ModelFacade;
 
 
 class JoinLobbyAsync /*extends AsyncTask<String, Void, JoinLobbyResponse>*/ {
-	ClientModelRoot modelRoot;
+	ModelFacade modelRoot;
 
-	public JoinLobbyAsync(ClientModelRoot setRoot) {
+	public JoinLobbyAsync(ModelFacade setRoot) {
 		modelRoot = setRoot;
 	}
 
@@ -38,9 +40,7 @@ class JoinLobbyAsync /*extends AsyncTask<String, Void, JoinLobbyResponse>*/ {
 	// @Override
 	public void onPostExecute(JoinLobbyResponse response) {
 		if (response.getException() == null) {
-			Lobby currentLobby = modelRoot.getLobby(response.getLobbyID());
-			currentLobby.setHistory(response.getLobbyHistory());
-			modelRoot.setCurrentLobby(currentLobby);
+			modelRoot.setCurrentLobby(response.getLobby());
 
 			ClientStateChange.ClientState stateVal = ClientStateChange.ClientState.lobby;
 			ClientStateChange state = new ClientStateChange(stateVal);

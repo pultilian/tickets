@@ -1,16 +1,20 @@
 
 package tickets.client.gui.presenters;
 
+import tickets.common.IMessage;
+import tickets.common.IObserver;
+import tickets.common.IObservable;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
 import tickets.common.UserData;
 
-import tickets.client.model.observable.*;
 import tickets.client.ModelFacade;
 import tickets.client.gui.presenters.IHolderActivity;
 
 
 public class LoginPresenter implements ILoginPresenter {
 	private IHolderActivity holder;
-	private ClientObservable observable;
+	private IObservable observable;
 
 	public LoginPresenter(IHolderActivity setHolder) {
 		holder = setHolder;
@@ -55,7 +59,7 @@ public class LoginPresenter implements ILoginPresenter {
 	}
 
 	@Override
-	public void setObservable(ClientObservable setObservable) {
+	public void setObservable(IObservable setObservable) {
 		observable = setObservable;
 		return;
 	}

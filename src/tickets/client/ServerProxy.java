@@ -2,7 +2,6 @@ package tickets.client;
 
 import tickets.common.Command;
 import tickets.common.response.*;
-import tickets.common.response.data.*;
 import tickets.common.IServer;
 import tickets.common.Lobby;
 import tickets.common.UserData;
@@ -61,7 +60,7 @@ public class ServerProxy implements IServer {
 
 	public LogoutResponse logout(String authToken) {
 		Object[] parameters = {authToken};
-		String[] parameterTypes = null;
+		String[] parameterTypes = {String.class.getName()};
 		Command command = new Command("logout", parameterTypes, parameters);
 		Object result = clientCommunicator.send(command);
 		return (LogoutResponse)result;
@@ -99,28 +98,11 @@ public class ServerProxy implements IServer {
 		return (PlayerTurnResponse)result;
 	}
 
-
-  public LobbyListData getAllLobbies(String authToken) {
-  	Object[] parameters = {authToken};
-  	String[] parameterTypes = {String.class.getName()};
-  	Command command = new Command("getAllLobbies", parameterTypes, parameters);
-  	Object result = clientCommunicator.send(command);
-  	return (LobbyListData)result;
-  }
-
-  public LobbyData getLobbyData(String lobbyID, String authToken) {
-  	Object[] parameters = {lobbyID, authToken};
-  	String[] parameterTypes = {String.class.getName(), String.class.getName()};
-  	Command command = new Command("getLobbyData", parameterTypes, parameters);
-  	Object result = clientCommunicator.send(command);
-  	return (LobbyData)result;
-  }
-
-  public ClientUpdate getClientUpdate(String authToken) {
-  	Object[] parameters = {authToken};
-  	String[] parameterTypes = {String.class.getName()};
-  	Command command = new Command("getClientUpdate", parameterTypes, parameters);
-  	Object result = clientCommunicator.send(command);
-  	return (ClientUpdate)result;
-  }
+	public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
+		Object[] parameters = {lastReceivedCommandID, authToken};
+		String[] parameterTypes = {String.class.getName(), String.class.getName()};
+		Command command = new Command("updateClient", parameterTypes, parameters);
+		Object result = clientCommunicator.send(command);
+		return (ClientUpdate) result;
+	}
 }

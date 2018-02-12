@@ -1,22 +1,23 @@
 package tickets.common.response;
 
+import tickets.common.Lobby;
+
 import java.util.List;
 
 public class JoinLobbyResponse extends Response {
 
-	private String lobbyID;
-	private List<String> lobbyHistory;
+  private Lobby lobby;
+
 
 	public JoinLobbyResponse(Exception exception) {
 		super(exception);
 	}
 
-	public JoinLobbyResponse(String lobbyID, List<String> lobbyHistory){
-		this.lobbyID = lobbyID;
-		this.lobbyHistory = lobbyHistory;
-	}
+  public JoinLobbyResponse(Lobby lobby){
+    this.lobby = lobby;
+  }
 
-	public String getLobbyID(){ return lobbyID; }
-
-	public List<String> getLobbyHistory(){ return lobbyHistory; }
+  public Lobby getLobby() { 
+  	return lobby;
+  }
 }

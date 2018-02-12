@@ -2,16 +2,18 @@
 package tickets.client.async;
 
 import tickets.common.response.LogoutResponse;
+import tickets.common.IMessage;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
 
-import tickets.client.model.ClientModelRoot;
-import tickets.client.model.observable.*;
+import tickets.client.ModelFacade;
 import tickets.client.ServerProxy;
 
 
 public class LogoutAsync /*extends AsyncTask<String, Void, LogoutResponse>*/ {
-	ClientModelRoot modelRoot;
+	ModelFacade modelRoot;
 
-	public LogoutAsync(ClientModelRoot root) {
+	public LogoutAsync(ModelFacade root) {
 		modelRoot = root;
 	}
 

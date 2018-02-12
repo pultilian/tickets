@@ -2,8 +2,10 @@
 package tickets.client.gui.presenters;
 
 import tickets.common.UserData;
+import tickets.common.IMessage;
+import tickets.common.IObserver;
+import tickets.common.IObservable;
 
-import tickets.client.model.observable.*;
 import tickets.client.ModelFacade;
 
 
@@ -14,5 +16,5 @@ public interface ILoginPresenter extends IObserver {
 
 	// from IObserver
 	public void notify(IMessage state);
-    public void setObservable(ClientObservable setObservable);
+    public void setObservable(IObservable setObservable);
 }

@@ -46,7 +46,7 @@ public class ServerCommunicator {
 			try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody())) {
 				System.out.println("  Processing command...");
 				Command command = new Command(reader);
-				result = command.execute();
+				result = command.execute(ServerFacade.getInstance());
 				System.out.println("  Command executed.");
 			}
 			try(OutputStreamWriter writer = new OutputStreamWriter(exchange.getResponseBody())) {
