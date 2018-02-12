@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_title">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="97dp"
+        android:layout_marginStart="97dp"
+        android:layout_marginTop="16dp">
+        <!--app:layout_constraintBottom_toTopOf="@+id/relativeLayout3"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lobby_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        android:layout_width="0dp"
+        android:layout_height="86dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp">
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/relativeLayout2"-->
+
+        <Button
+            android:id="@+id/join"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_alignBaseline="@+id/log_out"
+            android:layout_alignBottom="@+id/log_out"
+            android:layout_centerHorizontal="true"
+            android:text="Join" />
+
+        <Button
+            android:id="@+id/log_out"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="88dp"
+            android:layout_marginRight="88dp"
+            android:text="Log Out" />
+
+        <Button
+            android:id="@+id/create_game"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_alignBaseline="@+id/join"
+            android:layout_alignBottom="@+id/join"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="87dp"
+            android:layout_marginStart="87dp"
+            android:text="Create Game" />
+    </RelativeLayout>
+</RelativeLayout>
