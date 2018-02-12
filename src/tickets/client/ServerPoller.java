@@ -28,7 +28,7 @@ public class ServerPoller implements IObserver {
     	String token = ModelFacade.getInstance().authenticate();
     	ClientUpdate updates = ServerProxy.getInstance().updateClient(lastCommand, token);
     	for(Command c:updates.getCommands()){
-    		c.execute(ModelFacade.class);
+    		c.execute(ModelFacade.getInstance());
     	}
     }
     

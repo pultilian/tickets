@@ -39,6 +39,7 @@ public class ModelFacade implements IClient {
 		this.userData = userData;
 
 		if (result.getException() == null) {
+			System.out.println(result.getAuthToken());
 			userData.setAuthenticationToken(result.getAuthToken());
 			return true;
 		} else {
