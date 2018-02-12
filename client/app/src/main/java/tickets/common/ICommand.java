@@ -5,5 +5,5 @@ package tickets.common;
  */
 
 public interface ICommand {
-    public Object execute();
+    public Object execute(Object facade);
 }
