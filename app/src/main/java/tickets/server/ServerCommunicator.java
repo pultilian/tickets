@@ -44,8 +44,8 @@ public class ServerCommunicator {
 			System.out.println("Handling operation...");
 			Object result = null;
 			try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody())) {
-				System.out.println("  Processing command...");
 				Command command = new Command(reader);
+				System.out.println("  Processing command " + command.getMethodName());
 				result = command.execute(ServerFacade.getInstance());
 				System.out.println("  Command executed.");
 			}

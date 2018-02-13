@@ -45,6 +45,7 @@ class RegisterAsync extends AsyncTask<UserData, Void, LoginResponse> {
             ClientStateChange.ClientState stateVal;
             stateVal = ClientStateChange.ClientState.lobbylist;
             ClientStateChange state = new ClientStateChange(stateVal);
+            modelRoot.updateLobbyList(response.getLobbyList());
             modelRoot.updateObservable(state);
         } else {
             Exception ex = response.getException();

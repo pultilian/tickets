@@ -1,6 +1,8 @@
 
 package tickets.client.gui.presenters;
 
+import android.view.Display;
+
 import java.util.List;
 
 import tickets.common.Lobby;
@@ -29,6 +31,7 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 
     @Override
     public List<Lobby> getLobbyList() {
+        ModelFacade.getInstance().startServerPoller();
         return ModelFacade.getInstance().getLobbyList();
     }
 

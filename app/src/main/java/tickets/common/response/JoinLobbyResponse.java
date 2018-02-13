@@ -2,8 +2,6 @@ package tickets.common.response;
 
 import tickets.common.Lobby;
 
-import java.util.List;
-
 public class JoinLobbyResponse extends Response {
 
   private Lobby lobby;
@@ -13,11 +11,11 @@ public class JoinLobbyResponse extends Response {
 		super(exception);
 	}
 
-  public JoinLobbyResponse(Lobby lobby){
+	public JoinLobbyResponse(Lobby lobby){
     this.lobby = lobby;
   }
 
-  public Lobby getLobby() { 
+    public Lobby getLobby() {
   	return lobby;
   }
 }

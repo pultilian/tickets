@@ -27,3 +27,6 @@ build/
 .project
 .DS_Store
 .DS_Store?
+*.class
+*.rawproto
+*.json
