@@ -28,6 +28,7 @@ public class AsyncManager {
 
     public void register(UserData userData) {
         RegisterAsync task = new RegisterAsync(root);
+        System.out.println("AsyncManager executing task and returning");
         task.execute(userData);
         return;
     }

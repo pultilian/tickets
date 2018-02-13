@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import tickets.client.gui.presenters.IHolderActivity;
 import tickets.client.gui.presenters.LobbyPresenter;
@@ -48,13 +48,13 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
         presenter = new LobbyPresenter(this);
         currentLobby = presenter.getLobby();
 
-        startGameButton = (Button) this.findViewById(R.id.start_game_button);
-        leaveGame = (Button) this.findViewById(R.id.leave_game);
+        startGameButton = this.findViewById(R.id.start_game_button);
+        leaveGame = this.findViewById(R.id.leave_game);
 
         startGameButton.setEnabled(false);
 
-        lobbyPlayerList = (RecyclerView) findViewById(R.id.lobby_player_list);
-        updateWindow = (RecyclerView) findViewById(R.id.lobby_update_list);
+        lobbyPlayerList = findViewById(R.id.lobby_player_list);
+        updateWindow = findViewById(R.id.lobby_update_list);
 
         lobbyPlayerList.setLayoutManager(new LinearLayoutManager(this));
         updateWindow.setLayoutManager(new LinearLayoutManager(this));
@@ -81,11 +81,7 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
             }
         });
 
-        lobbyPlayerAdapter = new LobbyPlayerAdapter(this);
-        lobbyPlayerList.setAdapter(lobbyPlayerAdapter);
-        updateAdapter = new UpdateAdapter(this);
-        updateWindow.setAdapter(updateAdapter);
-
+        return;
     }
 
     @Override
@@ -100,6 +96,7 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+        return;
     }
 
     public void makeTransition(IHolderActivity.Transition toActivity){
@@ -107,6 +104,7 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
             Intent intent = new Intent(LobbyActivity.this, LobbyListActivity.class);
             startActivity(intent);
         }
+        return;
     }
 
     @Override
@@ -133,22 +131,29 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
         return;
     }
 
+    @Override
+    //from IHolderActivity
+    public void checkUpdate() {
+        //update the Lobby History
+        Lobby currentLobby = presenter.getLobby();
+        List<Player> allPlayers = currentLobby.getPlayers();
+        LobbyPlayerAdapter adapter = new LobbyPlayerAdapter(this, allPlayers);
+        lobbyPlayerList.setAdapter(adapter);
 
-
-    public void updateUI() {
+        List<String> history = currentLobby.getHistory();
+        updateAdapter = new UpdateAdapter(this, history);
+        updateWindow.setAdapter(updateAdapter);
+        return;
     }
 
 
     class LobbyPlayerAdapter extends RecyclerView.Adapter<LobbyPlayerHolder> {
         private LayoutInflater inflater;
-        private ArrayList<Player> players;
+        private List<Player> players;
 
-        public LobbyPlayerAdapter(Context context) {
+        public LobbyPlayerAdapter(Context context, List<Player> setPlayers) {
             inflater = LayoutInflater.from(context);
-            players = new ArrayList<>();
-            for (Player p : currentLobby.getPlayers()) {
-                players.add(p);
-            }
+            players = setPlayers;
 
             if(players.size() > 1 && players.size() < 6){
                 startGameButton.setEnabled(true);
@@ -184,28 +189,30 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
         public LobbyPlayerHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            playerName = (TextView) view.findViewById(R.id.title);
-            color = (TextView) view.findViewById(R.id.description);
+            playerName = view.findViewById(R.id.title);
+            color = view.findViewById(R.id.description);
         }
 
         // Assigns values in the layout.
         void bind(Player item) {
             playerName.setText(item.getPlayerId());
             color.setText("COLOR");
+            return;
         }
 
         @Override
         public void onClick(View view) {
-
+            //
+            return;
         }
     }
 
     class UpdateAdapter extends RecyclerView.Adapter<updateHolder> {
         private LayoutInflater inflater;
-        private String[] updates;
+        private List<String> updates;
 
-        public UpdateAdapter(Context context) {
-            updates = currentLobby.getHistory().toArray(new String[currentLobby.getHistory().size()]);
+        public UpdateAdapter(Context context, List<String> setHistory) {
+            updates = setHistory;
             inflater = LayoutInflater.from(context);
         }
 
@@ -218,14 +225,14 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
         // Grabs an individual row and assigns its values through the holder class.
         @Override
         public void onBindViewHolder(updateHolder holder, int position) {
-            String item = updates[position];
+            String item = updates.get(position);
             holder.bind(item);
             return;
         }
 
         @Override
         public int getItemCount() {
-            return updates.length;
+            return updates.size();
         }
 
     }
@@ -236,7 +243,7 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
         public updateHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            updateText = (TextView) view.findViewById(R.id.lobby_update_item);
+            updateText = view.findViewById(R.id.lobby_update_item);
         }
 
         // Assigns values in the layout.
