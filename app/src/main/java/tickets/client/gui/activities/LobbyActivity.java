@@ -81,7 +81,19 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
             }
         });
 
+        setUI();
         return;
+    }
+
+    public void setUI(){
+        Lobby currentLobby = presenter.getLobby();
+        List<Player> allPlayers = currentLobby.getPlayers();
+        lobbyPlayerAdapter = new LobbyPlayerAdapter(this, allPlayers);
+        lobbyPlayerList.setAdapter(lobbyPlayerAdapter);
+
+        List<String> history = currentLobby.getHistory();
+        updateAdapter = new UpdateAdapter(this, history);
+        updateWindow.setAdapter(updateAdapter);
     }
 
     @Override

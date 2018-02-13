@@ -84,8 +84,6 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
                 try {
                     int p = Integer.parseInt(players);
                     presenter.createLobby(new Lobby(lobbyName, p));
-                    Intent intent = new Intent(LobbyListActivity.this, LobbyActivity.class);
-                    startActivity(intent);
                 }
                 catch(NumberFormatException e) {
                     Toast.makeText(LobbyListActivity.this, "Invalid number of players", Toast.LENGTH_SHORT).show();
@@ -94,7 +92,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             }
         });
 
-        gameName = findViewById(R.id.num_players);
+        gameName = findViewById(R.id.name_game);
         gameName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -109,7 +107,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             public void afterTextChanged(Editable s) {
             }
         });
-        numPlayers = findViewById(R.id.name_game);
+        numPlayers = findViewById(R.id.num_players);
         numPlayers.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,8 +123,16 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             }
         });
 
+        setUI();
         checkButton();
         return;
+    }
+
+
+    public void setUI(){
+        List<Lobby> lobbies = presenter.getLobbyList();
+        lobbyListAdapter = new LobbyListAdapter(this, lobbies);
+        lobbyList.setAdapter(lobbyListAdapter);
     }
 
     @Override
