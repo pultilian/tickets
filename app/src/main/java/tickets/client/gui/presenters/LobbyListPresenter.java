@@ -92,6 +92,9 @@ public class LobbyListPresenter implements ILobbyListPresenter {
             case game:
                 //do nothing
                 break;
+            case update:
+                holder.checkUpdate();
+                break;
             default:
                 Exception err = new Exception("Observer err: invalid Transition " + flag.name());
                 holder.toastException(err);

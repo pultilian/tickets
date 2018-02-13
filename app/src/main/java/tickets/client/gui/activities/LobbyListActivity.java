@@ -1,6 +1,7 @@
 package tickets.client.gui.activities;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import android.content.Context;
@@ -124,7 +125,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             }
         });
 
-        updateUI();
+        checkButton();
         return;
     }
 
@@ -172,24 +173,25 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         toast.show();
     }
 
-    void updateUI() {
-        lobbyListAdapter = new LobbyListAdapter(this);
-        checkButton();
-        lobbyList.setAdapter(lobbyListAdapter);
+    @Override
+    //from IHolderActivity
+    public void checkUpdate() {
+        //update the lobby list by creating a new adapter for the list
+        List<Lobby> lobbies = presenter.getLobbyList();
+        LobbyListAdapter adapter = new LobbyListAdapter(this, lobbies);
+
+        lobbyList.setAdapter(adapter);
+        return;
     }
 
 
     class LobbyListAdapter extends RecyclerView.Adapter<LobbyListHolder> {
-        private ArrayList<Lobby> curLobbyList;
+        private List<Lobby> lobbyList;
         private LayoutInflater inflater;
 
-        public LobbyListAdapter(Context context) {
+        public LobbyListAdapter(Context context, List<Lobby> setLobbies) {
             inflater = LayoutInflater.from(context);
-            curLobbyList = new ArrayList<>();
-            for (Lobby l : presenter.getLobbyList()) {
-                curLobbyList.add(l);
-            }
-
+            lobbyList = setLobbies;
         }
 
         @Override
@@ -201,13 +203,13 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         // Grabs an individual row and assigns its values through the holder class.
         @Override
         public void onBindViewHolder(LobbyListHolder holder, int position) {
-            Lobby item = curLobbyList.get(position);
+            Lobby item = lobbyList.get(position);
             holder.bind(item);
         }
 
         @Override
         public int getItemCount() {
-            return curLobbyList.size();
+            return lobbyList.size();
         }
 
     }
@@ -221,8 +223,8 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         public LobbyListHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            gameTitle = (TextView) view.findViewById(R.id.title);
-            numPlayers = (TextView) view.findViewById(R.id.description);
+            gameTitle = view.findViewById(R.id.title);
+            numPlayers = view.findViewById(R.id.description);
             maxPlayers = 0;
         }
 

@@ -147,4 +147,11 @@ public class LoginActivity extends AppCompatActivity implements IHolderActivity 
             login.setEnabled(false);
         }
     }
+
+    @Override
+    //from IHolderActivity
+    public void checkUpdate() {
+        //do nothing
+        return;
+    }
 }

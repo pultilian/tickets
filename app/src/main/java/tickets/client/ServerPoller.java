@@ -3,6 +3,7 @@ package tickets.client;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import tickets.common.ClientStateChange;
 import tickets.common.Command;
 import tickets.common.IMessage;
 import tickets.common.IObserver;
@@ -41,12 +42,14 @@ public class ServerPoller implements IObserver {
 	    String token = ModelFacade.getInstance().getAuthToken();
 	    
     	@Override
-    	public void run(){
+    	public void run() {
     	    ClientUpdate updates = ServerProxy.getInstance().updateClient(lastCommand, token);
-    	    for(Command c:updates.getCommands()){
+    	    for(Command c : updates.getCommands()) {
     	    	c.execute(ModelFacade.getInstance());
     	    }
     	    lastCommand = updates.getLastCommandID();
+    	    IMessage state = new ClientStateChange(ClientState.update);
+    	    observable.notify(state);
     	}
     };    
     
