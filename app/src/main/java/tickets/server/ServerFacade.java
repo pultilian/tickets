@@ -90,6 +90,9 @@ public class ServerFacade implements IServer {
 
         // Update the server model
         AllLobbies.getInstance().addLobby(lobby);
+        Player player = new Player(UUID.randomUUID().toString(), authToken);
+        lobby.addPlayer(player);
+        lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has joined the lobby.");
 
         // Move current client
         ClientProxy currentClient = getProxy(authToken);
