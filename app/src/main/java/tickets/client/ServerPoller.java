@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import tickets.common.ClientStateChange;
 import tickets.common.Command;
 import tickets.common.IMessage;
 import tickets.common.IObserver;
@@ -43,7 +44,7 @@ public class ServerPoller implements IObserver {
 	    String token = ModelFacade.getInstance().getAuthToken();
 	    
     	@Override
-    	public void run(){
+    	public void run() {
     	    ClientUpdate updates = ServerProxy.getInstance().updateClient(lastCommand, token);
     	    if(updates.getException() == null) {
     	        if (updates.getCommands() == null)

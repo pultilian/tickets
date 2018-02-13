@@ -125,6 +125,7 @@ public class ModelFacade implements IClient {
 
 	public void register(UserData userData) {
 		setUserData(userData);
+		System.out.println("ModelFacade calling AsyncManager");
 		asyncManager.register(userData);
 		return;
 	}

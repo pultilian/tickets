@@ -15,7 +15,8 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 public class ClientCommunicator {
-	private static final String SERVER_HOST = "10.34.100.6";
+
+	private static final String SERVER_HOST = "192.168.0.103";
 	private static final String PORT = "8080";
 	private static final String PATH = "/command";
 

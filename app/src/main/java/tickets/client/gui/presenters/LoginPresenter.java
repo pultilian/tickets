@@ -30,6 +30,7 @@ public class LoginPresenter implements ILoginPresenter {
             holder.toastException(new Exception("invalid username or password"));
         }
         else {
+            System.out.println("presenter calling model facade");
             ModelFacade.getInstance().register(registerData);
         }
         return;
@@ -84,6 +85,9 @@ public class LoginPresenter implements ILoginPresenter {
                 //do nothing
                 break;
             case game:
+                //do nothing
+                break;
+            case update:
                 //do nothing
                 break;
             default:

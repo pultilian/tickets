@@ -26,8 +26,9 @@ class RegisterAsync extends AsyncTask<UserData, Void, LoginResponse> {
             AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
             return new LoginResponse(error);
         }
-
+        System.out.println("register async calling serverProxy in background");
         LoginResponse response = ServerProxy.getInstance().register(data[0]);
+        System.out.println("serverProxy returned response in background");
         return response;
     }
 
