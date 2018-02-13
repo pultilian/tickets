@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">client</string>
+
+    <string-array name="lobby_players">
+        <item name="two">2</item>
+        <item name="three">3</item>
+        <item name="four">4</item>
+        <item name="five">5</item>
+    </string-array>
+</resources>
