@@ -37,7 +37,12 @@ class JoinLobbyAsync extends AsyncTask<String, Void, JoinLobbyResponse> {
 
 	@Override
 	public void onPostExecute(JoinLobbyResponse response) {
-		if (response.getException() == null) {
+		if (response == null) {
+			Exception ex = new Exception("The Server could not be reached");
+			ExceptionMessage msg = new ExceptionMessage(ex);
+			modelRoot.updateObservable(msg);
+		}
+		else if (response.getException() == null) {
 			modelRoot.setCurrentLobby(response.getLobby());
 
 			ClientStateChange.ClientState stateVal = ClientStateChange.ClientState.lobby;

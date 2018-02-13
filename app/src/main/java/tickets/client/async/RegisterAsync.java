@@ -33,7 +33,12 @@ class RegisterAsync extends AsyncTask<UserData, Void, LoginResponse> {
 
     @Override
     public void onPostExecute(LoginResponse response) {
-        if (response.getException() == null) {
+        if (response == null) {
+            Exception ex = new Exception("The Server could not be reached");
+            ExceptionMessage msg = new ExceptionMessage(ex);
+            modelRoot.updateObservable(msg);
+        }
+        else if (response.getException() == null) {
             modelRoot.addAuthToken(response.getAuthToken());
 
             ClientStateChange.ClientState stateVal;

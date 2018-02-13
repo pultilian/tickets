@@ -36,8 +36,13 @@ class StartGameAsync extends AsyncTask<String, Void, JoinLobbyResponse> {
 
     @Override
     public void onPostExecute(JoinLobbyResponse response) {
-        //
-        return;
+        if (response == null) {
+            Exception ex = new Exception("The Server could not be reached");
+            ExceptionMessage msg = new ExceptionMessage(ex);
+            modelRoot.updateObservable(msg);
+        }
+
+            return;
     }
 
 }

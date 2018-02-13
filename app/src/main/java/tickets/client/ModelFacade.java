@@ -45,11 +45,17 @@ public class ModelFacade implements IClient {
 	private Lobby currentLobby;
 	private UserData userData;
 	private Game currentGame;
+	private ServerPoller serverPoller = null;
 	private List<Player> localPlayers;
 
 //----------------------------------------------------------------------------
 //	methods
-
+	public boolean startServerPoller(){
+	    if (serverPoller == null){
+            serverPoller = new ServerPoller();
+        }
+		return serverPoller.startPolling();
+	}
 //-------------------------------------------------
 //	model interface methods
 
@@ -170,8 +176,6 @@ public class ModelFacade implements IClient {
 //Represents the client to the server.
 //These methods are called when commands are retrieved
 //	by the poller from the Server.
-
-//TO BE IMPLEMENTED
 	public void addLobbyToList(Lobby lobby) {
 		lobbyManager.addLobby(lobby);
 	}
