@@ -19,13 +19,22 @@ public class ServerPoller implements IObserver {
     private String lastCommand;
     private Timer timer;
     private ClientState clientState;
+    private boolean running;
 
     public ServerPoller() {
         ModelFacade.getInstance().linkObserver(this);
         clientState = null;
         lastCommand = null;
         timer = new Timer();
-        timer.schedule(CheckServer, 0, 1000);
+        running = false;
+    }
+
+    public boolean startPolling(){
+        if(! running) {
+            timer.schedule(CheckServer, 0, 1000);
+            return true;
+        }
+        return false;
     }
     
     private TimerTask CheckServer = new TimerTask() {
@@ -37,6 +46,7 @@ public class ServerPoller implements IObserver {
     	    for(Command c:updates.getCommands()){
     	    	c.execute(ModelFacade.getInstance());
     	    }
+    	    lastCommand = updates.getLastCommandID();
     	}
     };    
     
