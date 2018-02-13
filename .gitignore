@@ -5,9 +5,8 @@
 # Android and Android Studio files
 .idea/
 .gradle/
-client/app/src/
-client/app/build/
-client/local.properties
+app/build/
+local.properties
 
 # Java generated/utility files
 .class
