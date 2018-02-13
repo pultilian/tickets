@@ -34,7 +34,6 @@ public class ModelFacade implements IClient {
 		observable = new ClientObservable();
 		lobbyManager = new LobbyManager();
 		localPlayers = new ArrayList<>();
-		serverPoller = new ServerPoller();
 	}
 	
 //----------------------------------------------------------------------------
@@ -46,12 +45,15 @@ public class ModelFacade implements IClient {
 	private Lobby currentLobby;
 	private UserData userData;
 	private Game currentGame;
-	private ServerPoller serverPoller;
+	private ServerPoller serverPoller = null;
 	private List<Player> localPlayers;
 
 //----------------------------------------------------------------------------
 //	methods
 	public boolean startServerPoller(){
+	    if (serverPoller == null){
+            serverPoller = new ServerPoller();
+        }
 		return serverPoller.startPolling();
 	}
 //-------------------------------------------------
