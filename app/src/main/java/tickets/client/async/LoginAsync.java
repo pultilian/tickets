@@ -20,7 +20,7 @@ class LoginAsync extends AsyncTask<UserData, Void, LoginResponse> {
 		modelRoot = setRoot;
 	}
 
-	// @Override
+	@Override
 	public LoginResponse doInBackground(UserData... data) {
 		if (data.length != 1) {
 			AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
@@ -31,7 +31,7 @@ class LoginAsync extends AsyncTask<UserData, Void, LoginResponse> {
 		return response;
 	}
 
-	// @Override
+	@Override
 	public void onPostExecute(LoginResponse response) {
 		if (response.getException() == null) {
 			modelRoot.addAuthToken(response.getAuthToken());
