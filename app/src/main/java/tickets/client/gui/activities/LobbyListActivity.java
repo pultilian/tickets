@@ -40,6 +40,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
     private LobbyListPresenter presenter;
     private EditText gameName;
     private EditText numPlayers;
+    private String lobbyID;
 
 
     @Override
@@ -59,11 +60,12 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         lobbyList.setLayoutManager(lobbyListManager);
 
         joinButton.setEnabled(false);
+        createGameButton.setEnabled(false);
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.joinLobby(UUID.randomUUID().toString());
+                presenter.joinLobby(lobbyID);
                 return;
             }
         });
@@ -116,6 +118,23 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 checkButton();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        numPlayers.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(Integer.parseInt(s.toString()) > 1 && Integer.parseInt(s.toString()) < 6){
+                    createGameButton.setEnabled(true);
+                }
             }
 
             @Override
@@ -240,6 +259,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             numPlayers.setText(item.getCurrentMembers() + "/" + item.getMaxMembers());
             maxPlayers = item.getMaxMembers();
             curPlayers = item.getCurrentMembers();
+            lobbyID = item.getId();
         }
 
         @Override
