@@ -40,6 +40,10 @@ public class ServerPoller implements IObserver {
         }
         return false;
     }
+
+    public void stopPolling(){
+        timer.cancel();
+    }
     
     private TimerTask CheckServer = new TimerTask() {
 	    String token = ModelFacade.getInstance().getAuthToken();
