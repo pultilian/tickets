@@ -77,7 +77,7 @@ public class LobbyPresenter implements ILobbyPresenter {
                 //do nothing
                 break;
             case lobbylist:
-                //do nothing
+                holder.makeTransition(IHolderActivity.Transition.toLobbyList);
                 break;
             case lobby:
                 //do nothing

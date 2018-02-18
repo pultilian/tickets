@@ -35,6 +35,7 @@ public class ServerPoller implements IObserver {
     public boolean startPolling(){
         if(! running) {
             timer.schedule(CheckServer, 0, 1000);
+            running = true;
             return true;
         }
         return false;

@@ -43,6 +43,7 @@ public class LeaveLobbyAsync extends AsyncTask<String, Void, LeaveLobbyResponse>
 			ClientStateChange.ClientState stateVal;
 			stateVal = ClientStateChange.ClientState.lobbylist;
 			ClientStateChange state = new ClientStateChange(stateVal);
+			modelRoot.setCurrentLobby(null);
 
 			modelRoot.updateObservable(state);
 		}

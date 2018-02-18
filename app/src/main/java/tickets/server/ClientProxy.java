@@ -50,7 +50,7 @@ public class ClientProxy implements IClient {
     @Override
     public void addPlayerToLobbyInList(Lobby lobby, Player player) {
         Command command = new Command(
-                "addPlayersToLobbyInList",
+                "addPlayerToLobbyInList",
                 new String[]{Lobby.class.getName(), Player.class.getName()},
                 new Object[]{lobby, player});
         unprocessedCommands.add(command);
@@ -61,7 +61,7 @@ public class ClientProxy implements IClient {
     @Override
     public void removePlayerFromLobbyInList(Lobby lobby, Player playerToRemove) {
         Command command = new Command(
-                "removePlayersFromLobbyInList",
+                "removePlayerFromLobbyInList",
                 new String[]{Lobby.class.getName(), Player.class.getName()},
                 new Object[]{lobby, playerToRemove});
         unprocessedCommands.add(command);
@@ -99,5 +99,10 @@ public class ClientProxy implements IClient {
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
+    }
+
+    public void clearCommands() {
+        unprocessedCommands.clear();
+        commandIDs.clear();
     }
 }

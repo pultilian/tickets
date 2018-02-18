@@ -70,6 +70,7 @@ public class ServerFacade implements IServer {
             // Move current client
             ClientProxy currentClient = getProxy(authToken);
             clientsInLobbyList.remove(currentClient);
+            currentClient.clearCommands();
             clientsInALobby.put(currentClient, AllLobbies.getInstance().getLobby(lobbyID));
 
             // Update relevant clients
@@ -97,6 +98,7 @@ public class ServerFacade implements IServer {
         // Move current client
         ClientProxy currentClient = getProxy(authToken);
         clientsInLobbyList.remove(currentClient);
+        currentClient.clearCommands();
         clientsInALobby.put(currentClient, lobby);
 
         // Update relevant clients
@@ -132,6 +134,7 @@ public class ServerFacade implements IServer {
                 // The current client will receive a start game response instead of this command.
                 if (!client.getAuthToken().equals(authToken)) client.startGame();
                 clientsInALobby.remove(client);
+                client.clearCommands();
                 clientsInAGame.put(client, game);
             }
             for (ClientProxy client: clientsInLobbyList) {
@@ -153,6 +156,7 @@ public class ServerFacade implements IServer {
             // Move current client
             ClientProxy currentClient = getProxy(authToken);
             clientsInALobby.remove(currentClient);
+            currentClient.clearCommands();
             clientsInLobbyList.add(currentClient);
 
             // Update the server model and relevant clients
