@@ -77,6 +77,11 @@ public class AsyncManager {
         return;
     }
 
+    public void addToChat(String message, String authToken) {
+        AddToChatAsync task = new AddToChatAsync(root);
+        task.execute(message, authToken);
+    }
+
     // public void getAllLobbies(String authToken) {
     // 	GetAllLobbiesAsync task = new GetAllLobbiesAsync(root);
     // 	task.execute(authToken);

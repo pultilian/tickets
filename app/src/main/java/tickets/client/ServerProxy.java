@@ -98,6 +98,14 @@ public class ServerProxy implements IServer {
         return (PlayerTurnResponse) result;
     }
 
+    public AddToChatResponse addToChat(String message, String authToken) {
+        Object[] parameters = {message, authToken};
+        String[] parameterTypes = {String.class.getName(), String.class.getName()};
+        Command command = new Command("addToChat", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (AddToChatResponse) result;
+    }
+
     public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
         Object[] parameters = {lastReceivedCommandID, authToken};
         String[] parameterTypes = {String.class.getName(), String.class.getName()};

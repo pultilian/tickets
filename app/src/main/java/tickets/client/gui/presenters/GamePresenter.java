@@ -23,6 +23,8 @@ public class GamePresenter implements IGamePresenter {
   	return;
   }
 
+  public void addToChat(String message) { ModelFacade.getInstance().addToChat(message); }
+
     // from IObserver
   public void notify(IMessage state) {
     return;

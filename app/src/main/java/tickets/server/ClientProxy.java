@@ -100,4 +100,12 @@ public class ClientProxy implements IClient {
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
+
+    @Override
+    public void addChatMessage(String message) {
+        Command command = new Command("addChatMessage", new String[]{String.class.getName()}, new Object[]{message});
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
 }
