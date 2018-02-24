@@ -206,6 +206,7 @@ public class ServerFacade implements IServer {
 
             // Update relevant clients
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(AllUsers.getInstance().getUsername(authToken) + " ended their turn.");
                 // The current client will receive a player turn response instead of this command.
                 if (!client.getAuthToken().equals(authToken)) client.endCurrentTurn();
             }

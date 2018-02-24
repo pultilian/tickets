@@ -108,4 +108,12 @@ public class ClientProxy implements IClient {
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
+
+    @Override
+    public void addToGameHistory(String message) {
+        Command command = new Command("addToGameHistory", new String[]{String.class.getName()}, new Object[]{message});
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
 }
