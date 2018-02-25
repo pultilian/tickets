@@ -30,10 +30,8 @@ public class ModelFacade implements IClient {
 	}
 	private ModelFacade() {
 		asyncManager = new AsyncManager(this);
-
 		observable = new ClientObservable();
 		lobbyManager = new LobbyManager();
-		localPlayers = new ArrayList<>();
 	}
 	
 //----------------------------------------------------------------------------
@@ -46,7 +44,7 @@ public class ModelFacade implements IClient {
 	private UserData userData;
 	private Game currentGame;
 	private ServerPoller serverPoller = null;
-	private List<Player> localPlayers;
+	private Player localPlayer;
 
 //----------------------------------------------------------------------------
 //	methods
@@ -194,11 +192,11 @@ public class ModelFacade implements IClient {
 	public void removePlayerFromLobbyInList(Lobby lobby, Player player) {
 		lobbyManager.removePlayer(lobby, player);
 	}
-	public void addPlayer(Player player) {
-		localPlayers.add(player);
+	public void setPlayer(Player player) {
+		localPlayer = player;
 	}
 	public void removePlayer(Player player) {
-		localPlayers.remove(player);
+		localPlayer = null;
 	}
 	public void startGame() {
 		return;

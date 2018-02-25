@@ -70,8 +70,8 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void addPlayer(Player player) {
-        Command command = new Command("addPlayer", new String[]{Player.class.getName()}, new Object[]{player});
+    public void setPlayer(Player player) {
+        Command command = new Command("setPlayer", new String[]{Player.class.getName()}, new Object[]{player});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;

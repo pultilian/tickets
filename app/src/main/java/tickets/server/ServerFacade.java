@@ -78,9 +78,9 @@ public class ServerFacade implements IServer {
                 client.addPlayerToLobbyInList(lobby, player);
             }
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
-                client.addPlayer(player);
+                client.setPlayer(player);
             }
-            return new JoinLobbyResponse(lobby);
+            return new JoinLobbyResponse(lobby, player);
         }
     }
 
@@ -105,7 +105,7 @@ public class ServerFacade implements IServer {
         for (ClientProxy client : clientsInLobbyList) {
             client.addLobbyToList(lobby);
         }
-        return new JoinLobbyResponse(lobby);
+        return new JoinLobbyResponse(lobby, player);
     }
 
     @Override
@@ -193,7 +193,7 @@ public class ServerFacade implements IServer {
                 client.addPlayerToLobbyInList(lobby, guest);
             }
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
-                client.addPlayer(guest);
+                client.setPlayer(guest);
             }
             return new AddGuestResponse("Guest added", guest.getPlayerId());
         }
