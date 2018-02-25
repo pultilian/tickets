@@ -56,6 +56,11 @@ public class ModelFacade implements IClient {
         }
 		return serverPoller.startPolling();
 	}
+
+	public void stopServerPoller(){
+		serverPoller.stopPolling();
+		serverPoller = null;
+	}
 //-------------------------------------------------
 //	model interface methods
 

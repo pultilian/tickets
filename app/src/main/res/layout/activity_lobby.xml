@@ -8,11 +8,11 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout4"
-        android:layout_width="1200px"
-        android:layout_height="600px"
+        android:layout_width="600dp"
+        android:layout_height="300dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="16dp"
-        android:padding="50px"
+        android:padding="25dp"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout5"
         app:layout_constraintEnd_toStartOf="@+id/relativeLayout6"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout5"
         android:layout_width="match_parent"
-        android:layout_height="300px"
+        android:layout_height="150dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -41,34 +41,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout4">
 
-
-        <ScrollView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lobby_update_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#FFFFFF"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/lobby_update_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#FFFFFF"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true" />
-            </LinearLayout>
-        </ScrollView>
+            android:layout_alignParentTop="true" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout6"
-        android:layout_width="500px"
+        android:layout_width="250dp"
         android:layout_height="0dp"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="16dp"
@@ -80,7 +65,7 @@
         <Button
             android:id="@+id/start_game_button"
             android:layout_width="match_parent"
-            android:layout_height="150px"
+            android:layout_height="75dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="14dp"
@@ -89,7 +74,7 @@
         <Button
             android:id="@+id/leave_game"
             android:layout_width="match_parent"
-            android:layout_height="150px"
+            android:layout_height="75dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/start_game_button"
