@@ -15,4 +15,6 @@ public interface IClient {
 
     // FOR CLIENTS IN A GAME
     public void endCurrentTurn();
+    public void addChatMessage(String message);
+    public void addToGameHistory(String message);
 }

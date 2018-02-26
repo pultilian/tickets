@@ -50,7 +50,7 @@ public class ClientProxy implements IClient {
     @Override
     public void addPlayerToLobbyInList(Lobby lobby, Player player) {
         Command command = new Command(
-                "addPlayerToLobbyInList",
+                "addPlayersToLobbyInList",
                 new String[]{Lobby.class.getName(), Player.class.getName()},
                 new Object[]{lobby, player});
         unprocessedCommands.add(command);
@@ -61,7 +61,7 @@ public class ClientProxy implements IClient {
     @Override
     public void removePlayerFromLobbyInList(Lobby lobby, Player playerToRemove) {
         Command command = new Command(
-                "removePlayerFromLobbyInList",
+                "removePlayersFromLobbyInList",
                 new String[]{Lobby.class.getName(), Player.class.getName()},
                 new Object[]{lobby, playerToRemove});
         unprocessedCommands.add(command);
@@ -96,6 +96,22 @@ public class ClientProxy implements IClient {
     @Override
     public void endCurrentTurn() {
         Command command = new Command("endCurrentTurn", new String[0], new Object[0]);
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
+
+    @Override
+    public void addChatMessage(String message) {
+        Command command = new Command("addChatMessage", new String[]{String.class.getName()}, new Object[]{message});
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
+
+    @Override
+    public void addToGameHistory(String message) {
+        Command command = new Command("addToGameHistory", new String[]{String.class.getName()}, new Object[]{message});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;

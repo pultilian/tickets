@@ -210,12 +210,32 @@ public class ServerFacade implements IServer {
 
             // Update relevant clients
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(AllUsers.getInstance().getUsername(authToken) + " ended their turn.");
                 // The current client will receive a player turn response instead of this command.
                 if (!client.getAuthToken().equals(authToken)) client.endCurrentTurn();
             }
 
             return new PlayerTurnResponse();
         }
+    }
+
+    @Override
+    public AddToChatResponse addToChat(String message, String authToken) {
+        ClientProxy client = getProxy(authToken);
+        if (client == null) return new AddToChatResponse(new Exception("You are not an authorized user!"));
+
+        Game game = clientsInAGame.get(client);
+        if (game == null) return new AddToChatResponse(new Exception("Game does not exist."));
+
+        // Update server model
+        game.addToChat(message);
+
+        // Update relevant clients
+        for (ClientProxy clientInGame : getClientsInGame(game.getGameId())) {
+            clientInGame.addChatMessage(message);
+        }
+
+        return new AddToChatResponse();
     }
 
     @Override

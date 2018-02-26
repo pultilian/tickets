@@ -174,6 +174,10 @@ public class ModelFacade implements IClient {
 		return;
 	}
 
+	public void addToChat(String message) {
+		asyncManager.addToChat(message, getAuthToken());
+	}
+
 //-------------------------------------------------
 //		IClient interface methods
 //
@@ -204,6 +208,6 @@ public class ModelFacade implements IClient {
 	public void endCurrentTurn() {
 		return;
 	}
-
-
+	public void addChatMessage(String message) { currentGame.addToChat(message); }
+	public void addToGameHistory(String message) { currentGame.addToHistory(message); }
 }
