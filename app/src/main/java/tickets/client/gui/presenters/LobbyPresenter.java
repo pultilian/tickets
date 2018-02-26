@@ -41,13 +41,6 @@ public class LobbyPresenter implements ILobbyPresenter {
     }
 
     @Override
-    public void addGuest(String lobbyID) {
-        ModelFacade.getInstance().addGuest(lobbyID);
-        return;
-    }
-
-
-    @Override
     public void notify(IMessage state) {
         if (state.getClass() == ClientStateChange.class) {
             ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();

@@ -48,6 +48,7 @@ class JoinLobbyAsync extends AsyncTask<String, Void, JoinLobbyResponse> {
 			ClientStateChange.ClientState stateVal = ClientStateChange.ClientState.lobby;
 			ClientStateChange state = new ClientStateChange(stateVal);
 			modelRoot.setCurrentLobby(response.getLobby());
+			modelRoot.setPlayer(response.getPlayer());
 			modelRoot.updateObservable(state);
 		}
 		else {
