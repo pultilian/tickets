@@ -49,6 +49,7 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 
     @Override
     public void logout() {
+        ModelFacade.getInstance().stopServerPoller();
         ModelFacade.getInstance().logout();
         return;
     }
@@ -83,7 +84,8 @@ public class LobbyListPresenter implements ILobbyListPresenter {
         IHolderActivity.Transition transition;
         switch (flag) {
             case login:
-                //do nothing
+                transition = IHolderActivity.Transition.toLogin;
+                holder.makeTransition(transition);
                 break;
             case lobbylist:
                 //do nothing

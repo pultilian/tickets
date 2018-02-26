@@ -174,6 +174,11 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             Intent intent = new Intent(this, LobbyActivity.class);
             startActivity(intent);
         }
+        if(toActivity == Transition.toLogin) {
+            System.out.println("Calling transition");
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
