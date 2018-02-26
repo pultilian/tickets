@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,13 +17,17 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import tickets.client.gui.presenters.IHolderActivity;
 import tickets.client.gui.presenters.LobbyListPresenter;
+import tickets.client.gui.views.CreateLobbyDialog;
 import tickets.common.Lobby;
 
 /**
@@ -50,10 +56,10 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         presenter = new LobbyListPresenter(this);
         setContentView(R.layout.activity_lobby_list);
 
-        joinButton = (Button) this.findViewById(R.id.join);
-        logoutButton = (Button) this.findViewById(R.id.log_out);
-        createGameButton = (Button) this.findViewById(R.id.create_game);
-        lobbyList = (RecyclerView) findViewById(R.id.lobby_list);
+        joinButton = this.findViewById(R.id.join);
+        logoutButton = this.findViewById(R.id.log_out);
+        createGameButton = this.findViewById(R.id.create_game);
+        lobbyList = findViewById(R.id.lobby_list);
 
         lobbyList.setLayoutManager(new LinearLayoutManager(this));
         lobbyListManager = new LinearLayoutManager(this);
@@ -166,6 +172,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+        return;
     }
 
     public void makeTransition(Transition toActivity){
@@ -179,6 +186,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         }
+        return;
     }
 
     @Override
@@ -190,6 +198,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+        return;
     }
 
     @Override
@@ -201,6 +210,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+        return;
     }
 
     @Override
@@ -279,10 +289,16 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
     void checkButton() {
         // Register Button
         if (gameName.getText().toString().length() != 0 &&
-                numPlayers.getText().toString().length() != 0){
+                numPlayers.getText().toString().length() != 0) {
             createGameButton.setEnabled(true);
         } else {
             createGameButton.setEnabled(false);
         }
+    }
+
+    public void createLobby(String lobbyName, int maxPlayers) {
+        Lobby lobby = new Lobby(lobbyName, maxPlayers);
+        presenter.createLobby(lobby);
+        return;
     }
 }

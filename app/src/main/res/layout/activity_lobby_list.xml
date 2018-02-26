@@ -72,7 +72,7 @@
             android:layout_marginLeft="87dp"
             android:layout_marginStart="87dp"
             android:text="Create Game" />
-
+            
         <EditText
             android:id="@+id/num_players"
             android:layout_width="150dp"
