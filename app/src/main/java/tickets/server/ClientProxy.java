@@ -116,4 +116,9 @@ public class ClientProxy implements IClient {
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
+
+    public void clearCommands() {
+        unprocessedCommands.clear();
+        commandIDs.clear();
+    }
 }
