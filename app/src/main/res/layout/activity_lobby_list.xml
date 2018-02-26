@@ -43,8 +43,8 @@
 
         <Button
             android:id="@+id/join"
-            android:layout_width="300px"
-            android:layout_height="100px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/log_out"
             android:layout_alignBottom="@+id/log_out"
             android:layout_centerHorizontal="true"
@@ -52,8 +52,8 @@
 
         <Button
             android:id="@+id/log_out"
-            android:layout_width="300px"
-            android:layout_height="100px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -63,8 +63,8 @@
 
         <Button
             android:id="@+id/create_game"
-            android:layout_width="300px"
-            android:layout_height="100px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/join"
             android:layout_alignBottom="@+id/join"
             android:layout_alignParentLeft="true"
@@ -73,29 +73,5 @@
             android:layout_marginStart="87dp"
             android:text="Create Game" />
 
-        <EditText
-            android:id="@+id/num_players"
-            android:layout_width="300px"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/login_button"
-            android:layout_alignLeft="@+id/login_button"
-            android:layout_alignStart="@+id/login_button"
-            android:layout_marginBottom="11dp"
-            android:background="#FFFFFF"
-            android:hint="Num Players"
-            android:paddingLeft="10dp" />
-
-        <EditText
-            android:id="@+id/name_game"
-            android:layout_width="300px"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/num_players"
-            android:layout_toRightOf="@+id/num_players"
-            android:background="#FFFFFF"
-            android:hint="Game Name"
-            android:paddingLeft="10dp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
