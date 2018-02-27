@@ -3,10 +3,10 @@ package tickets.client.gui.presenters;
 
 import java.util.List;
 
+import tickets.common.DestinationCard;
 import tickets.common.IMessage;
 import tickets.common.IObserver;
 import tickets.common.IObservable;
-import tickets.common.DestionationCard;
 import tickets.common.TrainCard;
 
 public interface IGamePresenter extends IObserver {

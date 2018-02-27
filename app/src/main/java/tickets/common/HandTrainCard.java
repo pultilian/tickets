@@ -29,7 +29,7 @@ public class HandTrainCard {
 		return;
 	}
 
-	public List<int> getHandSize() {
-		return -1;
+	public List<Integer> getHandSize() {
+		return null;
 	}
 }
