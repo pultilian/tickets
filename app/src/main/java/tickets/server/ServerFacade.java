@@ -23,7 +23,7 @@ public class ServerFacade implements IServer {
         return INSTANCE;
     }
 
-    private ServerFacade(){
+    private ServerFacade() {
         clientsInLobbyList = new ArrayList<>();
         clientsInALobby = new HashMap<>();
         clientsInAGame = new HashMap<>();
@@ -47,7 +47,7 @@ public class ServerFacade implements IServer {
         if (AllUsers.getInstance().userExists(userData.getUsername())){
             return new LoginResponse(new Exception("Username already exists."));
         }
-        else{
+        else {
             String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
             return new LoginResponse("Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
@@ -238,6 +238,74 @@ public class ServerFacade implements IServer {
         return new AddToChatResponse();
     }
 
+    //--------------------------------------------------------------------------------
+    //  Card Actions
+
+    @Override
+    public TrainCardResponse drawTrainCard(String authToken) {
+        Game game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new TrainCardResponse(ex);
+        }
+        // Update server model
+        //      have the player draw a card from the TrainCard deck
+
+        // Update relevant clients
+        //      update the game's event queue?
+        return null;
+    }
+    @Override
+    public TrainCardResponse drawFaceUpCard(int position, String authToken) {
+        Game game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new TrainCardResponse(ex);
+        }
+        // Update server model
+        //      have the player draw the face up train card at the given position
+
+        // Update relevant clients
+        //      update the game's event queue?
+        return null;
+    }
+    @Override
+    public DestinationCardResponse drawDestinationCard(String authToken) {
+        Game game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new DestinationCardResponse(ex);
+        }
+        // Update server model
+        //      have the player draw a card from the DestinationCard deck
+
+        // Update relevant clients
+        //      update the game's event queue?
+        return null;
+    }
+    @Override
+    public Response chooseDestinationCards(DestinationCard toDiscard, String authToken) {
+        Game game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new Response(ex);
+        }
+        // Update server model
+        //      have the player discard the given Destination Card (unless it's null, then don't do anything)
+
+        // Update relevant clients
+        //      update the game's event queue?
+        return null;
+    }
+
     @Override
     public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
         ClientProxy client = getProxy(authToken);
@@ -305,5 +373,18 @@ public class ServerFacade implements IServer {
             if (entry.getValue().equals(game)) result.add(entry.getKey());
         }
         return result;
+    }
+
+    private Game getGameForToken(String authToken) throws Exception {
+        ClientProxy client = getProxy(authToken);
+        if (client == null) {
+            throw new Exception("You are not an authorized user!");
+        }
+
+        Game game = clientsInAGame.get(client);
+        if (game == null) {
+            throw new Exception("Game does not exist.");
+        } 
+        return game;
     }
 }
