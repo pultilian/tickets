@@ -420,7 +420,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
                 <TextView
-                    android:id="@+id/ships_left"
+                    android:id="@+id/ships"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -433,7 +433,7 @@
                     android:text="00" />
 
                 <TextView
-                    android:id="@+id/points_title"
+                    android:id="@+id/points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -489,14 +489,14 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/button_game"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/menu_button_game" />
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/button_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
