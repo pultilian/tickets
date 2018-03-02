@@ -243,7 +243,10 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
 
         initVariables();
         assignIDs();
+<<<<<<< HEAD
         setClickListeners();
+=======
+>>>>>>> 92fa79b4f8447337a6b7df9558787756f0073cca
 
         //TODO: way to set the starting images and get a list of the faceUpCards
         //Yes

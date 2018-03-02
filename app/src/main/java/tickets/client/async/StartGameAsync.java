@@ -11,9 +11,9 @@ import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
 import tickets.client.ModelFacade;
+import tickets.common.response.StartGameResponse;
 
 
-class StartGameAsync extends AsyncTask<String, Void, JoinLobbyResponse> {
     ModelFacade modelRoot;
 
     public StartGameAsync(ModelFacade root) {
@@ -21,21 +21,17 @@ class StartGameAsync extends AsyncTask<String, Void, JoinLobbyResponse> {
     }
 
     @Override
-    public JoinLobbyResponse doInBackground(String... data) {
         if (data.length != 2) {
             AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
-            return new JoinLobbyResponse(error);
         }
 
         String id = data[0];
         String authToken = data[1];
 
-        JoinLobbyResponse response = ServerProxy.getInstance().joinLobby(id, authToken);
         return response;
     }
 
     @Override
-    public void onPostExecute(JoinLobbyResponse response) {
         if (response == null) {
             Exception ex = new Exception("The Server could not be reached");
             ExceptionMessage msg = new ExceptionMessage(ex);
