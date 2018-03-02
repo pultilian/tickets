@@ -238,7 +238,7 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         setNumResourceCards();
 
         //TODO: way to set the starting images and get a list of the faceUpCards
-
+        //Yes
 
 
 
