@@ -233,9 +233,9 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         setContentView(R.layout.activity_game);
 
         assignIDs();
-        setNumResourceCards();
+//        setNumResourceCards();
         setClickListeners();
-        setNumResourceCards();
+//        setNumResourceCards();
 
         //TODO: way to set the starting images and get a list of the faceUpCards
         //Yes
