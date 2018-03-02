@@ -3,6 +3,7 @@ package tickets.client.gui.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,14 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
     private GamePresenter presenter;
     private Game game;
 
+
+    public void initVariables(){
+        presenter = new GamePresenter(this);
+        destinationManager = new LinearLayoutManager(this);
+        destinationCards.setLayoutManager(destinationManager);
+        destinationAdapter = new DestinationAdapter(this, null); //TODO: Destination Cards
+        destinationCards.setAdapter(destinationAdapter);
+    }
 
 
     public void assignIDs(){
@@ -232,10 +241,9 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        initVariables();
         assignIDs();
-        setNumResourceCards();
         setClickListeners();
-        setNumResourceCards();
 
         //TODO: way to set the starting images and get a list of the faceUpCards
         //Yes
