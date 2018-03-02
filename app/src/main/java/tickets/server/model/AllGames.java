@@ -16,16 +16,16 @@ public class AllGames {
         return INSTANCE;
     }
 
-    private List<Game> games;
+    private List<ServerGame> games;
 
     private AllGames(){
         games = new ArrayList<>();
     }
 
-    public void addGame(Game game){ games.add(game); }
+    public void addGame(ServerGame game){ games.add(game); }
 
-    public Game getGame(String gameID){
-        for (Game game : games){
+    public ServerGame getGame(String gameID){
+        for (ServerGame game : games){
             if (game.getGameId().equals(gameID)) return game;
         }
         return null;

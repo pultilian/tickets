@@ -1,8 +1,10 @@
 
 package tickets.server.model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 import tickets.common.TrainCard;
 
@@ -12,23 +14,38 @@ public class TrainCardArea {
 
 	private TrainCard[] faceUpCards;
 
+	private Random rand;
+
 	public TrainCardArea(List<TrainCard> allCards) {
 		//---
-		drawDeck = new ArrayList<>();
+		drawDeck = new ArrayList<>(allCards);
 		discardDeck = new ArrayList<>();
 
 		faceUpCards = new TrainCard[5];
 		for (int i = 0; i < faceUpCards.length; i++) {
 			faceUpCards[i] = drawCard();
 		}
+		rand = new Random();
+
+		// Look! A nifty shuffle function!
+		Collections.shuffle(drawDeck, rand);
 		//---
 	}
 
 	public TrainCard drawCard() {
 		//---
 		// Is the deck shuffled on creation, or accessed randomly?
+		// I like shuffling on creation. It's easier to conceptualize and easy to code.
 		//---
-		return null;
+
+		TrainCard card = drawDeck.remove(0);
+		// Reshuffle discard into deck if deck is empty
+		if (drawDeck.isEmpty()) {
+			drawDeck.addAll(discardDeck);
+			discardDeck.clear();
+			Collections.shuffle(drawDeck, rand);
+		}
+		return card;
 	}
 
 	public TrainCard drawFaceUpCard(int position) {

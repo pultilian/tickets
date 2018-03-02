@@ -117,6 +117,11 @@ public class ClientProxy implements IClient {
         totalCommandsSoFar++;
     }
 
+    @Override
+    public void addPlayerTrainCard(String playerID) {
+
+    }
+
     public void clearCommands() {
         unprocessedCommands.clear();
         commandIDs.clear();

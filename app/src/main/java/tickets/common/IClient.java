@@ -17,4 +17,5 @@ public interface IClient {
     public void endCurrentTurn();
     public void addChatMessage(String message);
     public void addToGameHistory(String message);
+    public void addPlayerTrainCard(String playerID);
 }
