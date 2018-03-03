@@ -1,5 +1,5 @@
 
-package tickets.server.model;
+package tickets.server.model.game;
 
 import java.util.List;
 import java.util.ArrayList;

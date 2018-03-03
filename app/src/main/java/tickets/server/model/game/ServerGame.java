@@ -1,5 +1,5 @@
 
-package tickets.server.model;
+package tickets.server.model.game;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -8,9 +8,9 @@ import tickets.common.Game;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 
-import tickets.server.model.ServerPlayer;
-import tickets.server.model.TrainCardArea;
-import tickets.server.model.DestinationDeck;
+import tickets.server.model.game.ServerPlayer;
+import tickets.server.model.game.TrainCardArea;
+import tickets.server.model.game.DestinationDeck;
 
 public class ServerGame extends Game {
 	//inherited:
