@@ -36,6 +36,7 @@ class StartGameAsync extends AsyncTask<String, Void, StartGameResponse> {
     }
 
     @Override
+    public void onPostExecute(StartGameResponse response) {
         if (response == null) {
             Exception ex = new Exception("The Server could not be reached");
             ExceptionMessage msg = new ExceptionMessage(ex);
