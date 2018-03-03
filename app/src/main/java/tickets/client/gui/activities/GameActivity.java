@@ -269,6 +269,7 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
     @Override
     public void makeTransition(IHolderActivity.Transition toActivity) {
         //what transitions should be made?
+        //GOH
         return;
     }
 
