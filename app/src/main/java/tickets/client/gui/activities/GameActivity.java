@@ -93,9 +93,9 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         points = this.findViewById(R.id.points);
         destinationCards = this.findViewById(R.id.player_destination_cards);
         mapButton = this.findViewById(R.id.button_map);
-        mapButton = this.findViewById(R.id.button_chat);
-        mapButton = this.findViewById(R.id.button_game);
-        mapButton = this.findViewById(R.id.button_logout);
+        chatButton = this.findViewById(R.id.button_chat);
+        gameButton = this.findViewById(R.id.button_game);
+        logoutButton = this.findViewById(R.id.button_logout);
     }
 
     public void setClickListeners(){
@@ -240,13 +240,10 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-        initVariables();
         assignIDs();
-<<<<<<< HEAD
+        initVariables();
         setClickListeners();
-=======
->>>>>>> 92fa79b4f8447337a6b7df9558787756f0073cca
+//        setNumResourceCards();
 
         //TODO: way to set the starting images and get a list of the faceUpCards
         //Yes
@@ -323,17 +320,24 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
     }
 
     class DestinationHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView card;
+        TextView location1;
+        TextView location2;
+        TextView destinationScore;
 
         public DestinationHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            card = findViewById(R.id.card_destination);
+            location1 = findViewById(R.id.location1);
+            location2 = findViewById(R.id.location2);
+            destinationScore = findViewById(R.id.destination_score);
+
         }
 
         // Assigns values in the layout.
         void bind(DestinationCard item) {
-
+            location1.setText(item.toString());
+            location2.setText(item.toString());
+            destinationScore.setText(item.toString());
             return;
         }
 
