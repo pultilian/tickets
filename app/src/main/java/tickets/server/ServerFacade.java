@@ -6,7 +6,7 @@ import tickets.server.model.AllGames;
 import tickets.server.model.AllLobbies;
 import tickets.common.response.*;
 import tickets.server.model.AllUsers;
-import tickets.server.model.ServerGame;
+import tickets.server.model.game.ServerGame;
 
 import java.util.*;
 

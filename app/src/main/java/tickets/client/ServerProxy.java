@@ -1,6 +1,7 @@
 package tickets.client;
 
 import tickets.common.Command;
+import tickets.common.DestinationCard;
 import tickets.common.response.*;
 import tickets.common.IServer;
 import tickets.common.Lobby;
@@ -104,6 +105,38 @@ public class ServerProxy implements IServer {
         Command command = new Command("addToChat", parameterTypes, parameters);
         Object result = clientCommunicator.send(command);
         return (AddToChatResponse) result;
+    }
+
+    public TrainCardResponse drawTrainCard(String authToken) {
+        Object[] parameters = {authToken};
+        String[] parameterTypes = {String.class.getName()};
+        Command command = new Command("drawTrainCard", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (TrainCardResponse) result;
+    }
+
+    public TrainCardResponse drawFaceUpCard(int position, String authToken) {
+        Object[] parameters = {position, authToken};
+        String[] parameterTypes = {int.class.getName(), String.class.getName()};
+        Command command = new Command("drawFaceUpCard", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (TrainCardResponse) result;
+    }
+
+    public DestinationCardResponse drawDestinationCard(String authToken) {
+        Object[] parameters = {authToken};
+        String[] parameterTypes = {String.class.getName()};
+        Command command = new Command("drawDestinationCard", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (DestinationCardResponse) result;
+    }
+
+    public Response chooseDestinationCards(DestinationCard toDiscard, String authToken) {
+        Object[] parameters = {toDiscard, authToken};
+        String[] parameterTypes = {DestinationCard.class.getName(), String.class.getName()};
+        Command command = new Command("chooseDestinationCards", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (Response) result;
     }
 
     public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
