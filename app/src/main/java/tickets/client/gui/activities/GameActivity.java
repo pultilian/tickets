@@ -315,7 +315,7 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
 
         @Override
         public int getItemCount() {
-            return cards.size();
+            return 0; //cards.size(); //TODO: get cards initialized.
         }
 
     }
