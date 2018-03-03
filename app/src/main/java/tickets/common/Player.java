@@ -5,6 +5,11 @@ public class Player {
     private String playerId;
     private String associatedAuthToken;
     private Faction playerFaction;
+    private String name;
+    private int points;
+    private int shipsLeft;
+    private HandDestinationCard playerDestinationCards;
+    private HandTrainCard playerResourceCards;
 
     public Player(String playerId, String associatedAuthToken){
         this.playerId = playerId;
