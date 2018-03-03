@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Color values -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -9,6 +9,10 @@
 
         <!-- Hide the title bar - for landscape views -->
         <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="MainText">
+        <item name="android:textColor">#ffffffff</item>
     </style>
 
 </resources>
