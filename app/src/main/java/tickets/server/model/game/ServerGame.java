@@ -8,6 +8,7 @@ import tickets.common.Game;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
+import tickets.common.Player;
 
 import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.TrainCardArea;
@@ -106,4 +107,63 @@ public class ServerGame extends Game {
 	public boolean discardDestinationCard(DestinationCard discard) {
 		return destinationDeck.discardCard(discard);
 	}
+
+
+	//----------------------------------------------------------------------------------------------
+	//	nested abstract class provides an interface for ServerPlayer and
+	//	ServerGame to ineract with each other without circular dependencies
+
+	abstract class IServerPlayer extends Player {
+			//inherited:
+			// public Player(String playerId, String associatedAuthToken);
+			// public String getPlayerId();
+			// public String getAssociatedAuthToken();
+			// public Faction getPlayerFaction();
+			// public void setPlayerFaction(Faction playerFaction);
+			// public HandTrainCard getTrainCards();
+
+		//--------------
+
+		IServerPlayer(String playerID, String authToken) {
+			super(playerID, authToken);
+		}
+
+		private void scorePoints(int points) {
+			int currentScore = this.getScore();
+			this.setScore(currentScore + points);
+			return;
+		}
+
+		protected TrainCard drawTrainCardFromGame() {
+			return ServerGame.this.drawTrainCard();
+		}
+
+		protected TrainCard drawFaceUpCardFromGame(int position) {
+			return ServerGame.this.drawFaceUpTrainCard(position);
+		}
+
+		protected boolean claimRouteFromGame(Route route, IServerPlayer player) {
+			// Route route = ServerGame.this.getRoute(route, numWildCards);
+			// if (! route.isOwned()) {
+			//   route.setOwner(player);
+			//	 player.scorePoints(route.getLength());
+			//	 return true;
+			// }
+			// else return false;
+
+			return false;
+		}
+
+		protected DestinationCard drawDestCardFromGame() {
+			return ServerGame.this.drawDestinationCard();
+		}
+
+		protected void discardDestCardToGame(DestinationCard discard) {
+			ServerGame.this.discardDestinationCard(discard);
+			return;
+		}
+
+	}
+
+
 }

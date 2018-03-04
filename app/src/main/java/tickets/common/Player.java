@@ -33,9 +33,19 @@ public class Player {
         this.playerFaction = playerFaction;
     }
 
-    public HandTrainCard getTrainCards() {
+    public HandTrainCard getHandTrainCards() {
         return trainCards;
     }
 
+    public HandDestinationCard getHandDestinationCards() {
+        return destinationCards;
+    }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }

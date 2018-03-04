@@ -3,30 +3,40 @@ package tickets.server.model.game;
 
 import java.util.List;
 
-import tickets.common.Player;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
+import tickets.common.HandDestinationCard;
+import tickets.common.HandTrainCard;
+
+import tickets.server.model.game.ServerGame;
+import tickets.server.model.game.ServerGame.IServerPlayer;
 
 
-public class ServerPlayer extends Player {
-	//inherited:
-	// public Player(String playerId, String associatedAuthToken);
-	// public String getPlayerId();
-	// public String getAssociatedAuthToken();
-	// public Faction getPlayerFaction();
-	// public void setPlayerFaction(Faction playerFaction);
-	// public HandTrainCard getTrainCards();
+public class ServerPlayer extends IServerPlayer {
 
-//--------------
-
-	private ServerGame game;
+	// State Pattern object
 	private PlayerTurnState turnState;
 
 	public ServerPlayer(String playerID, String authToken, ServerGame game) {
-		super(playerID, authToken);
-		this.game = game;
+		game.super(playerID, authToken);
+		turnState = new GameLoadingState(this);
 	}
 
+	public void initPlayer(List<TrainCard> hand, List<DestinationCard> destinations) {
+		turnState = new TurnZeroState(this);
+
+		HandTrainCard playerCards = this.getHandTrainCards();
+		for(TrainCard card : hand) {
+			playerCards.addCard(card);
+		}
+
+		HandDestinationCard playerDestinations = this.getHandDestinationCards();
+		for(DestinationCard dest : destinations) {
+			playerDestinations.addCard(dest);
+		}
+
+		return;
+	}
 
 	public void drawTrainCard() {
 		turnState.drawTrainCard();
@@ -57,6 +67,7 @@ public class ServerPlayer extends Player {
 	//	the server does not need to check player state before
 	//	executing a client's game commands (this simplifies the
 	//	multi-step processes of drawing train/destination cards)
+	//
 	abstract class PlayerTurnState {
 		protected ServerPlayer player;
 
@@ -96,7 +107,9 @@ public class ServerPlayer extends Player {
 		}
 	}
 
-	// package-private
+	// package-private - flags for the
+	// different states a player may be in
+	// so states may transition from one to another
 	enum States {
 		TURN_ZERO,
 		WAIT_FOR_TURN,
