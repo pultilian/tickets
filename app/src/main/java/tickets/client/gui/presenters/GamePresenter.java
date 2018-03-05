@@ -15,51 +15,63 @@ import tickets.common.TrainCard;
 
 
 public class GamePresenter implements IGamePresenter {
-  private IObservable observable;
-  private IHolderActivity holder;
+    private IObservable observable;
+    private IHolderActivity holder;
 
-  public GamePresenter(IHolderActivity setHolder) {
-    holder = setHolder;
-    ModelFacade.getInstance().linkObserver(this);
-  }
+    public GamePresenter(IHolderActivity setHolder) {
+        holder = setHolder;
+        ModelFacade.getInstance().linkObserver(this);
+    }
 
-  public void takeTurn() {
-  	return;
-  }
+    public void takeTurn() {
+        return;
+    }
 
-  public void addToChat(String message) { ModelFacade.getInstance().addToChat(message); }
+    public void addToChat(String message) {
+        ModelFacade.getInstance().addToChat(message);
+    }
 
-  public void drawTrainCard() {
+    public void drawTrainCard() {
 
-  }
+    }
 
-  public void drawFaceUpTrainCard(int position) {
+    public void drawFaceUpTrainCard(int position) {
 
-  }
+    }
 
-  public void drawDestinationCard() {
+    public void drawDestinationCard() {
 
-  }
+    }
 
-  public void claimPath() {
+    public void claimPath() {
 
-  }
+    }
 
-  public List<TrainCard> getPlayerHand() {
-    return null;
-  }
+    public List<TrainCard> getPlayerHand() {
+        return null;
+    }
 
-  public void chooseDestinationCards(DestinationCard toDiscard) {
+    public void chooseDestinationCards(DestinationCard toDiscard) {
 
-  }
+    }
 
-  // from IObserver
-  public void notify(IMessage state) {
-    return;
-  }
-  
-  public void setObservable(IObservable setObservable) {
-  	observable = setObservable;
-  	return;
-  }
+    // from IObserver
+    public void notify(IMessage state) {
+        return;
+    }
+
+    public void setObservable(IObservable setObservable) {
+        observable = setObservable;
+        return;
+    }
+
+    public List<DestinationCard> getPlayerDestinations() {
+        // not implemented
+        return null;
+    }
+
+    public void discardDestination(DestinationCard discard) {
+        // not implemented
+        return;
+    }
 }
