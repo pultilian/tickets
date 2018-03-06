@@ -11,14 +11,29 @@ import tickets.common.TrainCard;
 
 public interface IGamePresenter extends IObserver {
 
-    public void takeTurn();
-    public void addToChat(String message);
+    // public void takeTurn();
+
+    //----------------------------------------
+    // Game Setup
+    public void chooseDestinationCards(DestinationCard toDiscard);
+        // this shouldn't be useful
+
+    //----------------------------------------
+    // Turn actions
     public void drawTrainCard();
     public void drawFaceUpTrainCard(int position);
     public void drawDestinationCard();
-    public void claimPath(); //this should take a parameter...
+    public void discardDestination(DestinationCard discard);
+        // can be used for setup or during a turn
+
+    public void claimPath();
+        // params?
+
+    //----------------------------------------
+    // Player data getters
+    public List<DestinationCard> getPlayerDestinations();
     public List<TrainCard> getPlayerHand();
-    public void chooseDestinationCards(DestinationCard toDiscard);
+
 
     // from IObserver
     void notify(IMessage state);

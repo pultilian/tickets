@@ -1,20 +1,28 @@
 package tickets.common;
 
 public class Player {
+    private PlayerInfo info;
+    // general information the player can present publicly
+    //
+    // private Faction playerFaction; - in info
+    // private String name; - in info
+    // private int points; - in info
+    // private int shipsLeft; - in info
 
     private String playerId;
     private String associatedAuthToken;
-    private Faction playerFaction;
-    private String name;
-    private int points;
-    private int shipsLeft;
     private HandDestinationCard playerDestinationCards;
     private HandTrainCard playerResourceCards;
 
-    public Player(String playerId, String associatedAuthToken){
+    public Player(String playerId, String associatedAuthToken) {
+        info = new PlayerInfo();
+
         this.playerId = playerId;
         this.associatedAuthToken = associatedAuthToken;
-        playerFaction = null;
+    }
+
+    public PlayerInfo getInfo() {
+        return info;
     }
 
     public String getPlayerId(){ return playerId; }
@@ -22,11 +30,12 @@ public class Player {
     public String getAssociatedAuthToken(){ return associatedAuthToken; }
 
     public Faction getPlayerFaction() {
-        return playerFaction;
+        return info.getFaction();
     }
 
     public void setPlayerFaction(Faction playerFaction) {
-        this.playerFaction = playerFaction;
+        info.setFaction(playerFaction);
+        return;
     }
 
 }
