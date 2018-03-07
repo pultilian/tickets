@@ -31,6 +31,10 @@ public class GamePresenter implements IGamePresenter {
         ModelFacade.getInstance().addToChat(message);
     }
 
+    public List<TrainCard> getFaceUpCards(){
+        return null;
+    }
+
     public void drawTrainCard() {
 
     }
