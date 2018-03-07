@@ -132,16 +132,14 @@ public class ServerFacade implements IServer {
             // Update relevant clients and move clients from lobby to game
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
                 // The current client will receive a start game response instead of this command.
-                if (!client.getAuthToken().equals(authToken)) client.startGame();
+                if (!client.getAuthToken().equals(authToken)) client.startGame(game);
                 clientsInALobby.remove(client);
-                client.clearCommands();
                 clientsInAGame.put(client, game);
             }
             for (ClientProxy client: clientsInLobbyList) {
                 client.removeLobbyFromList(lobby);
             }
 
-            AllGames.getInstance().addGame(game);
             return new StartGameResponse(game.getGameId());
         }
     }

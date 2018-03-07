@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import tickets.common.ClientStateChange;
 import tickets.common.Game;
 import tickets.common.IClient;
 import tickets.common.Lobby;
@@ -202,8 +203,14 @@ public class ModelFacade implements IClient {
 	public void removePlayer(Player player) {
 		localPlayer = null;
 	}
-	public void startGame() {
-		return;
+	public void startGame(Game game) {
+		currentGame = game;
+		currentLobby = null;
+		ClientStateChange.ClientState stateVal;
+		stateVal = ClientStateChange.ClientState.game;
+		ClientStateChange state = new ClientStateChange(stateVal);
+
+		updateObservable(state);
 	}
 	public void endCurrentTurn() {
 		return;

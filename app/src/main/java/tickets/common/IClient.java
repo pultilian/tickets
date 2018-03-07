@@ -11,7 +11,7 @@ public interface IClient {
     // FOR CLIENTS IN A LOBBY
     public void setPlayer(Player player);
     public void removePlayer(Player player);
-    public void startGame();
+    public void startGame(Game game);
 
     // FOR CLIENTS IN A GAME
     public void endCurrentTurn();

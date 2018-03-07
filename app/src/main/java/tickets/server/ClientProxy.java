@@ -1,6 +1,7 @@
 package tickets.server;
 
 import tickets.common.Command;
+import tickets.common.Game;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
@@ -86,8 +87,8 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void startGame() {
-        Command command = new Command("startGame", new String[0], new Object[0]);
+    public void startGame(Game game) {
+        Command command = new Command("startGame", new String[]{Game.class.getName()}, new Object[]{game});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
