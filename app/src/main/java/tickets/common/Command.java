@@ -28,9 +28,13 @@ public class Command implements ICommand {
 		methodName = temp.getMethodName();
 		parameterTypeNames = temp.getParameterTypeNames();
 		parametersAsJsonStrings = temp.getParametersAsJsonStrings();
-		createParameterTypes();
-		createParametersFromJsonStrings();
+        decode();
 	}
+
+	public void decode() {
+        createParameterTypes();
+        createParametersFromJsonStrings();
+    }
 
 	public String getMethodName() {
 		return methodName;
