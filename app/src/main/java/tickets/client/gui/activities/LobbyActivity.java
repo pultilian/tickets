@@ -211,8 +211,8 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
 
         // Assigns values in the layout.
         void bind(Player item) {
-            playerName.setText(item.getPlayerId());
-            color.setText("COLOR");
+            playerName.setText(item.getPlayerFaction().getName());
+            color.setText(item.getPlayerFaction().getColor().toString());
             return;
         }
 
