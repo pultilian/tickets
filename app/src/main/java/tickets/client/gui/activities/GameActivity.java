@@ -2,6 +2,9 @@ package tickets.client.gui.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import tickets.client.gui.fragments.ChatFragment;
+import tickets.client.gui.fragments.GameInfoFragment;
+import tickets.client.gui.fragments.MapFragment;
 import tickets.client.gui.presenters.GamePresenter;
 import tickets.client.gui.presenters.IHolderActivity;
 import tickets.common.DestinationCard;
@@ -60,16 +66,16 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
     private Game game;
 
 
-    public void initVariables(){
+    public void initVariables() {
         presenter = new GamePresenter(this);
         destinationManager = new LinearLayoutManager(this);
         destinationCards.setLayoutManager(destinationManager);
-        destinationAdapter = new DestinationAdapter(this, null); //TODO: Destination Cards
+        destinationAdapter = new DestinationAdapter(this, presenter.getPlayerDestinations());
         destinationCards.setAdapter(destinationAdapter);
     }
 
 
-    public void assignIDs(){
+    public void assignIDs() {
         faceUpCard1 = this.findViewById(R.id.card1);
         faceUpCard2 = this.findViewById(R.id.card2);
         faceUpCard3 = this.findViewById(R.id.card3);
@@ -98,7 +104,7 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         logoutButton = this.findViewById(R.id.button_logout);
     }
 
-    public void setClickListeners(){
+    public void setClickListeners() {
         faceUpCard1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,34 +157,45 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Change fragment to the Map Canvas
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = new MapFragment();
+                fragmentManager.beginTransaction()
+                            .add(R.id.fragment_container, fragment)
+                            .commit();
                 return;
             }
         });
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Change fragment to Chat
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = new ChatFragment();
+                fragmentManager.beginTransaction()
+                        .add(R.id.fragment_container, fragment)
+                        .commit();
                 return;
             }
         });
         gameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Change fragment to Game Info
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = new GameInfoFragment();
+                fragmentManager.beginTransaction()
+                        .add(R.id.fragment_container, fragment)
+                        .commit();
                 return;
             }
         });
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Log the User out.
                 return;
             }
         });
     }
 
-    public void setNumResourceCards(){
+    public void setNumResourceCards() {
         int red = 0;
         int blue = 0;
         int yellow = 0;
@@ -191,10 +208,10 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
 
         List<TrainCard> cards = presenter.getPlayerHand();
 
-        for(int i = 0; i < cards.size(); i++){
+        for (int i = 0; i < cards.size(); i++) {
             String color = cards.get(i).getColor();
 
-            switch (color){
+            switch (color) {
                 case "red":
                     red++;
                     break;
@@ -245,11 +262,8 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         setClickListeners();
 //        setNumResourceCards();
 
+
         //TODO: way to set the starting images and get a list of the faceUpCards
-        //Yes
-
-
-
     }
 
     @Override

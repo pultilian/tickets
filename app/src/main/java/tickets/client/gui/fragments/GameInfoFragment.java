@@ -1,8 +1,8 @@
 package tickets.client.gui.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +18,7 @@ import tickets.client.gui.presenters.GamePresenter;
  * Created by Pultilian on 3/4/2018.
  */
 
-public class GameInfoFragment extends Fragment{
+public class GameInfoFragment extends Fragment {
     private RecyclerView playersInfo;
     private RecyclerView gameHistory;
     private GamePresenter presenter;
@@ -49,7 +49,7 @@ public class GameInfoFragment extends Fragment{
         playersInfo.setAdapter(playersInfoAdapter);
         gameHistory.setAdapter(gameHistoryAdapter);
 
-        return null;
+        return view;
     }
 
     class PlayersInfoAdapter extends RecyclerView.Adapter<GameInfoFragment.PlayersInfoHolder> {
