@@ -65,6 +65,7 @@ public class ServerFacade implements IServer {
             // Update the server model
             Player player = new Player(UUID.randomUUID().toString(), authToken);
             lobby.addPlayer(player);
+            lobby.assignFaction(player);
             lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has joined the lobby.");
 
             // Move current client
@@ -161,6 +162,7 @@ public class ServerFacade implements IServer {
             List<Player> playersForUser = lobby.getPlayersWithAuthToken(authToken);
             for (Player player : playersForUser) {
                 lobby.removePlayer(player);
+                lobby.unassignFaction(player);
 
                 for (ClientProxy client : getClientsInLobby(lobbyID)) {
                     client.removePlayer(player);
