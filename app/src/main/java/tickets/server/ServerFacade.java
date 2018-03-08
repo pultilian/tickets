@@ -244,10 +244,11 @@ public class ServerFacade implements IServer {
 
         // Remove commands until the last received command
         while ((lastReceivedCommandID != null) &&
-                (commands.peek() != null) &&
-                (!commandIDs.get(commands.peek()).equals(lastReceivedCommandID))) {
-            commandIDs.remove(commands.peek());
-            commands.remove();
+                (commands.peek() != null)) {
+            Command command = commands.remove();
+            String ID = commandIDs.get(command);
+            commandIDs.remove(command);
+            if (ID.equals(lastReceivedCommandID)) break;
         }
 
         // Update the client proxy
