@@ -2,6 +2,7 @@
 package tickets.server.model.game;
 
 import tickets.common.DestinationCard;
+import tickets.common.Route;
 
 import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.ServerPlayer.PlayerTurnState;
@@ -47,7 +48,7 @@ class TurnStartState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_claimRoute(Route route, int numWildCards) {
+	void state_claimRoute(Route route) {
 		//---
 		// Check that the player has enough Train cards of the route's color
 		// If not:

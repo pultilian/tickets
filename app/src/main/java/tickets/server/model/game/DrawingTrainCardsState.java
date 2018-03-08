@@ -2,6 +2,7 @@
 package tickets.server.model.game;
 
 import tickets.common.DestinationCard;
+import tickets.common.Route;
 
 import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.ServerPlayer.PlayerTurnState;
@@ -44,7 +45,7 @@ class DrawingTrainCardsState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_claimRoute(Route route, int numWildCards) {
+	void state_claimRoute(Route route) {
 		// throw new Exception("You must draw a second Train card");
 		return;
 	}

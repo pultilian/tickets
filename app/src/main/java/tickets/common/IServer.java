@@ -15,25 +15,24 @@ public interface IServer {
   public LeaveLobbyResponse leaveLobby(String lobbyID, String authToken);
 
   //Game Actions
+    //To remove
   public PlayerTurnResponse takeTurn(String playerID, String authToken);
-  public AddToChatResponse addToChat(String message, String authToken);
-
-  //Card Actions
-  public TrainCardResponse drawTrainCard(String authToken);
-  public TrainCardResponse drawFaceUpCard(int position, String authToken);
-  public DestinationCardResponse drawDestinationCard(String authToken);
-
   public Response chooseDestinationCards(DestinationCard toDiscard, String authToken);
 
+    //Player in-game actions
+  public TrainCardResponse drawTrainCard(String authToken);
+  public TrainCardResponse drawFaceUpCard(int position, String authToken);
+  public Response claimRoute(Route route, String authToken);
+  public DestinationCardResponse drawDestinationCard(String authToken);
+  public Response discardDestinationCard(DestinationCard discard, String authToken);
+  public Response endTurn(String authToken);
+
+  public AddToChatResponse addToChat(String message, String authToken);
+  
+
   //TODO:
-  //  implement card actions on ServerFacade
-  //  
-  //  write IGame
-  //  write ServerGame
-  //  
-  //  write Server Player and Game stuff?...
-  //
-  //  implement card actions on ServerProxy
+  //  implement player in-game actions on ServerFacade
+  //  implement player in-game actions on ServerProxy
 
   //Poller response object
   public ClientUpdate updateClient(String lastReceivedCommandID, String authToken);

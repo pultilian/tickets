@@ -7,6 +7,7 @@ import tickets.server.model.AllLobbies;
 import tickets.common.response.*;
 import tickets.server.model.AllUsers;
 import tickets.server.model.game.ServerGame;
+import tickets.common.Route;
 
 import java.util.*;
 
@@ -193,6 +194,14 @@ public class ServerFacade implements IServer {
     //----------------------------------------------------------------------------------------------
     // *** IN-GAME COMMANDS ***
 
+    // This should be deprecated - players will take turns by calling the action specific methods
+    //   - drawTrainCard
+    //   - drawFaceUpCard
+    //   - claimRoute
+    //   - drawDestinationCard
+    //   - discardDestinationCard
+    //   - addToChat
+    //   - endTurn
     @Override
     public PlayerTurnResponse takeTurn(String playerID, String authToken) {
         ServerGame game;
@@ -243,7 +252,14 @@ public class ServerFacade implements IServer {
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // *** Card Actions ***
+    // *** In-Game Player Turn Actions ***
+
+    // x drawTrainCard
+    // x drawFaceUpCard
+    // x claimRoute
+    // x drawDestinationCard
+    // o discardDestinationCard
+    // o endTurn
 
     @Override
     public TrainCardResponse drawTrainCard(String authToken) {
@@ -302,6 +318,11 @@ public class ServerFacade implements IServer {
     }
 
     @Override
+    public Response claimRoute(Route route, String authToken) {
+        return new Response(new Exception("Claiming routes has not been implemented"));
+    }
+
+    @Override
     public DestinationCardResponse drawDestinationCard(String authToken) {
         ServerGame game;
         try {
@@ -321,6 +342,17 @@ public class ServerFacade implements IServer {
         return null;
     }
 
+    @Override
+    public Response discardDestinationCard(DestinationCard discard, String authToken) {
+        return new Response(new Exception("Discarding destination cards has not been implmented"));
+    }
+
+    @Override
+    public Response endTurn(String authToken) {
+        return new Response(new Exception("Ending the turn has not been implemented"));
+    }
+
+    // This should be deprecated for discardDestinationCard and endTurn
     @Override
     public Response chooseDestinationCards(DestinationCard toDiscard, String authToken) {
         Game game;
