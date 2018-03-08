@@ -18,52 +18,37 @@ class PickingDestCardsState extends PlayerTurnState {
 	}
 
 	@Override
-	void drawTrainCard() {
-		// The player has already drawn destination cards
-		return;
+	void state_drawTrainCard() {
+
 	}
 
 	@Override
-	void drawFaceUpCard(int position) {
-		// The player has already drawn destination cards
-		return;
+	void state_drawFaceUpCard(int position) {
+
 	}
 
 	@Override
-	void claimRoute(Route route, int numWildCards) {
-		// The player has already drawn destination cards
-		return;
+	void state_claimRoute(Route route, int numWildCards) {
+
 	}
 
 	@Override
-	void drawDestinationCard() {
-		// The player has already drawn destination cards
-		return;
+	void state_drawDestinationCard() {
+
 	}
 
 	@Override
-	void discardDestinationCard(DestinationCard discard) {
-		//---
-		// Discard the specified destination card.
-		// Update the game's history
-		// End the turn.
-		//---
-		return;
+	void state_discardDestinationCard(DestinationCard discard) {
+
 	}
 
 	@Override
-	void endTurn() {
-		//---
-		// Keep both of the destination cards that were drawn
-		// Update the game's history (?)
-		// End the turn
-		//---
-		return;
+	void state_endTurn() {
+
 	}
 
 	@Override
-	void addToChat(String msg) {
-		//add the message to the chat
-		return;
+	void state_addToChat(String msg) {
+
 	}
 }

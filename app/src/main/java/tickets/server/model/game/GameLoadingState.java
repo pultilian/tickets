@@ -25,33 +25,37 @@ class GameLoadingState extends PlayerTurnState {
 	//   so no player actions can be taken
 
 	@Override
-	void drawTrainCard() {
-		return;
+	void state_drawTrainCard() {
+
 	}
 
 	@Override
-	void drawFaceUpCard(int position) {
-		return;
+	void state_drawFaceUpCard(int position) {
+
 	}
 
 	@Override
-	void claimRoute(Route route, int numWildCards) {
-		return;
+	void state_claimRoute(Route route, int numWildCards) {
+
 	}
 
 	@Override
-	void drawDestinationCard() {
-		return;
+	void state_drawDestinationCard() {
+
 	}
 
 	@Override
-	void discardDestinationCard(DestinationCard discard) {
-		return;
+	void state_discardDestinationCard(DestinationCard discard) {
+
 	}
 
 	@Override
-	void addToChat(String msg) {
-		//add the message to the chat
-		return;
+	void state_endTurn() {
+
+	}
+
+	@Override
+	void state_addToChat(String msg) {
+
 	}
 }

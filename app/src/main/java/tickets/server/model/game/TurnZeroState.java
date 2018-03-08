@@ -21,50 +21,37 @@ class TurnZeroState extends PlayerTurnState {
 	}
 
 	@Override
-	void drawTrainCard() {
-		//Player must select starting Destination Cards first
-		return;
+	void state_drawTrainCard() {
+
 	}
 
 	@Override
-	void drawFaceUpCard(int position) {
-		//Player must select starting Destination Cards first
-		return;
+	void state_drawFaceUpCard(int position) {
+
 	}
 
 	@Override
-	void claimRoute(Route route, int numWildCards) {
-		//Player must select starting Destination Cards first
-		return;
+	void state_claimRoute(Route route, int numWildCards) {
+
 	}
 
 	@Override
-	void drawDestinationCard() {
-		//Player must select starting Destination Cards first
-		return;
+	void state_drawDestinationCard() {
+
 	}
 
 	@Override
-	void discardDestinationCard(DestinationCard discard) {
-		//---
-		// Discard the specified destination card.
-		// End the turn.
-		//---
-		return;
+	void state_discardDestinationCard(DestinationCard discard) {
+
 	}
 
 	@Override
-	void endTurn() {
-		//---
-		// Keep all three starting destination cards.
-		// End the turn
-		//---
-		return;
+	void state_endTurn() {
+
 	}
 
 	@Override
-	void addToChat(String msg) {
-		// add the message to the chat
-		return;
+	void state_addToChat(String msg) {
+
 	}
 }

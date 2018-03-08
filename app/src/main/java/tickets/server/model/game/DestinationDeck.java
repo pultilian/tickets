@@ -12,7 +12,7 @@ public class DestinationDeck {
 	private List<DestinationCard> cards;
 
 	public DestinationDeck(List<DestinationCard> cards) {
-		this.cards = AllDestinationCards.getDeck();
+		this.cards = AllDestinationCards.getCards();
 		Collections.shuffle(cards, new Random());
 	}
 
