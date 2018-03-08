@@ -3,6 +3,8 @@ package tickets.client.gui.presenters;
 
 import java.util.List;
 
+import tickets.common.Route;
+
 public interface IGameMapPresenter {
 	// This isn't the final return value yet
 	public List<Object> getClaimedRoutes();

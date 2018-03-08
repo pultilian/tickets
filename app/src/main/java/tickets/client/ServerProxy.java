@@ -6,6 +6,7 @@ import tickets.common.response.*;
 import tickets.common.IServer;
 import tickets.common.Lobby;
 import tickets.common.UserData;
+import tickets.common.Route;
 
 import tickets.client.ClientCommunicator;
 
@@ -138,4 +139,28 @@ public class ServerProxy implements IServer {
         Object result = clientCommunicator.send(command);
         return (ClientUpdate) result;
     }
+
+
+    public Response claimRoute(Route route, String authToken) {
+        Object[] parameters = {route, authToken};
+        String[] parameterTypes = {Route.class.getName(), String.class.getName()};
+        Command command = new Command("claimRoute", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (Response) result;
+    }
+    public Response discardDestinationCard(DestinationCard discard, String authToken) {
+        Object[] parameters = {discard, authToken};
+        String[] parameterTypes = {DestinationCard.class.getName(), String.class.getName()};
+        Command command = new Command("discardDestinationCard", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (Response) result;
+    }
+    public Response endTurn(String authToken) {
+        Object[] parameters = {authToken};
+        String[] parameterTypes = {String.class.getName()};
+        Command command = new Command("endTurn", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (Response) result;
+    }
+
 }
