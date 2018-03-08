@@ -173,10 +173,12 @@ public class ServerFacade implements IServer {
             currentClient.clearCommands();
             clientsInLobbyList.add(currentClient);
 
+
             // Update the server model and relevant clients
             List<Player> playersForUser = lobby.getPlayersWithAuthToken(authToken);
             for (Player player : playersForUser) {
                 lobby.removePlayer(player);
+                lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has left the lobby.");
                 lobby.unassignFaction(player);
 
                 for (ClientProxy client : getClientsInLobby(lobbyID)) {
