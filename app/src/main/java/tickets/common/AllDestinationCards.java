@@ -1,5 +1,6 @@
 package tickets.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // This is basically a fancy enumeration of all destination
@@ -80,8 +81,38 @@ public final class AllDestinationCards {
 	}*/
 
 	public static List<DestinationCard> getCards() {
-		// TODO: implement this
-		return null;
+		List<DestinationCard> cards = new ArrayList<>();
+		cards.add(AEONTACHT_MAGMARSE);
+		cards.add(ICOCOL_WARFELD);
+		cards.add(SPHERAS_DALLAMAN);
+		cards.add(NONNOG_KIFLAMAR);
+		cards.add(ORTHOK_CREPUSCULON);
+		cards.add(BOISEY_LIN);
+		cards.add(AYON_CASTINE);
+		cards.add(PARADUS_WARFELD);
+		cards.add(EXEN_DALLAMAN);
+		cards.add(ZEEATLL_LIN);
+		cards.add(ORTHOK_FRACTINE);
+		cards.add(AYON_AEUONI);
+		cards.add(ASTERN_ALTIERE);
+		cards.add(PARADUS_MAGMARSE);
+		cards.add(KERRECTICE_LITTLEROCK);
+		cards.add(BYNODIA_SPHERAS);
+		cards.add(STRATUS_IGIO);
+		cards.add(AEONTACHT_PETRAQA);
+		cards.add(WENCE_ALTIERE);
+		cards.add(KERRECTICE_WARFELD);
+		cards.add(VERDONA_FRACTINE);
+		cards.add(EXEN_CREPUSCULON);
+		cards.add(NONNOG_IGIO);
+		cards.add(LIN_ORTHOK);
+		cards.add(STRATUS_CASTINE);
+		cards.add(JAQUALIND_DALLAMAN);
+		cards.add(VERDONA_EXEN);
+		cards.add(LIN_ALTIERE);
+		cards.add(LIN_SPHERAS);
+		cards.add(ZEEATLL_SPHERAS);
+		return cards;
 	}
 
 

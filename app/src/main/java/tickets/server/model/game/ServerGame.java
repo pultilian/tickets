@@ -4,6 +4,7 @@ package tickets.server.model.game;
 import java.util.List;
 import java.util.ArrayList;
 
+import tickets.common.AllDestinationCards;
 import tickets.common.Game;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
@@ -43,9 +44,8 @@ public class ServerGame extends Game {
 	public ServerGame(String gameID) {
 		super(gameID);
 		List<TrainCard> allTrainCards = initializeTrainCards();
-		List<DestinationCard> allDestinationCards = initializeDestinationCards();
 		trainCardArea = new TrainCardArea(allTrainCards);
-		destinationDeck = new DestinationDeck(allDestinationCards);
+		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
 	}
 
 	private List<TrainCard> initializeTrainCards() {
@@ -65,12 +65,6 @@ public class ServerGame extends Game {
 		allTrainCards.add(new TrainCard(RouteColors.Wild));
 		allTrainCards.add(new TrainCard(RouteColors.Wild));
 		return allTrainCards;
-	}
-
-	private List<DestinationCard> initializeDestinationCards() {
-		List<DestinationCard> allDestinationCards = new ArrayList<>();
-		// TODO: Add in all the destination cards
-		return allDestinationCards;
 	}
 
 	//----------------------------------------------------------------------------------------------
