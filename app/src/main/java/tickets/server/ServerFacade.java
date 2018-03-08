@@ -190,37 +190,10 @@ public class ServerFacade implements IServer {
         }
     }
 
-    @Override
-<<<<<<< HEAD
-    public AddGuestResponse addGuest(String lobbyID, String authToken) {
-        if (getProxy(authToken) == null) return new AddGuestResponse(new Exception("You are not an authorized user!"));
-
-        Lobby lobby = AllLobbies.getInstance().getLobby(lobbyID);
-        if (lobby == null) return new AddGuestResponse(new Exception("Lobby does not exist."));
-        else if (lobby.getCurrentMembers() == lobby.getMaxMembers()) return new AddGuestResponse(new Exception("Lobby is full."));
-        else {
-            // Update the server model
-            Player guest = new Player(UUID.randomUUID().toString(), authToken);
-            lobby.addPlayer(guest);
-            lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has added a guest.");
-
-            // Update relevant clients
-            for (ClientProxy client : clientsInLobbyList) {
-                client.addPlayerToLobbyInList(lobby, guest);
-            }
-            for (ClientProxy client : getClientsInLobby(lobbyID)) {
-                client.setPlayer(guest);
-            }
-            return new AddGuestResponse("Guest added", guest.getPlayerId());
-        }
-    }
-
     //----------------------------------------------------------------------------------------------
     // *** IN-GAME COMMANDS ***
 
     @Override
-=======
->>>>>>> master
     public PlayerTurnResponse takeTurn(String playerID, String authToken) {
         ServerGame game;
         try {
