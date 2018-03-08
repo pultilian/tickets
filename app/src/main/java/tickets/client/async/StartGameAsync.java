@@ -3,6 +3,7 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
+import tickets.common.Game;
 import tickets.common.UserData;
 import tickets.common.response.JoinLobbyResponse;
 import tickets.common.IMessage;
@@ -43,10 +44,7 @@ class StartGameAsync extends AsyncTask<String, Void, StartGameResponse> {
             modelRoot.updateObservable(msg);
         }
         else if (response.getException() == null) {
-            ClientStateChange.ClientState stateVal;
-            stateVal = ClientStateChange.ClientState.game;
-            ClientStateChange state = new ClientStateChange(stateVal);
-            modelRoot.updateObservable(state);
+            modelRoot.startGame(new Game(response.getGameID()));
         }
         else {
             Exception ex = response.getException();

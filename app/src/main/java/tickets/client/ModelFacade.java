@@ -121,6 +121,8 @@ public class ModelFacade implements IClient {
 		return currentGame;
 	}
 
+	public void setPlayer(Player player) { localPlayer = player; }
+
 //-------------------------------------------------
 //		server interface methods
 //
@@ -197,13 +199,11 @@ public class ModelFacade implements IClient {
 	public void removePlayerFromLobbyInList(Lobby lobby, Player player) {
 		lobbyManager.removePlayer(lobby, player);
 	}
-	public void setPlayer(Player player) {
-		localPlayer = player;
-	}
 	public void removePlayer(Player player) {
 		localPlayer = null;
 	}
 	public void startGame(Game game) {
+		System.out.println("***** CALLING STARTGAME *****");
 		currentGame = game;
 		currentLobby = null;
 		ClientStateChange.ClientState stateVal;

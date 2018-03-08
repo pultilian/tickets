@@ -71,14 +71,6 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void setPlayer(Player player) {
-        Command command = new Command("setPlayer", new String[]{Player.class.getName()}, new Object[]{player});
-        unprocessedCommands.add(command);
-        commandIDs.put(command, totalCommandsSoFar.toString());
-        totalCommandsSoFar++;
-    }
-
-    @Override
     public void removePlayer(Player player) {
         Command command = new Command("removePlayer", new String[]{Player.class.getName()}, new Object[]{player});
         unprocessedCommands.add(command);
