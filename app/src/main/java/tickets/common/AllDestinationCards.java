@@ -1,5 +1,8 @@
+package tickets.common;
 
-// This is basically a fancy enumeration of all destination 
+import java.util.List;
+
+// This is basically a fancy enumeration of all destination
 // cards in the game. I'm using a fimal (static) class so that 
 // the .equals() method can be overridden to allow X->Y == Y->X
 public final class AllDestinationCards {
@@ -66,7 +69,7 @@ public final class AllDestinationCards {
 
 	// Since all routes are undirected, the
 	//	 source-destination distinction is only internal
-	private final String srcCityName;
+	/*private final String srcCityName;
 	private final String destCityName;
 	private final int value;
 
@@ -74,9 +77,9 @@ public final class AllDestinationCards {
 		this.srcCityName = srcCityName;
 		this.destCityName = destCityName;
 		this.value = value;
-	}
+	}*/
 
-	public List<DestinationCard> getCards() {
+	public static List<DestinationCard> getCards() {
 		// TODO: implement this
 		return null;
 	}

@@ -215,34 +215,34 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         List<TrainCard> cards = presenter.getPlayerHand();
 
         for (int i = 0; i < cards.size(); i++) {
-            String color = cards.get(i).getColor();
+            String color = cards.get(i).getColor().name();
 
             switch (color) {
-                case "red":
+                case "Red":
                     red++;
                     break;
-                case "blue":
+                case "Blue":
                     blue++;
                     break;
-                case "yellow":
+                case "Yellow":
                     yellow++;
                     break;
-                case "green":
+                case "Green":
                     green++;
                     break;
-                case "white":
+                case "White":
                     white++;
                     break;
-                case "black":
+                case "Black":
                     black++;
                     break;
-                case "orange":
+                case "Orange":
                     orange++;
                     break;
-                case "pink":
+                case "Pink":
                     pink++;
                     break;
-                case "silver":
+                case "Wild":
                     silver++;
                     break;
             }

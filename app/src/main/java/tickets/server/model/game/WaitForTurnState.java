@@ -19,44 +19,37 @@ class WaitForTurnState extends PlayerTurnState {
 	}
 
 	@Override
-	void drawTrainCard() {
-		// It is not your turn
-		return;
+	void state_drawTrainCard() {
+
 	}
 
 	@Override
-	void drawFaceUpCard(int position) {
-		// It is not your turn
-		return;
+	void state_drawFaceUpCard(int position) {
+
 	}
 
 	@Override
-	void claimRoute(Route route, int numWildCards) {
-		// It is not your turn
-		return;
+	void state_claimRoute(Route route, int numWildCards) {
+
 	}
 
 	@Override
-	void drawDestinationCard() {
-		// It is not your turn
-		return;
+	void state_drawDestinationCard() {
+
 	}
 
 	@Override
-	void discardDestinationCard(DestinationCard discard) {
-		// It is not your turn
-		return;
+	void state_discardDestinationCard(DestinationCard discard) {
+
 	}
 
 	@Override
-	void endTurn() {
-		// It is not your turn
-		return;
+	void state_endTurn() {
+
 	}
 
 	@Override
-	void addToChat(String msg) {
-		// Add the message to the chat
-		return;
+	void state_addToChat(String msg) {
+
 	}
 }

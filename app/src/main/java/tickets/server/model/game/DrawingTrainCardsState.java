@@ -21,46 +21,38 @@ class DrawingTrainCardsState extends PlayerTurnState {
 		player.super();
 	}
 
-	void drawTrainCard() {
-		//---
-		// Draw the first card in the deck
-		// Add it to the player's hand
-		// End the turn
-		//---
-		return;
+	@Override
+	void state_drawTrainCard() {
+
 	}
 
-	// The player has already drawn one train card,
-	//   so they can't draw a face up card if it is a wild
-	//
-	void drawFaceUpCard(int position) {
-		//---
-		// Check the card at the given position
-		// If it is a wild:
-		//   do nothing
-		// Otherwise:
-		// 	 draw it from the row of face up cards
-		//   Add it to the player's hand
-		// 	 End the turn
-		//---
-		return;
+	@Override
+	void state_drawFaceUpCard(int position) {
+
 	}
 
-	// These functions do not apply to this state
-	void claimRoute(Route route, int numWildCards) {
-		// the player must choose a second card to draw
-		return;
+	@Override
+	void state_claimRoute(Route route, int numWildCards) {
+
 	}
-	void drawDestinationCard() {
-		// the player must choose a second card to draw
-		return;
+
+	@Override
+	void state_drawDestinationCard() {
+
 	}
-	void discardDestinationCard(DestinationCard discard) {
-		// the player must choose a second card to draw
-		return;
+
+	@Override
+	void state_discardDestinationCard(DestinationCard discard) {
+
 	}
-	void endTurn() {
-		// the player must choose a second card to draw
-		return;
+
+	@Override
+	void state_endTurn() {
+
+	}
+
+	@Override
+	void state_addToChat(String msg) {
+
 	}
 }
