@@ -26,12 +26,12 @@ public class PlayerInfo {
 		return name;
 	}
 
-	public void setPoints(int set) {
+	public void setScore(int set) {
 		points = set;
 		return;
 	}
 
-	public int getPoints() {
+	public int getScore() {
 		return points;
 	}
 

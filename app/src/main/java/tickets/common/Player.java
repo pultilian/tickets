@@ -44,18 +44,19 @@ public class Player {
     }
 
     public HandTrainCard getHandTrainCards() {
-        return trainCards;
+        return playerResourceCards;
     }
 
     public HandDestinationCard getHandDestinationCards() {
-        return destinationCards;
+        return playerDestinationCards;
     }
 
     public int getScore() {
-        return score;
+        return info.getScore();
     }
 
     public void setScore(int score) {
-        this.score = score;
+        this.info.setScore(score);
+        return;
     }
 }

@@ -4,13 +4,19 @@ package tickets.common;
 import tickets.common.RouteColors;
 
 public class TrainCard {
-  public String getColor() {
+
+	private RouteColors color;
+
+	public TrainCard(RouteColors cardColor) {
+		this.color = cardColor;
+	}
+
+  public RouteColors getColor() {
       return color;
   }
 
-  public void setColor(String color) {
+  public void setColor(RouteColors color) {
       this.color = color;
+      return;
   }
-
-  String color;
 }
