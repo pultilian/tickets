@@ -11,7 +11,9 @@ import tickets.common.HandTrainCard;
 import tickets.server.model.game.ServerGame;
 import tickets.server.model.game.ServerGame.IServerPlayer;
 
-
+// A player in a game on the server
+// Defines actions that players can take on the game
+//
 public class ServerPlayer extends IServerPlayer {
 
 	// State Pattern object
@@ -38,29 +40,29 @@ public class ServerPlayer extends IServerPlayer {
 		return;
 	}
 
-	public void drawTrainCard() {
-		turnState.drawTrainCard();
-		return;
-	}
+	// public void drawTrainCard() {
+	// 	turnState.drawTrainCard();
+	// 	return;
+	// }
 
-	public void drawFaceUpCard(int position) {
-		return;
-	}
+	// public void drawFaceUpCard(int position) {
+	// 	return;
+	// }
 
 	// 
 	// depends on how routes, cities, and the game's map are represented 
 	// claimRoute(String srcCity, String destCity, RouteColors color, int )
-	public void claimRoute(Route route, int numWildCards) {
-		return;
-	}
+	// public void claimRoute(Route route, int numWildCards) {
+	// 	return;
+	// }
 
-	public void drawDestinationCard() {
-		return;
-	}
+	// public void drawDestinationCard() {
+	// 	return;
+	// }
 
-	public void discardDestinationCard(DestinationCard discard) {
-		return;
-	}
+	// public void discardDestinationCard(DestinationCard discard) {
+	// 	return;
+	// }
 
 
 	//Using the State Pattern to represent player turn actions
@@ -69,17 +71,20 @@ public class ServerPlayer extends IServerPlayer {
 	//	multi-step processes of drawing train/destination cards)
 	//
 	abstract class PlayerTurnState {
-		protected ServerPlayer player;
+		private ServerPlayer player;
 
 		PlayerTurnState() {
 			player = ServerPlayer.this;
 		}
 
-		abstract void drawTrainCard();
-		abstract void drawFaceUpCard(int position);
-		abstract void claimRoute(Route route, int numWildCards);
-		abstract void drawDestinationCard();
-		abstract void discardDestinationCard(DestinationCard discard);
+		abstract void state_drawTrainCard();
+		abstract void state_drawFaceUpCard(int position);
+		abstract void state_claimRoute(Route route, int numWildCards);
+		abstract void state_drawDestinationCard();
+		abstract void state_discardDestinationCard(DestinationCard discard);
+		abstract void state_endTurn();
+		abstract void state_addToChat(String msg);
+
 
 		protected void changeStateTo(States state) {
 			switch(state) {
@@ -103,6 +108,15 @@ public class ServerPlayer extends IServerPlayer {
 					break;
 			}
 
+			return;
+		}
+
+		protected void addToHistory_fromPlayer(String msg) {
+			player.addToHistory_fromGame(msg);
+			return;
+		}
+		protected void addToChat_fromPlayer(String msg) {
+			player.addToChat_fromGame(msg);
 			return;
 		}
 	}

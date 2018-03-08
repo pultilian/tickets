@@ -122,27 +122,30 @@ public class ServerGame extends Game {
 			// public void setPlayerFaction(Faction playerFaction);
 			// public HandTrainCard getTrainCards();
 
-		//--------------
-
 		IServerPlayer(String playerID, String authToken) {
 			super(playerID, authToken);
 		}
 
-		private void scorePoints(int points) {
-			int currentScore = this.getScore();
-			this.setScore(currentScore + points);
-			return;
-		}
+		//   The player class already has this method
+		// private void scorePoints(int points) {
+		// 	int currentScore = this.getScore();
+		// 	this.setScore(currentScore + points);
+		// 	return;
+		// }
 
-		protected TrainCard drawTrainCardFromGame() {
+
+		//-------------------------------------------------------------------
+		//	These functions provide access to the Game to players
+
+		protected TrainCard drawTrainCard_fromGame() {
 			return ServerGame.this.drawTrainCard();
 		}
 
-		protected TrainCard drawFaceUpCardFromGame(int position) {
+		protected TrainCard drawFaceUpCard_fromGame(int position) {
 			return ServerGame.this.drawFaceUpTrainCard(position);
 		}
 
-		protected boolean claimRouteFromGame(Route route, IServerPlayer player) {
+		protected boolean claimRoute_fromGame(Route route, IServerPlayer player) {
 			// Route route = ServerGame.this.getRoute(route, numWildCards);
 			// if (! route.isOwned()) {
 			//   route.setOwner(player);
@@ -154,12 +157,22 @@ public class ServerGame extends Game {
 			return false;
 		}
 
-		protected DestinationCard drawDestCardFromGame() {
+		protected DestinationCard drawDestCard_fromGame() {
 			return ServerGame.this.drawDestinationCard();
 		}
 
-		protected void discardDestCardToGame(DestinationCard discard) {
+		protected void discardDestCard_fromGame(DestinationCard discard) {
 			ServerGame.this.discardDestinationCard(discard);
+			return;
+		}
+
+		protected void addToHistory_fromGame(String msg) {
+			ServerGame.this.addToHistory(msg);
+			return;
+		}
+
+		protected void addToChat_fromGame(String msg) {
+			ServerGame.this.addToChat(msg);
 			return;
 		}
 
