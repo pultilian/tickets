@@ -5,8 +5,8 @@ public class DestinationCard {
 	private String firstCity;
 	private String secondCity;
 	private int value;
-
-	public DestinationCard(String firstCity, String secondCity, int value) {
+	
+	DestinationCard(String firstCity, String secondCity, int value) {
 		this.firstCity = firstCity;
 		this.secondCity = secondCity;
 		this.value = value;
