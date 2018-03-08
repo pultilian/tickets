@@ -106,6 +106,7 @@ public class ServerFacade implements IServer {
         AllLobbies.getInstance().addLobby(lobby);
         Player player = new Player(UUID.randomUUID().toString(), authToken);
         lobby.addPlayer(player);
+        lobby.assignFaction(player);
         lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has joined the lobby.");
 
         // Move current client
@@ -141,7 +142,6 @@ public class ServerFacade implements IServer {
         if (lobby == null) return new StartGameResponse(new Exception("Lobby does not exist."));
         else {
             // Update server model
-            AllLobbies.getInstance().removeLobby(lobbyID);
             ServerGame game = new ServerGame(UUID.randomUUID().toString());
             AllGames.getInstance().addGame(game);
 
