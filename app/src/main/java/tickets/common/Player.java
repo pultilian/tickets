@@ -1,5 +1,8 @@
 package tickets.common;
 
+import tickets.common.HandTrainCard;
+import tickets.common.HandDestinationCard;
+
 public class Player {
     private PlayerInfo info;
     // general information the player can present publicly
@@ -19,6 +22,8 @@ public class Player {
 
         this.playerId = playerId;
         this.associatedAuthToken = associatedAuthToken;
+        playerDestinationCards = new HandDestinationCard();
+        playerResourceCards = new HandTrainCard();
     }
 
     public PlayerInfo getInfo() {
@@ -38,4 +43,20 @@ public class Player {
         return;
     }
 
+    public HandTrainCard getHandTrainCards() {
+        return playerResourceCards;
+    }
+
+    public HandDestinationCard getHandDestinationCards() {
+        return playerDestinationCards;
+    }
+
+    public int getScore() {
+        return info.getScore();
+    }
+
+    public void setScore(int score) {
+        this.info.setScore(score);
+        return;
+    }
 }

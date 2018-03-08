@@ -18,6 +18,23 @@ public interface IServer {
   public PlayerTurnResponse takeTurn(String playerID, String authToken);
   public AddToChatResponse addToChat(String message, String authToken);
 
+  //Card Actions
+  public TrainCardResponse drawTrainCard(String authToken);
+  public TrainCardResponse drawFaceUpCard(int position, String authToken);
+  public DestinationCardResponse drawDestinationCard(String authToken);
+
+  public Response chooseDestinationCards(DestinationCard toDiscard, String authToken);
+
+  //TODO:
+  //  implement card actions on ServerFacade
+  //  
+  //  write IGame
+  //  write ServerGame
+  //  
+  //  write Server Player and Game stuff?...
+  //
+  //  implement card actions on ServerProxy
+
   //Poller response object
   public ClientUpdate updateClient(String lastReceivedCommandID, String authToken);
 }

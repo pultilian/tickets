@@ -217,4 +217,8 @@ public class ModelFacade implements IClient {
 	}
 	public void addChatMessage(String message) { currentGame.addToChat(message); }
 	public void addToGameHistory(String message) { currentGame.addToHistory(message); }
+
+	public void addPlayerTrainCard(String playerID) {
+
+	}
 }

@@ -1,6 +1,7 @@
 /bin/
 /out/
 *.iml
+*.sh
 
 # Android and Android Studio files
 .idea/

@@ -1,20 +1,25 @@
 package tickets.server;
 
 import tickets.common.*;
+import tickets.common.DestinationCard;
 import tickets.server.model.AllGames;
 import tickets.server.model.AllLobbies;
 import tickets.common.response.*;
 import tickets.server.model.AllUsers;
+import tickets.server.model.game.ServerGame;
 
 import java.util.*;
 
 public class ServerFacade implements IServer {
 
-    private static ServerFacade INSTANCE = null;
-
     private List<ClientProxy> clientsInLobbyList;
     private Map<ClientProxy, Lobby> clientsInALobby;
-    private Map<ClientProxy, Game> clientsInAGame;
+    private Map<ClientProxy, ServerGame> clientsInAGame;
+
+    //----------------------------------------------------------------------------------------------
+    // *** SINGLETON PATTERN ***
+
+    private static ServerFacade INSTANCE = null;
 
     public static ServerFacade getInstance() {
         if (INSTANCE == null) {
@@ -23,11 +28,14 @@ public class ServerFacade implements IServer {
         return INSTANCE;
     }
 
-    private ServerFacade(){
+    private ServerFacade() {
         clientsInLobbyList = new ArrayList<>();
         clientsInALobby = new HashMap<>();
         clientsInAGame = new HashMap<>();
     }
+
+    //----------------------------------------------------------------------------------------------
+    // *** LOGIN/REGISTER COMMANDS ***
 
     @Override
     public LoginResponse login(UserData userData) {
@@ -47,12 +55,15 @@ public class ServerFacade implements IServer {
         if (AllUsers.getInstance().userExists(userData.getUsername())){
             return new LoginResponse(new Exception("Username already exists."));
         }
-        else{
+        else {
             String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
             return new LoginResponse("Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
         }
     }
+
+    //----------------------------------------------------------------------------------------------
+    // *** LOBBY LIST COMMANDS ***
 
     @Override
     public JoinLobbyResponse joinLobby(String lobbyID, String authToken) {
@@ -118,6 +129,9 @@ public class ServerFacade implements IServer {
         return new LogoutResponse("Logout successful");
     }
 
+    //----------------------------------------------------------------------------------------------
+    // *** LOBBY COMMANDS ***
+
     @Override
     public StartGameResponse startGame(String lobbyID, String authToken) {
         if (getProxy(authToken) == null) return new StartGameResponse(new Exception("You are not an authorized user!"));
@@ -126,7 +140,8 @@ public class ServerFacade implements IServer {
         if (lobby == null) return new StartGameResponse(new Exception("Lobby does not exist."));
         else {
             // Update server model
-            Game game = new Game(UUID.randomUUID().toString());
+            AllLobbies.getInstance().removeLobby(lobbyID);
+            ServerGame game = new ServerGame(UUID.randomUUID().toString());
             AllGames.getInstance().addGame(game);
 
             // Update relevant clients and move clients from lobby to game
@@ -175,18 +190,29 @@ public class ServerFacade implements IServer {
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    // *** IN-GAME COMMANDS ***
+
     @Override
     public PlayerTurnResponse takeTurn(String playerID, String authToken) {
-        if (getProxy(authToken) == null) return new PlayerTurnResponse(new Exception("You are not an authorized user!"));
+        ServerGame game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new PlayerTurnResponse(ex);
+        }
+        if (!game.getCurrentPlayer().getAssociatedAuthToken().equals(authToken))
+            return new PlayerTurnResponse(new Exception("It is not your turn."));
 
-        Game game = clientsInAGame.get(getProxy(authToken));
-        if (game == null) return new PlayerTurnResponse(new Exception("Game does not exist."));
         else {
-            // Update server model (COMING SOON IN THE NEXT PHASE)
+            // Update server model
+            String historyMessage = AllUsers.getInstance().getUsername(authToken) + " ended their turn.";
+            game.nextTurn();
 
             // Update relevant clients
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
-                client.addToGameHistory(AllUsers.getInstance().getUsername(authToken) + " ended their turn.");
+                client.addToGameHistory(historyMessage);
                 // The current client will receive a player turn response instead of this command.
                 if (!client.getAuthToken().equals(authToken)) client.endCurrentTurn();
             }
@@ -197,11 +223,13 @@ public class ServerFacade implements IServer {
 
     @Override
     public AddToChatResponse addToChat(String message, String authToken) {
-        ClientProxy client = getProxy(authToken);
-        if (client == null) return new AddToChatResponse(new Exception("You are not an authorized user!"));
-
-        Game game = clientsInAGame.get(client);
-        if (game == null) return new AddToChatResponse(new Exception("Game does not exist."));
+        ServerGame game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new AddToChatResponse(ex);
+        }
 
         // Update server model
         game.addToChat(message);
@@ -213,6 +241,105 @@ public class ServerFacade implements IServer {
 
         return new AddToChatResponse();
     }
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // *** Card Actions ***
+
+    @Override
+    public TrainCardResponse drawTrainCard(String authToken) {
+        ServerGame game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new TrainCardResponse(ex);
+        }
+        if (!game.getCurrentPlayer().getAssociatedAuthToken().equals(authToken))
+            return new TrainCardResponse(new Exception("It is not your turn."));
+
+        // Update server model
+        TrainCard card = game.drawTrainCard();
+        String historyMessage = AllUsers.getInstance().getUsername(authToken) + " drew a resource card.";
+        game.addToHistory(historyMessage);
+
+        // Update relevant clients
+        for (ClientProxy client : getClientsInGame(game.getGameId())) {
+            client.addToGameHistory(historyMessage);
+            // The current client will receive a train card response rather than this command.
+            if (!client.getAuthToken().equals(authToken))
+                client.addPlayerTrainCard(game.getPlayerID(authToken));
+        }
+
+        return new TrainCardResponse(card);
+    }
+
+    @Override
+    public TrainCardResponse drawFaceUpCard(int position, String authToken) {
+        ServerGame game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new TrainCardResponse(ex);
+        }
+        if (!game.getCurrentPlayer().getAssociatedAuthToken().equals(authToken))
+            return new TrainCardResponse(new Exception("It is not your turn."));
+
+        // Update server model
+        TrainCard card = game.drawFaceUpTrainCard(position);
+        String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                " drew a " + card.getColor().toString() + " face-up resource card.";
+        game.addToHistory(historyMessage);
+
+        // Update relevant clients
+        for (ClientProxy client : getClientsInGame(game.getGameId())) {
+            client.addToGameHistory(historyMessage);
+            // The current client will receive a train card response rather than this command.
+            if (!client.getAuthToken().equals(authToken))
+                client.addPlayerTrainCard(game.getPlayerID(authToken));
+        }
+        return new TrainCardResponse(card);
+    }
+
+    @Override
+    public DestinationCardResponse drawDestinationCard(String authToken) {
+        ServerGame game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new DestinationCardResponse(ex);
+        }
+        if (!game.getCurrentPlayer().getAssociatedAuthToken().equals(authToken))
+            return new DestinationCardResponse(new Exception("It is not your turn."));
+
+        // Update server model
+        //      have the player draw a card from the DestinationCard deck
+
+        // Update relevant clients
+        //      update the game's event queue?
+        return null;
+    }
+
+    @Override
+    public Response chooseDestinationCards(DestinationCard toDiscard, String authToken) {
+        Game game;
+        try {
+            game = getGameForToken(authToken);
+        }
+        catch(Exception ex) {
+            return new Response(ex);
+        }
+        // Update server model
+        //      have the player discard the given Destination Card (unless it's null, then don't do anything)
+
+        // Update relevant clients
+        //      update the game's event queue?
+        return null;
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // *** UPDATE CLIENT COMMAND FOR POLLER ***
 
     @Override
     public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
@@ -241,7 +368,8 @@ public class ServerFacade implements IServer {
         }
     }
 
-    // PRIVATE HELPER METHODS------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // *** PRIVATE HELPER METHODS ***
 
     private boolean lobbyNameExists(String lobbyName) {
         for (Lobby lobby : AllLobbies.getInstance().getAllLobbies()) {
@@ -278,9 +406,22 @@ public class ServerFacade implements IServer {
         Game game = AllGames.getInstance().getGame(gameID);
         List<ClientProxy> result = new ArrayList<>();
 
-        for (Map.Entry<ClientProxy, Game> entry : clientsInAGame.entrySet()) {
+        for (Map.Entry<ClientProxy, ServerGame> entry : clientsInAGame.entrySet()) {
             if (entry.getValue().equals(game)) result.add(entry.getKey());
         }
         return result;
+    }
+
+    private ServerGame getGameForToken(String authToken) throws Exception {
+        ClientProxy client = getProxy(authToken);
+        if (client == null) {
+            throw new Exception("You are not an authorized user!");
+        }
+
+        ServerGame game = clientsInAGame.get(client);
+        if (game == null) {
+            throw new Exception("Game does not exist.");
+        } 
+        return game;
     }
 }

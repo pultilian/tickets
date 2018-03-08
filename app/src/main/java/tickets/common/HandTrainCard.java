@@ -2,6 +2,7 @@
 package tickets.common;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import tickets.common.TrainCard;
 
@@ -15,6 +16,18 @@ public class HandTrainCard {
 	private List<TrainCard> blackCards;
 	private List<TrainCard> redCards;
 	private List<TrainCard> wildCards;
+
+	public HandTrainCard() {
+		purpleCards = new ArrayList<>();
+		blueCards = new ArrayList<>();
+		orangeCards = new ArrayList<>();
+		whiteCards = new ArrayList<>();
+		greenCards = new ArrayList<>();
+		yellowCards = new ArrayList<>();
+		blackCards = new ArrayList<>();
+		redCards = new ArrayList<>();
+		wildCards = new ArrayList<>();
+	}
 
 
 	public List<TrainCard> getAllCards() {
