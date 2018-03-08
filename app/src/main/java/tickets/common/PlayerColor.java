@@ -1,7 +1,7 @@
 package tickets.common;
 
 public enum PlayerColor {
-    blue("blue"), green("blue"), yellow("blue"), black("blue"), red("blue");
+    blue("blue"), green("green"), yellow("yellow"), black("black"), red("red");
 
     private String color;
 
