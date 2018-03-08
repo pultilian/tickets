@@ -17,7 +17,6 @@ public class TrainCardArea {
 	private Random rand;
 
 	public TrainCardArea(List<TrainCard> allCards) {
-		//---
 		drawDeck = new ArrayList<>(allCards);
 		discardDeck = new ArrayList<>();
 
@@ -27,17 +26,11 @@ public class TrainCardArea {
 		}
 		rand = new Random();
 
-		// Look! A nifty shuffle function!
+		// Deck is shuffled once on creation
 		Collections.shuffle(drawDeck, rand);
-		//---
 	}
 
 	public TrainCard drawCard() {
-		//---
-		// Is the deck shuffled on creation, or accessed randomly?
-		// I like shuffling on creation. It's easier to conceptualize and easy to code.
-		//---
-
 		TrainCard card = drawDeck.remove(0);
 		// Reshuffle discard into deck if deck is empty
 		if (drawDeck.isEmpty()) {
