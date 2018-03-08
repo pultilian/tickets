@@ -167,11 +167,6 @@ public class ModelFacade implements IClient {
 		return;
 	}
 
-	public void addGuest(String lobbyID) {
-		asyncManager.addGuest(lobbyID, getAuthToken());
-		return;
-	}
-
 	public void takeTurn(String playerID) {
 		asyncManager.takeTurn(playerID, getAuthToken());
 		return;
