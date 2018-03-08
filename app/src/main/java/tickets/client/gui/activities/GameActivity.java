@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tickets.client.gui.fragments.ChatFragment;
+import tickets.client.gui.fragments.DestinationFragment;
 import tickets.client.gui.fragments.GameInfoFragment;
 import tickets.client.gui.fragments.MapFragment;
 import tickets.client.gui.presenters.GamePresenter;
@@ -151,6 +152,11 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
             @Override
             public void onClick(View view) {
                 presenter.drawDestinationCard();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = new DestinationFragment();
+                fragmentManager.beginTransaction()
+                        .add(R.id.fragment_container, fragment)
+                        .commit();
                 return;
             }
         });

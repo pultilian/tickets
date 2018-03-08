@@ -91,7 +91,11 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
                 String players = numPlayers.getText().toString();
                 try {
                     int p = Integer.parseInt(players);
-                    presenter.createLobby(new Lobby(lobbyName, p));
+                    if(p > 1 && p < 6) {
+                        presenter.createLobby(new Lobby(lobbyName, p));
+                    } else {
+                        toastMessage("You must have between 2-5 players.");
+                    }
                 }
                 catch(NumberFormatException e) {
                     Toast.makeText(LobbyListActivity.this, "Invalid number of players", Toast.LENGTH_SHORT).show();
