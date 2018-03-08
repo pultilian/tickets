@@ -1,8 +1,6 @@
 
 package tickets.client.async;
 
-// import android.os.AsyncTask;
-
 import android.os.AsyncTask;
 
 import tickets.common.UserData;
@@ -50,6 +48,7 @@ class CreateLobbyAsync extends AsyncTask<Object, Void, JoinLobbyResponse> {
 			stateVal = ClientStateChange.ClientState.lobby;
 			ClientStateChange state = new ClientStateChange(stateVal);
 			modelRoot.setCurrentLobby(response.getLobby());
+            modelRoot.setPlayer(response.getPlayer());
 			modelRoot.updateObservable(state);
 		}
 		else {

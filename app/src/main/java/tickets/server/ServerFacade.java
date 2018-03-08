@@ -76,6 +76,7 @@ public class ServerFacade implements IServer {
             // Update the server model
             Player player = new Player(UUID.randomUUID().toString(), authToken);
             lobby.addPlayer(player);
+            lobby.assignFaction(player);
             lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has joined the lobby.");
 
             // Move current client
@@ -89,7 +90,7 @@ public class ServerFacade implements IServer {
                 client.addPlayerToLobbyInList(lobby, player);
             }
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
-                client.setPlayer(player);
+                client.addPlayerToLobbyInList(lobby, player);
             }
             return new JoinLobbyResponse(lobby, player);
         }
@@ -146,16 +147,15 @@ public class ServerFacade implements IServer {
             // Update relevant clients and move clients from lobby to game
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
                 // The current client will receive a start game response instead of this command.
-                if (!client.getAuthToken().equals(authToken)) client.startGame();
+                if (!client.getAuthToken().equals(authToken)) client.startGame(game);
                 clientsInALobby.remove(client);
-                client.clearCommands();
                 clientsInAGame.put(client, game);
             }
             for (ClientProxy client: clientsInLobbyList) {
                 client.removeLobbyFromList(lobby);
             }
 
-            AllGames.getInstance().addGame(game);
+            AllLobbies.getInstance().removeLobby(lobbyID);
             return new StartGameResponse(game.getGameId());
         }
     }
@@ -177,6 +177,7 @@ public class ServerFacade implements IServer {
             List<Player> playersForUser = lobby.getPlayersWithAuthToken(authToken);
             for (Player player : playersForUser) {
                 lobby.removePlayer(player);
+                lobby.unassignFaction(player);
 
                 for (ClientProxy client : getClientsInLobby(lobbyID)) {
                     client.removePlayer(player);
@@ -190,6 +191,7 @@ public class ServerFacade implements IServer {
     }
 
     @Override
+<<<<<<< HEAD
     public AddGuestResponse addGuest(String lobbyID, String authToken) {
         if (getProxy(authToken) == null) return new AddGuestResponse(new Exception("You are not an authorized user!"));
 
@@ -217,6 +219,8 @@ public class ServerFacade implements IServer {
     // *** IN-GAME COMMANDS ***
 
     @Override
+=======
+>>>>>>> master
     public PlayerTurnResponse takeTurn(String playerID, String authToken) {
         ServerGame game;
         try {
@@ -372,10 +376,11 @@ public class ServerFacade implements IServer {
 
         // Remove commands until the last received command
         while ((lastReceivedCommandID != null) &&
-                (commands.peek() != null) &&
-                (!commandIDs.get(commands.peek()).equals(lastReceivedCommandID))) {
-            commandIDs.remove(commands.peek());
-            commands.remove();
+                (commands.peek() != null)) {
+            Command command = commands.remove();
+            String ID = commandIDs.get(command);
+            commandIDs.remove(command);
+            if (ID.equals(lastReceivedCommandID)) break;
         }
 
         // Update the client proxy

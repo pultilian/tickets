@@ -75,22 +75,20 @@ public class Lobby {
 
 	public void addPlayer(Player player) {
 		players.add(player);
-		assignFaction(player);
 		currentMembers++;
 	}
 
 	public void removePlayer(Player player) {
 		players.remove(player);
-		unassignFaction(player);
 		currentMembers--;
 	}
 
 	public void assignFaction(Player player) {
 	    if (player.getPlayerFaction() == null) {
-            int choice = new Random().nextInt(availableFactions.size());
-            player.setPlayerFaction(availableFactions.get(choice));
-            availableFactions.remove(choice);
-        }
+               int choice = new Random().nextInt(availableFactions.size());
+	       player.setPlayerFaction(availableFactions.get(choice));
+	       availableFactions.remove(choice);
+	   }
 	}
 
 	public void unassignFaction(Player player) {

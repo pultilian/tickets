@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import tickets.common.ClientStateChange;
 import tickets.common.Game;
 import tickets.common.IClient;
 import tickets.common.Lobby;
@@ -120,6 +121,8 @@ public class ModelFacade implements IClient {
 		return currentGame;
 	}
 
+	public void setPlayer(Player player) { localPlayer = player; }
+
 //-------------------------------------------------
 //		server interface methods
 //
@@ -196,14 +199,18 @@ public class ModelFacade implements IClient {
 	public void removePlayerFromLobbyInList(Lobby lobby, Player player) {
 		lobbyManager.removePlayer(lobby, player);
 	}
-	public void setPlayer(Player player) {
-		localPlayer = player;
-	}
 	public void removePlayer(Player player) {
 		localPlayer = null;
 	}
-	public void startGame() {
-		return;
+	public void startGame(Game game) {
+		System.out.println("***** CALLING STARTGAME *****");
+		currentGame = game;
+		currentLobby = null;
+		ClientStateChange.ClientState stateVal;
+		stateVal = ClientStateChange.ClientState.game;
+		ClientStateChange state = new ClientStateChange(stateVal);
+
+		updateObservable(state);
 	}
 	public void endCurrentTurn() {
 		return;

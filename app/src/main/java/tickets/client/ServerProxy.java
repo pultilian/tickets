@@ -83,14 +83,6 @@ public class ServerProxy implements IServer {
         return (LeaveLobbyResponse) result;
     }
 
-    public AddGuestResponse addGuest(String lobbyID, String authToken) {
-        Object[] parameters = {lobbyID, authToken};
-        String[] parameterTypes = {String.class.getName(), String.class.getName()};
-        Command command = new Command("addGuest", parameterTypes, parameters);
-        Object result = clientCommunicator.send(command);
-        return (AddGuestResponse) result;
-    }
-
     public PlayerTurnResponse takeTurn(String playerID, String authToken) {
         Object[] parameters = {playerID, authToken};
         String[] parameterTypes = {String.class.getName(), String.class.getName()};
