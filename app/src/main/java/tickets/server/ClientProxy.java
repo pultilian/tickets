@@ -1,6 +1,7 @@
 package tickets.server;
 
 import tickets.common.Command;
+import tickets.common.Game;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
@@ -50,7 +51,7 @@ public class ClientProxy implements IClient {
     @Override
     public void addPlayerToLobbyInList(Lobby lobby, Player player) {
         Command command = new Command(
-                "addPlayersToLobbyInList",
+                "addPlayerToLobbyInList",
                 new String[]{Lobby.class.getName(), Player.class.getName()},
                 new Object[]{lobby, player});
         unprocessedCommands.add(command);
@@ -61,17 +62,9 @@ public class ClientProxy implements IClient {
     @Override
     public void removePlayerFromLobbyInList(Lobby lobby, Player playerToRemove) {
         Command command = new Command(
-                "removePlayersFromLobbyInList",
+                "removePlayerFromLobbyInList",
                 new String[]{Lobby.class.getName(), Player.class.getName()},
                 new Object[]{lobby, playerToRemove});
-        unprocessedCommands.add(command);
-        commandIDs.put(command, totalCommandsSoFar.toString());
-        totalCommandsSoFar++;
-    }
-
-    @Override
-    public void setPlayer(Player player) {
-        Command command = new Command("setPlayer", new String[]{Player.class.getName()}, new Object[]{player});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -86,8 +79,8 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void startGame() {
-        Command command = new Command("startGame", new String[0], new Object[0]);
+    public void startGame(Game game) {
+        Command command = new Command("startGame", new String[]{Game.class.getName()}, new Object[]{game});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;

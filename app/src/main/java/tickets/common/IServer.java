@@ -13,7 +13,6 @@ public interface IServer {
   //Lobby Actions
   public StartGameResponse startGame(String lobbyID, String authToken);
   public LeaveLobbyResponse leaveLobby(String lobbyID, String authToken);
-  public AddGuestResponse addGuest(String lobbyID, String authToken);
 
   //Game Actions
   public PlayerTurnResponse takeTurn(String playerID, String authToken);
