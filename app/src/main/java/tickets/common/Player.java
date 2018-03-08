@@ -8,6 +8,11 @@ public class Player {
     private String playerId;
     private String associatedAuthToken;
     private Faction playerFaction;
+    private String name;
+    private int points;
+    private int shipsLeft;
+    private HandDestinationCard playerDestinationCards;
+    private HandTrainCard playerResourceCards;
 
     private HandTrainCard trainCards;
     private HandDestinationCard destinationCards;

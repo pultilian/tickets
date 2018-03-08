@@ -11,9 +11,10 @@ import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
 import tickets.client.ModelFacade;
+import tickets.common.response.StartGameResponse;
 
 
-class StartGameAsync extends AsyncTask<String, Void, JoinLobbyResponse> {
+class StartGameAsync extends AsyncTask<String, Void, StartGameResponse> {
     ModelFacade modelRoot;
 
     public StartGameAsync(ModelFacade root) {
@@ -21,23 +22,34 @@ class StartGameAsync extends AsyncTask<String, Void, JoinLobbyResponse> {
     }
 
     @Override
-    public JoinLobbyResponse doInBackground(String... data) {
+    public StartGameResponse doInBackground(String... data) {
         if (data.length != 2) {
             AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
-            return new JoinLobbyResponse(error);
+            return new StartGameResponse(error);
         }
 
         String id = data[0];
         String authToken = data[1];
 
-        JoinLobbyResponse response = ServerProxy.getInstance().joinLobby(id, authToken);
+        StartGameResponse response = ServerProxy.getInstance().startGame(id, authToken);
         return response;
     }
 
     @Override
-    public void onPostExecute(JoinLobbyResponse response) {
+    public void onPostExecute(StartGameResponse response) {
         if (response == null) {
             Exception ex = new Exception("The Server could not be reached");
+            ExceptionMessage msg = new ExceptionMessage(ex);
+            modelRoot.updateObservable(msg);
+        }
+        else if (response.getException() == null) {
+            ClientStateChange.ClientState stateVal;
+            stateVal = ClientStateChange.ClientState.game;
+            ClientStateChange state = new ClientStateChange(stateVal);
+            modelRoot.updateObservable(state);
+        }
+        else {
+            Exception ex = response.getException();
             ExceptionMessage msg = new ExceptionMessage(ex);
             modelRoot.updateObservable(msg);
         }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/card_altian" />
+
+        <TextView
+            android:id="@+id/player_info_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="30dp"
+            android:textColor="#FFFFFF"
+            android:text="Player Name" />
+
+        <TextView
+            android:id="@+id/player_info_points"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/player_info_ships_left"
+            android:layout_alignParentStart="true"
+            android:textColor="#FFFFFF"
+            android:text="Points"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/player_info_ships_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/players_info_destination"
+            android:layout_alignParentStart="true"
+            android:textColor="#FFFFFF"
+            android:text="Ships Left"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/players_info_resource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="27dp"
+            android:textColor="#FFFFFF"
+            android:text="Resource Cards"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/players_info_destination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/players_info_resource"
+            android:layout_alignParentStart="true"
+            android:textColor="#FFFFFF"
+            android:text="Dest Cards"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
