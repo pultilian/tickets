@@ -55,7 +55,7 @@ public class ServerPoller implements IObserver {
     	        if (updates.getCommands() == null)
                     return;
                 for (Command c : updates.getCommands()) {
-                    System.out.println(c.getMethodName());
+                    c.decode();
                     c.execute(ModelFacade.getInstance());
                 }
                 lastCommand = updates.getLastCommandID();
