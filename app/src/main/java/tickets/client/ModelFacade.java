@@ -45,6 +45,11 @@ public class ModelFacade implements IClient {
 	private UserData userData;
 	private Game currentGame;
 	private ServerPoller serverPoller = null;
+
+	public Player getLocalPlayer() {
+		return localPlayer;
+	}
+
 	private Player localPlayer;
 
 //----------------------------------------------------------------------------
