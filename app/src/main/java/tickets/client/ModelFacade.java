@@ -1,5 +1,7 @@
 package tickets.client;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import tickets.common.ClientModelUpdate;
@@ -254,10 +256,17 @@ public class ModelFacade implements IClient {
 	public void removePlayer(Player player) {
 		localPlayer = null;
 	}
-	public void startGame(Game game) {
-		System.out.println("***** CALLING STARTGAME *****");
+
+	public void startGame(Game game, TrainCard[] initialCards, DestinationCard[] initialDestinationCards) {
 		currentGame = game;
 		currentLobby = null;
+		for (TrainCard card : initialCards) {
+			localPlayer.addTrainCardToHand(card);
+		}
+		List<DestinationCard> initialOptions = new ArrayList<>();
+		Collections.addAll(initialOptions, initialDestinationCards);
+		localPlayer.setDestinationCardOptions(initialOptions);
+
 		ClientStateChange.ClientState stateVal;
 		stateVal = ClientStateChange.ClientState.game;
 		ClientStateChange state = new ClientStateChange(stateVal);

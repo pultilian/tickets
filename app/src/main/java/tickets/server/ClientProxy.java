@@ -100,10 +100,10 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void startGame(Game game) {
+    public void startGame(Game game, TrainCard[] initialCards, DestinationCard[] initialDestinationCards) {
         Command command = new Command("startGame",
-                new String[]{Game.class.getName()},
-                new Object[]{game});
+                new String[]{Game.class.getName(), TrainCard[].class.getName(), DestinationCard[].class.getName()},
+                new Object[]{game, initialCards, initialDestinationCards});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
