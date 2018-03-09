@@ -2,8 +2,11 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
+import java.util.List;
+
 import tickets.client.ModelFacade;
 import tickets.client.ServerProxy;
+import tickets.common.DestinationCard;
 import tickets.common.ExceptionMessage;
 import tickets.common.response.DestinationCardResponse;
 
@@ -33,7 +36,8 @@ class DrawDestinationCardAsync extends AsyncTask<String, Void, DestinationCardRe
             ExceptionMessage msg = new ExceptionMessage(ex);
             modelRoot.updateObservable(msg);
         } else if (response.getException() == null) {
-            //TODO: Do something with DestinationCard response
+            List<DestinationCard> cards = response.getCards();
+            //TODO: present cards to client
         } else {
             Exception ex = response.getException();
             ExceptionMessage msg = new ExceptionMessage(ex);

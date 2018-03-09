@@ -1,20 +1,22 @@
 
 package tickets.common.response;
 
+import java.util.List;
+
 import tickets.common.DestinationCard;
 
 public class DestinationCardResponse extends Response {
-		private DestinationCard card;
+		private List<DestinationCard> cards;
 
 		public DestinationCardResponse(Exception ex) {
 			super(ex);
 		}
 
-		public DestinationCardResponse(DestinationCard card) {
-			this.card = card;
+		public DestinationCardResponse(List<DestinationCard> cards) {
+			this.cards = cards;
 		}
 
-		public DestinationCard getCard() {
-			return card;
+		public List<DestinationCard> getCards() {
+			return cards;
 		}
 }
