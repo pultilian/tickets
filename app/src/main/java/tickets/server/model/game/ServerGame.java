@@ -104,8 +104,12 @@ public class ServerGame extends Game {
 		return trainCardArea.drawCard();
 	}
 
-	public TrainCard drawFaceUpTrainCard(int position) {
+	public TrainCard drawFaceUpCard(int position) {
 		return trainCardArea.drawFaceUpCard(position);
+	}
+
+	public boolean isFaceUpCardWild(int position) {
+		return trainCardArea.isFaceUpCardWild(position);
 	}
 
 	public DestinationCard drawDestinationCard() {
@@ -132,6 +136,8 @@ public class ServerGame extends Game {
 			// public Faction getPlayerFaction();
 			// public void setPlayerFaction(Faction playerFaction);
 			// public HandTrainCard getTrainCards();
+			// public void addTrainCardToHand(TrainCard card);
+	    // public void addDestinationCardToHand(DestinationCard card);
 
 		IServerPlayer(Player copy) {
 			super(copy);
@@ -172,7 +178,11 @@ public class ServerGame extends Game {
 		}
 
 		protected TrainCard drawFaceUpCard_fromGame(int position) {
-			return ServerGame.this.drawFaceUpTrainCard(position);
+			return ServerGame.this.drawFaceUpCard(position);
+		}
+
+		protected boolean isFaceUpCardWild_fromGame(int position) {
+			return ServerGame.this.isFaceUpCardWild(position);
 		}
 
 		protected boolean claimRoute_fromGame(Route route, IServerPlayer player) {

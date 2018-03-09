@@ -2,10 +2,12 @@
 package tickets.server.model.game;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
+import tickets.common.RouteColors;
 
 import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.ServerPlayer.PlayerTurnState;
@@ -25,31 +27,29 @@ class TurnStartState extends PlayerTurnState {
 
 	@Override
 	TrainCard state_drawTrainCard() throws Exception {
-		//---
-		// If the Train Card deck is empty:
-		//	 throw new Exception("There are no train cards in the deck to be drawn");
-		//
-		// Draw the top card of the Train card deck
-		// Add it to the player's hand
-		// Go to DrawingTrainCardsState
-		//---
-		return null;
+		TrainCard card = drawTrainCard_fromPlayer();
+		if (card == null) {
+			throw new Exception("There are no train cards in the deck to be drawn");
+		}
+		addTrainCardToHand_fromPlayer(card);
+		changeStateTo(ServerPlayer.States.DRAWING_TRAIN_CARDS);
+		return card;
 	}
 
 	@Override
 	TrainCard state_drawFaceUpCard(int position) throws Exception {
-		//---
-		// If the Train card deck is empty:
-		//	 throw new Exception("There are no face up train cards to be drawn");
-		//
-		// Draw the face up card at the specified position
-		// Add it to the player's hand
-		// If the card drawn is wild:
-		//	 end the turn
-		// Otherwise:
-		//	 Go to DrawingTrainCardsState
-		//---
-		return null;
+		TrainCard card = drawFaceUpCard_fromPlayer(position);
+		if (card == null) {
+			throw new Exception("There are no face up train cards to be drawn");
+		}
+		addTrainCardToHand_fromPlayer(card);
+		if (card.getColor() == RouteColors.Wild) {
+			changeStateTo(ServerPlayer.States.WAIT_FOR_TURN);
+		}
+		else {
+			changeStateTo(ServerPlayer.States.DRAWING_TRAIN_CARDS);
+		}
+		return card;
 	}
 
 	@Override
@@ -66,19 +66,27 @@ class TurnStartState extends PlayerTurnState {
 		// Lose train tokens equal to the route's length
 		// Gain points equal to the route's value
 		//---
+		throw new Exception("claiming routes has not been implemented.");
 	}
 
 	@Override
 	List<DestinationCard> state_drawDestinationCards() throws Exception {
-		//---
-		// If the Destination card deck is empty:
-		//	 throw new Exception("There are no destination cards left in the deck");
-		//
-		// Draw two destination cards from the top of the deck
-		// Hold them out from the player's hand of destination cards
-		// Go to PickingDestCardsState
-		//---
-		return null;
+		//draw three destination cards
+		DestinationCard card1 = drawDestinationCard_fromPlayer();
+		DestinationCard card2 = drawDestinationCard_fromPlayer();
+		DestinationCard card3 = drawDestinationCard_fromPlayer();
+
+		if (card1 == null || card2 == null || card3 == null) {
+			throw new Exception("There are not enough destination cards left in the deck.");
+		}
+
+		List<DestinationCard> cards = new ArrayList<>();
+		cards.add(card1);
+		cards.add(card2);
+		cards.add(card3);
+
+		changeStateTo(ServerPlayer.States.PICKING_DEST_CARDS);
+		return cards;
 	}
 
 	@Override
@@ -93,7 +101,6 @@ class TurnStartState extends PlayerTurnState {
 
 	@Override
 	void state_addToChat(String msg) {
-		// add the message to the chat
 		addToChat_fromPlayer(msg);
 		return;
 	}

@@ -20,30 +20,41 @@ public class ServerPlayer extends IServerPlayer {
 
 	// State Pattern object
 	private PlayerTurnState turnState;
+	private PlayerTurnState nextState;
+
+	private List<DestinationCard> tempDestinationCards;
 
 	public ServerPlayer(Player copy, ServerGame game) {
 		game.super(copy);
 		turnState = new GameLoadingState(this);
+		nextState = new TurnZeroState(this);
 	}
 
 	public ServerPlayer(String playerID, String authToken, ServerGame game) {
 		game.super(playerID, authToken);
 		turnState = new GameLoadingState(this);
+		nextState = new TurnZeroState(this);
 	}
 
 	public void initPlayer(List<TrainCard> hand, List<DestinationCard> destinations) {
 		turnState = new TurnZeroState(this);
 
-		HandTrainCard playerCards = this.getHandTrainCards();
 		for(TrainCard card : hand) {
-			playerCards.addCard(card);
+			this.addTrainCardToHand(card);
 		}
 
-		HandDestinationCard playerDestinations = this.getHandDestinationCards();
 		for(DestinationCard dest : destinations) {
-			playerDestinations.addCard(dest);
+			this.addDestinationCardToHand(dest);
 		}
 
+		return;
+	}
+
+	private void goNextState() {
+		if (nextState != null) {
+			turnState = nextState;
+			nextState = null;
+		}
 		return;
 	}
 
@@ -54,44 +65,54 @@ public class ServerPlayer extends IServerPlayer {
 
 	@Override
 	public TrainCard takeAction_drawTrainCard() throws Exception {
-		return turnState.state_drawTrainCard();
+		TrainCard card = turnState.state_drawTrainCard();
+		goNextState();
+		return card;
 	}
 
 	@Override
 	public TrainCard takeAction_drawFaceUpCard(int position) throws Exception {
-		return turnState.state_drawFaceUpCard(position);
+		TrainCard card = turnState.state_drawFaceUpCard(position);
+		goNextState();
+		return card;
 	}
 
 	@Override
 	public void takeAction_claimRoute(Route route) throws Exception {
 		turnState.state_claimRoute(route);
+		goNextState();
 		return;
 	}
 
 	@Override
 	public List<DestinationCard> takeAction_drawDestinationCards() throws Exception {
-		return turnState.state_drawDestinationCards();
+		tempDestinationCards = turnState.state_drawDestinationCards();
+		goNextState();
+		return tempDestinationCards;
 	}
 
 	@Override
 	public void takeAction_discardDestinationCard(DestinationCard discard) throws Exception {
 		turnState.state_discardDestinationCard(discard);
+		goNextState();
 		return;
 	}
 
 	@Override
 	public void takeAction_endTurn() throws Exception {
 		turnState.state_endTurn();
+		goNextState();
 		return;
 	}
 
 	@Override
 	public void takeAction_addToChat(String msg) {
 		turnState.state_addToChat(msg);
+		goNextState();
 		return;
 	}
 
-	// Using the State Pattern to represent player turn actions
+	// Using the State Pattern to represent player turn actions;
 	// 	the server does not need to check player state before
 	// 	executing a client's game commands (this simplifies the
 	//	multi-step processes of drawing train/destination cards)
@@ -115,13 +136,13 @@ public class ServerPlayer extends IServerPlayer {
 		protected void changeStateTo(States state) {
 			switch(state) {
 				case WAIT_FOR_TURN:	
-					player.turnState = new WaitForTurnState(player);
+					player.nextState = new WaitForTurnState(player);
 					break;
 				case DRAWING_TRAIN_CARDS:
-					player.turnState = new DrawingTrainCardsState(player);
+					player.nextState = new DrawingTrainCardsState(player);
 					break;
 				case PICKING_DEST_CARDS:
-					player.turnState = new PickingDestCardsState(player);
+					player.nextState = new PickingDestCardsState(player);
 					break;
 				default:
 					System.out.println("ERROR: in ServerPlayer.PlayerTurnState, invalid state transition");
@@ -131,17 +152,60 @@ public class ServerPlayer extends IServerPlayer {
 			return;
 		}
 
+		protected TrainCard drawTrainCard_fromPlayer() {
+			return player.drawTrainCard_fromGame();
+		}
+
+		protected TrainCard drawFaceUpCard_fromPlayer(int position) {
+			return player.drawFaceUpCard_fromGame(position);
+		}
+
+		protected boolean isFaceUpCardWild_fromPlayer(int position) {
+			return player.isFaceUpCardWild_fromGame(position);
+		}
+
+		protected boolean claimRoute_fromPlayer(Route route) {
+			// player.claimRoute_fromGame(route, this)
+
+			return false;
+		}
+
+		protected DestinationCard drawDestinationCard_fromPlayer() {
+			return player.drawDestinationCard_fromGame();
+		}
+
+		protected void discardDestinationCard_fromPlayer(DestinationCard discard) {
+			player.discardDestinationCard_fromGame(discard);
+			return;
+		}
+
 		protected void addToHistory_fromPlayer(String msg) {
 			player.addToHistory_fromGame(msg);
 			return;
 		}
+
 		protected void addToChat_fromPlayer(String msg) {
 			player.addToChat_fromGame(msg);
 			return;
 		}
+
+		protected void endTurn_fromPlayer() {
+			player.endTurn_fromGame();
+			return;
+		}
+
+		protected void addTrainCardToHand_fromPlayer(TrainCard card) {
+			player.addTrainCardToHand(card);
+			return;
+		}
+
+		protected void addDestinationCardToHand_fromPlayer(DestinationCard card) {
+			player.addDestinationCardToHand(card);
+			return;
+		}
 	}
 
-	// package-private - flags for the
+	// package-private flags for the
 	// different states a player may be in
 	// so states may transition from one to another
 	enum States {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import tickets.common.TrainCard;
+import tickets.common.RouteColors;
 
 public class TrainCardArea {
 	private List<TrainCard> drawDeck;
@@ -31,6 +32,9 @@ public class TrainCardArea {
 	}
 
 	public TrainCard drawCard() {
+		if (drawDeck.isEmpty() && discardDeck.isEmpty()) {
+			return null;
+		}
 		TrainCard card = drawDeck.remove(0);
 		// Reshuffle discard into deck if deck is empty
 		if (drawDeck.isEmpty()) {
@@ -60,5 +64,15 @@ public class TrainCardArea {
 
 		discardDeck.add(discard);
 		return true;
+	}
+
+	public boolean isFaceUpCardWild(int position) {
+		if (position < 1 || position > 5) {
+			return false;
+		}
+		if (faceUpCards[position - 1].getColor() == RouteColors.Wild) {
+			return true;
+		}
+		else return false;
 	}
 }
