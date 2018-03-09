@@ -161,8 +161,14 @@ public class ServerFacade implements IServer {
             AllLobbies.getInstance().removeLobby(lobbyID);
             Game clientGame = new Game(game.getGameId());
             HandTrainCard playerHand = new HandTrainCard();
-            DestinationCard[] destCardOptions = new DestinationCard[3];
-            return new StartGameResponse(clientGame, playerHand, destCardOptions);
+            DestinationCard[] initialDestinationCards = new DestinationCard[3];
+            for (int i = 0; i < 4; i++) {
+                playerHand.addCard(game.drawTrainCard());
+            }
+            for (int i = 0; i < initialDestinationCards.length; i++) {
+                initialDestinationCards[i] = game.drawDestinationCard();
+            }
+            return new StartGameResponse(clientGame, playerHand, initialDestinationCards);
         }
     }
 
