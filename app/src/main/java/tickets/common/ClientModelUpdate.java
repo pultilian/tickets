@@ -3,12 +3,14 @@ package tickets.common;
 public class ClientModelUpdate implements IMessage {
 
     public enum ModelUpdate{
-        updatePlayerCard,
-        updateFaceUpCard,
-        updatePlayerDestCards,
-        updateGameHistory,
-        updateChat,
-        updateMap
+        playerTrainHandUpdated,
+        faceUpCardUpdated,
+        playerDestHandUpdated,
+        destCardOptionsUpdated,
+        gameHistoryUpdated,
+        playerInfoUpdated,
+        chatUpdated,
+        mapUpdated,
     }
 
     private ModelUpdate update;

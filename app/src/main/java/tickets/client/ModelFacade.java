@@ -2,6 +2,7 @@ package tickets.client;
 
 import java.util.List;
 
+import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.DestinationCard;
 import tickets.common.Game;
@@ -242,12 +243,18 @@ public class ModelFacade implements IClient {
 	}
 	public void addChatMessage(String message) {
 		currentGame.addToChat(message);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.chatUpdated);
+        updateObservable(update);
 	}
 	public void addToGameHistory(String message) {
 		currentGame.addToHistory(message);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.gameHistoryUpdated);
+        updateObservable(update);
 	}
 // Update public info
 	public void addPlayerTrainCard(String playerId) {
 		currentGame.getPlayerInfo(playerId).addTrainCard();
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+        ModelFacade.getInstance().updateObservable(message);
 	}
 }

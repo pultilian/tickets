@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import tickets.client.ModelFacade;
 import tickets.client.ServerProxy;
+import tickets.common.ClientModelUpdate;
 import tickets.common.ExceptionMessage;
 import tickets.common.response.TrainCardResponse;
 
@@ -35,6 +36,8 @@ class DrawFaceUpCardAsync extends AsyncTask<Object, Void, TrainCardResponse> {
             modelRoot.updateObservable(msg);
         } else if (response.getException() == null) {
             ModelFacade.getInstance().getLocalPlayer().addTrainCardToHand(response.getCard());
+            ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
+            ModelFacade.getInstance().updateObservable(message);
         } else {
             Exception ex = response.getException();
             ExceptionMessage msg = new ExceptionMessage(ex);

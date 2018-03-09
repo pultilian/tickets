@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import tickets.client.ModelFacade;
 import tickets.client.ServerProxy;
+import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 import tickets.common.response.TrainCardResponse;
@@ -36,6 +37,8 @@ class DrawTrainCardAsync extends AsyncTask<String, Void, TrainCardResponse> {
         }
         else if (response.getException() == null) {
             ModelFacade.getInstance().getLocalPlayer().addTrainCardToHand(response.getCard());
+            ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
+            ModelFacade.getInstance().updateObservable(message);
         }
         else {
             Exception ex = response.getException();

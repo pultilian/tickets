@@ -6,6 +6,7 @@ import java.util.List;
 
 import tickets.client.ModelFacade;
 import tickets.client.ServerProxy;
+import tickets.common.ClientModelUpdate;
 import tickets.common.DestinationCard;
 import tickets.common.ExceptionMessage;
 import tickets.common.response.DestinationCardResponse;
@@ -38,6 +39,8 @@ class DrawDestinationCardAsync extends AsyncTask<String, Void, DestinationCardRe
         } else if (response.getException() == null) {
             List<DestinationCard> cards = response.getCards();
             ModelFacade.getInstance().getLocalPlayer().setDestinationCardOptions(cards);
+            ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
+            ModelFacade.getInstance().updateObservable(message);
         } else {
             Exception ex = response.getException();
             ExceptionMessage msg = new ExceptionMessage(ex);
