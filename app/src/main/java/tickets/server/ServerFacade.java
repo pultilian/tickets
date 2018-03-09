@@ -157,15 +157,17 @@ public class ServerFacade implements IServer {
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
                 // The current client will receive a start game response instead of this command.
                 if (!client.getAuthToken().equals(authToken)) {
-                    TrainCard[] initialCards = new TrainCard[4];
-                    DestinationCard[] initialDestinationCards = new DestinationCard[3];
-                    for (int i = 0; i < initialCards.length; i++) {
-                        initialCards[i] = game.drawTrainCard();
+                    HandTrainCard playerHand = new HandTrainCard();
+                    List<DestinationCard> initialDestinationCards = new ArrayList<>();
+                    for (int i = 0; i < 4; i++) {
+                        playerHand.addCard(game.drawTrainCard());
                     }
-                    for (int i = 0; i < initialDestinationCards.length; i++) {
-                        initialDestinationCards[i] = game.drawDestinationCard();
+                    for (int i = 0; i < 3; i++) {
+                        initialDestinationCards.add(game.drawDestinationCard());
                     }
-                    client.startGame(clientGame, initialCards, initialDestinationCards);
+                    ChoiceDestinationCards destinationCards = new ChoiceDestinationCards();
+                    destinationCards.setDestinationCards(initialDestinationCards);
+                    client.startGame(clientGame, playerHand, destinationCards);
                 }
                 clientsInALobby.remove(client);
                 clientsInAGame.put(client, game);
@@ -176,15 +178,17 @@ public class ServerFacade implements IServer {
 
             AllLobbies.getInstance().removeLobby(lobbyID);
 
-            TrainCard[] initialCards = new TrainCard[4];
-            DestinationCard[] initialDestinationCards = new DestinationCard[3];
-            for (int i = 0; i < initialCards.length; i++) {
-                initialCards[i] = game.drawTrainCard();
+            HandTrainCard playerHand = new HandTrainCard();
+            List<DestinationCard> initialDestinationCards = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                playerHand.addCard(game.drawTrainCard());
             }
-            for (int i = 0; i < initialDestinationCards.length; i++) {
-                initialDestinationCards[i] = game.drawDestinationCard();
+            for (int i = 0; i < 3; i++) {
+                initialDestinationCards.add(game.drawDestinationCard());
             }
-            return new StartGameResponse(clientGame, initialCards, initialDestinationCards);
+            ChoiceDestinationCards destinationCards = new ChoiceDestinationCards();
+            destinationCards.setDestinationCards(initialDestinationCards);
+            return new StartGameResponse(clientGame, playerHand, destinationCards);
         }
     }
 

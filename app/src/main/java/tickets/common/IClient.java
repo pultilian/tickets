@@ -12,7 +12,7 @@ public interface IClient {
 
     // FOR CLIENTS IN A LOBBY
     public void removePlayer(Player player);
-    public void startGame(Game game, TrainCard[] initialCards, DestinationCard[] initialDestinationCards);
+    public void startGame(Game game, HandTrainCard playerHand, ChoiceDestinationCards destCardOptions);
 
     // FOR CLIENTS IN A GAME
     // public void startTurn();
@@ -21,5 +21,5 @@ public interface IClient {
     public void addToGameHistory(String message);
     public void addPlayerTrainCard(String playerID);
     public void givePlayerTrainCard(TrainCard card);
-    public void givePlayerDestinationCards(DestinationCard[] cards);
+    public void givePlayerDestinationCards(ChoiceDestinationCards cards);
 }

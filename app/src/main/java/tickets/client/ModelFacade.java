@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import tickets.common.ChoiceDestinationCards;
 import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.DestinationCard;
 import tickets.common.Game;
+import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
@@ -229,7 +231,7 @@ public class ModelFacade implements IClient {
         updateObservable(update);
     }
 
-    public void givePlayerDestinationCards(DestinationCard[] cards) {
+    public void givePlayerDestinationCards(ChoiceDestinationCards cards) {
         localPlayer.setDestinationCardOptions(cards);
         ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
         updateObservable(update);
@@ -257,13 +259,11 @@ public class ModelFacade implements IClient {
 		localPlayer = null;
 	}
 
-	public void startGame(Game game, TrainCard[] initialCards, DestinationCard[] initialDestinationCards) {
+	public void startGame(Game game, HandTrainCard playerHand, ChoiceDestinationCards destCardOptions) {
 		currentGame = game;
 		currentLobby = null;
-		for (TrainCard card : initialCards) {
-			localPlayer.addTrainCardToHand(card);
-		}
-		localPlayer.setDestinationCardOptions(initialDestinationCards);
+		localPlayer.setTrainCardHand(playerHand);
+		localPlayer.setDestinationCardOptions(destCardOptions);
 
 		ClientStateChange.ClientState stateVal;
 		stateVal = ClientStateChange.ClientState.game;

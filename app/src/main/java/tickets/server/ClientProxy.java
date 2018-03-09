@@ -1,8 +1,10 @@
 package tickets.server;
 
+import tickets.common.ChoiceDestinationCards;
 import tickets.common.Command;
 import tickets.common.DestinationCard;
 import tickets.common.Game;
+import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
@@ -100,10 +102,10 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void startGame(Game game, TrainCard[] initialCards, DestinationCard[] initialDestinationCards) {
+    public void startGame(Game game, HandTrainCard playerHand, ChoiceDestinationCards destCardOptions) {
         Command command = new Command("startGame",
-                new String[]{Game.class.getName(), TrainCard[].class.getName(), DestinationCard[].class.getName()},
-                new Object[]{game, initialCards, initialDestinationCards});
+                new String[]{Game.class.getName(), HandTrainCard.class.getName(), ChoiceDestinationCards.class.getName()},
+                new Object[]{game, playerHand, destCardOptions});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -160,9 +162,9 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void givePlayerDestinationCards(DestinationCard[] cards) {
+    public void givePlayerDestinationCards(ChoiceDestinationCards cards) {
         Command command = new Command("givePlayerDestinationCards",
-                new String[]{DestinationCard[].class.getName()},
+                new String[]{ChoiceDestinationCards.class.getName()},
                 new Object[]{cards});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
