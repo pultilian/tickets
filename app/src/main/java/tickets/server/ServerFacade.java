@@ -159,7 +159,10 @@ public class ServerFacade implements IServer {
             }
 
             AllLobbies.getInstance().removeLobby(lobbyID);
-            return new StartGameResponse(game.getGameId());
+            Game clientGame = new Game(game.getGameId());
+            HandTrainCard playerHand = new HandTrainCard();
+            DestinationCard[] destCardOptions = new DestinationCard[3];
+            return new StartGameResponse(clientGame, playerHand, destCardOptions);
         }
     }
 
