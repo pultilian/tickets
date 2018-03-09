@@ -1,16 +1,16 @@
 package tickets.client;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import tickets.common.ClientStateChange;
+import tickets.common.DestinationCard;
 import tickets.common.Game;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
+import tickets.common.Route;
+import tickets.common.TrainCard;
 import tickets.common.UserData;
-import tickets.common.response.*;
 import tickets.common.IObserver;
 import tickets.common.IMessage;
 
@@ -45,6 +45,11 @@ public class ModelFacade implements IClient {
 	private UserData userData;
 	private Game currentGame;
 	private ServerPoller serverPoller = null;
+
+	public Player getLocalPlayer() {
+		return localPlayer;
+	}
+
 	private Player localPlayer;
 
 //----------------------------------------------------------------------------
@@ -167,19 +172,39 @@ public class ModelFacade implements IClient {
 		return;
 	}
 
-	public void addGuest(String lobbyID) {
-		asyncManager.addGuest(lobbyID, getAuthToken());
-		return;
-	}
 
-	public void takeTurn(String playerID) {
-		asyncManager.takeTurn(playerID, getAuthToken());
-		return;
-	}
+//-----------------------------------------------
+//   Player in game actions
+//
 
 	public void addToChat(String message) {
 		asyncManager.addToChat(message, getAuthToken());
 	}
+
+	public void drawTrainCard() {
+        asyncManager.drawTrainCard(getAuthToken());
+    }
+
+    public void drawFaceUpCard(int position) {
+        asyncManager.drawFaceUpCard(position, getAuthToken());
+    }
+
+	public void claimRoute(Route route) {
+        asyncManager.claimRoute(route, getAuthToken());
+    }
+
+    public void drawDestinationCard() {
+        asyncManager.drawDestinationCard(getAuthToken());
+    }
+
+    public void discardDestinationCard(DestinationCard discard) {
+        asyncManager.discardDestinationCard(discard, getAuthToken());
+    }
+
+    public void endTurn() {
+        asyncManager.endTurn(getAuthToken());
+    }
+
 
 //-------------------------------------------------
 //		IClient interface methods
@@ -212,13 +237,18 @@ public class ModelFacade implements IClient {
 
 		updateObservable(state);
 	}
+// Gameplay operations
 	public void endCurrentTurn() {
 		return;
 	}
-	public void addChatMessage(String message) { currentGame.addToChat(message); }
-	public void addToGameHistory(String message) { currentGame.addToHistory(message); }
-
-	public void addPlayerTrainCard(String playerID) {
-
+	public void addChatMessage(String message) {
+		currentGame.addToChat(message);
+	}
+	public void addToGameHistory(String message) {
+		currentGame.addToHistory(message);
+	}
+// Update public info
+	public void addPlayerTrainCard(String playerId) {
+		currentGame.getPlayerInfo(playerId).addTrainCard();
 	}
 }

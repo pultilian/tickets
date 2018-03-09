@@ -62,7 +62,7 @@ class GameLoadingState extends PlayerTurnState {
 	void state_addToChat(String msg) {
 		// add the message to the chat
 		// update the player's ClientProxy
-		return;
-	}
+		return;	
+  }
 
 }

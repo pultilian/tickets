@@ -55,6 +55,7 @@ class DrawingTrainCardsState extends PlayerTurnState {
 	}
 
 	@Override
+<<<<<<< HEAD
 	List<DestinationCard> state_drawDestinationCards() throws Exception {
 		throw new Exception("You must draw a second Train card");
 	}
@@ -67,6 +68,28 @@ class DrawingTrainCardsState extends PlayerTurnState {
 	@Override
 	void state_endTurn() throws Exception {
 		throw new Exception("You must draw a second Train card");
+=======
+	void state_drawDestinationCard() {
+
+
+		// throw new Exception("You must draw a second Train card");
+		return;
+
+	}
+
+	@Override
+	void state_discardDestinationCard(DestinationCard discard) {
+		// throw new Exception("You must draw a second Train card");
+		return;
+
+	}
+
+	@Override
+	void state_endTurn() {
+		// throw new Exception("You must draw a second Train card");
+		return;
+
+>>>>>>> master
 	}
 
 	@Override
@@ -74,5 +97,6 @@ class DrawingTrainCardsState extends PlayerTurnState {
 		// add the message to the chat
 		// update the player's ClientProxy
 		return;
+
 	}
 }

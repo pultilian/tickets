@@ -25,6 +25,7 @@ import tickets.client.gui.fragments.MapFragment;
 import tickets.client.gui.presenters.GamePresenter;
 import tickets.client.gui.presenters.IHolderActivity;
 import tickets.common.DestinationCard;
+import tickets.common.Faction;
 import tickets.common.Game;
 import tickets.common.Player;
 import tickets.common.TrainCard;
@@ -68,7 +69,6 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
 
 
     public void initVariables() {
-        presenter = new GamePresenter(this);
         destinationManager = new LinearLayoutManager(this);
         destinationCards.setLayoutManager(destinationManager);
         destinationAdapter = new DestinationAdapter(this, presenter.getPlayerDestinations());
@@ -103,6 +103,28 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         chatButton = this.findViewById(R.id.button_chat);
         gameButton = this.findViewById(R.id.button_game);
         logoutButton = this.findViewById(R.id.button_logout);
+
+        Faction currentPlayer = presenter.getCurrentPlayer().getPlayerFaction();
+        playerName.setText(currentPlayer.getName());
+        playerRace.setText(currentPlayer.getName());
+
+        switch (currentPlayer.getColor().toString()) {
+            case "Blue":
+                playerIcon.setImageResource(R.drawable.race_altian);
+                break;
+            case "Red":
+                playerIcon.setImageResource(R.drawable.race_tacht);
+                break;
+            case "Green":
+                playerIcon.setImageResource(R.drawable.race_pathian);
+                break;
+            case "Yellow":
+                playerIcon.setImageResource(R.drawable.race_kit);
+                break;
+            case "Black":
+                playerIcon.setImageResource(R.drawable.race_murtoken);
+                break;
+        }
     }
 
     public void setClickListeners() {
@@ -259,14 +281,61 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         silverCount.setText(Integer.toString(silver));
     }
 
+    public void setFaceUpCards(){
+        ImageView[] faceUpCard = {faceUpCard1,faceUpCard2,faceUpCard3,faceUpCard4,faceUpCard5};
+        List<TrainCard> cards = presenter.getFaceUpCards();
+        for(int i = 0; i < 5; i++){
+            switch (cards.get(i).getColor().toString().toLowerCase()){
+                case "blue":
+                    faceUpCard[i].setImageResource(R.drawable.resource_blue);
+                    break;
+                case "red":
+                    faceUpCard[i].setImageResource(R.drawable.resource_red);
+                    break;
+                case "pink":
+                    faceUpCard[i].setImageResource(R.drawable.resource_pink);
+                    break;
+                case "orange":
+                    faceUpCard[i].setImageResource(R.drawable.resource_orange);
+                    break;
+                case "yellow":
+                    faceUpCard[i].setImageResource(R.drawable.resource_yellow);
+                    break;
+                case "black":
+                    faceUpCard[i].setImageResource(R.drawable.resource_black);
+                    break;
+                case "white":
+                    faceUpCard[i].setImageResource(R.drawable.resource_white);
+                    break;
+                case "green":
+                    faceUpCard[i].setImageResource(R.drawable.resource_green);
+                    break;
+                case "silver":
+                    faceUpCard[i].setImageResource(R.drawable.resource_silver);
+                    break;
+
+            }
+        }
+    }
+
+    public void updatePoints(){
+         points.setText(presenter.getCurrentPlayer().getScore());
+    }
+
+    public void updateShips(){
+        ships.setText(presenter.getCurrentPlayer().getInfo().getShipsLeft());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        presenter = new GamePresenter(this);
         assignIDs();
         initVariables();
         setClickListeners();
 //        setNumResourceCards();
+
 
 
         //TODO: way to set the starting images and get a list of the faceUpCards
