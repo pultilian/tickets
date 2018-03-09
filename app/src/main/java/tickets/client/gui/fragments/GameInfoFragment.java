@@ -46,6 +46,7 @@ public class GameInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_info, container, false);
+        presenter = new GameInfoPresenter();
         playersInfo = view.findViewById(R.id.players_info);
         gameHistory = view.findViewById(R.id.game_history);
         playerInfoManager = new LinearLayoutManager(this.getContext());

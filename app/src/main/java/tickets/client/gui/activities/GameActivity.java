@@ -106,7 +106,6 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         chatButton = this.findViewById(R.id.button_chat);
         gameButton = this.findViewById(R.id.button_game);
         logoutButton = this.findViewById(R.id.button_logout);
-
         Faction currentPlayer = presenter.getCurrentPlayer().getPlayerFaction();
         playerName.setText(currentPlayer.getName());
         playerRace.setText(currentPlayer.getName());
@@ -229,15 +228,15 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
     public void setNumResourceCards() {
         HandTrainCard cards = presenter.getPlayerHand();
 
-        blueCount.setText(cards.getCountForColor(RouteColors.Blue));
-        redCount.setText(cards.getCountForColor(RouteColors.Red));
-        greenCount.setText(cards.getCountForColor(RouteColors.Green));
-        orangeCount.setText(cards.getCountForColor(RouteColors.Orange));
-        yellowCount.setText(cards.getCountForColor(RouteColors.Yellow));
-        whiteCount.setText(cards.getCountForColor(RouteColors.White));
-        blackCount.setText(cards.getCountForColor(RouteColors.Black));
-        silverCount.setText(cards.getCountForColor(RouteColors.Wild));
-        pinkCount.setText(cards.getCountForColor(RouteColors.Purple));
+        blueCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Blue)));
+        redCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Red)));
+        greenCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Green)));
+        orangeCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Orange)));
+        yellowCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Yellow)));
+        whiteCount.setText(Integer.toString(cards.getCountForColor(RouteColors.White)));
+        blackCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Black)));
+        silverCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Wild)));
+        pinkCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Purple)));
     }
 
     public void setFaceUpCards(){
@@ -278,11 +277,11 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
     }
 
     public void updatePoints(){
-         points.setText(presenter.getCurrentPlayer().getInfo().getScore());
+         points.setText(Integer.toString(presenter.getCurrentPlayer().getInfo().getScore()));
     }
 
     public void updateShips(){
-        ships.setText(presenter.getCurrentPlayer().getInfo().getShipsLeft());
+        ships.setText(Integer.toString(presenter.getCurrentPlayer().getInfo().getShipsLeft()));
     }
 
     @Override
