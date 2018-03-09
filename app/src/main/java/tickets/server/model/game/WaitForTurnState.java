@@ -38,7 +38,6 @@ class WaitForTurnState extends PlayerTurnState {
 	}
 
 	@Override
-<<<<<<< HEAD
 	List<DestinationCard> state_drawDestinationCards() throws Exception {
 		throw new Exception("It is not your turn");
 	}
@@ -51,23 +50,6 @@ class WaitForTurnState extends PlayerTurnState {
 	@Override
 	void state_endTurn() throws Exception {
 		throw new Exception("It is not your turn");
-=======
-	void state_drawDestinationCard() {
-
-		// throw new Exception("It is not your turn");
-	}
-
-	@Override
-	void state_discardDestinationCard(DestinationCard discard) {
-
-		// throw new Exception("It is not your turn");
-	}
-
-	@Override
-	void state_endTurn() {
-
-		// throw new Exception("It is not your turn");
->>>>>>> master
 	}
 
 	@Override
