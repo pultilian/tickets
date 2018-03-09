@@ -142,7 +142,8 @@ public class ServerFacade implements IServer {
         if (lobby == null) return new StartGameResponse(new Exception("Lobby does not exist."));
         else {
             // Update server model
-            ServerGame game = new ServerGame(UUID.randomUUID().toString());
+            List<Player> playersInLobby = lobby.getPlayers();
+            ServerGame game = new ServerGame(UUID.randomUUID().toString(), playersInLobby);
             AllGames.getInstance().addGame(game);
 
             // Update relevant clients and move clients from lobby to game
@@ -204,6 +205,9 @@ public class ServerFacade implements IServer {
     //   - endTurn
     @Override
     public PlayerTurnResponse takeTurn(String playerID, String authToken) {
+        //---
+        if (true) return new PlayerTurnResponse(new Exception("Call a specific turn action on the server."));
+        //---
         ServerGame game;
         try {
             game = getGameForToken(authToken);
@@ -254,12 +258,8 @@ public class ServerFacade implements IServer {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // *** In-Game Player Turn Actions ***
 
-    // x drawTrainCard
-    // x drawFaceUpCard
-    // x claimRoute
-    // x drawDestinationCard
-    // o discardDestinationCard
-    // o endTurn
+//------
+//------ 
 
     @Override
     public TrainCardResponse drawTrainCard(String authToken) {

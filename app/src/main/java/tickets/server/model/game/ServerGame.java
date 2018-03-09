@@ -41,8 +41,15 @@ public class ServerGame extends Game {
 	//----------------------------------------------------------------------------------------------
 	// *** SET-UP METHODS ***
 
-	public ServerGame(String gameID) {
+	public ServerGame(String gameID, List<Player> playersFromLobby) {
 		super(gameID);
+
+		this.players = new ArrayList<>();
+		for (Player p : playersFromLobby) {
+			//move players into the game
+			players.add(new ServerPlayer(p, this));
+		}
+
 		List<TrainCard> allTrainCards = initializeTrainCards();
 		trainCardArea = new TrainCardArea(allTrainCards);
 		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
@@ -116,6 +123,10 @@ public class ServerGame extends Game {
 			// public Faction getPlayerFaction();
 			// public void setPlayerFaction(Faction playerFaction);
 			// public HandTrainCard getTrainCards();
+
+		IServerPlayer(Player copy) {
+			super(copy);
+		}
 
 		IServerPlayer(String playerID, String authToken) {
 			super(playerID, authToken);

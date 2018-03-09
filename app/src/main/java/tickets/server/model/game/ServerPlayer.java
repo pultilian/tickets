@@ -8,6 +8,7 @@ import tickets.common.DestinationCard;
 import tickets.common.HandDestinationCard;
 import tickets.common.HandTrainCard;
 import tickets.common.Route;
+import tickets.common.Player;
 
 import tickets.server.model.game.ServerGame;
 import tickets.server.model.game.ServerGame.IServerPlayer;
@@ -19,6 +20,11 @@ public class ServerPlayer extends IServerPlayer {
 
 	// State Pattern object
 	private PlayerTurnState turnState;
+
+	public ServerPlayer(Player copy, ServerGame game) {
+		game.super(copy);
+		turnState = new GameLoadingState(this);
+	}
 
 	public ServerPlayer(String playerID, String authToken, ServerGame game) {
 		game.super(playerID, authToken);
