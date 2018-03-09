@@ -1,20 +1,22 @@
 package tickets.common.response;
 
+import tickets.common.ChoiceDestinationCards;
 import tickets.common.Game;
 import tickets.common.DestinationCard;
+import tickets.common.HandTrainCard;
 import tickets.common.TrainCard;
 
 public class StartGameResponse extends Response {
 
     private Game game;
-    private TrainCard[] playerHand;
-    private DestinationCard[] destCardOptions;
+    private HandTrainCard playerHand;
+    private ChoiceDestinationCards destCardOptions;
 
     public StartGameResponse(Exception exception) {
         super(exception);
     }
 
-    public StartGameResponse(Game game, TrainCard[] playerHand, DestinationCard[] destCardOptions) {
+    public StartGameResponse(Game game, HandTrainCard playerHand, ChoiceDestinationCards destCardOptions) {
         this.game = game;
         this.playerHand = playerHand;
         this.destCardOptions = destCardOptions;
@@ -24,11 +26,11 @@ public class StartGameResponse extends Response {
         return game;
     }
 
-    public TrainCard[] getPlayerHand() {
+    public HandTrainCard getPlayerHand() {
         return playerHand;
     }
 
-    public DestinationCard[] getDestCardOptions() {
+    public ChoiceDestinationCards getDestCardOptions() {
         return destCardOptions;
     }
 }
