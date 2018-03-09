@@ -10,9 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
 
 import tickets.client.gui.activities.R;
+import tickets.client.gui.presenters.GameInfoPresenter;
 import tickets.client.gui.presenters.GamePresenter;
+import tickets.common.PlayerInfo;
 
 /**
  * Created by Pultilian on 3/4/2018.
@@ -21,7 +29,7 @@ import tickets.client.gui.presenters.GamePresenter;
 public class GameInfoFragment extends Fragment {
     private RecyclerView playersInfo;
     private RecyclerView gameHistory;
-    private GamePresenter presenter;
+    private GameInfoPresenter presenter;
     private RecyclerView.LayoutManager playerInfoManager;
     private RecyclerView.LayoutManager gameHistoryManager;
     private PlayersInfoAdapter playersInfoAdapter;
@@ -44,8 +52,8 @@ public class GameInfoFragment extends Fragment {
         gameHistoryManager = new LinearLayoutManager(this.getContext());
         playersInfo.setLayoutManager(playerInfoManager);
         gameHistory.setLayoutManager(gameHistoryManager);
-        playersInfoAdapter = new PlayersInfoAdapter(this.getContext()); //TODO: Destination Cards
-        gameHistoryAdapter = new GameHistoryAdapter(this.getContext()); //TODO: Destination Cards
+        playersInfoAdapter = new PlayersInfoAdapter(this.getContext(), presenter.getPlayerInfo());
+        gameHistoryAdapter = new GameHistoryAdapter(this.getContext(), presenter.getGameHistory());
         playersInfo.setAdapter(playersInfoAdapter);
         gameHistory.setAdapter(gameHistoryAdapter);
 
@@ -54,22 +62,24 @@ public class GameInfoFragment extends Fragment {
 
     class PlayersInfoAdapter extends RecyclerView.Adapter<GameInfoFragment.PlayersInfoHolder> {
         private LayoutInflater inflater;
+        private List<PlayerInfo> playerInfoList;
 
-        public PlayersInfoAdapter(Context context) {
+        public PlayersInfoAdapter(Context context, List<PlayerInfo> playerInfoList) {
+            this.playerInfoList = playerInfoList;
             inflater = LayoutInflater.from(context);
         }
 
         @Override
         public PlayersInfoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = inflater.inflate(R.layout.destination_layout, parent, false);
+            View view = inflater.inflate(R.layout.player_info_card, parent, false);
             return new PlayersInfoHolder(view);
         }
 
         // Grabs an individual row and assigns its values through the holder class.
         @Override
         public void onBindViewHolder(PlayersInfoHolder holder, int position) {
-
-            holder.bind();
+            PlayerInfo item = playerInfoList.get(position);
+            holder.bind(item);
         }
 
         @Override
@@ -80,16 +90,48 @@ public class GameInfoFragment extends Fragment {
     }
 
     class PlayersInfoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView cardImage;
+        TextView name;
+        TextView points;
+        TextView shipsLeft;
+        TextView resourcesCount;
+        TextView destinationCount;
+
         public PlayersInfoHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-
-
+            cardImage = view.findViewById(R.id.race_image_card);
+            name = view.findViewById(R.id.player_info_name);
+            points = view.findViewById(R.id.player_info_points);
+            shipsLeft = view.findViewById(R.id.player_info_ships_left);
+            resourcesCount = view.findViewById(R.id.players_info_resource);
+            destinationCount = view.findViewById(R.id.players_info_destination);
         }
 
         // Assigns values in the layout.
-        void bind() {
-            return;
+        void bind(PlayerInfo item) {
+            name.setText(item.getName());
+            points.setText(item.getScore());
+            shipsLeft.setText(item.getShipsLeft());
+            resourcesCount.setText(item.getTrainCardCount());
+            destinationCount.setText(item.getDestinationCardCount());
+            switch (item.getFaction().getName().toLowerCase()){
+                case "altian":
+                    cardImage.setImageResource(R.drawable.card_altian);
+                    break;
+                case "kit":
+                    cardImage.setImageResource(R.drawable.card_kit);
+                    break;
+                case "murtoken":
+                    cardImage.setImageResource(R.drawable.card_murtoken);
+                    break;
+                case "tacht":
+                    cardImage.setImageResource(R.drawable.card_tacht);
+                    break;
+                case "pathian":
+                    cardImage.setImageResource(R.drawable.card_pathian);
+                    break;
+            }
         }
 
         @Override
@@ -100,22 +142,24 @@ public class GameInfoFragment extends Fragment {
 
     class GameHistoryAdapter extends RecyclerView.Adapter<GameHistoryHolder> {
         private LayoutInflater inflater;
+        private List<String> gameHistory;
 
-        public GameHistoryAdapter(Context context) {
+        public GameHistoryAdapter(Context context, List<String> gameHistory) {
+            this.gameHistory = gameHistory;
             inflater = LayoutInflater.from(context);
         }
 
         @Override
         public GameHistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = inflater.inflate(R.layout.destination_layout, parent, false);
+            View view = inflater.inflate(R.layout.game_history_list, parent, false);
             return new GameHistoryHolder(view);
         }
 
         // Grabs an individual row and assigns its values through the holder class.
         @Override
         public void onBindViewHolder(GameHistoryHolder holder, int position) {
-
-            holder.bind();
+            String item = gameHistory.get(position);
+            holder.bind(item);
         }
 
         @Override
@@ -126,16 +170,17 @@ public class GameInfoFragment extends Fragment {
     }
 
     class GameHistoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView message;
+
         public GameHistoryHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-
-
+            message.findViewById(R.id.game_history_text);
         }
 
         // Assigns values in the layout.
-        void bind() {
-            return;
+        void bind(String item) {
+            message.setText(item);
         }
 
         @Override

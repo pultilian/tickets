@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import tickets.client.gui.activities.GameActivity;
 import tickets.client.gui.activities.R;
+import tickets.client.gui.presenters.GameChatPresenter;
 import tickets.client.gui.presenters.GamePresenter;
 import tickets.common.DestinationCard;
 
@@ -30,7 +33,7 @@ public class ChatFragment extends Fragment {
     private Button sendButton;
     private RecyclerView.LayoutManager chatManager;
     private ChatAdapter chatAdapter;
-    private GamePresenter presenter;
+    private GameChatPresenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,37 +50,59 @@ public class ChatFragment extends Fragment {
 
         chatManager = new LinearLayoutManager(this.getContext());
         chatScreen.setLayoutManager(chatManager);
-        chatAdapter = new ChatAdapter(this.getContext()); //TODO: Destination Cards
+        chatAdapter = new ChatAdapter(this.getContext(), presenter.getChatHistory()); //TODO: Destination Cards
         chatScreen.setAdapter(chatAdapter);
+        sendButton.setEnabled(false);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                presenter.addToChat(chatAdd.getText().toString());
+                chatAdd.setText("");
+                sendButton.setEnabled(false);
             }
         });
 
+        chatAdd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!chatAdd.getText().equals("")){
+                    sendButton.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         return view;
     }
 
     class ChatAdapter extends RecyclerView.Adapter<ChatFragment.ChatHolder> {
         private LayoutInflater inflater;
+        private List<String> chatMessages;
 
-        public ChatAdapter(Context context) {
+        public ChatAdapter(Context context, List<String> chatMessages) {
             inflater = LayoutInflater.from(context);
+            this.chatMessages = chatMessages;
         }
 
         @Override
         public ChatHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = inflater.inflate(R.layout.destination_layout, parent, false);
+            View view = inflater.inflate(R.layout.game_history_list, parent, false);
             return new ChatHolder(view);
         }
 
         // Grabs an individual row and assigns its values through the holder class.
         @Override
         public void onBindViewHolder(ChatHolder holder, int position) {
-
-            holder.bind();
+            holder.bind(chatMessages.get(position));
         }
 
         @Override
@@ -88,17 +113,17 @@ public class ChatFragment extends Fragment {
     }
 
     class ChatHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+        TextView message;
 
         public ChatHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-
-
+            message = view.findViewById(R.id.game_history_text);
         }
 
         // Assigns values in the layout.
-        void bind() {
+        void bind(String message) {
+            this.message.setText(message);
             return;
         }
 
