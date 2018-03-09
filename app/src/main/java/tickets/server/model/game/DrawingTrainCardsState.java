@@ -1,6 +1,8 @@
 
 package tickets.server.model.game;
 
+import java.util.List;
+
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
@@ -53,7 +55,7 @@ class DrawingTrainCardsState extends PlayerTurnState {
 	}
 
 	@Override
-	DestinationCard state_drawDestinationCard() throws Exception {
+	List<DestinationCard> state_drawDestinationCards() throws Exception {
 		throw new Exception("You must draw a second Train card");
 	}
 

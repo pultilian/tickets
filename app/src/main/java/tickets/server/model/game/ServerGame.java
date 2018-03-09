@@ -94,9 +94,10 @@ public class ServerGame extends Game {
 		return null;
 	}
 
-	public void nextTurn() {
+	private void nextTurn() {
 		currentPlayerIndex++;
 		if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
+		getCurrentPlayer().startTurn();
 	}
 
 	public TrainCard drawTrainCard() {
@@ -118,7 +119,6 @@ public class ServerGame extends Game {
 	public boolean discardDestinationCard(DestinationCard discard) {
 		return destinationDeck.discardCard(discard);
 	}
-
 
 	//----------------------------------------------------------------------------------------------
 	//	nested abstract class provides an interface for ServerPlayer and
@@ -154,11 +154,15 @@ public class ServerGame extends Game {
 		public abstract TrainCard takeAction_drawTrainCard() throws Exception;
 		public abstract TrainCard takeAction_drawFaceUpCard(int position) throws Exception;
 		public abstract void takeAction_claimRoute(Route route) throws Exception;
-		public abstract DestinationCard takeAction_drawDestinationCard() throws Exception;
+		public abstract List<DestinationCard> takeAction_drawDestinationCards() throws Exception;
 		public abstract void takeAction_discardDestinationCard(DestinationCard discard) throws Exception;
 		public abstract void takeAction_endTurn() throws Exception;
 
 		public abstract void takeAction_addToChat(String message);
+
+		//-------------------------------------------------------------------
+		//  Signals the player that it is now their turn
+		abstract void startTurn();
 
 		//-------------------------------------------------------------------
 		//	These methods provide access to the Game to players
@@ -199,6 +203,11 @@ public class ServerGame extends Game {
 
 		protected void addToChat_fromGame(String msg) {
 			ServerGame.this.addToChat(msg);
+			return;
+		}
+
+		protected void endTurn_fromGame() {
+			ServerGame.this.nextTurn();
 			return;
 		}
 

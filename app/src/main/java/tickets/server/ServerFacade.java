@@ -196,45 +196,6 @@ public class ServerFacade implements IServer {
     //----------------------------------------------------------------------------------------------
     // *** IN-GAME COMMANDS ***
 
-    // This should be deprecated - players will take turns by calling the action specific methods
-    //   - drawTrainCard
-    //   - drawFaceUpCard
-    //   - claimRoute
-    //   - drawDestinationCard
-    //   - discardDestinationCard
-    //   - addToChat
-    //   - endTurn
-    @Override
-    public PlayerTurnResponse takeTurn(String playerID, String authToken) {
-        //---
-        if (true) return new PlayerTurnResponse(new Exception("Call a specific turn action on the server."));
-        //---
-        ServerGame game;
-        try {
-            game = getGameForToken(authToken);
-        }
-        catch(Exception ex) {
-            return new PlayerTurnResponse(ex);
-        }
-        if (!game.getCurrentPlayer().getAssociatedAuthToken().equals(authToken))
-            return new PlayerTurnResponse(new Exception("It is not your turn."));
-
-        else {
-            // Update server model
-            String historyMessage = AllUsers.getInstance().getUsername(authToken) + " ended their turn.";
-            game.nextTurn();
-
-            // Update relevant clients
-            for (ClientProxy client : getClientsInGame(game.getGameId())) {
-                client.addToGameHistory(historyMessage);
-                // The current client will receive a player turn response instead of this command.
-                if (!client.getAuthToken().equals(authToken)) client.endCurrentTurn();
-            }
-
-            return new PlayerTurnResponse();
-        }
-    }
-
     @Override
     public AddToChatResponse addToChat(String message, String authToken) {
         ServerGame game;
@@ -259,8 +220,18 @@ public class ServerFacade implements IServer {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // *** In-Game Player Turn Actions ***
 
-//------
-//------ 
+    // Players take turns by calling action-specific methods
+    //   - drawTrainCard
+    //   - drawFaceUpCard
+    //   - claimRoute
+    //   - drawDestinationCards
+    //   - discardDestinationCard
+    //   - addToChat
+    //   - endTurn
+    //
+    // Each ServerPlayer tracks its progression through the actions available to it during its turn
+    // The ServerGame object owns the players playing the game, and makes sure that only one player
+    // can be in a current turn state at a time
 
     @Override
     public TrainCardResponse drawTrainCard(String authToken) {
@@ -268,28 +239,24 @@ public class ServerFacade implements IServer {
         try {
             game = getGameForToken(authToken);
             ServerPlayer player = game.getServerPlayer(authToken);
-            player.takeAction_drawTrainCard();
+            TrainCard drawnCard = player.takeAction_drawTrainCard();
+
+            //update game history
+            String historyMessage = AllUsers.getInstance().getUsername(authToken) + " drew a resource card.";
+            game.addToHistory(historyMessage);
+
+            //update other clients in the game
+            for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(historyMessage);
+                // The current client will receive a train card response rather than this command.
+                if (!client.getAuthToken().equals(authToken))
+                    client.addPlayerTrainCard(game.getPlayerID(authToken));
+            }
+            return new TrainCardResponse(drawnCard);
         }
         catch(Exception ex) {
             return new TrainCardResponse(ex);
         }
-        if (!game.getCurrentPlayer().getAssociatedAuthToken().equals(authToken))
-            return new TrainCardResponse(new Exception("It is not your turn."));
-
-        // Update server model
-        TrainCard card = game.drawTrainCard();
-        String historyMessage = AllUsers.getInstance().getUsername(authToken) + " drew a resource card.";
-        game.addToHistory(historyMessage);
-
-        // Update relevant clients
-        for (ClientProxy client : getClientsInGame(game.getGameId())) {
-            client.addToGameHistory(historyMessage);
-            // The current client will receive a train card response rather than this command.
-            if (!client.getAuthToken().equals(authToken))
-                client.addPlayerTrainCard(game.getPlayerID(authToken));
-        }
-
-        return new TrainCardResponse(card);
     }
 
     @Override
@@ -297,81 +264,141 @@ public class ServerFacade implements IServer {
         ServerGame game;
         try {
             game = getGameForToken(authToken);
+            ServerPlayer player = game.getServerPlayer(authToken);
+            TrainCard drawnCard = player.takeAction_drawFaceUpCard(position);
+
+            //update game history
+            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                    " drew a " + drawnCard.getColor().toString() + " face-up resource card.";
+            game.addToHistory(historyMessage);
+
+            //update other clients in the game
+            for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(historyMessage);
+                // The current client will receive a train card response rather than this command.
+                if (!client.getAuthToken().equals(authToken))
+                    client.addPlayerTrainCard(game.getPlayerID(authToken));
+            }
+
+            return new TrainCardResponse(drawnCard);
         }
         catch(Exception ex) {
             return new TrainCardResponse(ex);
         }
-        if (!game.getCurrentPlayer().getAssociatedAuthToken().equals(authToken))
-            return new TrainCardResponse(new Exception("It is not your turn."));
-
-        // Update server model
-        TrainCard card = game.drawFaceUpTrainCard(position);
-        String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                " drew a " + card.getColor().toString() + " face-up resource card.";
-        game.addToHistory(historyMessage);
-
-        // Update relevant clients
-        for (ClientProxy client : getClientsInGame(game.getGameId())) {
-            client.addToGameHistory(historyMessage);
-            // The current client will receive a train card response rather than this command.
-            if (!client.getAuthToken().equals(authToken))
-                client.addPlayerTrainCard(game.getPlayerID(authToken));
-        }
-        return new TrainCardResponse(card);
     }
 
     @Override
     public Response claimRoute(Route route, String authToken) {
-        return new Response(new Exception("Claiming routes has not been implemented"));
-    }
-
-    @Override
-    public DestinationCardResponse drawDestinationCards(String authToken) {
-        ServerGame game;
         try {
-            game = getGameForToken(authToken);
-        }
-        catch(Exception ex) {
-            return new DestinationCardResponse(ex);
-        }
-        if (!game.getCurrentPlayer().getAssociatedAuthToken().equals(authToken))
-            return new DestinationCardResponse(new Exception("It is not your turn."));
+            ServerGame game = getGameForToken(authToken);
+            ServerPlayer player = game.getServerPlayer(authToken);
+            player.takeAction_claimRoute(route);
 
-        // Update server model
-        //      have the player draw a card from the DestinationCard deck
+            //update game history
+            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                    " has claimed the route " + route.toString();
+            game.addToHistory(historyMessage);
 
-        // Update relevant clients
-        //      update the game's event queue?
-        return null;
-    }
+            //update other clients in the game
+            for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(historyMessage);
+                // The current client will receive a train card response rather than this command.
+                if (!client.getAuthToken().equals(authToken)) {
+                    // client.addClaimedRoute(game.getPlayerID(authToken), route);
+                }
+            }
 
-    @Override
-    public Response discardDestinationCard(DestinationCard discard, String authToken) {
-        return new Response(new Exception("Discarding destination cards has not been implmented"));
-    }
-
-    @Override
-    public Response endTurn(String authToken) {
-        return new Response(new Exception("Ending the turn has not been implemented"));
-    }
-
-    // This should be deprecated for discardDestinationCard and endTurn
-    @Override
-    public Response chooseDestinationCards(DestinationCard toDiscard, String authToken) {
-        Game game;
-        try {
-            game = getGameForToken(authToken);
+            return new Response(); // "Route claimed successfully"
         }
         catch(Exception ex) {
             return new Response(ex);
         }
-        // Update server model
-        //      have the player discard the given Destination Card (unless it's null, then don't do anything)
-
-        // Update relevant clients
-        //      update the game's event queue?
-        return null;
     }
+
+    @Override
+    public DestinationCardResponse drawDestinationCards(String authToken) {
+        try {
+            ServerGame game = getGameForToken(authToken);
+            ServerPlayer player = game.getServerPlayer(authToken);
+            List<DestinationCard> drawnCards = player.takeAction_drawDestinationCards();
+
+            //update game history
+            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                    " has drawn two destination cards.";
+            game.addToHistory(historyMessage);
+
+            //update other game members
+            for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(historyMessage);
+                // The current client will receive a destination card response rather than this command.
+                if (!client.getAuthToken().equals(authToken)) {
+                    // client.addPlayerDestinationCard(game.getPlayerID(authToken));
+                    // client.addPlayerDestinationCard(game.getPlayerID(authToken));
+                }
+            }
+
+            return new DestinationCardResponse(drawnCards.get(0), drawnCards.get(1));
+        }
+        catch(Exception ex) {
+            return new DestinationCardResponse(ex);
+        }
+    }
+
+    @Override
+    public Response discardDestinationCard(DestinationCard discard, String authToken) {
+        try {
+            ServerGame game = getGameForToken(authToken);
+            ServerPlayer player = game.getServerPlayer(authToken);
+            player.takeAction_discardDestinationCard(discard);
+
+            //update game history
+            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                    " has discarded a destination card.";
+            game.addToHistory(historyMessage);
+
+            //update other game members
+            for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(historyMessage);
+                // The current client will receive a destination card response rather than this command.
+                if (!client.getAuthToken().equals(authToken)) {
+                    // client.removePlayerDestinationCard(game.getPlayerID(authToken));
+                }
+            }
+
+            return new Response(); // "Destination successfully discarded"
+        }
+        catch(Exception ex) {
+            return new Response(ex);
+        }
+    }
+
+    @Override
+    public Response endTurn(String authToken) {
+        try {
+            ServerGame game = getGameForToken(authToken);
+            ServerPlayer player = game.getServerPlayer(authToken);
+            player.takeAction_endTurn();
+
+            //update game history
+            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                    " has ended their turn.";
+            game.addToHistory(historyMessage);
+
+            //update other clients in the game
+            for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(historyMessage);
+                if (!client.getAuthToken().equals(authToken)) {
+                    // client.endCurrentTurn();
+                }
+            }
+
+            return new Response(); // "Turn successfully ended"
+        }
+        catch(Exception ex) {
+            return new Response(ex);
+        }
+    }
+
 
     //----------------------------------------------------------------------------------------------
     // *** UPDATE CLIENT COMMAND FOR POLLER ***

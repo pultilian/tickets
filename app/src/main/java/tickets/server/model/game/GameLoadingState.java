@@ -1,6 +1,8 @@
 
 package tickets.server.model.game;
 
+import java.util.List;
+
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
@@ -42,7 +44,7 @@ class GameLoadingState extends PlayerTurnState {
 	}
 
 	@Override
-	DestinationCard state_drawDestinationCard() throws Exception {
+	List<DestinationCard> state_drawDestinationCards() throws Exception {
 		throw new Exception("The game is still loading");
 	}
 

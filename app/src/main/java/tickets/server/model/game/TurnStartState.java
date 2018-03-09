@@ -1,6 +1,8 @@
 
 package tickets.server.model.game;
 
+import java.util.List;
+
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
@@ -67,7 +69,7 @@ class TurnStartState extends PlayerTurnState {
 	}
 
 	@Override
-	DestinationCard state_drawDestinationCard() throws Exception {
+	List<DestinationCard> state_drawDestinationCards() throws Exception {
 		//---
 		// If the Destination card deck is empty:
 		//	 throw new Exception("There are no destination cards left in the deck");

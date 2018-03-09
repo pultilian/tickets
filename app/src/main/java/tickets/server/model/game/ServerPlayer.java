@@ -48,6 +48,11 @@ public class ServerPlayer extends IServerPlayer {
 	}
 
 	@Override
+	void startTurn() {
+		this.turnState = new TurnStartState(this);
+	}
+
+	@Override
 	public TrainCard takeAction_drawTrainCard() throws Exception {
 		return turnState.state_drawTrainCard();
 	}
@@ -64,8 +69,8 @@ public class ServerPlayer extends IServerPlayer {
 	}
 
 	@Override
-	public DestinationCard takeAction_drawDestinationCard() throws Exception {
-		return turnState.state_drawDestinationCard();
+	public List<DestinationCard> takeAction_drawDestinationCards() throws Exception {
+		return turnState.state_drawDestinationCards();
 	}
 
 	@Override
@@ -101,7 +106,7 @@ public class ServerPlayer extends IServerPlayer {
 		abstract TrainCard state_drawTrainCard() throws Exception;
 		abstract TrainCard state_drawFaceUpCard(int position) throws Exception;
 		abstract void state_claimRoute(Route route) throws Exception;
-		abstract DestinationCard state_drawDestinationCard() throws Exception;
+		abstract List<DestinationCard> state_drawDestinationCards() throws Exception;
 		abstract void state_discardDestinationCard(DestinationCard discard) throws Exception;
 		abstract void state_endTurn() throws Exception;
 		abstract void state_addToChat(String msg);
@@ -109,14 +114,8 @@ public class ServerPlayer extends IServerPlayer {
 
 		protected void changeStateTo(States state) {
 			switch(state) {
-				case TURN_ZERO:
-					player.turnState = new TurnZeroState(player);
-					break;
 				case WAIT_FOR_TURN:	
 					player.turnState = new WaitForTurnState(player);
-					break;
-				case TURN_START:
-					player.turnState = new TurnStartState(player);
 					break;
 				case DRAWING_TRAIN_CARDS:
 					player.turnState = new DrawingTrainCardsState(player);
@@ -146,9 +145,7 @@ public class ServerPlayer extends IServerPlayer {
 	// different states a player may be in
 	// so states may transition from one to another
 	enum States {
-		TURN_ZERO,
 		WAIT_FOR_TURN,
-		TURN_START,
 		DRAWING_TRAIN_CARDS,
 		PICKING_DEST_CARDS
 	}

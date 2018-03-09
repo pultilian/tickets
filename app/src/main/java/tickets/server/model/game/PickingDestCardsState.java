@@ -1,6 +1,8 @@
 
 package tickets.server.model.game;
 
+import java.util.List;
+
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
@@ -35,7 +37,7 @@ class PickingDestCardsState extends PlayerTurnState {
 	}
 
 	@Override
-	DestinationCard state_drawDestinationCard() throws Exception {
+	List<DestinationCard> state_drawDestinationCards() throws Exception {
 		throw new Exception("You must decide which destination cards to keep");
 	}
 
