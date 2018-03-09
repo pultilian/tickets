@@ -263,9 +263,7 @@ public class ModelFacade implements IClient {
 		for (TrainCard card : initialCards) {
 			localPlayer.addTrainCardToHand(card);
 		}
-		List<DestinationCard> initialOptions = new ArrayList<>();
-		Collections.addAll(initialOptions, initialDestinationCards);
-		localPlayer.setDestinationCardOptions(initialOptions);
+		localPlayer.setDestinationCardOptions(initialDestinationCards);
 
 		ClientStateChange.ClientState stateVal;
 		stateVal = ClientStateChange.ClientState.game;
