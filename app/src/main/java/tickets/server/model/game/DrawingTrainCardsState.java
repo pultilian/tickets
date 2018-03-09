@@ -24,11 +24,7 @@ class DrawingTrainCardsState extends PlayerTurnState {
 
 	@Override
 	void state_drawTrainCard() {
-		//---
-		// Draw the first card in the deck
-		// Add it to the player's hand
-		// End the turn
-		//---
+
 	}
 
 	@Override
@@ -52,20 +48,25 @@ class DrawingTrainCardsState extends PlayerTurnState {
 
 	@Override
 	void state_drawDestinationCard() {
+
+
 		// throw new Exception("You must draw a second Train card");
 		return;
+
 	}
 
 	@Override
 	void state_discardDestinationCard(DestinationCard discard) {
 		// throw new Exception("You must draw a second Train card");
 		return;
+
 	}
 
 	@Override
 	void state_endTurn() {
 		// throw new Exception("You must draw a second Train card");
 		return;
+
 	}
 
 	@Override
@@ -73,5 +74,6 @@ class DrawingTrainCardsState extends PlayerTurnState {
 		// add the message to the chat
 		// update the player's ClientProxy
 		return;
+
 	}
 }

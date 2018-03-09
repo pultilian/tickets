@@ -1,6 +1,7 @@
 package tickets.common;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 // This is basically a fancy enumeration of all destination
@@ -81,6 +82,7 @@ public final class AllDestinationCards {
 	}*/
 
 	public static List<DestinationCard> getCards() {
+
 		List<DestinationCard> cards = new ArrayList<>();
 		cards.add(AEONTACHT_MAGMARSE);
 		cards.add(ICOCOL_WARFELD);
@@ -114,8 +116,6 @@ public final class AllDestinationCards {
 		cards.add(ZEEATLL_SPHERAS);
 		return cards;
 	}
-
-
 }
 
 
