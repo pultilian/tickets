@@ -36,9 +36,9 @@ class DrawTrainCardAsync extends AsyncTask<String, Void, TrainCardResponse> {
             modelRoot.updateObservable(msg);
         }
         else if (response.getException() == null) {
-            ModelFacade.getInstance().getLocalPlayer().addTrainCardToHand(response.getCard());
+            modelRoot.getLocalPlayer().addTrainCardToHand(response.getCard());
             ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
-            ModelFacade.getInstance().updateObservable(message);
+            modelRoot.updateObservable(message);
         }
         else {
             Exception ex = response.getException();

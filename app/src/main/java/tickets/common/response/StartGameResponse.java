@@ -1,16 +1,34 @@
 package tickets.common.response;
 
+import tickets.common.Game;
+import tickets.common.DestinationCard;
+import tickets.common.HandTrainCard;
+
 public class StartGameResponse extends Response {
 
-    private String gameID;
+    private Game game;
+    private HandTrainCard playerHand;
+    private DestinationCard[] destCardOptions;
 
-    public StartGameResponse(Exception exception){
+    public StartGameResponse(Exception exception) {
         super(exception);
     }
 
-    public StartGameResponse(String gameID){
-        this.gameID = gameID;
+    public StartGameResponse(Game game, HandTrainCard playerHand, DestinationCard[] destCardOptions) {
+        this.game = game;
+        this.playerHand = playerHand;
+        this.destCardOptions = destCardOptions;
     }
 
-    public String getGameID(){ return gameID; }
+    public Game getGame() {
+        return game;
+    }
+
+    public HandTrainCard getPlayerHand() {
+        return playerHand;
+    }
+
+    public DestinationCard[] getDestCardOptions() {
+        return destCardOptions;
+    }
 }

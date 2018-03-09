@@ -229,7 +229,7 @@ public class ModelFacade implements IClient {
         updateObservable(update);
     }
 
-    public void givePlayerDestinationCards(List<DestinationCard> cards) {
+    public void givePlayerDestinationCards(DestinationCard[] cards) {
         localPlayer.setDestinationCardOptions(cards);
         ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
         updateObservable(update);

@@ -38,9 +38,9 @@ class DrawDestinationCardAsync extends AsyncTask<String, Void, DestinationCardRe
             modelRoot.updateObservable(msg);
         } else if (response.getException() == null) {
             List<DestinationCard> cards = response.getCards();
-            ModelFacade.getInstance().getLocalPlayer().setDestinationCardOptions(cards);
+            modelRoot.getLocalPlayer().setDestinationCardOptions(cards);
             ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
-            ModelFacade.getInstance().updateObservable(message);
+            modelRoot.updateObservable(message);
         } else {
             Exception ex = response.getException();
             ExceptionMessage msg = new ExceptionMessage(ex);
