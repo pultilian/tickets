@@ -44,6 +44,7 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        presenter = new GameChatPresenter();
         chatScreen = view.findViewById(R.id.chat_list);
         chatAdd = (EditText) view.findViewById(R.id.chat_add);
         sendButton = (Button) view.findViewById(R.id.send_button);
