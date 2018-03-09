@@ -22,9 +22,6 @@ public class DestinationDeck {
 
 	public boolean discardCard(DestinationCard discard) {
 		if (cards.contains(discard)) {
-			// Just wondering, when would this happen?
-
-			// I have no earthly idea. Just though it'd be a good defensive programming practice
 			return false;
 		}
 		cards.add(discard);

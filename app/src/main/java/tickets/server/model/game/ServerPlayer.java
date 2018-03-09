@@ -8,6 +8,7 @@ import tickets.common.DestinationCard;
 import tickets.common.HandDestinationCard;
 import tickets.common.HandTrainCard;
 import tickets.common.Route;
+import tickets.common.Player;
 
 import tickets.server.model.game.ServerGame;
 import tickets.server.model.game.ServerGame.IServerPlayer;
@@ -19,6 +20,11 @@ public class ServerPlayer extends IServerPlayer {
 
 	// State Pattern object
 	private PlayerTurnState turnState;
+
+	public ServerPlayer(Player copy, ServerGame game) {
+		game.super(copy);
+		turnState = new GameLoadingState(this);
+	}
 
 	public ServerPlayer(String playerID, String authToken, ServerGame game) {
 		game.super(playerID, authToken);
@@ -42,37 +48,39 @@ public class ServerPlayer extends IServerPlayer {
 	}
 
 	@Override
-	public void takeAction_drawTrainCard() {
-		turnState.state_drawTrainCard();
-		return;
+	void startTurn() {
+		this.turnState = new TurnStartState(this);
 	}
 
 	@Override
-	public void takeAction_drawFaceUpCard(int position) {
-		turnState.state_drawFaceUpCard(position);
-		return;
+	public TrainCard takeAction_drawTrainCard() throws Exception {
+		return turnState.state_drawTrainCard();
 	}
 
 	@Override
-	public void takeAction_claimRoute(Route route) {
+	public TrainCard takeAction_drawFaceUpCard(int position) throws Exception {
+		return turnState.state_drawFaceUpCard(position);
+	}
+
+	@Override
+	public void takeAction_claimRoute(Route route) throws Exception {
 		turnState.state_claimRoute(route);
 		return;
 	}
 
 	@Override
-	public void takeAction_drawDestinationCard() {
-		turnState.state_drawDestinationCard();
-		return;
+	public List<DestinationCard> takeAction_drawDestinationCards() throws Exception {
+		return turnState.state_drawDestinationCards();
 	}
 
 	@Override
-	public void takeAction_discardDestinationCard(DestinationCard discard) {
+	public void takeAction_discardDestinationCard(DestinationCard discard) throws Exception {
 		turnState.state_discardDestinationCard(discard);
 		return;
 	}
 
 	@Override
-	public void takeAction_endTurn() {
+	public void takeAction_endTurn() throws Exception {
 		turnState.state_endTurn();
 		return;
 	}
@@ -95,25 +103,19 @@ public class ServerPlayer extends IServerPlayer {
 			player = ServerPlayer.this;
 		}
 
-		abstract void state_drawTrainCard();
-		abstract void state_drawFaceUpCard(int position);
-		abstract void state_claimRoute(Route route);
-		abstract void state_drawDestinationCard();
-		abstract void state_discardDestinationCard(DestinationCard discard);
-		abstract void state_endTurn();
+		abstract TrainCard state_drawTrainCard() throws Exception;
+		abstract TrainCard state_drawFaceUpCard(int position) throws Exception;
+		abstract void state_claimRoute(Route route) throws Exception;
+		abstract List<DestinationCard> state_drawDestinationCards() throws Exception;
+		abstract void state_discardDestinationCard(DestinationCard discard) throws Exception;
+		abstract void state_endTurn() throws Exception;
 		abstract void state_addToChat(String msg);
 
 
 		protected void changeStateTo(States state) {
 			switch(state) {
-				case TURN_ZERO:
-					player.turnState = new TurnZeroState(player);
-					break;
 				case WAIT_FOR_TURN:	
 					player.turnState = new WaitForTurnState(player);
-					break;
-				case TURN_START:
-					player.turnState = new TurnStartState(player);
 					break;
 				case DRAWING_TRAIN_CARDS:
 					player.turnState = new DrawingTrainCardsState(player);
@@ -143,9 +145,7 @@ public class ServerPlayer extends IServerPlayer {
 	// different states a player may be in
 	// so states may transition from one to another
 	enum States {
-		TURN_ZERO,
 		WAIT_FOR_TURN,
-		TURN_START,
 		DRAWING_TRAIN_CARDS,
 		PICKING_DEST_CARDS
 	}
