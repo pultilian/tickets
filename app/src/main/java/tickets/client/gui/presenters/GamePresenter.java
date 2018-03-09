@@ -11,6 +11,7 @@ import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 
 import tickets.client.ModelFacade;
+import tickets.common.Player;
 import tickets.common.TrainCard;
 
 
@@ -32,6 +33,10 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public List<TrainCard> getFaceUpCards(){
+        return null;
+    }
+
+    public Player getCurrentPlayer(){
         return null;
     }
 
