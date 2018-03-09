@@ -1,5 +1,7 @@
 package tickets.common;
 
+import java.util.List;
+
 import tickets.common.HandTrainCard;
 import tickets.common.HandDestinationCard;
 
@@ -10,6 +12,7 @@ public class Player {
     private String associatedAuthToken;
     private HandDestinationCard playerDestinationCards;
     private HandTrainCard playerResourceCards;
+    private List<DestinationCard> destinationCardOptions;
 
     public Player(String playerId, String associatedAuthToken) {
         info = new PlayerInfo();
@@ -53,4 +56,7 @@ public class Player {
         playerDestinationCards.addCard(card);
     }
 
+    public void setDestinationCardOptions(List<DestinationCard> cards) {
+        destinationCardOptions = cards;
+    }
 }
