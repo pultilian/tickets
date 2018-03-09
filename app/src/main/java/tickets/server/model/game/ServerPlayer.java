@@ -37,20 +37,20 @@ public class ServerPlayer extends IServerPlayer {
 	}
 
 	public void initPlayer(List<TrainCard> hand, List<DestinationCard> destinations) {
-		turnState = new TurnZeroState(this);
+		// turnState = new TurnZeroState(this);
 
-		for(TrainCard card : hand) {
+		for (TrainCard card : hand) {
 			this.addTrainCardToHand(card);
 		}
 
-		for(DestinationCard dest : destinations) {
+		for (DestinationCard dest : destinations) {
 			this.addDestinationCardToHand(dest);
 		}
 
 		return;
 	}
 
-	private void goNextState() {
+	public void goNextState() {
 		if (nextState != null) {
 			turnState = nextState;
 			nextState = null;
@@ -60,7 +60,12 @@ public class ServerPlayer extends IServerPlayer {
 
 	@Override
 	void startTurn() {
+		if (this.nextState != null && this.nextState.getClass() == TurnZeroState.class) {
+			goNextState();
+			return;
+		}
 		this.turnState = new TurnStartState(this);
+		return;
 	}
 
 	@Override
@@ -202,6 +207,10 @@ public class ServerPlayer extends IServerPlayer {
 		protected void addDestinationCardToHand_fromPlayer(DestinationCard card) {
 			player.addDestinationCardToHand(card);
 			return;
+		}
+
+		protected List<DestinationCard> getTempDestinationCards_fromPlayer() {
+			return player.tempDestinationCards;
 		}
 	}
 

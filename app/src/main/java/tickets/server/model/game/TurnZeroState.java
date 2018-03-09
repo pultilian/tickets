@@ -46,20 +46,31 @@ class TurnZeroState extends PlayerTurnState {
 
 	@Override
 	void state_discardDestinationCard(DestinationCard discard) throws Exception {
-		//---
-		// Discard the specified destination card.
-		// Add the others to the player's hand.
-		// End the turn.
-		//---
+		List<DestinationCard> cards = getTempDestinationCards_fromPlayer();
+		int removeIndex = -1;
+		for (int i = 0; i < cards.size(); i++) {
+			if (cards.get(i).equals(discard)) {
+				removeIndex = i;
+			}
+		}
+		cards.remove(removeIndex);
+		
+		for (DestinationCard c : cards) {
+			addDestinationCardToHand_fromPlayer(c);
+		}
+
+		changeStateTo(ServerPlayer.States.WAIT_FOR_TURN);
+		return;
 	}
 
 	@Override
 	void state_endTurn() throws Exception {
-
-		//---
-		// Add all three destination cards to the player's hand.
-		// End the turn
-		//---
+		List<DestinationCard> cards = getTempDestinationCards_fromPlayer();
+		for (DestinationCard c : cards) {
+			addDestinationCardToHand_fromPlayer(c);
+		}
+		changeStateTo(ServerPlayer.States.WAIT_FOR_TURN);
+		return;
 	}
 
 	@Override

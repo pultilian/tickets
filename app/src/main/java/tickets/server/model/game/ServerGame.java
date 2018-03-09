@@ -53,6 +53,7 @@ public class ServerGame extends Game {
 		List<TrainCard> allTrainCards = initializeTrainCards();
 		trainCardArea = new TrainCardArea(allTrainCards);
 		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
+		players.get(0).startTurn();
 	}
 
 	private List<TrainCard> initializeTrainCards() {
