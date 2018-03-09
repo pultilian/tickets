@@ -339,7 +339,11 @@ public class ServerFacade implements IServer {
                 }
             }
 
-            return new DestinationCardResponse(drawnCards.get(0), drawnCards.get(1));
+            List<DestinationCard> cards = new ArrayList<>();
+            cards.add(drawnCards.get(0));
+            cards.add(drawnCards.get(1));
+            cards.add(drawnCards.get(2));
+            return new DestinationCardResponse(cards);
         }
         catch(Exception ex) {
             return new DestinationCardResponse(ex);
