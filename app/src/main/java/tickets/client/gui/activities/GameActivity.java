@@ -228,16 +228,16 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
 
     public void setNumResourceCards() {
         HandTrainCard cards = presenter.getPlayerHand();
-//
-//        blueCount.setText(cards.getCountForColor(RouteColors.Blue));
-//        redCount.setText(cards.getCountForColor(RouteColors.Red));
-//        greenCount.setText(cards.getCountForColor(RouteColors.Green));
-//        orangeCount.setText(cards.getCountForColor(RouteColors.Orange));
-//        yellowCount.setText(cards.getCountForColor(RouteColors.Yellow));
-//        whiteCount.setText(cards.getCountForColor(RouteColors.White));
-//        blackCount.setText(cards.getCountForColor(RouteColors.Black));
-//        silverCount.setText(cards.getCountForColor(RouteColors.Wild));
-//        pinkCount.setText(cards.getCountForColor(RouteColors.Purple));
+
+        blueCount.setText(cards.getCountForColor(RouteColors.Blue));
+        redCount.setText(cards.getCountForColor(RouteColors.Red));
+        greenCount.setText(cards.getCountForColor(RouteColors.Green));
+        orangeCount.setText(cards.getCountForColor(RouteColors.Orange));
+        yellowCount.setText(cards.getCountForColor(RouteColors.Yellow));
+        whiteCount.setText(cards.getCountForColor(RouteColors.White));
+        blackCount.setText(cards.getCountForColor(RouteColors.Black));
+        silverCount.setText(cards.getCountForColor(RouteColors.Wild));
+        pinkCount.setText(cards.getCountForColor(RouteColors.Purple));
     }
 
     public void setFaceUpCards(){
@@ -292,12 +292,17 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         presenter = new GamePresenter(this);
         assignIDs();
         initVariables();
+        updatePlayerTrainHand();
+        updatePoints();
+        updateShips();
         setClickListeners();
-//        setNumResourceCards();
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = new DestinationFragment();
+        fragmentManager.beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit();
 
-
-        //TODO: way to set the starting images and get a list of the faceUpCards
     }
 
     @Override

@@ -114,8 +114,8 @@ public class Command implements ICommand {
 			System.err.println("ERROR: no method " + methodName + "exists");
 			e.printStackTrace();
 		} catch (NumberFormatException | InvocationTargetException e) {
-			result = "NUMBERFORMATERROR";
 			System.err.println("ERROR: number format error");
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			System.err.println("ERROR: illegal access");
 			e.printStackTrace();
