@@ -4,11 +4,13 @@ package tickets.server.model.game;
 import java.util.List;
 import java.util.ArrayList;
 
+import tickets.common.AllDestinationCards;
 import tickets.common.Game;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Player;
+import tickets.common.Route;
 
 import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.TrainCardArea;
@@ -42,9 +44,8 @@ public class ServerGame extends Game {
 	public ServerGame(String gameID) {
 		super(gameID);
 		List<TrainCard> allTrainCards = initializeTrainCards();
-		List<DestinationCard> allDestinationCards = initializeDestinationCards();
 		trainCardArea = new TrainCardArea(allTrainCards);
-		destinationDeck = new DestinationDeck(allDestinationCards);
+		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
 	}
 
 	private List<TrainCard> initializeTrainCards() {
@@ -64,12 +65,6 @@ public class ServerGame extends Game {
 		allTrainCards.add(new TrainCard(RouteColors.Wild));
 		allTrainCards.add(new TrainCard(RouteColors.Wild));
 		return allTrainCards;
-	}
-
-	private List<DestinationCard> initializeDestinationCards() {
-		List<DestinationCard> allDestinationCards = new ArrayList<>();
-		// TODO: Add in all the destination cards
-		return allDestinationCards;
 	}
 
 	//----------------------------------------------------------------------------------------------
@@ -133,9 +128,19 @@ public class ServerGame extends Game {
 		// 	return;
 		// }
 
+		//-------------------------------------------------------------------
+		//	Methods defining actions players can take within the game
+
+		public abstract void takeAction_drawTrainCard();
+		public abstract void takeAction_drawFaceUpCard(int position);
+		public abstract void takeAction_claimRoute(Route route);
+		public abstract void takeAction_drawDestinationCard();
+		public abstract void takeAction_discardDestinationCard(DestinationCard discard);
+		public abstract void takeAction_addToChat(String message);
+		public abstract void takeAction_endTurn();
 
 		//-------------------------------------------------------------------
-		//	These functions provide access to the Game to players
+		//	These methods provide access to the Game to players
 
 		protected TrainCard drawTrainCard_fromGame() {
 			return ServerGame.this.drawTrainCard();
@@ -157,11 +162,11 @@ public class ServerGame extends Game {
 			return false;
 		}
 
-		protected DestinationCard drawDestCard_fromGame() {
+		protected DestinationCard drawDestinationCard_fromGame() {
 			return ServerGame.this.drawDestinationCard();
 		}
 
-		protected void discardDestCard_fromGame(DestinationCard discard) {
+		protected void discardDestinationCard_fromGame(DestinationCard discard) {
 			ServerGame.this.discardDestinationCard(discard);
 			return;
 		}

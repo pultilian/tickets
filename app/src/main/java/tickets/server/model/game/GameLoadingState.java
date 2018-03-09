@@ -2,6 +2,7 @@
 package tickets.server.model.game;
 
 import tickets.common.DestinationCard;
+import tickets.common.Route;
 
 import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.ServerPlayer.PlayerTurnState;
@@ -56,6 +57,39 @@ class GameLoadingState extends PlayerTurnState {
 
 	@Override
 	void state_addToChat(String msg) {
-
+		// throw new Exception("The game is still loading");
 	}
+
+	@Override
+	void state_drawFaceUpCard(int position) {
+		// throw new Exception("The game is still loading");
+	}
+
+	@Override
+	void state_claimRoute(Route route) {
+		// throw new Exception("The game is still loading");
+	}
+
+	@Override
+	void state_drawDestinationCard() {
+		// throw new Exception("The game is still loading");
+	}
+
+	@Override
+	void state_discardDestinationCard(DestinationCard discard) {
+		// throw new Exception("The game is still loading");
+	}
+
+	@Override
+	void state_endTurn() {
+		// throw new Exception("The game is still loading");
+	}
+
+	@Override
+	void state_addToChat(String msg) {
+		// add the message to the chat
+		// update the player's ClientProxy
+		return;	
+  }
+
 }

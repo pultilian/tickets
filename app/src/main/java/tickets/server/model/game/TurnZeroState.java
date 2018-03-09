@@ -2,6 +2,7 @@
 package tickets.server.model.game;
 
 import tickets.common.DestinationCard;
+import tickets.common.Route;
 
 import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.ServerPlayer.PlayerTurnState;
@@ -22,7 +23,7 @@ class TurnZeroState extends PlayerTurnState {
 
 	@Override
 	void state_drawTrainCard() {
-
+		// throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
@@ -33,25 +34,44 @@ class TurnZeroState extends PlayerTurnState {
 	@Override
 	void state_claimRoute(Route route, int numWildCards) {
 
+		// throw new Exception("You must select starting Destination Cards");
+	}
+
+	@Override
+	void state_claimRoute(Route route) {
+		// throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
 	void state_drawDestinationCard() {
 
+		// throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
 	void state_discardDestinationCard(DestinationCard discard) {
 
+		//---
+		// Discard the specified destination card.
+		// Add the others to the player's hand.
+		// End the turn.
+		//---
 	}
 
 	@Override
 	void state_endTurn() {
 
+		//---
+		// Add all three destination cards to the player's hand.
+		// End the turn
+		//---
 	}
 
 	@Override
 	void state_addToChat(String msg) {
 
+		// add the message to the chat
+		// update the player's ClientProxy
+		return;
 	}
 }

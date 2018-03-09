@@ -7,6 +7,7 @@ import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.HandDestinationCard;
 import tickets.common.HandTrainCard;
+import tickets.common.Route;
 
 import tickets.server.model.game.ServerGame;
 import tickets.server.model.game.ServerGame.IServerPlayer;
@@ -40,34 +41,51 @@ public class ServerPlayer extends IServerPlayer {
 		return;
 	}
 
-	// public void drawTrainCard() {
-	// 	turnState.drawTrainCard();
-	// 	return;
-	// }
+	@Override
+	public void takeAction_drawTrainCard() {
+		turnState.state_drawTrainCard();
+		return;
+	}
 
-	// public void drawFaceUpCard(int position) {
-	// 	return;
-	// }
+	@Override
+	public void takeAction_drawFaceUpCard(int position) {
+		turnState.state_drawFaceUpCard(position);
+		return;
+	}
 
-	// 
-	// depends on how routes, cities, and the game's map are represented 
-	// claimRoute(String srcCity, String destCity, RouteColors color, int )
-	// public void claimRoute(Route route, int numWildCards) {
-	// 	return;
-	// }
+	@Override
+	public void takeAction_claimRoute(Route route) {
+		turnState.state_claimRoute(route);
+		return;
+	}
 
-	// public void drawDestinationCard() {
-	// 	return;
-	// }
+	@Override
+	public void takeAction_drawDestinationCard() {
+		turnState.state_drawDestinationCard();
+		return;
+	}
 
-	// public void discardDestinationCard(DestinationCard discard) {
-	// 	return;
-	// }
+	@Override
+	public void takeAction_discardDestinationCard(DestinationCard discard) {
+		turnState.state_discardDestinationCard(discard);
+		return;
+	}
 
+	@Override
+	public void takeAction_endTurn() {
+		turnState.state_endTurn();
+		return;
+	}
 
-	//Using the State Pattern to represent player turn actions
-	//	the server does not need to check player state before
-	//	executing a client's game commands (this simplifies the
+	@Override
+	public void takeAction_addToChat(String msg) {
+		turnState.state_addToChat(msg);
+		return;
+	}
+
+	// Using the State Pattern to represent player turn actions
+	// 	the server does not need to check player state before
+	// 	executing a client's game commands (this simplifies the
 	//	multi-step processes of drawing train/destination cards)
 	//
 	abstract class PlayerTurnState {
@@ -79,7 +97,7 @@ public class ServerPlayer extends IServerPlayer {
 
 		abstract void state_drawTrainCard();
 		abstract void state_drawFaceUpCard(int position);
-		abstract void state_claimRoute(Route route, int numWildCards);
+		abstract void state_claimRoute(Route route);
 		abstract void state_drawDestinationCard();
 		abstract void state_discardDestinationCard(DestinationCard discard);
 		abstract void state_endTurn();

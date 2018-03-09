@@ -1,8 +1,8 @@
 
-package tickets.server.model.game;
+package tickets.common;
 
 
-class Route {
+public class Route {
 	//JUST A STUB CLASS SO IT COMPILES
 	//
 	//We'll probably want this in common, I just have it here
@@ -11,6 +11,6 @@ class Route {
 	//	imported directly when it's written
 
 	private Route() {
-		throw new RuntimeException("tickets.server.model.game.Route is a stub.");
+		throw new RuntimeException("tickets.common.Route is a stub.");
 	}
 }
