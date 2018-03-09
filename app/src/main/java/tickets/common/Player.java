@@ -14,6 +14,13 @@ public class Player {
     private HandTrainCard playerResourceCards;
     private List<DestinationCard> destinationCardOptions;
 
+    public Player(Player copy) {
+        this.playerId = copy.playerId;
+        this.associatedAuthToken = copy.associatedAuthToken;
+        this.playerDestinationCards = copy.playerDestinationCards;
+        this.playerResourceCards = copy.playerResourceCards;
+    }
+
     public Player(String playerId, String associatedAuthToken) {
         info = new PlayerInfo();
 

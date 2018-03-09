@@ -1,6 +1,9 @@
 
 package tickets.server.model.game;
 
+import java.util.List;
+
+import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
 
@@ -22,35 +25,27 @@ class TurnZeroState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_drawTrainCard() {
-		// throw new Exception("You must select starting Destination Cards");
+	TrainCard state_drawTrainCard() throws Exception {
+		throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
-	void state_drawFaceUpCard(int position) {
-
+	TrainCard state_drawFaceUpCard(int position) throws Exception {
+		throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
-	void state_claimRoute(Route route, int numWildCards) {
-
-		// throw new Exception("You must select starting Destination Cards");
+	void state_claimRoute(Route route) throws Exception {
+		throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
-	void state_claimRoute(Route route) {
-		// throw new Exception("You must select starting Destination Cards");
+	List<DestinationCard> state_drawDestinationCards() throws Exception {
+		throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
-	void state_drawDestinationCard() {
-
-		// throw new Exception("You must select starting Destination Cards");
-	}
-
-	@Override
-	void state_discardDestinationCard(DestinationCard discard) {
-
+	void state_discardDestinationCard(DestinationCard discard) throws Exception {
 		//---
 		// Discard the specified destination card.
 		// Add the others to the player's hand.
@@ -59,7 +54,7 @@ class TurnZeroState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_endTurn() {
+	void state_endTurn() throws Exception {
 
 		//---
 		// Add all three destination cards to the player's hand.
@@ -69,9 +64,8 @@ class TurnZeroState extends PlayerTurnState {
 
 	@Override
 	void state_addToChat(String msg) {
-
 		// add the message to the chat
-		// update the player's ClientProxy
+		addToChat_fromPlayer(msg);
 		return;
 	}
 }

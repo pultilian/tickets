@@ -41,8 +41,15 @@ public class ServerGame extends Game {
 	//----------------------------------------------------------------------------------------------
 	// *** SET-UP METHODS ***
 
-	public ServerGame(String gameID) {
+	public ServerGame(String gameID, List<Player> playersFromLobby) {
 		super(gameID);
+
+		this.players = new ArrayList<>();
+		for (Player p : playersFromLobby) {
+			//move players into the game
+			players.add(new ServerPlayer(p, this));
+		}
+
 		List<TrainCard> allTrainCards = initializeTrainCards();
 		trainCardArea = new TrainCardArea(allTrainCards);
 		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
@@ -78,9 +85,19 @@ public class ServerGame extends Game {
 		return null;
 	}
 
-	public void nextTurn() {
+	public ServerPlayer getServerPlayer(String authToken) {
+		for (ServerPlayer player : players) {
+			if (player.getAssociatedAuthToken().equals(authToken)) {
+				return player;
+			}
+		}
+		return null;
+	}
+
+	private void nextTurn() {
 		currentPlayerIndex++;
 		if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
+		getCurrentPlayer().startTurn();
 	}
 
 	public TrainCard drawTrainCard() {
@@ -103,7 +120,6 @@ public class ServerGame extends Game {
 		return destinationDeck.discardCard(discard);
 	}
 
-
 	//----------------------------------------------------------------------------------------------
 	//	nested abstract class provides an interface for ServerPlayer and
 	//	ServerGame to ineract with each other without circular dependencies
@@ -116,6 +132,10 @@ public class ServerGame extends Game {
 			// public Faction getPlayerFaction();
 			// public void setPlayerFaction(Faction playerFaction);
 			// public HandTrainCard getTrainCards();
+
+		IServerPlayer(Player copy) {
+			super(copy);
+		}
 
 		IServerPlayer(String playerID, String authToken) {
 			super(playerID, authToken);
@@ -131,13 +151,18 @@ public class ServerGame extends Game {
 		//-------------------------------------------------------------------
 		//	Methods defining actions players can take within the game
 
-		public abstract void takeAction_drawTrainCard();
-		public abstract void takeAction_drawFaceUpCard(int position);
-		public abstract void takeAction_claimRoute(Route route);
-		public abstract void takeAction_drawDestinationCard();
-		public abstract void takeAction_discardDestinationCard(DestinationCard discard);
+		public abstract TrainCard takeAction_drawTrainCard() throws Exception;
+		public abstract TrainCard takeAction_drawFaceUpCard(int position) throws Exception;
+		public abstract void takeAction_claimRoute(Route route) throws Exception;
+		public abstract List<DestinationCard> takeAction_drawDestinationCards() throws Exception;
+		public abstract void takeAction_discardDestinationCard(DestinationCard discard) throws Exception;
+		public abstract void takeAction_endTurn() throws Exception;
+
 		public abstract void takeAction_addToChat(String message);
-		public abstract void takeAction_endTurn();
+
+		//-------------------------------------------------------------------
+		//  Signals the player that it is now their turn
+		abstract void startTurn();
 
 		//-------------------------------------------------------------------
 		//	These methods provide access to the Game to players
@@ -178,6 +203,11 @@ public class ServerGame extends Game {
 
 		protected void addToChat_fromGame(String msg) {
 			ServerGame.this.addToChat(msg);
+			return;
+		}
+
+		protected void endTurn_fromGame() {
+			ServerGame.this.nextTurn();
 			return;
 		}
 

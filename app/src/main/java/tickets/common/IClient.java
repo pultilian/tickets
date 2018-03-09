@@ -13,8 +13,10 @@ public interface IClient {
     public void startGame(Game game);
 
     // FOR CLIENTS IN A GAME
+    // public void startTurn();
     public void endCurrentTurn();
     public void addChatMessage(String message);
     public void addToGameHistory(String message);
     public void addPlayerTrainCard(String playerID);
+    // public void addPlayerDestinationCard(String playerID);
 }

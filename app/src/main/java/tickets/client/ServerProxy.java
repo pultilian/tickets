@@ -84,14 +84,6 @@ public class ServerProxy implements IServer {
         return (LeaveLobbyResponse) result;
     }
 
-    public PlayerTurnResponse takeTurn(String playerID, String authToken) {
-        Object[] parameters = {playerID, authToken};
-        String[] parameterTypes = {String.class.getName(), String.class.getName()};
-        Command command = new Command("takeTurn", parameterTypes, parameters);
-        Object result = clientCommunicator.send(command);
-        return (PlayerTurnResponse) result;
-    }
-
     public AddToChatResponse addToChat(String message, String authToken) {
         Object[] parameters = {message, authToken};
         String[] parameterTypes = {String.class.getName(), String.class.getName()};
@@ -116,20 +108,12 @@ public class ServerProxy implements IServer {
         return (TrainCardResponse) result;
     }
 
-    public DestinationCardResponse drawDestinationCard(String authToken) {
+    public DestinationCardResponse drawDestinationCards(String authToken) {
         Object[] parameters = {authToken};
         String[] parameterTypes = {String.class.getName()};
         Command command = new Command("drawDestinationCard", parameterTypes, parameters);
         Object result = clientCommunicator.send(command);
         return (DestinationCardResponse) result;
-    }
-
-    public Response chooseDestinationCards(DestinationCard toDiscard, String authToken) {
-        Object[] parameters = {toDiscard, authToken};
-        String[] parameterTypes = {DestinationCard.class.getName(), String.class.getName()};
-        Command command = new Command("chooseDestinationCards", parameterTypes, parameters);
-        Object result = clientCommunicator.send(command);
-        return (Response) result;
     }
 
     public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
