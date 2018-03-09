@@ -44,9 +44,7 @@ class StartGameAsync extends AsyncTask<String, Void, StartGameResponse> {
             modelRoot.updateObservable(msg);
         }
         else if (response.getException() == null) {
-            modelRoot.startGame(response.getGame());
-            modelRoot.getLocalPlayer().setTrainCardHand(response.getPlayerHand());
-            modelRoot.getLocalPlayer().setDestinationCardOptions(response.getDestCardOptions());
+            modelRoot.startGame(response.getGame(), response.getPlayerHand(), response.getDestCardOptions());
         }
         else {
             Exception ex = response.getException();

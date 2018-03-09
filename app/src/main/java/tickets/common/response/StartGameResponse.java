@@ -2,19 +2,19 @@ package tickets.common.response;
 
 import tickets.common.Game;
 import tickets.common.DestinationCard;
-import tickets.common.HandTrainCard;
+import tickets.common.TrainCard;
 
 public class StartGameResponse extends Response {
 
     private Game game;
-    private HandTrainCard playerHand;
+    private TrainCard[] playerHand;
     private DestinationCard[] destCardOptions;
 
     public StartGameResponse(Exception exception) {
         super(exception);
     }
 
-    public StartGameResponse(Game game, HandTrainCard playerHand, DestinationCard[] destCardOptions) {
+    public StartGameResponse(Game game, TrainCard[] playerHand, DestinationCard[] destCardOptions) {
         this.game = game;
         this.playerHand = playerHand;
         this.destCardOptions = destCardOptions;
@@ -24,7 +24,7 @@ public class StartGameResponse extends Response {
         return game;
     }
 
-    public HandTrainCard getPlayerHand() {
+    public TrainCard[] getPlayerHand() {
         return playerHand;
     }
 

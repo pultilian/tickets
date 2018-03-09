@@ -12,7 +12,7 @@ public interface IClient {
 
     // FOR CLIENTS IN A LOBBY
     public void removePlayer(Player player);
-    public void startGame(Game game);
+    public void startGame(Game game, TrainCard[] initialCards, DestinationCard[] initialDestinationCards);
 
     // FOR CLIENTS IN A GAME
     // public void startTurn();
