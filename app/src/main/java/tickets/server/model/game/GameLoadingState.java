@@ -27,6 +27,36 @@ class GameLoadingState extends PlayerTurnState {
 
 	@Override
 	void state_drawTrainCard() {
+
+	}
+
+	@Override
+	void state_drawFaceUpCard(int position) {
+
+	}
+
+	@Override
+	void state_claimRoute(Route route, int numWildCards) {
+
+	}
+
+	@Override
+	void state_drawDestinationCard() {
+
+	}
+
+	@Override
+	void state_discardDestinationCard(DestinationCard discard) {
+
+	}
+
+	@Override
+	void state_endTurn() {
+
+	}
+
+	@Override
+	void state_addToChat(String msg) {
 		// throw new Exception("The game is still loading");
 	}
 
@@ -59,7 +89,7 @@ class GameLoadingState extends PlayerTurnState {
 	void state_addToChat(String msg) {
 		// add the message to the chat
 		// update the player's ClientProxy
-		return;
-	}
+		return;	
+  }
 
 }

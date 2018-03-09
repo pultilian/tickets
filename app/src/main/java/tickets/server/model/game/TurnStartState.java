@@ -34,6 +34,12 @@ class TurnStartState extends PlayerTurnState {
 
 	@Override
 	void state_drawFaceUpCard(int position) {
+
+	}
+
+	@Override
+	void state_claimRoute(Route route, int numWildCards) {
+
 		//---
 		// If the Train card deck is empty:
 		//	 throw new Exception("There are no face up train cards to be drawn");
@@ -65,6 +71,7 @@ class TurnStartState extends PlayerTurnState {
 
 	@Override
 	void state_drawDestinationCard() {
+
 		//---
 		// If the Destination card deck is empty:
 		//	 throw new Exception("There are no destination cards left in the deck");
@@ -77,16 +84,19 @@ class TurnStartState extends PlayerTurnState {
 
 	@Override
 	void state_discardDestinationCard(DestinationCard discard) {
+
 		// throw new Exception("You cannot discard destination cards you've already picked");
 	}
 
 	@Override
 	void state_endTurn() {
+
 		// throw new Exception("You must choose an action to take on your turn");
 	}
 
 	@Override
 	void state_addToChat(String msg) {
+
 		// add the message to the chat
 		// update the player's ClientProxy
 		return;

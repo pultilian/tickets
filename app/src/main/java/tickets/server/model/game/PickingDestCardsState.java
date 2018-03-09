@@ -25,6 +25,12 @@ class PickingDestCardsState extends PlayerTurnState {
 
 	@Override
 	void state_drawFaceUpCard(int position) {
+
+	}
+
+	@Override
+	void state_claimRoute(Route route, int numWildCards) {
+
 		// throw new Exception("You must decide which destination cards to keep");
 	}
 

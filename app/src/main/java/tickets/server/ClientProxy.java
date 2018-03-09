@@ -5,6 +5,7 @@ import tickets.common.Game;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
+import tickets.common.TrainCard;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -111,8 +112,11 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void addPlayerTrainCard(String playerID) {
-
+    public void addPlayerTrainCard(String playerId) {
+        Command command = new Command("addPlayerTrainCard", new String[]{String.class.getName()}, new Object[]{playerId});
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
     }
 
     public void clearCommands() {
