@@ -23,7 +23,7 @@ public interface IServer {
   public TrainCardResponse drawTrainCard(String authToken);
   public TrainCardResponse drawFaceUpCard(int position, String authToken);
   public Response claimRoute(Route route, String authToken);
-  public DestinationCardResponse drawDestinationCard(String authToken);
+  public DestinationCardResponse drawDestinationCards(String authToken);
   public Response discardDestinationCard(DestinationCard discard, String authToken);
   public Response endTurn(String authToken);
 

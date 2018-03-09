@@ -1,6 +1,7 @@
 
 package tickets.server.model.game;
 
+import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
 
@@ -26,33 +27,33 @@ class GameLoadingState extends PlayerTurnState {
 	//   so no player actions can be taken
 
 	@Override
-	void state_drawTrainCard() {
-		// throw new Exception("The game is still loading");
+	TrainCard state_drawTrainCard() throws Exception {
+		throw new Exception("The game is still loading");
 	}
 
 	@Override
-	void state_drawFaceUpCard(int position) {
-		// throw new Exception("The game is still loading");
+	TrainCard state_drawFaceUpCard(int position) throws Exception {
+		throw new Exception("The game is still loading");
 	}
 
 	@Override
-	void state_claimRoute(Route route) {
-		// throw new Exception("The game is still loading");
+	void state_claimRoute(Route route) throws Exception {
+		throw new Exception("The game is still loading");
 	}
 
 	@Override
-	void state_drawDestinationCard() {
-		// throw new Exception("The game is still loading");
+	DestinationCard state_drawDestinationCard() throws Exception {
+		throw new Exception("The game is still loading");
 	}
 
 	@Override
-	void state_discardDestinationCard(DestinationCard discard) {
-		// throw new Exception("The game is still loading");
+	void state_discardDestinationCard(DestinationCard discard) throws Exception {
+		throw new Exception("The game is still loading");
 	}
 
 	@Override
-	void state_endTurn() {
-		// throw new Exception("The game is still loading");
+	void state_endTurn() throws Exception {
+		throw new Exception("The game is still loading");
 	}
 
 	@Override

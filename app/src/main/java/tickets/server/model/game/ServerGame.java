@@ -85,6 +85,15 @@ public class ServerGame extends Game {
 		return null;
 	}
 
+	public ServerPlayer getServerPlayer(String authToken) {
+		for (ServerPlayer player : players) {
+			if (player.getAssociatedAuthToken().equals(authToken)) {
+				return player;
+			}
+		}
+		return null;
+	}
+
 	public void nextTurn() {
 		currentPlayerIndex++;
 		if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
@@ -142,13 +151,14 @@ public class ServerGame extends Game {
 		//-------------------------------------------------------------------
 		//	Methods defining actions players can take within the game
 
-		public abstract void takeAction_drawTrainCard();
-		public abstract void takeAction_drawFaceUpCard(int position);
-		public abstract void takeAction_claimRoute(Route route);
-		public abstract void takeAction_drawDestinationCard();
-		public abstract void takeAction_discardDestinationCard(DestinationCard discard);
+		public abstract TrainCard takeAction_drawTrainCard() throws Exception;
+		public abstract TrainCard takeAction_drawFaceUpCard(int position) throws Exception;
+		public abstract void takeAction_claimRoute(Route route) throws Exception;
+		public abstract DestinationCard takeAction_drawDestinationCard() throws Exception;
+		public abstract void takeAction_discardDestinationCard(DestinationCard discard) throws Exception;
+		public abstract void takeAction_endTurn() throws Exception;
+
 		public abstract void takeAction_addToChat(String message);
-		public abstract void takeAction_endTurn();
 
 		//-------------------------------------------------------------------
 		//	These methods provide access to the Game to players

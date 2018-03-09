@@ -1,6 +1,7 @@
 
 package tickets.server.model.game;
 
+import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
 
@@ -22,27 +23,27 @@ class TurnZeroState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_drawTrainCard() {
-		// throw new Exception("You must select starting Destination Cards");
+	TrainCard state_drawTrainCard() throws Exception {
+		throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
-	void state_drawFaceUpCard(int position) {
-		// throw new Exception("You must select starting Destination Cards");
+	TrainCard state_drawFaceUpCard(int position) throws Exception {
+		throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
-	void state_claimRoute(Route route) {
-		// throw new Exception("You must select starting Destination Cards");
+	void state_claimRoute(Route route) throws Exception {
+		throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
-	void state_drawDestinationCard() {
-		// throw new Exception("You must select starting Destination Cards");
+	DestinationCard state_drawDestinationCard() throws Exception {
+		throw new Exception("You must select starting Destination Cards");
 	}
 
 	@Override
-	void state_discardDestinationCard(DestinationCard discard) {
+	void state_discardDestinationCard(DestinationCard discard) throws Exception {
 		//---
 		// Discard the specified destination card.
 		// Add the others to the player's hand.
@@ -51,7 +52,7 @@ class TurnZeroState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_endTurn() {
+	void state_endTurn() throws Exception {
 		//---
 		// Add all three destination cards to the player's hand.
 		// End the turn

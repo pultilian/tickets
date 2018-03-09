@@ -8,6 +8,7 @@ import tickets.common.response.*;
 import tickets.server.model.AllUsers;
 import tickets.server.model.game.ServerGame;
 import tickets.common.Route;
+import tickets.server.model.game.ServerPlayer;
 
 import java.util.*;
 
@@ -266,6 +267,8 @@ public class ServerFacade implements IServer {
         ServerGame game;
         try {
             game = getGameForToken(authToken);
+            ServerPlayer player = game.getServerPlayer(authToken);
+            player.takeAction_drawTrainCard();
         }
         catch(Exception ex) {
             return new TrainCardResponse(ex);
@@ -323,7 +326,7 @@ public class ServerFacade implements IServer {
     }
 
     @Override
-    public DestinationCardResponse drawDestinationCard(String authToken) {
+    public DestinationCardResponse drawDestinationCards(String authToken) {
         ServerGame game;
         try {
             game = getGameForToken(authToken);

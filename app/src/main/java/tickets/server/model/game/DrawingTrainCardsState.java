@@ -1,6 +1,7 @@
 
 package tickets.server.model.game;
 
+import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
 
@@ -23,16 +24,17 @@ class DrawingTrainCardsState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_drawTrainCard() {
+	TrainCard state_drawTrainCard() throws Exception {
 		//---
 		// Draw the first card in the deck
 		// Add it to the player's hand
 		// End the turn
 		//---
+		return null;
 	}
 
 	@Override
-	void state_drawFaceUpCard(int position) {
+	TrainCard state_drawFaceUpCard(int position) throws Exception {
 		//---
 		// Check the card at the given position
 		// If it is a wild:
@@ -42,30 +44,27 @@ class DrawingTrainCardsState extends PlayerTurnState {
 		//   Add it to the player's hand
 		// 	 End the turn
 		//---
+		return null;
 	}
 
 	@Override
-	void state_claimRoute(Route route) {
-		// throw new Exception("You must draw a second Train card");
-		return;
+	void state_claimRoute(Route route) throws Exception {
+		throw new Exception("You must draw a second Train card");
 	}
 
 	@Override
-	void state_drawDestinationCard() {
-		// throw new Exception("You must draw a second Train card");
-		return;
+	DestinationCard state_drawDestinationCard() throws Exception {
+		throw new Exception("You must draw a second Train card");
 	}
 
 	@Override
-	void state_discardDestinationCard(DestinationCard discard) {
-		// throw new Exception("You must draw a second Train card");
-		return;
+	void state_discardDestinationCard(DestinationCard discard) throws Exception {
+		throw new Exception("You must draw a second Train card");
 	}
 
 	@Override
-	void state_endTurn() {
-		// throw new Exception("You must draw a second Train card");
-		return;
+	void state_endTurn() throws Exception {
+		throw new Exception("You must draw a second Train card");
 	}
 
 	@Override

@@ -48,37 +48,34 @@ public class ServerPlayer extends IServerPlayer {
 	}
 
 	@Override
-	public void takeAction_drawTrainCard() {
-		turnState.state_drawTrainCard();
-		return;
+	public TrainCard takeAction_drawTrainCard() throws Exception {
+		return turnState.state_drawTrainCard();
 	}
 
 	@Override
-	public void takeAction_drawFaceUpCard(int position) {
-		turnState.state_drawFaceUpCard(position);
-		return;
+	public TrainCard takeAction_drawFaceUpCard(int position) throws Exception {
+		return turnState.state_drawFaceUpCard(position);
 	}
 
 	@Override
-	public void takeAction_claimRoute(Route route) {
+	public void takeAction_claimRoute(Route route) throws Exception {
 		turnState.state_claimRoute(route);
 		return;
 	}
 
 	@Override
-	public void takeAction_drawDestinationCard() {
-		turnState.state_drawDestinationCard();
-		return;
+	public DestinationCard takeAction_drawDestinationCard() throws Exception {
+		return turnState.state_drawDestinationCard();
 	}
 
 	@Override
-	public void takeAction_discardDestinationCard(DestinationCard discard) {
+	public void takeAction_discardDestinationCard(DestinationCard discard) throws Exception {
 		turnState.state_discardDestinationCard(discard);
 		return;
 	}
 
 	@Override
-	public void takeAction_endTurn() {
+	public void takeAction_endTurn() throws Exception {
 		turnState.state_endTurn();
 		return;
 	}
@@ -101,12 +98,12 @@ public class ServerPlayer extends IServerPlayer {
 			player = ServerPlayer.this;
 		}
 
-		abstract void state_drawTrainCard();
-		abstract void state_drawFaceUpCard(int position);
-		abstract void state_claimRoute(Route route);
-		abstract void state_drawDestinationCard();
-		abstract void state_discardDestinationCard(DestinationCard discard);
-		abstract void state_endTurn();
+		abstract TrainCard state_drawTrainCard() throws Exception;
+		abstract TrainCard state_drawFaceUpCard(int position) throws Exception;
+		abstract void state_claimRoute(Route route) throws Exception;
+		abstract DestinationCard state_drawDestinationCard() throws Exception;
+		abstract void state_discardDestinationCard(DestinationCard discard) throws Exception;
+		abstract void state_endTurn() throws Exception;
 		abstract void state_addToChat(String msg);
 
 

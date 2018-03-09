@@ -1,6 +1,7 @@
 
 package tickets.server.model.game;
 
+import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
 
@@ -21,7 +22,7 @@ class TurnStartState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_drawTrainCard() {
+	TrainCard state_drawTrainCard() throws Exception {
 		//---
 		// If the Train Card deck is empty:
 		//	 throw new Exception("There are no train cards in the deck to be drawn");
@@ -30,10 +31,11 @@ class TurnStartState extends PlayerTurnState {
 		// Add it to the player's hand
 		// Go to DrawingTrainCardsState
 		//---
+		return null;
 	}
 
 	@Override
-	void state_drawFaceUpCard(int position) {
+	TrainCard state_drawFaceUpCard(int position) throws Exception {
 		//---
 		// If the Train card deck is empty:
 		//	 throw new Exception("There are no face up train cards to be drawn");
@@ -45,10 +47,11 @@ class TurnStartState extends PlayerTurnState {
 		// Otherwise:
 		//	 Go to DrawingTrainCardsState
 		//---
+		return null;
 	}
 
 	@Override
-	void state_claimRoute(Route route) {
+	void state_claimRoute(Route route) throws Exception {
 		//---
 		// Check that the player has enough Train cards of the route's color
 		// If not:
@@ -64,7 +67,7 @@ class TurnStartState extends PlayerTurnState {
 	}
 
 	@Override
-	void state_drawDestinationCard() {
+	DestinationCard state_drawDestinationCard() throws Exception {
 		//---
 		// If the Destination card deck is empty:
 		//	 throw new Exception("There are no destination cards left in the deck");
@@ -73,16 +76,17 @@ class TurnStartState extends PlayerTurnState {
 		// Hold them out from the player's hand of destination cards
 		// Go to PickingDestCardsState
 		//---
+		return null;
 	}
 
 	@Override
-	void state_discardDestinationCard(DestinationCard discard) {
-		// throw new Exception("You cannot discard destination cards you've already picked");
+	void state_discardDestinationCard(DestinationCard discard) throws Exception {
+		throw new Exception("You cannot discard destination cards you've already picked");
 	}
 
 	@Override
-	void state_endTurn() {
-		// throw new Exception("You must choose an action to take on your turn");
+	void state_endTurn() throws Exception {
+		throw new Exception("You must choose an action to take on your turn");
 	}
 
 	@Override
