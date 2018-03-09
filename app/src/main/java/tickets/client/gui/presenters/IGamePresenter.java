@@ -4,6 +4,7 @@ package tickets.client.gui.presenters;
 import java.util.List;
 
 import tickets.common.DestinationCard;
+import tickets.common.HandTrainCard;
 import tickets.common.IMessage;
 import tickets.common.IObserver;
 import tickets.common.IObservable;
@@ -32,7 +33,7 @@ public interface IGamePresenter extends IObserver {
     //----------------------------------------
     // Player data getters
     public List<DestinationCard> getPlayerDestinations();
-    public List<TrainCard> getPlayerHand();
+    public HandTrainCard getPlayerHand();
 
 
     // from IObserver

@@ -24,17 +24,20 @@ import tickets.client.gui.fragments.GameInfoFragment;
 import tickets.client.gui.fragments.MapFragment;
 import tickets.client.gui.presenters.GamePresenter;
 import tickets.client.gui.presenters.IHolderActivity;
+import tickets.client.gui.presenters.IHolderGameActivity;
 import tickets.common.DestinationCard;
 import tickets.common.Faction;
 import tickets.common.Game;
+import tickets.common.HandTrainCard;
 import tickets.common.Player;
+import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 
 /**
  * Created by Pultilian on 2/11/2018.
  */
 
-public class GameActivity extends AppCompatActivity implements IHolderActivity {
+public class GameActivity extends AppCompatActivity implements IHolderGameActivity {
     private ImageView faceUpCard1;
     private ImageView faceUpCard2;
     private ImageView faceUpCard3;
@@ -224,61 +227,17 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
     }
 
     public void setNumResourceCards() {
-        int red = 0;
-        int blue = 0;
-        int yellow = 0;
-        int green = 0;
-        int white = 0;
-        int black = 0;
-        int orange = 0;
-        int pink = 0;
-        int silver = 0;
-
-        List<TrainCard> cards = presenter.getPlayerHand();
-
-        for (int i = 0; i < cards.size(); i++) {
-            String color = cards.get(i).getColor().name();
-
-            switch (color) {
-                case "Red":
-                    red++;
-                    break;
-                case "Blue":
-                    blue++;
-                    break;
-                case "Yellow":
-                    yellow++;
-                    break;
-                case "Green":
-                    green++;
-                    break;
-                case "White":
-                    white++;
-                    break;
-                case "Black":
-                    black++;
-                    break;
-                case "Orange":
-                    orange++;
-                    break;
-                case "Pink":
-                    pink++;
-                    break;
-                case "Wild":
-                    silver++;
-                    break;
-            }
-        }
-
-        redCount.setText(Integer.toString(red));
-        yellowCount.setText(Integer.toString(yellow));
-        blueCount.setText(Integer.toString(blue));
-        greenCount.setText(Integer.toString(green));
-        whiteCount.setText(Integer.toString(white));
-        blackCount.setText(Integer.toString(black));
-        orangeCount.setText(Integer.toString(orange));
-        pinkCount.setText(Integer.toString(pink));
-        silverCount.setText(Integer.toString(silver));
+        HandTrainCard cards = presenter.getPlayerHand();
+//
+//        blueCount.setText(cards.getCountForColor(RouteColors.Blue));
+//        redCount.setText(cards.getCountForColor(RouteColors.Red));
+//        greenCount.setText(cards.getCountForColor(RouteColors.Green));
+//        orangeCount.setText(cards.getCountForColor(RouteColors.Orange));
+//        yellowCount.setText(cards.getCountForColor(RouteColors.Yellow));
+//        whiteCount.setText(cards.getCountForColor(RouteColors.White));
+//        blackCount.setText(cards.getCountForColor(RouteColors.Black));
+//        silverCount.setText(cards.getCountForColor(RouteColors.Wild));
+//        pinkCount.setText(cards.getCountForColor(RouteColors.Purple));
     }
 
     public void setFaceUpCards(){
@@ -379,6 +338,17 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         //do nothing?
         return;
     }
+
+    @Override
+    public void updateFaceUpCards(){
+        setFaceUpCards();
+    }
+
+    @Override
+    public void updatePlayerTrainHand(){
+        setNumResourceCards();
+    }
+
 
     class DestinationAdapter extends RecyclerView.Adapter<DestinationHolder> {
         private LayoutInflater inflater;
