@@ -221,6 +221,17 @@ public class ModelFacade implements IClient {
         updateObservable(update);
     }
 
+    public void givePlayerTrainCard(TrainCard card) {
+        localPlayer.addTrainCardToHand(card);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
+        updateObservable(update);
+    }
+
+    public void givePlayerDestinationCards(List<DestinationCard> cards) {
+        localPlayer.setDestinationCardOptions(cards);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
+        updateObservable(update);
+    }
 
 //-------------------------------------------------
 //		IClient interface methods
@@ -261,7 +272,7 @@ public class ModelFacade implements IClient {
         ModelFacade.getInstance().updateObservable(message);
 	}
 
-	public void addPlayerPoints(String playerId, int points) {
+    public void addPlayerPoints(String playerId, int points) {
 	    currentGame.getPlayerInfo(playerId).addToScore(points);
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         ModelFacade.getInstance().updateObservable(message);

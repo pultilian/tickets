@@ -1,6 +1,7 @@
 package tickets.server;
 
 import tickets.common.Command;
+import tickets.common.DestinationCard;
 import tickets.common.Game;
 import tickets.common.IClient;
 import tickets.common.Lobby;
@@ -9,6 +10,7 @@ import tickets.common.TrainCard;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -26,16 +28,30 @@ public class ClientProxy implements IClient {
         totalCommandsSoFar = (double)0;
     }
 
-    public String getAuthToken(){ return authToken; }
-    public Queue<Command> getUnprocessedCommands() { return unprocessedCommands; }
-    public Map<Command, String> getCommandIDs() { return commandIDs; }
+    public String getAuthToken(){
+        return authToken;
+    }
 
-    public void setUnprocessedCommands(Queue<Command> unprocessedCommands) { this.unprocessedCommands = unprocessedCommands; }
-    public void setCommandIDs(Map<Command, String> commandIDs) { this.commandIDs = commandIDs; }
+    public Queue<Command> getUnprocessedCommands() {
+        return unprocessedCommands;
+    }
+
+    public Map<Command, String> getCommandIDs() {
+        return commandIDs;
+    }
+
+    public void setUnprocessedCommands(Queue<Command> unprocessedCommands) {
+        this.unprocessedCommands = unprocessedCommands;
+    }
+    public void setCommandIDs(Map<Command, String> commandIDs) {
+        this.commandIDs = commandIDs;
+    }
 
     @Override
     public void addLobbyToList(Lobby lobby) {
-        Command command = new Command("addLobbyToList", new String[]{Lobby.class.getName()}, new Object[]{lobby});
+        Command command = new Command("addLobbyToList",
+                new String[]{Lobby.class.getName()},
+                new Object[]{lobby});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -43,7 +59,9 @@ public class ClientProxy implements IClient {
 
     @Override
     public void removeLobbyFromList(Lobby lobby) {
-        Command command = new Command("removeLobbyFromList", new String[]{Lobby.class.getName()}, new Object[]{lobby});
+        Command command = new Command("removeLobbyFromList",
+                new String[]{Lobby.class.getName()},
+                new Object[]{lobby});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -73,7 +91,9 @@ public class ClientProxy implements IClient {
 
     @Override
     public void removePlayer(Player player) {
-        Command command = new Command("removePlayer", new String[]{Player.class.getName()}, new Object[]{player});
+        Command command = new Command("removePlayer",
+                new String[]{Player.class.getName()},
+                new Object[]{player});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -81,7 +101,9 @@ public class ClientProxy implements IClient {
 
     @Override
     public void startGame(Game game) {
-        Command command = new Command("startGame", new String[]{Game.class.getName()}, new Object[]{game});
+        Command command = new Command("startGame",
+                new String[]{Game.class.getName()},
+                new Object[]{game});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -89,7 +111,9 @@ public class ClientProxy implements IClient {
 
     @Override
     public void endCurrentTurn() {
-        Command command = new Command("endCurrentTurn", new String[0], new Object[0]);
+        Command command = new Command("endCurrentTurn",
+                new String[0],
+                new Object[0]);
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -97,7 +121,9 @@ public class ClientProxy implements IClient {
 
     @Override
     public void addChatMessage(String message) {
-        Command command = new Command("addChatMessage", new String[]{String.class.getName()}, new Object[]{message});
+        Command command = new Command("addChatMessage",
+                new String[]{String.class.getName()},
+                new Object[]{message});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -105,7 +131,9 @@ public class ClientProxy implements IClient {
 
     @Override
     public void addToGameHistory(String message) {
-        Command command = new Command("addToGameHistory", new String[]{String.class.getName()}, new Object[]{message});
+        Command command = new Command("addToGameHistory",
+                new String[]{String.class.getName()},
+                new Object[]{message});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
@@ -113,7 +141,29 @@ public class ClientProxy implements IClient {
 
     @Override
     public void addPlayerTrainCard(String playerId) {
-        Command command = new Command("addPlayerTrainCard", new String[]{String.class.getName()}, new Object[]{playerId});
+        Command command = new Command("addPlayerTrainCard",
+                new String[]{String.class.getName()},
+                new Object[]{playerId});
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
+
+    @Override
+    public void givePlayerTrainCard(TrainCard card) {
+        Command command = new Command("givePlayerTrainCard",
+                new String[]{TrainCard.class.getName()},
+                new Object[]{card});
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
+
+    @Override
+    public void givePlayerDestinationCards(List<DestinationCard> cards) {
+        Command command = new Command("givePlayerDestinationCards",
+                new String[]{cards.getClass().getName()},
+                new Object[]{cards});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;

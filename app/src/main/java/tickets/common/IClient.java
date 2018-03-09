@@ -1,5 +1,7 @@
 package tickets.common;
 
+import java.util.List;
+
 public interface IClient {
 
     // FOR CLIENTS IN LOBBY LIST
@@ -18,5 +20,6 @@ public interface IClient {
     public void addChatMessage(String message);
     public void addToGameHistory(String message);
     public void addPlayerTrainCard(String playerID);
-    // public void addPlayerDestinationCard(String playerID);
+    public void givePlayerTrainCard(TrainCard card);
+    public void givePlayerDestinationCards(List<DestinationCard> cards);
 }
