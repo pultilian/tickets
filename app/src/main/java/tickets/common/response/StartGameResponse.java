@@ -1,6 +1,6 @@
 package tickets.common.response;
 
-import tickets.client.model.Game;
+import tickets.common.Game;
 import tickets.common.DestinationCard;
 import tickets.common.HandTrainCard;
 
