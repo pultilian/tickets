@@ -111,20 +111,20 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         playerName.setText(currentPlayer.getName());
         playerRace.setText(currentPlayer.getName());
 
-        switch (currentPlayer.getColor().toString()) {
-            case "Blue":
+        switch (currentPlayer.getColor().toString().toLowerCase()) {
+            case "blue":
                 playerIcon.setImageResource(R.drawable.race_altian);
                 break;
-            case "Red":
+            case "red":
                 playerIcon.setImageResource(R.drawable.race_tacht);
                 break;
-            case "Green":
+            case "green":
                 playerIcon.setImageResource(R.drawable.race_pathian);
                 break;
-            case "Yellow":
+            case "yellow":
                 playerIcon.setImageResource(R.drawable.race_kit);
                 break;
-            case "Black":
+            case "black":
                 playerIcon.setImageResource(R.drawable.race_murtoken);
                 break;
         }
