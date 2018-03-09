@@ -35,7 +35,7 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public List<TrainCard> getFaceUpCards(){
-      return  null; //ModelFacade.getInstance().getGame().getFaceUpCards();
+      return ModelFacade.getInstance().getGame().getFaceUpCards();
     }
 
     public Player getCurrentPlayer(){

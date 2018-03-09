@@ -35,9 +35,9 @@ class DrawFaceUpCardAsync extends AsyncTask<Object, Void, TrainCardResponse> {
             ExceptionMessage msg = new ExceptionMessage(ex);
             modelRoot.updateObservable(msg);
         } else if (response.getException() == null) {
-            ModelFacade.getInstance().getLocalPlayer().addTrainCardToHand(response.getCard());
+            modelRoot.getLocalPlayer().addTrainCardToHand(response.getCard());
             ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
-            ModelFacade.getInstance().updateObservable(message);
+            modelRoot.updateObservable(message);
         } else {
             Exception ex = response.getException();
             ExceptionMessage msg = new ExceptionMessage(ex);

@@ -227,7 +227,7 @@ public class ModelFacade implements IClient {
         updateObservable(update);
     }
 
-    public void givePlayerDestinationCards(List<DestinationCard> cards) {
+    public void givePlayerDestinationCards(DestinationCard[] cards) {
         localPlayer.setDestinationCardOptions(cards);
         ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
         updateObservable(update);
@@ -254,8 +254,8 @@ public class ModelFacade implements IClient {
 	public void removePlayer(Player player) {
 		localPlayer = null;
 	}
+
 	public void startGame(Game game) {
-		System.out.println("***** CALLING STARTGAME *****");
 		currentGame = game;
 		currentLobby = null;
 		ClientStateChange.ClientState stateVal;

@@ -12,13 +12,14 @@ public class Player {
     private String associatedAuthToken;
     private HandDestinationCard playerDestinationCards;
     private HandTrainCard playerResourceCards;
-    private List<DestinationCard> destinationCardOptions;
+    private DestinationCard[] destinationCardOptions;
 
     public Player(Player copy) {
         this.playerId = copy.playerId;
         this.associatedAuthToken = copy.associatedAuthToken;
         this.playerDestinationCards = copy.playerDestinationCards;
         this.playerResourceCards = copy.playerResourceCards;
+        this.destinationCardOptions = copy.destinationCardOptions;
     }
 
     public Player(String playerId, String associatedAuthToken) {
@@ -28,6 +29,7 @@ public class Player {
         this.associatedAuthToken = associatedAuthToken;
         playerDestinationCards = new HandDestinationCard();
         playerResourceCards = new HandTrainCard();
+        destinationCardOptions = null;
     }
 
     public PlayerInfo getInfo() {
@@ -63,7 +65,11 @@ public class Player {
         playerDestinationCards.addCard(card);
     }
 
-    public void setDestinationCardOptions(List<DestinationCard> cards) {
+    public void setDestinationCardOptions(DestinationCard[] cards) {
         destinationCardOptions = cards;
+    }
+
+    public void setTrainCardHand(HandTrainCard playerHand) {
+        playerResourceCards = playerHand;
     }
 }

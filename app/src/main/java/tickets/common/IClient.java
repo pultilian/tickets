@@ -21,5 +21,5 @@ public interface IClient {
     public void addToGameHistory(String message);
     public void addPlayerTrainCard(String playerID);
     public void givePlayerTrainCard(TrainCard card);
-    public void givePlayerDestinationCards(List<DestinationCard> cards);
+    public void givePlayerDestinationCards(DestinationCard[] cards);
 }
