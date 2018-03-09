@@ -6,6 +6,7 @@ import java.util.List;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
+import tickets.common.RouteColors;
 
 import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.ServerPlayer.PlayerTurnState;
@@ -27,26 +28,29 @@ class DrawingTrainCardsState extends PlayerTurnState {
 
 	@Override
 	TrainCard state_drawTrainCard() throws Exception {
-		//---
-		// Draw the first card in the deck
-		// Add it to the player's hand
-		// End the turn
-		//---
-		return null;
+		TrainCard card = drawTrainCard_fromPlayer();
+		if (card == null) {
+			throw new Exception("There are no train cards in the deck to be drawn");
+		}
+		addTrainCardToHand_fromPlayer(card);
+		changeStateTo(ServerPlayer.States.DRAWING_TRAIN_CARDS);
+		return card;
 	}
 
 	@Override
 	TrainCard state_drawFaceUpCard(int position) throws Exception {
-		//---
-		// Check the card at the given position
-		// If it is a wild:
-		//   throw new Exception("You cannot draw a wild card second");
-		// Otherwise:
-		// 	 draw it from the row of face up cards
-		//   Add it to the player's hand
-		// 	 End the turn
-		//---
-		return null;
+		if (isFaceUpCardWild_fromPlayer(position)) {
+			throw new Exception("You cannot draw a wild card now.");
+		}
+
+		TrainCard card = drawFaceUpCard_fromPlayer(position);
+		if (card == null) {
+			throw new Exception("There are no face up train cards to be drawn");
+		}
+		
+		addTrainCardToHand_fromPlayer(card);
+		changeStateTo(ServerPlayer.States.DRAWING_TRAIN_CARDS);
+		return card;
 	}
 
 	@Override
@@ -71,7 +75,6 @@ class DrawingTrainCardsState extends PlayerTurnState {
 
 	@Override
 	void state_addToChat(String msg) {
-		// add the message to the chat
 		addToChat_fromPlayer(msg);
 		return;
 

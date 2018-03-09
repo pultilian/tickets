@@ -13,8 +13,8 @@ import tickets.server.model.game.ServerPlayer.PlayerTurnState;
 
 // Part of the state pattern describing a player's overall turn
 //
-// At this state, the player has drawn two destination cards
-//	 and must now choose whether to discard one or zero of them.
+// At this state, the player has drawn three destination cards
+//	 and must now choose whether to discard two, one or zero of them.
 //
 class PickingDestCardsState extends PlayerTurnState {
 	PickingDestCardsState(ServerPlayer player) {
@@ -43,27 +43,33 @@ class PickingDestCardsState extends PlayerTurnState {
 
 	@Override
 	void state_discardDestinationCard(DestinationCard discard) throws Exception {
-		//---
-		// Discard the specified destination card.
-		// Update the game's history
-		// End the turn.
-		//---
+		List<DestinationCard> cards = getTempDestinationCards_fromPlayer();
+		int removeIndex = -1;
+		for (int i = 0; i < cards.size(); i++) {
+			if (cards.get(i).equals(discard)) {
+				removeIndex = i;
+			}
+		}
+		cards.remove(removeIndex);
+		if (cards.size() == 1) {
+			addDestinationCardToHand_fromPlayer(cards.get(0));
+			changeStateTo(ServerPlayer.States.WAIT_FOR_TURN);
+		}
 		return;
 	}
 
 	@Override
 	void state_endTurn() throws Exception {
-		//---
-		// Keep both of the destination cards that were drawn
-		// Update the game's history (?)
-		// End the turn
-		//---
+		List<DestinationCard> cards = getTempDestinationCards_fromPlayer();
+		for (DestinationCard c : cards) {
+			addDestinationCardToHand_fromPlayer(c);
+		}
+		changeStateTo(ServerPlayer.States.WAIT_FOR_TURN);
 		return;
 	}
 
 	@Override
 	void state_addToChat(String msg) {
-		// add the message to the chat
 		addToChat_fromPlayer(msg);
 		return;
 	}
