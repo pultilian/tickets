@@ -69,7 +69,6 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
 
 
     public void initVariables() {
-        presenter = new GamePresenter(this);
         destinationManager = new LinearLayoutManager(this);
         destinationCards.setLayoutManager(destinationManager);
         destinationAdapter = new DestinationAdapter(this, presenter.getPlayerDestinations());
@@ -108,6 +107,7 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
         Faction currentPlayer = presenter.getCurrentPlayer().getPlayerFaction();
         playerName.setText(currentPlayer.getName());
         playerRace.setText(currentPlayer.getName());
+
         switch (currentPlayer.getColor().toString()) {
             case "Blue":
                 playerIcon.setImageResource(R.drawable.race_altian);
@@ -330,6 +330,7 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        presenter = new GamePresenter(this);
         assignIDs();
         initVariables();
         setClickListeners();

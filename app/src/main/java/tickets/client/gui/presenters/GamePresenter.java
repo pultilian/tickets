@@ -37,7 +37,7 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public Player getCurrentPlayer(){
-        return null;
+        return ModelFacade.getInstance().getLocalPlayer();
     }
 
     public void drawTrainCard() {
