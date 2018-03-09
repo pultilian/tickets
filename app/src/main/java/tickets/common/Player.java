@@ -5,12 +5,6 @@ import tickets.common.HandDestinationCard;
 
 public class Player {
     private PlayerInfo info;
-    // general information the player can present publicly
-    //
-    // private Faction playerFaction; - in info
-    // private String name; - in info
-    // private int points; - in info
-    // private int shipsLeft; - in info
 
     private String playerId;
     private String associatedAuthToken;
@@ -47,16 +41,16 @@ public class Player {
         return playerResourceCards;
     }
 
+    public void addTrainCardToHand(TrainCard card){
+        playerResourceCards.addCard(card);
+    }
+
     public HandDestinationCard getHandDestinationCards() {
         return playerDestinationCards;
     }
 
-    public int getScore() {
-        return info.getScore();
+    public void addDestinationCardToHand(DestinationCard card){
+        playerDestinationCards.addCard(card);
     }
 
-    public void setScore(int score) {
-        this.info.setScore(score);
-        return;
-    }
 }
