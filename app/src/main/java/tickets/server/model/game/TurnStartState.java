@@ -69,12 +69,7 @@ class TurnStartState extends PlayerTurnState {
 	}
 
 	@Override
-<<<<<<< HEAD
 	List<DestinationCard> state_drawDestinationCards() throws Exception {
-=======
-	void state_drawDestinationCard() {
-
->>>>>>> master
 		//---
 		// If the Destination card deck is empty:
 		//	 throw new Exception("There are no destination cards left in the deck");
@@ -87,7 +82,6 @@ class TurnStartState extends PlayerTurnState {
 	}
 
 	@Override
-<<<<<<< HEAD
 	void state_discardDestinationCard(DestinationCard discard) throws Exception {
 		throw new Exception("You cannot discard destination cards you've already picked");
 	}
@@ -95,24 +89,12 @@ class TurnStartState extends PlayerTurnState {
 	@Override
 	void state_endTurn() throws Exception {
 		throw new Exception("You must choose an action to take on your turn");
-=======
-	void state_discardDestinationCard(DestinationCard discard) {
-
-		// throw new Exception("You cannot discard destination cards you've already picked");
-	}
-
-	@Override
-	void state_endTurn() {
-
-		// throw new Exception("You must choose an action to take on your turn");
->>>>>>> master
 	}
 
 	@Override
 	void state_addToChat(String msg) {
-
 		// add the message to the chat
-		// update the player's ClientProxy
+		addToChat_fromPlayer(msg);
 		return;
 	}
 }

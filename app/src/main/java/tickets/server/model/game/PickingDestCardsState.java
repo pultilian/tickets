@@ -64,7 +64,7 @@ class PickingDestCardsState extends PlayerTurnState {
 	@Override
 	void state_addToChat(String msg) {
 		// add the message to the chat
-		// update the player's ClientProxy
+		addToChat_fromPlayer(msg);
 		return;
 	}
 }
