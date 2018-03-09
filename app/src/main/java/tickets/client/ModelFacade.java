@@ -172,7 +172,6 @@ public class ModelFacade implements IClient {
 		return;
 	}
 
-
 //-----------------------------------------------
 //   Player in game actions
 //
