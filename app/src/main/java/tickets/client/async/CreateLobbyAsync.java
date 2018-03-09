@@ -48,6 +48,7 @@ class CreateLobbyAsync extends AsyncTask<Object, Void, JoinLobbyResponse> {
 			stateVal = ClientStateChange.ClientState.lobby;
 			ClientStateChange state = new ClientStateChange(stateVal);
 			modelRoot.setCurrentLobby(response.getLobby());
+			modelRoot.addLobbyToList(modelRoot.getLobby());
             modelRoot.setPlayer(response.getPlayer());
 			modelRoot.updateObservable(state);
 		}

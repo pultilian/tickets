@@ -25,7 +25,7 @@ public class LobbyManager {
 	
 	public Lobby getLobby(String id) {
 		for (Lobby l : lobbyList) {
-			if (l.getId() == id) {
+			if (l.getId().equals(id)) {
 				return l;
 			}
 		}
