@@ -26,7 +26,7 @@ class DrawDestinationCardAsync extends AsyncTask<String, Void, DestinationCardRe
         }
 
         String authToken = data[0];
-        DestinationCardResponse response = ServerProxy.getInstance().drawDestinationCard(authToken);
+        DestinationCardResponse response = ServerProxy.getInstance().drawDestinationCards(authToken);
         return response;
     }
 

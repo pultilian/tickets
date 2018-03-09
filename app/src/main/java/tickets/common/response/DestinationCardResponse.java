@@ -10,7 +10,7 @@ public class DestinationCardResponse extends Response {
 
 	public DestinationCardResponse(Exception ex) {
 			super(ex);
-		}
+    }
 
 	public DestinationCardResponse(List<DestinationCard> cards) {
 		this.cards = cards;
