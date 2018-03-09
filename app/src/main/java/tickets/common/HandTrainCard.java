@@ -13,6 +13,9 @@ public class HandTrainCard {
 
 	public HandTrainCard() {
 	    colorsListMap = new HashMap<>();
+	    for (RouteColors color : RouteColors.values()){
+	    	colorsListMap.put(color, new ArrayList<TrainCard>());
+		}
 	}
 
 
