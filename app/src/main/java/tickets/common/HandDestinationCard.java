@@ -4,8 +4,6 @@ package tickets.common;
 import java.util.List;
 import java.util.ArrayList;
 
-import tickets.common.DestinationCard;
-
 public class HandDestinationCard {
 	private List<DestinationCard> cards;
 
@@ -14,18 +12,18 @@ public class HandDestinationCard {
 	}
 
 	public List<DestinationCard> getAllCards() {
-		return null;
+		return cards;
 	}
 
 	public void addCard(DestinationCard card) {
-		return;
+		cards.add(card);
 	}
 
-	public void removeCard(DestinationCard card) {
-		return;
+	public boolean removeCard(DestinationCard card) {
+		return cards.remove(card);
 	}
 
 	public int getHandSize() {
-		return -1;
+		return cards.size();
 	}
 }

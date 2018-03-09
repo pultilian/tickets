@@ -1,48 +1,45 @@
 
 package tickets.common;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import tickets.common.TrainCard;
 
 public class HandTrainCard {
-	private List<TrainCard> purpleCards;
-	private List<TrainCard> blueCards;
-	private List<TrainCard> orangeCards;
-	private List<TrainCard> whiteCards;
-	private List<TrainCard> greenCards;
-	private List<TrainCard> yellowCards;
-	private List<TrainCard> blackCards;
-	private List<TrainCard> redCards;
-	private List<TrainCard> wildCards;
+	private Map<RouteColors, List<TrainCard>> colorsListMap;
 
 	public HandTrainCard() {
-		purpleCards = new ArrayList<>();
-		blueCards = new ArrayList<>();
-		orangeCards = new ArrayList<>();
-		whiteCards = new ArrayList<>();
-		greenCards = new ArrayList<>();
-		yellowCards = new ArrayList<>();
-		blackCards = new ArrayList<>();
-		redCards = new ArrayList<>();
-		wildCards = new ArrayList<>();
+	    colorsListMap = new HashMap<>();
 	}
 
 
-	public List<TrainCard> getAllCards() {
-		return null;
+	public Map<RouteColors, List<TrainCard>> getAllCards() {
+		return colorsListMap;
+	}
+
+	public int getCountForColor(RouteColors color){
+		return colorsListMap.get(color).size();
 	}
 
 	public void addCard(TrainCard card) {
-		return;
+		colorsListMap.get(card.getColor()).add(card);
 	}
 
-	public void removeCard(TrainCard card) {
-		return;
+	public TrainCard removeCard(RouteColors color) {
+		if(colorsListMap.get(color).size() > 0){
+		    return colorsListMap.get(color).remove(0);
+        }
+        return null;
 	}
 
-	public List<Integer> getHandSize() {
-		return null;
+	public int getHandSize() {
+	    int handTotal = 0;
+		for(RouteColors key : colorsListMap.keySet()){
+		    handTotal += colorsListMap.get(key).size();
+        }
+        return handTotal;
 	}
 }

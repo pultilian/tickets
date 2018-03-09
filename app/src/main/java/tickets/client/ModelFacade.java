@@ -205,6 +205,22 @@ public class ModelFacade implements IClient {
         asyncManager.endTurn(getAuthToken());
     }
 
+    public void endCurrentTurn() {
+        return;
+    }
+
+    public void addChatMessage(String message) {
+        currentGame.addToChat(message);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.chatUpdated);
+        updateObservable(update);
+    }
+
+    public void addToGameHistory(String message) {
+        currentGame.addToHistory(message);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.gameHistoryUpdated);
+        updateObservable(update);
+    }
+
 
 //-------------------------------------------------
 //		IClient interface methods
@@ -237,24 +253,17 @@ public class ModelFacade implements IClient {
 
 		updateObservable(state);
 	}
-// Gameplay operations
-	public void endCurrentTurn() {
-		return;
-	}
-	public void addChatMessage(String message) {
-		currentGame.addToChat(message);
-        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.chatUpdated);
-        updateObservable(update);
-	}
-	public void addToGameHistory(String message) {
-		currentGame.addToHistory(message);
-        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.gameHistoryUpdated);
-        updateObservable(update);
-	}
+
 // Update public info
 	public void addPlayerTrainCard(String playerId) {
 		currentGame.getPlayerInfo(playerId).addTrainCard();
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         ModelFacade.getInstance().updateObservable(message);
 	}
+
+	public void addPlayerPoints(String playerId, int points) {
+	    currentGame.getPlayerInfo(playerId).addToScore(points);
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+        ModelFacade.getInstance().updateObservable(message);
+    }
 }

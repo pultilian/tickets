@@ -11,12 +11,14 @@ public class Game {
     private List<String> chat;
     private List<String> gameHistory;
     private Map<String, PlayerInfo> gamePlayers;
+    private List<TrainCard> faceUpCards;
 
     public Game(String gameId){
         this.gameId = gameId;
         chat = new ArrayList<>();
         gameHistory = new ArrayList<>();
         gamePlayers = new HashMap<>();
+        faceUpCards = new ArrayList<>();
     }
 
     public String getGameId(){ return gameId; }
@@ -36,5 +38,17 @@ public class Game {
 
     public Map<String, PlayerInfo> getAllPlayers() {
         return gamePlayers;
+    }
+
+    public void setFaceUpCards(List<TrainCard> faceUpCards){
+        this.faceUpCards = faceUpCards;
+    }
+
+    public void replaceFaceUpCard(int position, TrainCard faceUpCard){
+        faceUpCards.set(position, faceUpCard);
+    }
+
+    public List<TrainCard> getFaceUpCards(){
+        return faceUpCards;
     }
 }
