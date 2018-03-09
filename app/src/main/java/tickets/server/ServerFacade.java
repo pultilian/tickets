@@ -146,6 +146,7 @@ public class ServerFacade implements IServer {
             List<Player> playersInLobby = lobby.getPlayers();
             ServerGame game = new ServerGame(UUID.randomUUID().toString(), playersInLobby);
             Game clientGame = new Game(game.getGameId());
+            clientGame.setFaceUpCards(game.getFaceUpCards());
             for (Player player : playersInLobby) {
                 PlayerInfo info = new PlayerInfo();
                 info.setFaction(player.getPlayerFaction());

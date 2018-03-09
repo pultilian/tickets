@@ -18,7 +18,6 @@ public class HandTrainCard {
 		}
 	}
 
-
 	public Map<RouteColors, List<TrainCard>> getAllCards() {
 		return colorsListMap;
 	}
