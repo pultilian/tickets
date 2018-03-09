@@ -319,7 +319,7 @@ public class GameActivity extends AppCompatActivity implements IHolderActivity {
     }
 
     public void updatePoints(){
-         points.setText(presenter.getCurrentPlayer().getScore());
+         points.setText(presenter.getCurrentPlayer().getInfo().getScore());
     }
 
     public void updateShips(){
