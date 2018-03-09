@@ -69,29 +69,9 @@ public class AsyncManager {
         return;
     }
 
-    public void addGuest(String lobbyID, String authToken) {
-        return;
-    }
-
-    public void takeTurn(String playerID, String authToken) {
-        return;
-    }
-
     public void addToChat(String message, String authToken) {
         AddToChatAsync task = new AddToChatAsync(root);
         task.execute(message, authToken);
     }
-
-    // public void getAllLobbies(String authToken) {
-    // 	GetAllLobbiesAsync task = new GetAllLobbiesAsync(root);
-    // 	task.execute(authToken);
-    // 	return;
-    // }
-
-    // public void getLobbyData(String lobbyID, String authToken) {
-    // 	GetLobbyDataAsync task = new GetLobbyDataAsync(root);
-    // 	task.execute(lobbyID, authToken);
-    // 	return;
-    // }
 
 }
