@@ -47,7 +47,7 @@ class StartGameAsync extends AsyncTask<String, Void, StartGameResponse> {
             modelRoot.updateObservable(msg);
         }
 
-            return;
+        return;
     }
 
 }

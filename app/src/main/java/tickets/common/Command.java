@@ -111,11 +111,14 @@ public class Command implements ICommand {
 			Method method = facade.getClass().getMethod(methodName, parameterTypes);
 			result = method.invoke(facade, parameters);
 		} catch (NoSuchMethodException e) {
-			System.err.println("ERROR: no method " + methodName + "exists");
+			System.err.println("ERROR: no method " + methodName + " exists");
 			e.printStackTrace();
-		} catch (NumberFormatException | InvocationTargetException e) {
-			System.err.println("ERROR: number format error");
-			e.printStackTrace();
+		} catch (NumberFormatException e) {
+            System.err.println("ERROR: number format error");
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            System.err.println("ERROR: while invoking method " + methodName);
+            e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			System.err.println("ERROR: illegal access");
 			e.printStackTrace();
