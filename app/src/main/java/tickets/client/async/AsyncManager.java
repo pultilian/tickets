@@ -1,6 +1,8 @@
 package tickets.client.async;
 
+import tickets.common.DestinationCard;
 import tickets.common.Lobby;
+import tickets.common.Route;
 import tickets.common.UserData;
 
 import tickets.client.ModelFacade;
@@ -69,29 +71,38 @@ public class AsyncManager {
         return;
     }
 
-    public void addGuest(String lobbyID, String authToken) {
-        return;
-    }
-
-    public void takeTurn(String playerID, String authToken) {
-        return;
-    }
-
     public void addToChat(String message, String authToken) {
         AddToChatAsync task = new AddToChatAsync(root);
         task.execute(message, authToken);
     }
 
-    // public void getAllLobbies(String authToken) {
-    // 	GetAllLobbiesAsync task = new GetAllLobbiesAsync(root);
-    // 	task.execute(authToken);
-    // 	return;
-    // }
+    public void drawTrainCard(String authToken) {
+        DrawTrainCardAsync task = new DrawTrainCardAsync(root);
+        task.execute(authToken);
+    }
 
-    // public void getLobbyData(String lobbyID, String authToken) {
-    // 	GetLobbyDataAsync task = new GetLobbyDataAsync(root);
-    // 	task.execute(lobbyID, authToken);
-    // 	return;
-    // }
+    public void drawFaceUpCard(int position, String authToken) {
+        DrawFaceUpCardAsync task = new DrawFaceUpCardAsync(root);
+        task.execute(position, authToken);
+    }
 
+    public void claimRoute(Route route, String authToken) {
+        ClaimRouteAsync task = new ClaimRouteAsync(root);
+        task.execute(route, authToken);
+    }
+
+    public void drawDestinationCard(String authToken) {
+        DrawDestinationCardAsync task = new DrawDestinationCardAsync(root);
+        task.execute(authToken);
+    }
+
+    public void discardDestinationCard(DestinationCard discard, String authToken) {
+        DiscardDestinationCardAsync task = new DiscardDestinationCardAsync(root);
+        task.execute(authToken);
+    }
+
+    public void endTurn(String authToken) {
+        EndTurnAsync task = new EndTurnAsync(root);
+        task.execute(authToken);
+    }
 }
