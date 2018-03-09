@@ -21,11 +21,21 @@ public class Game {
         faceUpCards = new ArrayList<>();
     }
 
-    public String getGameId(){ return gameId; }
-    public List<String> getChat(){ return chat; }
-    public List<String> getGameHistory(){ return gameHistory; }
+    public String getGameId(){
+        return gameId;
+    }
 
-    public void addToChat(String message){ chat.add(message); }
+    public List<String> getChat(){
+        return chat;
+    }
+
+    public List<String> getGameHistory(){
+        return gameHistory;
+    }
+
+    public void addToChat(String message){
+        chat.add(message);
+    }
     public void addToHistory(String message){ gameHistory.add(message); }
 
     public void addPlayer(String playerId, PlayerInfo info) {

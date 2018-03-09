@@ -3,11 +3,6 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.common.Game;
-import tickets.common.UserData;
-import tickets.common.response.JoinLobbyResponse;
-import tickets.common.IMessage;
-import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;

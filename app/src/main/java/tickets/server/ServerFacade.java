@@ -145,6 +145,12 @@ public class ServerFacade implements IServer {
             // Update server model
             List<Player> playersInLobby = lobby.getPlayers();
             ServerGame game = new ServerGame(UUID.randomUUID().toString(), playersInLobby);
+            Game clientGame = new Game(game.getGameId());
+            for (Player player : playersInLobby) {
+                PlayerInfo info = new PlayerInfo();
+                info.setFaction(player.getPlayerFaction());
+                clientGame.addPlayer(player.getPlayerId(), info);
+            }
             AllGames.getInstance().addGame(game);
 
             // Update relevant clients and move clients from lobby to game
@@ -159,7 +165,7 @@ public class ServerFacade implements IServer {
                     for (int i = 0; i < initialDestinationCards.length; i++) {
                         initialDestinationCards[i] = game.drawDestinationCard();
                     }
-                    client.startGame(game, initialCards, initialDestinationCards);
+                    client.startGame(clientGame, initialCards, initialDestinationCards);
                 }
                 clientsInALobby.remove(client);
                 clientsInAGame.put(client, game);
@@ -169,6 +175,7 @@ public class ServerFacade implements IServer {
             }
 
             AllLobbies.getInstance().removeLobby(lobbyID);
+
             TrainCard[] initialCards = new TrainCard[4];
             DestinationCard[] initialDestinationCards = new DestinationCard[3];
             for (int i = 0; i < initialCards.length; i++) {
@@ -177,7 +184,7 @@ public class ServerFacade implements IServer {
             for (int i = 0; i < initialDestinationCards.length; i++) {
                 initialDestinationCards[i] = game.drawDestinationCard();
             }
-            return new StartGameResponse(game, initialCards, initialDestinationCards);
+            return new StartGameResponse(clientGame, initialCards, initialDestinationCards);
         }
     }
 
