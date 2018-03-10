@@ -34,18 +34,23 @@ import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 
 /**
- * Activity for the Main Screen
+ * Activity for the Main Screen, It holds the player info, current face up cards, and
+ * @author Dallin Pulsipher
  */
-
 public class GameActivity extends AppCompatActivity implements IHolderGameActivity {
 
+    //Face up cards
     private ImageView faceUpCard1;
     private ImageView faceUpCard2;
     private ImageView faceUpCard3;
     private ImageView faceUpCard4;
     private ImageView faceUpCard5;
+
+    // draw piles
     private ImageView drawResourcePile;
     private ImageView drawDestinationPile;
+
+    // player resources count
     private TextView blueCount;
     private TextView redCount;
     private TextView yellowCount;
@@ -55,23 +60,33 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
     private TextView orangeCount;
     private TextView pinkCount;
     private TextView silverCount;
+
+    // player info
     private TextView playerName;
     private ImageView playerIcon;
     private TextView playerRace;
     private TextView ships;
     private TextView points;
+
+    // recycler view stuff for destination cards
     private RecyclerView destinationCards;
     private RecyclerView.LayoutManager destinationManager;
     private DestinationAdapter destinationAdapter;
+
+    // buttons
     private ImageView mapButton;
     private ImageView chatButton;
     private ImageView gameButton;
     private ImageView logoutButton;
 
+    // presenter
     private GamePresenter presenter;
     private Game game;
 
-
+    /** InitVariables
+     * initializes variables for the recyclerView
+     * @post recyclerView is updated
+     */
     public void initVariables() {
         destinationManager = new LinearLayoutManager(this);
         destinationCards.setLayoutManager(destinationManager);
@@ -79,7 +94,9 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         destinationCards.setAdapter(destinationAdapter);
     }
 
-
+    /** AssignIDs
+     * assigns the object to their respective android objects.
+     */
     public void assignIDs() {
         faceUpCard1 = this.findViewById(R.id.card1);
         faceUpCard2 = this.findViewById(R.id.card2);
@@ -111,6 +128,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         playerName.setText(currentPlayer.getName());
         playerRace.setText(currentPlayer.getName());
 
+        //Sets the image based on the info
         switch (currentPlayer.getColor().toString().toLowerCase()) {
             case "blue":
                 playerIcon.setImageResource(R.drawable.race_altian);
@@ -130,6 +148,9 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         }
     }
 
+    /** setClickListeners
+     * sets the click listeners for the various buttons and their operations
+     */
     public void setClickListeners() {
         faceUpCard1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,6 +247,9 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         });
     }
 
+    /** setNumResourceCards
+     * sets the players resource cards count. and updates the screen.
+     */
     public void setNumResourceCards() {
         HandTrainCard cards = presenter.getPlayerHand();
 
@@ -240,6 +264,9 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         pinkCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Purple)));
     }
 
+    /** setFaceUpCards
+     * sets the face up cards and updates the screen.
+     */
     public void setFaceUpCards(){
         ImageView[] faceUpCard = {faceUpCard1,faceUpCard2,faceUpCard3,faceUpCard4,faceUpCard5};
         List<TrainCard> cards = presenter.getFaceUpCards();
@@ -277,14 +304,24 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         }
     }
 
+    /** UpdatePoints
+     * updates current players points for the observers.
+     */
     public void updatePoints(){
          points.setText(Integer.toString(presenter.getCurrentPlayer().getInfo().getScore()));
     }
 
+    /** UpdateShips
+     * updates the ships count for the observers.
+     */
     public void updateShips(){
         ships.setText(Integer.toString(presenter.getCurrentPlayer().getInfo().getShipsLeft()));
     }
 
+    /** onCreate
+     * runs this when the gameActivity is started. It initializes variables
+     * and performs initial setup.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -298,6 +335,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         updateFaceUpCards();
         setClickListeners();
 
+        // sets the destination fragment as the first
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = new DestinationFragment();
         fragmentManager.beginTransaction()
@@ -306,6 +344,10 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
 
     }
 
+    /** on Window FocusChanged
+     * sets certain parameters for the Observer for how the android screen will be formatted.
+     * @param hasFocus
+     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
