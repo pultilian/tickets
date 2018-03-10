@@ -23,7 +23,6 @@ public class ServerCommunicator {
 	private static final int MAX_WAITING_CONNECTIONS = 10;
 	public static final String COMMAND_DESIGNATOR = "/command";
 	public static final String DEFAULT_DESIGNATOR = "/";
-	public static final String SERVER_HOST = "localhost";
 
 	private static Gson gson = new Gson();
 

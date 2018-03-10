@@ -280,7 +280,24 @@ public class ModelFacade implements IClient {
 	}
 
     public void addPlayerPoints(String playerId, int points) {
+        if (playerId.equals(localPlayer.getPlayerId())) {
+            localPlayer.getInfo().addToScore(points);
+        }
 	    currentGame.getPlayerInfo(playerId).addToScore(points);
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+        ModelFacade.getInstance().updateObservable(message);
+    }
+
+    public void removePlayerShips(String playerId, int numShips) {
+	    if (playerId.equals(localPlayer.getPlayerId())) {
+	        localPlayer.getInfo().useShips(numShips);
+        }
+	    currentGame.getPlayerInfo(playerId).useShips(numShips);
+	    ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+    }
+
+    public void addPlayerDestinationCard(String playerId){
+        currentGame.getPlayerInfo(playerId).addDestinationCard();
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         ModelFacade.getInstance().updateObservable(message);
     }
