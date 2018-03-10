@@ -60,7 +60,7 @@ public class Game {
     }
 
     public void nextTurn() {
-        currentTurn = currentTurn + 1 % gamePlayers.size();
+        currentTurn = (currentTurn + 1) % gamePlayers.size();
     }
 
     public void setFaceUpCards(List<TrainCard> faceUpCards){
