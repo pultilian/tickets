@@ -34,7 +34,7 @@ import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 
 /**
- * Created by Pultilian on 2/11/2018.
+ * Activity for the Main Screen
  */
 
 public class GameActivity extends AppCompatActivity implements IHolderGameActivity {
@@ -355,6 +355,10 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         setNumResourceCards();
     }
 
+    @Override
+    public void updatePlayerDestHand(){
+        initVariables();
+    }
 
     class DestinationAdapter extends RecyclerView.Adapter<DestinationHolder> {
         private LayoutInflater inflater;
@@ -380,7 +384,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
 
         @Override
         public int getItemCount() {
-            return 0; //cards.size(); //TODO: get cards initialized.
+            return cards.size();
         }
 
     }
