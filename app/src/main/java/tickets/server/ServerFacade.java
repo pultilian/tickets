@@ -151,7 +151,7 @@ public class ServerFacade implements IServer {
             for (Player player : playersInLobby) {
                 PlayerInfo info = new PlayerInfo();
                 info.setFaction(player.getPlayerFaction());
-                clientGame.addPlayer(player.getPlayerId(), info);
+                clientGame.addPlayer(info);
             }
             AllGames.getInstance().addGame(game);
 

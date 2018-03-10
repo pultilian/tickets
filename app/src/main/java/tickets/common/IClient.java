@@ -19,7 +19,8 @@ public interface IClient {
     public void endCurrentTurn();
     public void addChatMessage(String message);
     public void addToGameHistory(String message);
-    public void addPlayerTrainCard(String playerID);
-    public void givePlayerTrainCard(TrainCard card);
-    public void givePlayerDestinationCards(ChoiceDestinationCards cards);
+    public void addPlayerTrainCard();
+    public void addPlayerPoints(int points);
+    public void removePlayerShips(int numShips);
+    public void addPlayerDestinationCard();
 }

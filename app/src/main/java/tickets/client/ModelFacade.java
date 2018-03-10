@@ -225,18 +225,6 @@ public class ModelFacade implements IClient {
         updateObservable(update);
     }
 
-    public void givePlayerTrainCard(TrainCard card) {
-        localPlayer.addTrainCardToHand(card);
-        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
-        updateObservable(update);
-    }
-
-    public void givePlayerDestinationCards(ChoiceDestinationCards cards) {
-        localPlayer.setDestinationCardOptions(cards);
-        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
-        updateObservable(update);
-    }
-
 //-------------------------------------------------
 //		IClient interface methods
 //
@@ -273,31 +261,31 @@ public class ModelFacade implements IClient {
 	}
 
 // Update public info
-	public void addPlayerTrainCard(String playerId) {
-		currentGame.getPlayerInfo(playerId).addTrainCard();
+	public void addPlayerTrainCard() {
+		currentGame.getActivePlayerInfo().addTrainCard();
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         ModelFacade.getInstance().updateObservable(message);
 	}
 
-    public void addPlayerPoints(String playerId, int points) {
-        if (playerId.equals(localPlayer.getPlayerId())) {
+    public void addPlayerPoints(int points) {
+        if (localPlayer.getPlayerFaction().getName().equals(currentGame.getActivePlayerInfo().getFaction().getName())) {
             localPlayer.getInfo().addToScore(points);
         }
-	    currentGame.getPlayerInfo(playerId).addToScore(points);
+	    currentGame.getActivePlayerInfo().addToScore(points);
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         ModelFacade.getInstance().updateObservable(message);
     }
 
-    public void removePlayerShips(String playerId, int numShips) {
-	    if (playerId.equals(localPlayer.getPlayerId())) {
+    public void removePlayerShips(int numShips) {
+	    if (localPlayer.getPlayerFaction().getName().equals(currentGame.getActivePlayerInfo().getFaction().getName())) {
 	        localPlayer.getInfo().useShips(numShips);
         }
-	    currentGame.getPlayerInfo(playerId).useShips(numShips);
+	    currentGame.getActivePlayerInfo().useShips(numShips);
 	    ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
     }
 
-    public void addPlayerDestinationCard(String playerId){
-        currentGame.getPlayerInfo(playerId).addDestinationCard();
+    public void addPlayerDestinationCard(){
+        currentGame.getActivePlayerInfo().addDestinationCard();
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         ModelFacade.getInstance().updateObservable(message);
     }
