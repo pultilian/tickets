@@ -142,30 +142,40 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void addPlayerTrainCard(String playerId) {
+    public void addPlayerTrainCard() {
         Command command = new Command("addPlayerTrainCard",
-                new String[]{String.class.getName()},
-                new Object[]{playerId});
+                new String[0],
+                new Object[0]);
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
 
     @Override
-    public void givePlayerTrainCard(TrainCard card) {
-        Command command = new Command("givePlayerTrainCard",
-                new String[]{TrainCard.class.getName()},
-                new Object[]{card});
+    public void addPlayerPoints(int points) {
+        Command command = new Command("addPlayerPoints",
+                new String[]{Integer.class.getName()},
+                new Object[]{points});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
 
     @Override
-    public void givePlayerDestinationCards(ChoiceDestinationCards cards) {
-        Command command = new Command("givePlayerDestinationCards",
-                new String[]{ChoiceDestinationCards.class.getName()},
-                new Object[]{cards});
+    public void removePlayerShips(int numShips) {
+        Command command = new Command("removePlayerShips",
+                new String[]{Integer.class.getName()},
+                new Object[]{numShips});
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
+
+    @Override
+    public void addPlayerDestinationCard() {
+        Command command = new Command("addPlayerDestinationCard",
+                new String[0],
+                new Object[0]);
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;

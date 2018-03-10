@@ -10,14 +10,16 @@ public class Game {
     private String gameId;
     private List<String> chat;
     private List<String> gameHistory;
-    private Map<String, PlayerInfo> gamePlayers;
+    private int currentTurn;
+    private List<PlayerInfo> gamePlayers;
     private List<TrainCard> faceUpCards;
 
     public Game(String gameId){
         this.gameId = gameId;
         chat = new ArrayList<>();
         gameHistory = new ArrayList<>();
-        gamePlayers = new HashMap<>();
+        gamePlayers = new ArrayList<>();
+        currentTurn = 0;
         faceUpCards = new ArrayList<>();
     }
 
@@ -36,18 +38,29 @@ public class Game {
     public void addToChat(String message){
         chat.add(message);
     }
-    public void addToHistory(String message){ gameHistory.add(message); }
 
-    public void addPlayer(String playerId, PlayerInfo info) {
-        gamePlayers.put(playerId, info);
+    public void addToHistory(String message){
+        gameHistory.add(message);
     }
 
-    public PlayerInfo getPlayerInfo(String playerId) {
-        return gamePlayers.get(playerId);
+    public void addPlayer(PlayerInfo info) {
+        gamePlayers.add(info);
     }
 
-    public Map<String, PlayerInfo> getAllPlayers() {
+    public PlayerInfo getActivePlayerInfo() {
+        return gamePlayers.get(currentTurn);
+    }
+
+    public List<PlayerInfo> getAllPlayers() {
         return gamePlayers;
+    }
+
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public void nextTurn() {
+        currentTurn = currentTurn + 1 % gamePlayers.size();
     }
 
     public void setFaceUpCards(List<TrainCard> faceUpCards){
