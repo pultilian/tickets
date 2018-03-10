@@ -57,14 +57,19 @@
 
         <EditText
             android:id="@+id/chat_add"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="match_parent"
             android:textAlignment="viewStart"
             android:textSize="14dp" />
 
         <Button
             android:id="@+id/send_button"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_row="0"
+            android:text="Send" />
+
     </GridLayout>
 
 </android.support.constraint.ConstraintLayout>
