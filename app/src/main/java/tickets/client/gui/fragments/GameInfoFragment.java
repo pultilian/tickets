@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Iterator;
 import java.util.List;
 
 import tickets.client.gui.activities.R;
@@ -85,7 +86,7 @@ public class GameInfoFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 0; //cards.size(); //TODO: get cards initialized.
+            return playerInfoList.size(); //cards.size(); //TODO: get cards initialized.
         }
 
     }
@@ -111,11 +112,11 @@ public class GameInfoFragment extends Fragment {
 
         // Assigns values in the layout.
         void bind(PlayerInfo item) {
-            name.setText(item.getName());
-            points.setText(item.getScore());
-            shipsLeft.setText(item.getShipsLeft());
-            resourcesCount.setText(item.getTrainCardCount());
-            destinationCount.setText(item.getDestinationCardCount());
+            name.setText(item.getFaction().getName());
+            points.setText("Points " + Integer.toString(item.getScore()));
+            shipsLeft.setText("Ships Left " + Integer.toString(item.getShipsLeft()));
+            resourcesCount.setText("Resources " + Integer.toString(item.getTrainCardCount()));
+            destinationCount.setText("Destination " + Integer.toString(item.getDestinationCardCount()));
             switch (item.getFaction().getName().toLowerCase()){
                 case "altian":
                     cardImage.setImageResource(R.drawable.card_altian);
