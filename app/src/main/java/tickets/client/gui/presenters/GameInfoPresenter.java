@@ -17,6 +17,6 @@ public class GameInfoPresenter implements IGameInfoPresenter{
         return ModelFacade.getInstance().getGame().getGameHistory();
     }
     public List<PlayerInfo> getPlayerInfo(){
-        return new ArrayList<PlayerInfo>(ModelFacade.getInstance().getGame().getAllPlayers().values());
+        return new ArrayList<PlayerInfo>(ModelFacade.getInstance().getGame().getAllPlayers());
     }
 }

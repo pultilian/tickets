@@ -95,7 +95,7 @@ public class ServerGame extends Game {
 		return null;
 	}
 
-	private void nextTurn() {
+	public void nextTurn() {
 		currentPlayerIndex++;
 		if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
 		getCurrentPlayer().startTurn();

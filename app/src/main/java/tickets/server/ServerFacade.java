@@ -283,7 +283,7 @@ public class ServerFacade implements IServer {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
                 if (!client.getAuthToken().equals(authToken))
-                    client.addPlayerTrainCard(game.getPlayerID(authToken));
+                    client.addPlayerTrainCard();
             }
             return new TrainCardResponse(drawnCard);
         }
@@ -310,7 +310,7 @@ public class ServerFacade implements IServer {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
                 if (!client.getAuthToken().equals(authToken))
-                    client.addPlayerTrainCard(game.getPlayerID(authToken));
+                    client.addPlayerTrainCard();
             }
 
             return new TrainCardResponse(drawnCard);
