@@ -13,6 +13,10 @@ public class TrainCardArea {
 	private List<TrainCard> drawDeck;
 	private List<TrainCard> discardDeck;
 
+	public TrainCard[] getFaceUpCards() {
+		return faceUpCards;
+	}
+
 	private TrainCard[] faceUpCards;
 
 	private Random rand;

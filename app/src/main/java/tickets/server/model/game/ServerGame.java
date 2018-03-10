@@ -121,6 +121,9 @@ public class ServerGame extends Game {
 		return trainCardArea.discardCard(discard);
 	}
 
+	public TrainCardArea getTrainCardArea(){
+		return this.trainCardArea;
+	}
 	public boolean discardDestinationCard(DestinationCard discard) {
 		return destinationDeck.discardCard(discard);
 	}
