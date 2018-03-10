@@ -98,7 +98,7 @@ public class AsyncManager {
 
     public void discardDestinationCard(DestinationCard discard, String authToken) {
         DiscardDestinationCardAsync task = new DiscardDestinationCardAsync(root);
-        task.execute(authToken);
+        task.execute(discard, authToken);
     }
 
     public void endTurn(String authToken) {
