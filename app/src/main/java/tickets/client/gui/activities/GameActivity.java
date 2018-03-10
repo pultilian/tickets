@@ -362,6 +362,10 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         }
     }
 
+    /** Make Transition
+     * make a transition to another activity upon request of the server.
+     * @param toActivity
+     */
     @Override
     public void makeTransition(IHolderActivity.Transition toActivity) {
         //what transitions should be made?
@@ -369,34 +373,54 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         return;
     }
 
+    /** ToastMessage
+     * displays a toast upon request from the server.
+     * @param message
+     */
     @Override
     public void toastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         return;
     }
 
+    /** ToastException
+     * throws an exception from the server in the form of a toast
+     * @param e
+     */
     @Override
     public void toastException(Exception e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         return;
     }
 
+    /** CheckUpdate
+     * it is here for the next phase.
+     */
     @Override
     public void checkUpdate() {
         //do nothing?
         return;
     }
 
+    /** updateFaceUpCards
+     * updates the face up cards upon request from the server. Attached to Observer
+     */
     @Override
     public void updateFaceUpCards(){
         setFaceUpCards();
     }
 
+    /** updatePlayerTrainHand
+     * updates Players train cards upon request from the server.
+     */
     @Override
     public void updatePlayerTrainHand(){
         setNumResourceCards();
     }
 
+    /** updatePlayerDestHand
+     * updates Player destination cards upon request from the server.
+     */
     @Override
     public void updatePlayerDestHand(){
         initVariables();

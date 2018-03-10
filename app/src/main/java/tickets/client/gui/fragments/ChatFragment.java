@@ -35,6 +35,13 @@ public class ChatFragment extends Fragment {
     private ChatAdapter chatAdapter;
     private GameChatPresenter presenter;
 
+    public void updateRecyclerView(){
+        chatManager = new LinearLayoutManager(this.getContext());
+        chatScreen.setLayoutManager(chatManager);
+        chatAdapter = new ChatAdapter(this.getContext(), presenter.getChatHistory());
+        chatScreen.setAdapter(chatAdapter);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
