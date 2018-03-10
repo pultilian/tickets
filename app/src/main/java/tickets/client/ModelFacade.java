@@ -202,6 +202,13 @@ public class ModelFacade implements IClient {
     }
 
     public void discardDestinationCard(DestinationCard discard) {
+		for(DestinationCard card : localPlayer.getDestinationCardOptions()){
+		    if (card.getFirstCity().equals(discard.getFirstCity()) &&
+                discard.getSecondCity().equals(discard.getSecondCity())){
+		        localPlayer.addDestinationCardToHand(card);
+            }
+        }
+        localPlayer.setDestinationCardOptions(null);
         asyncManager.discardDestinationCard(discard, getAuthToken());
     }
 
