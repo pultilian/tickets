@@ -94,6 +94,7 @@ public class GamePresenter implements IGamePresenter {
                 holder.updateFaceUpCards();
                 break;
             case playerDestHandUpdated:
+                holder.updatePlayerDestHand();
                 break;
             case destCardOptionsUpdated:
                 break;
@@ -118,8 +119,7 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public List<DestinationCard> getPlayerDestinations() {
-        ModelFacade.getInstance().getLocalPlayer().getHandDestinationCards();
-        return null;
+        return ModelFacade.getInstance().getLocalPlayer().getHandDestinationCards().getAllCards();
     }
 
     public void discardDestination(DestinationCard discard) {
