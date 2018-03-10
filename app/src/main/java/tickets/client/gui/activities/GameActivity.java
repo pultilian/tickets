@@ -38,6 +38,7 @@ import tickets.common.TrainCard;
  */
 
 public class GameActivity extends AppCompatActivity implements IHolderGameActivity {
+
     private ImageView faceUpCard1;
     private ImageView faceUpCard2;
     private ImageView faceUpCard3;
@@ -242,7 +243,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
     public void setFaceUpCards(){
         ImageView[] faceUpCard = {faceUpCard1,faceUpCard2,faceUpCard3,faceUpCard4,faceUpCard5};
         List<TrainCard> cards = presenter.getFaceUpCards();
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < cards.size(); i++){
             switch (cards.get(i).getColor().toString().toLowerCase()){
                 case "blue":
                     faceUpCard[i].setImageResource(R.drawable.resource_blue);
@@ -294,6 +295,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         updatePlayerTrainHand();
         updatePoints();
         updateShips();
+        updateFaceUpCards();
         setClickListeners();
 
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -120,9 +121,17 @@ public class DestinationFragment extends Fragment {
                 }
                 if(check == 2){
                     presenter.chooseDestinationCards(destinationCards.get(cardToDiscard)); // TODO: get the index of the card to discard.
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    Fragment fragment = new MapFragment();
+                    fragmentManager.beginTransaction()
+                            .add(R.id.fragment_container, fragment)
+                            .commit();
                 } else if (check == 3){
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    Fragment fragment = new MapFragment();
+                    fragmentManager.beginTransaction()
+                            .add(R.id.fragment_container, fragment)
+                            .commit();
                 } else {
                     Toast.makeText(getActivity(),"You must click at least 2",Toast.LENGTH_SHORT).show();
                 }
