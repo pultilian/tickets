@@ -51,7 +51,7 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
         startGameButton = this.findViewById(R.id.start_game_button);
         leaveGame = this.findViewById(R.id.leave_game);
 
-        startGameButton.setEnabled(false);
+        startGameButton.setEnabled(true);
 
         lobbyPlayerList = findViewById(R.id.lobby_player_list);
         updateWindow = findViewById(R.id.lobby_update_list);
@@ -171,7 +171,7 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
             inflater = LayoutInflater.from(context);
             players = setPlayers;
 
-            if(players.size() > 1 && players.size() < 6){
+            if(players.size() >= 1 && players.size() < 6){
                 startGameButton.setEnabled(true);
             } else {
                 startGameButton.setEnabled(false);

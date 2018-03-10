@@ -38,6 +38,7 @@ import tickets.common.TrainCard;
  */
 
 public class GameActivity extends AppCompatActivity implements IHolderGameActivity {
+
     private ImageView faceUpCard1;
     private ImageView faceUpCard2;
     private ImageView faceUpCard3;
