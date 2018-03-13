@@ -4,18 +4,17 @@ package tickets.client.async;
 import android.os.AsyncTask;
 
 import tickets.common.response.LogoutResponse;
-import tickets.common.IMessage;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.client.ServerProxy;
 
 
 public class LogoutAsync extends AsyncTask<String, Void, LogoutResponse> {
-	ModelFacade modelRoot;
+	ClientFacade modelRoot;
 
-	public LogoutAsync(ModelFacade root) {
+	public LogoutAsync(ClientFacade root) {
 		modelRoot = root;
 	}
 

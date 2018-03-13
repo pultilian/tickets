@@ -1,15 +1,14 @@
 
 package tickets.client.gui.presenters;
 
+import tickets.client.async.AsyncManager;
 import tickets.common.IMessage;
-import tickets.common.IObserver;
 import tickets.common.IObservable;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 import tickets.common.UserData;
 
-import tickets.client.ModelFacade;
-import tickets.client.gui.presenters.IHolderActivity;
+import tickets.client.ClientFacade;
 
 
 public class LoginPresenter implements ILoginPresenter {
@@ -18,7 +17,7 @@ public class LoginPresenter implements ILoginPresenter {
 
     public LoginPresenter(IHolderActivity setHolder) {
         holder = setHolder;
-        ModelFacade.getInstance().linkObserver(this);
+        ClientFacade.getInstance().linkObserver(this);
     }
 
 //----------------------------------------------------------------------------
@@ -31,7 +30,7 @@ public class LoginPresenter implements ILoginPresenter {
         }
         else {
             System.out.println("presenter calling model facade");
-            ModelFacade.getInstance().register(registerData);
+            AsyncManager.getInstance().register(registerData);
         }
         return;
     }
@@ -42,7 +41,7 @@ public class LoginPresenter implements ILoginPresenter {
             holder.toastException(new Exception("invalid username or password"));
         }
         else {
-            ModelFacade.getInstance().login(loginData);
+            AsyncManager.getInstance().login(loginData);
         }
         return;
     }

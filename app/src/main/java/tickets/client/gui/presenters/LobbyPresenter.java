@@ -1,14 +1,14 @@
 
 package tickets.client.gui.presenters;
 
+import tickets.client.async.AsyncManager;
 import tickets.common.Lobby;
 import tickets.common.IMessage;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
-import tickets.common.IObserver;
 import tickets.common.IObservable;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 
 
 public class LobbyPresenter implements ILobbyPresenter {
@@ -17,7 +17,7 @@ public class LobbyPresenter implements ILobbyPresenter {
 
     public LobbyPresenter(IHolderActivity setHolder) {
         holder = setHolder;
-        ModelFacade.getInstance().linkObserver(this);
+        ClientFacade.getInstance().linkObserver(this);
     }
 
 //----------------------------------------------------------------------------
@@ -25,18 +25,18 @@ public class LobbyPresenter implements ILobbyPresenter {
 
     @Override
     public Lobby getLobby() {
-        return ModelFacade.getInstance().getLobby();
+        return ClientFacade.getInstance().getLobby();
     }
 
     @Override
     public void startGame(String lobbyID) {
-        ModelFacade.getInstance().startGame(lobbyID);
+        AsyncManager.getInstance().startGame(lobbyID);
         return;
     }
 
     @Override
     public void leaveLobby(String lobbyID) {
-        ModelFacade.getInstance().leaveLobby(lobbyID);
+        AsyncManager.getInstance().leaveLobby(lobbyID);
         return;
     }
 

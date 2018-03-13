@@ -1,60 +1,45 @@
 package tickets.client;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
-import tickets.common.DestinationCard;
 import tickets.common.Game;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
-import tickets.common.Route;
-import tickets.common.TrainCard;
 import tickets.common.UserData;
 import tickets.common.IObserver;
 import tickets.common.IMessage;
 
-import tickets.client.async.*;
 import tickets.client.model.ClientObservable;
 import tickets.client.model.LobbyManager;
 
 
-public class ModelFacade implements IClient {
+public class ClientFacade implements IClient {
 //----------------------------------------------------------------------------
 //	Singleton structure
-
-	private static ModelFacade INSTANCE = null;
-	public static ModelFacade getInstance() {
+	private static ClientFacade INSTANCE = null;
+	public static ClientFacade getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ModelFacade();
+			INSTANCE = new ClientFacade();
 		return INSTANCE;
 	}
-	private ModelFacade() {
-		asyncManager = new AsyncManager(this);
+	private ClientFacade() {
 		observable = new ClientObservable();
 		lobbyManager = new LobbyManager();
 	}
 	
 //----------------------------------------------------------------------------
 //	member variables
-
-	private AsyncManager asyncManager;
 	private ClientObservable observable;
 	private LobbyManager lobbyManager;
 	private Lobby currentLobby;
 	private UserData userData;
 	private Game currentGame;
 	private ServerPoller serverPoller = null;
-
-	public Player getLocalPlayer() {
-		return localPlayer;
-	}
-
 	private Player localPlayer;
 
 //----------------------------------------------------------------------------
@@ -70,19 +55,18 @@ public class ModelFacade implements IClient {
 		serverPoller.stopPolling();
 		serverPoller = null;
 	}
+
 //-------------------------------------------------
 //	model interface methods
 
 //Observer pattern
 	public void updateObservable(IMessage state) {
 		observable.notify(state);
-		return;
 	}
 
 //Observer pattern
 	public void linkObserver(IObserver observer) {
 		observable.linkObserver(observer);
-		return;
 	}
 
 //User Data access
@@ -109,112 +93,32 @@ public class ModelFacade implements IClient {
 
 	public void setCurrentLobby(Lobby lobby) {
 		currentLobby = lobby;
-		return;
 	}
 
 	public Lobby getLobby() {
 		return currentLobby;
 	}
 
-  public Lobby getLobby(String lobbyID) {
+    public Lobby getLobby(String lobbyID) {
   	return lobbyManager.getLobby(lobbyID);
   }
 
+    public Player getLocalPlayer() {
+        return localPlayer;
+    }
 	
 //Game data access
 	public void addGame(Game game) {
 		currentGame = game;
-		return;
 	}
 	
 	public Game getGame() {
 		return currentGame;
 	}
 
-	public void setPlayer(Player player) { localPlayer = player; }
-
-//-------------------------------------------------
-//		server interface methods
-//
-//mirror the server interface to the presenters
-//calls are made on the ServerProxy via AsyncTask objects
-
-	public void register(UserData userData) {
-		setUserData(userData);
-		System.out.println("ModelFacade calling AsyncManager");
-		asyncManager.register(userData);
-		return;
+	public void setPlayer(Player player) {
+	    localPlayer = player;
 	}
-
-	public void login(UserData userData) {
-		setUserData(userData);
-		asyncManager.login(userData);
-		return;
-	}
-
-	public void joinLobby(String lobbyID) {
-		asyncManager.joinLobby(lobbyID, getAuthToken());
-		return;
-	}
-
-	public void createLobby(Lobby lobby) {
-		asyncManager.createLobby(lobby, getAuthToken());
-		return;
-	}
-
-	public void logout() {
-		asyncManager.logout(getAuthToken());
-		return;
-	}
-
-	public void startGame(String lobbyID) {
-		asyncManager.startGame(lobbyID, getAuthToken());
-		return;
-	}
-
-	public void leaveLobby(String lobbyID) {
-		asyncManager.leaveLobby(lobbyID, getAuthToken());
-		return;
-	}
-
-//-----------------------------------------------
-//   Player in game actions
-//
-
-	public void addToChat(String message) {
-		asyncManager.addToChat(message, getAuthToken());
-	}
-
-	public void drawTrainCard() {
-        asyncManager.drawTrainCard(getAuthToken());
-    }
-
-    public void drawFaceUpCard(int position) {
-        asyncManager.drawFaceUpCard(position, getAuthToken());
-    }
-
-	public void claimRoute(Route route) {
-        asyncManager.claimRoute(route, getAuthToken());
-    }
-
-    public void drawDestinationCard() {
-        asyncManager.drawDestinationCard(getAuthToken());
-    }
-
-    public void discardDestinationCard(DestinationCard discard) {
-		for(DestinationCard card : localPlayer.getDestinationCardOptions()){
-		    if (card.getFirstCity().equals(discard.getFirstCity()) &&
-                discard.getSecondCity().equals(discard.getSecondCity())){
-		        localPlayer.addDestinationCardToHand(card);
-            }
-        }
-        localPlayer.setDestinationCardOptions(null);
-        asyncManager.discardDestinationCard(discard, getAuthToken());
-    }
-
-    public void endTurn() {
-        asyncManager.endTurn(getAuthToken());
-    }
 
     public void endCurrentTurn() {
         return;
@@ -241,15 +145,19 @@ public class ModelFacade implements IClient {
 	public void addLobbyToList(Lobby lobby) {
 		lobbyManager.addLobby(lobby);
 	}
+
 	public void removeLobbyFromList(Lobby lobby) {
 		lobbyManager.removeLobby(lobby);
 	}
+
 	public void addPlayerToLobbyInList(Lobby lobby, Player playerToAdd) {
 		lobbyManager.addPlayer(lobby, playerToAdd);
 	}
+
 	public void removePlayerFromLobbyInList(Lobby lobby, Player player) {
 		lobbyManager.removePlayer(lobby, player);
 	}
+
 	public void removePlayer(Player player) {
 		localPlayer = null;
 	}
@@ -267,11 +175,12 @@ public class ModelFacade implements IClient {
 		updateObservable(state);
 	}
 
+//-------------------------------------------------
 // Update public info
 	public void addPlayerTrainCard() {
 		currentGame.getActivePlayerInfo().addTrainCard();
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-        ModelFacade.getInstance().updateObservable(message);
+        updateObservable(message);
 	}
 
     public void addPlayerPoints(int points) {
@@ -280,7 +189,7 @@ public class ModelFacade implements IClient {
         }
 	    currentGame.getActivePlayerInfo().addToScore(points);
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-        ModelFacade.getInstance().updateObservable(message);
+        updateObservable(message);
     }
 
     public void removePlayerShips(int numShips) {
@@ -289,11 +198,12 @@ public class ModelFacade implements IClient {
         }
 	    currentGame.getActivePlayerInfo().useShips(numShips);
 	    ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+	    updateObservable(message);
     }
 
     public void addPlayerDestinationCard(){
         currentGame.getActivePlayerInfo().addDestinationCard();
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-        ModelFacade.getInstance().updateObservable(message);
+        updateObservable(message);
     }
 }

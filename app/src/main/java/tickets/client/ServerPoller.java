@@ -1,16 +1,13 @@
 package tickets.client;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import tickets.common.ClientStateChange;
 import tickets.common.Command;
 import tickets.common.IMessage;
 import tickets.common.IObserver;
 import tickets.common.IObservable;
 import tickets.common.ClientStateChange.ClientState;
-import tickets.common.Lobby;
 import tickets.common.response.ClientUpdate;
 
 
@@ -36,6 +33,8 @@ public class ServerPoller implements IObserver {
 	/** Public constructor initializes member variables
 	*/
     public ServerPoller() {
+        ClientFacade.getInstance().linkObserver(this);
+        clientState = null;
         lastCommand = null;
         timer = new Timer();
         running = false;
@@ -79,7 +78,7 @@ public class ServerPoller implements IObserver {
     private TimerTask CheckServer = new TimerTask() {
 		/** Stores token required by the server for receiving requests
 		*/
-	    String token = ModelFacade.getInstance().getAuthToken();
+	    String token = ClientFacade.getInstance().getAuthToken();
 	    
 		/** This is the regularly executed task for checking for updates from
 		 *   the server and handling those updates
@@ -98,7 +97,7 @@ public class ServerPoller implements IObserver {
                 for (Command c : updates.getCommands()) {
 					// Ensure that parameters have been decoded from json strings
                     c.decode();
-                    c.execute(ModelFacade.getInstance());
+                    c.execute(ClientFacade.getInstance());
                 }
 				// Save last command for the next request
                 lastCommand = updates.getLastCommandID();

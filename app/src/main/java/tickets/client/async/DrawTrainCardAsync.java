@@ -2,17 +2,16 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.client.ServerProxy;
 import tickets.common.ClientModelUpdate;
-import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 import tickets.common.response.TrainCardResponse;
 
 class DrawTrainCardAsync extends AsyncTask<String, Void, TrainCardResponse> {
-    ModelFacade modelRoot;
+    ClientFacade modelRoot;
 
-    public DrawTrainCardAsync(ModelFacade setRoot) {
+    public DrawTrainCardAsync(ClientFacade setRoot) {
         modelRoot = setRoot;
     }
 

@@ -2,15 +2,15 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.client.ServerProxy;
 import tickets.common.ExceptionMessage;
 import tickets.common.response.Response;
 
 class EndTurnAsync  extends AsyncTask<String, Void, Response> {
-    ModelFacade modelRoot;
+    ClientFacade modelRoot;
 
-    public EndTurnAsync(ModelFacade setRoot) {
+    public EndTurnAsync(ClientFacade setRoot) {
         modelRoot = setRoot;
     }
 

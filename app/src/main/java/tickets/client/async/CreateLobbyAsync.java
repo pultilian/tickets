@@ -3,22 +3,19 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.common.UserData;
 import tickets.common.response.JoinLobbyResponse;
 import tickets.common.Lobby;
-import tickets.common.IMessage;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
-import tickets.client.gui.presenters.ILoginPresenter;
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 
 
 class CreateLobbyAsync extends AsyncTask<Object, Void, JoinLobbyResponse> {
-	ModelFacade modelRoot;
+	ClientFacade modelRoot;
 
-	public CreateLobbyAsync(ModelFacade setRoot) {
+	public CreateLobbyAsync(ClientFacade setRoot) {
 		modelRoot = setRoot;
 	}
 

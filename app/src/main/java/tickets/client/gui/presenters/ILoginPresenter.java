@@ -6,8 +6,6 @@ import tickets.common.IMessage;
 import tickets.common.IObserver;
 import tickets.common.IObservable;
 
-import tickets.client.ModelFacade;
-
 
 public interface ILoginPresenter extends IObserver {
 

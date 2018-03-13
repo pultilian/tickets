@@ -2,9 +2,8 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.client.ServerProxy;
-import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 import tickets.common.response.AddToChatResponse;
 
@@ -13,9 +12,9 @@ import tickets.common.response.AddToChatResponse;
  */
 
 public class AddToChatAsync extends AsyncTask<String, Void, AddToChatResponse> {
-    ModelFacade modelRoot;
+    ClientFacade modelRoot;
 
-    public AddToChatAsync(ModelFacade root) {
+    public AddToChatAsync(ClientFacade root) {
         modelRoot = root;
     }
 

@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.client.ServerProxy;
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.ClientModelUpdate;
@@ -13,9 +13,9 @@ import tickets.common.ExceptionMessage;
 import tickets.common.response.DestinationCardResponse;
 
 class DrawDestinationCardAsync extends AsyncTask<String, Void, DestinationCardResponse> {
-    ModelFacade modelRoot;
+    ClientFacade modelRoot;
 
-    public DrawDestinationCardAsync(ModelFacade setRoot) {
+    public DrawDestinationCardAsync(ClientFacade setRoot) {
         modelRoot = setRoot;
     }
 

@@ -5,18 +5,17 @@ import android.os.AsyncTask;
 
 import tickets.common.UserData;
 import tickets.common.response.LoginResponse;
-import tickets.common.IMessage;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 
 
 class LoginAsync extends AsyncTask<UserData, Void, LoginResponse> {
-	ModelFacade modelRoot;
+	ClientFacade modelRoot;
 
-	public LoginAsync(ModelFacade setRoot) {
+	public LoginAsync(ClientFacade setRoot) {
 		modelRoot = setRoot;
 	}
 
