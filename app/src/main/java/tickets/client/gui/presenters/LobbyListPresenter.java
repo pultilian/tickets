@@ -1,20 +1,16 @@
 
 package tickets.client.gui.presenters;
 
-import android.view.Display;
-
 import java.util.List;
 
+import tickets.client.async.AsyncManager;
 import tickets.common.Lobby;
 import tickets.common.IMessage;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
-import tickets.common.IObserver;
 import tickets.common.IObservable;
 
-import tickets.client.*;
-import tickets.client.gui.presenters.IHolderActivity;
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 
 
 public class LobbyListPresenter implements ILobbyListPresenter {
@@ -23,7 +19,7 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 
     public LobbyListPresenter(IHolderActivity setHolder) {
         holder = setHolder;
-        ModelFacade.getInstance().linkObserver(this);
+        ClientFacade.getInstance().linkObserver(this);
     }
 
 //----------------------------------------------------------------------------
@@ -31,26 +27,26 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 
     @Override
     public List<Lobby> getLobbyList() {
-        ModelFacade.getInstance().startServerPoller();
-        return ModelFacade.getInstance().getLobbyList();
+        ClientFacade.getInstance().startServerPoller();
+        return ClientFacade.getInstance().getLobbyList();
     }
 
     @Override
     public void createLobby(Lobby lobby) {
-        ModelFacade.getInstance().createLobby(lobby);
+        AsyncManager.getInstance().createLobby(lobby);
         return;
     }
 
     @Override
     public void joinLobby(String id) {
-        ModelFacade.getInstance().joinLobby(id);
+        AsyncManager.getInstance().joinLobby(id);
         return;
     }
 
     @Override
     public void logout() {
-        ModelFacade.getInstance().stopServerPoller();
-        ModelFacade.getInstance().logout();
+        ClientFacade.getInstance().stopServerPoller();
+        AsyncManager.getInstance().logout();
         return;
     }
 

@@ -2,7 +2,7 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.client.ServerProxy;
 import tickets.common.DestinationCard;
 import tickets.common.ExceptionMessage;
@@ -10,9 +10,9 @@ import tickets.common.response.DestinationCardResponse;
 import tickets.common.response.Response;
 
 class DiscardDestinationCardAsync extends AsyncTask<Object, Void, Response> {
-    ModelFacade modelRoot;
+    ClientFacade modelRoot;
 
-    public DiscardDestinationCardAsync(ModelFacade setRoot) {
+    public DiscardDestinationCardAsync(ClientFacade setRoot) {
         modelRoot = setRoot;
     }
 

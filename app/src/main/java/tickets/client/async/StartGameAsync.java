@@ -6,14 +6,14 @@ import android.os.AsyncTask;
 import tickets.common.ExceptionMessage;
 
 import tickets.client.ServerProxy;
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.common.response.StartGameResponse;
 
 
 class StartGameAsync extends AsyncTask<String, Void, StartGameResponse> {
-    ModelFacade modelRoot;
+    ClientFacade modelRoot;
 
-    public StartGameAsync(ModelFacade root) {
+    public StartGameAsync(ClientFacade root) {
         modelRoot = root;
     }
 

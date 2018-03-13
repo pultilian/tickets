@@ -3,16 +3,16 @@ package tickets.client.gui.presenters;
 
 import java.util.List;
 
+import tickets.client.async.AsyncManager;
 import tickets.common.ClientModelUpdate;
 import tickets.common.DestinationCard;
 import tickets.common.HandTrainCard;
 import tickets.common.IMessage;
-import tickets.common.IObserver;
 import tickets.common.IObservable;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.common.Player;
 import tickets.common.TrainCard;
 
@@ -23,7 +23,7 @@ public class GamePresenter implements IGamePresenter {
 
     public GamePresenter(IHolderGameActivity setHolder) {
         holder = setHolder;
-        ModelFacade.getInstance().linkObserver(this);
+        ClientFacade.getInstance().linkObserver(this);
     }
 
     public void takeTurn() {
@@ -31,27 +31,27 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public void addToChat(String message) {
-        ModelFacade.getInstance().addToChat(message);
+        AsyncManager.getInstance().addToChat(message);
     }
 
     public List<TrainCard> getFaceUpCards(){
-      return ModelFacade.getInstance().getGame().getFaceUpCards();
+      return ClientFacade.getInstance().getGame().getFaceUpCards();
     }
 
     public Player getCurrentPlayer(){
-        return ModelFacade.getInstance().getLocalPlayer();
+        return ClientFacade.getInstance().getLocalPlayer();
     }
 
     public void drawTrainCard() {
-        ModelFacade.getInstance().drawTrainCard();
+        AsyncManager.getInstance().drawTrainCard();
     }
 
     public void drawFaceUpTrainCard(int position) {
-        ModelFacade.getInstance().drawFaceUpCard(position);
+        AsyncManager.getInstance().drawFaceUpCard(position);
     }
 
     public void drawDestinationCard() {
-        ModelFacade.getInstance().drawDestinationCard();
+        AsyncManager.getInstance().drawDestinationCard();
     }
 
     public void claimPath() {
@@ -59,7 +59,7 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public HandTrainCard getPlayerHand() {
-        return ModelFacade.getInstance().getLocalPlayer().getHandTrainCards();
+        return ClientFacade.getInstance().getLocalPlayer().getHandTrainCards();
     }
 
     public void chooseDestinationCards(DestinationCard toDiscard) {
@@ -119,7 +119,7 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public List<DestinationCard> getPlayerDestinations() {
-        return ModelFacade.getInstance().getLocalPlayer().getHandDestinationCards().getAllCards();
+        return ClientFacade.getInstance().getLocalPlayer().getHandDestinationCards().getAllCards();
     }
 
     public void discardDestination(DestinationCard discard) {

@@ -1,16 +1,13 @@
 package tickets.client;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import tickets.common.ClientStateChange;
 import tickets.common.Command;
 import tickets.common.IMessage;
 import tickets.common.IObserver;
 import tickets.common.IObservable;
 import tickets.common.ClientStateChange.ClientState;
-import tickets.common.Lobby;
 import tickets.common.response.ClientUpdate;
 
 
@@ -25,7 +22,7 @@ public class ServerPoller implements IObserver {
     private boolean running;
 
     public ServerPoller() {
-        ModelFacade.getInstance().linkObserver(this);
+        ClientFacade.getInstance().linkObserver(this);
         clientState = null;
         lastCommand = null;
         timer = new Timer();
@@ -46,7 +43,7 @@ public class ServerPoller implements IObserver {
     }
     
     private TimerTask CheckServer = new TimerTask() {
-	    String token = ModelFacade.getInstance().getAuthToken();
+	    String token = ClientFacade.getInstance().getAuthToken();
 	    
     	@Override
     	public void run() {
@@ -56,7 +53,7 @@ public class ServerPoller implements IObserver {
                     return;
                 for (Command c : updates.getCommands()) {
                     c.decode();
-                    c.execute(ModelFacade.getInstance());
+                    c.execute(ClientFacade.getInstance());
                 }
                 lastCommand = updates.getLastCommandID();
             }

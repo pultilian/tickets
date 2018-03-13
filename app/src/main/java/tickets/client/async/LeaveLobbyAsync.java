@@ -4,18 +4,17 @@ package tickets.client.async;
 import android.os.AsyncTask;
 
 import tickets.common.response.LeaveLobbyResponse;
-import tickets.common.IMessage;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.client.ServerProxy;
 
 
 public class LeaveLobbyAsync extends AsyncTask<String, Void, LeaveLobbyResponse> {
-	ModelFacade modelRoot;
+	ClientFacade modelRoot;
 
-	public LeaveLobbyAsync(ModelFacade setRoot) {
+	public LeaveLobbyAsync(ClientFacade setRoot) {
 		modelRoot = setRoot;
 	}
 

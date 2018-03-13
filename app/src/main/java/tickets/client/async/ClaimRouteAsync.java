@@ -2,17 +2,16 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
 import tickets.client.ServerProxy;
 import tickets.common.ExceptionMessage;
 import tickets.common.Route;
 import tickets.common.response.Response;
-import tickets.common.response.TrainCardResponse;
 
 class ClaimRouteAsync extends AsyncTask<Object, Void, Response> {
-    ModelFacade modelRoot;
+    ClientFacade modelRoot;
 
-    public ClaimRouteAsync(ModelFacade setRoot) {
+    public ClaimRouteAsync(ClientFacade setRoot) {
         modelRoot = setRoot;
     }
 
