@@ -6,19 +6,31 @@ import java.util.List;
 import tickets.client.async.AsyncManager;
 import tickets.common.Lobby;
 import tickets.common.IMessage;
+import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 import tickets.common.IObservable;
 
 import tickets.client.ClientFacade;
+import tickets.client.ITaskManager;
+import tickets.client.TaskManager;
 
 
 public class LobbyListPresenter implements ILobbyListPresenter {
     private IHolderActivity holder;
     private IObservable observable;
+    private ITaskManager manager;
+
 
     public LobbyListPresenter(IHolderActivity setHolder) {
         holder = setHolder;
+        manager = AsyncManager.getInstance();
+        ClientFacade.getInstance().linkObserver(this);
+    }
+    
+    public LobbyListPresenter() {
+    	holder = null;
+        manager = TaskManager.getInstance();
         ClientFacade.getInstance().linkObserver(this);
     }
 
@@ -33,20 +45,20 @@ public class LobbyListPresenter implements ILobbyListPresenter {
 
     @Override
     public void createLobby(Lobby lobby) {
-        AsyncManager.getInstance().createLobby(lobby);
+        manager.createLobby(lobby);
         return;
     }
 
     @Override
     public void joinLobby(String id) {
-        AsyncManager.getInstance().joinLobby(id);
+        manager.joinLobby(id);
         return;
     }
 
     @Override
     public void logout() {
         ClientFacade.getInstance().stopServerPoller();
-        AsyncManager.getInstance().logout();
+        manager.logout();
         return;
     }
 
@@ -57,7 +69,11 @@ public class LobbyListPresenter implements ILobbyListPresenter {
             ClientStateChange.ClientState flag;
             flag = (ClientStateChange.ClientState) state.getMessage();
             checkClientStateFlag(flag);
-        } else if (state.getClass() == ExceptionMessage.class) {
+        } else if (state.getClass() == ClientModelUpdate.class) {
+        	ClientModelUpdate.ModelUpdate flag;
+            flag = (ClientModelUpdate.ModelUpdate) state.getMessage();
+            checkClientUpdateFlag(flag);
+    	} else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
             holder.toastException(e);
         } else {
@@ -102,5 +118,15 @@ public class LobbyListPresenter implements ILobbyListPresenter {
                 break;
         }
         return;
+    }
+    
+    private void checkClientUpdateFlag(ClientModelUpdate.ModelUpdate flag) {
+    	switch(flag) {
+    		case lobbyAdded:
+    			System.out.println("New lobby added");
+    			break;
+    		default:
+    			break;
+    	}
     }
 }

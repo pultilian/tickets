@@ -35,31 +35,35 @@ public class LoginPresenter implements ILoginPresenter {
 //	interface methods
 
     @Override
-    public void register(UserData registerData) {
+    public boolean register(UserData registerData) {
         if (!registerData.checkValues()) {
         	if (holder != null)
         		holder.toastException(new Exception("Invalid username or password"));
-        	else
+        	else {
         		System.out.println("Invalid username or password");
+        		return false;
+        	}
         }
         else {
             manager.register(registerData);
         }
-        return;
+        return true;
     }
 
     @Override
-    public void login(UserData loginData) {
+    public boolean login(UserData loginData) {
         if (!loginData.checkValues()) {
         	if (holder != null)
         		holder.toastException(new Exception("Invalid username or password"));
-        	else
+        	else {
         		System.out.println("Invalid username or password");
+        		return false;
+        	}
         }
         else {
             manager.login(loginData);
         }
-        return;
+        return true;
     }
 
     @Override

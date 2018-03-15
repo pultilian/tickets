@@ -144,6 +144,8 @@ public class ClientFacade implements IClient {
 //	by the poller from the Server.
 	public void addLobbyToList(Lobby lobby) {
 		lobbyManager.addLobby(lobby);
+		ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.lobbyAdded);
+        updateObservable(update);
 	}
 
 	public void removeLobbyFromList(Lobby lobby) {

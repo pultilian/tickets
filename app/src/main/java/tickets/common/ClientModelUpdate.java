@@ -11,6 +11,7 @@ public class ClientModelUpdate implements IMessage {
         playerInfoUpdated,
         chatUpdated,
         mapUpdated,
+        lobbyAdded,
     }
 
     private ModelUpdate update;

@@ -9,8 +9,8 @@ import tickets.common.IObservable;
 
 public interface ILoginPresenter extends IObserver {
 
-	public void register(UserData registerData);
-	public void login(UserData loginData);
+	public boolean register(UserData registerData);
+	public boolean login(UserData loginData);
 
 	// from IObserver
 	public void notify(IMessage state);
