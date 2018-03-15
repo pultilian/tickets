@@ -35,6 +35,14 @@ public class TrainCardArea {
 		Collections.shuffle(drawDeck, rand);
 	}
 
+	public TrainCard getTopCard() {
+		return drawDeck.get(0);
+	}
+
+	public TrainCard getFaceUpCard(int position) {
+		return faceUpCards[position - 1];
+	}
+
 	public TrainCard drawCard() {
 		if (drawDeck.isEmpty() && discardDeck.isEmpty()) {
 			return null;

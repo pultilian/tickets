@@ -1,6 +1,7 @@
 
 package tickets.server.model.game;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,22 +13,19 @@ import tickets.common.DestinationCard;
 import tickets.common.Player;
 import tickets.common.Route;
 
-import tickets.server.model.game.ServerPlayer;
-import tickets.server.model.game.TrainCardArea;
-import tickets.server.model.game.DestinationDeck;
-
 public class ServerGame extends Game {
-	//inherited:
-	// public Game(String gameId);
-	// public String getGameId();
-	// public List<String> getChat();
-	// public List<String> getGameHistory();
-	// public void addToChat(String message);
-	// public void addToHistory(String message);
 
-//--------------
+	/*Inherited from Game:
+	public Game(String gameId);
+	public String getGameId();
+	public List<String> getChat();
+	public List<String> getGameHistory();
+	public void addToChat(String message);
+	public void addToHistory(String message);*/
 
-		//Players are stored in turn order - only index of the current player is stored separately
+//--------------------------------------------------------------------------------------------------
+
+    //Players are stored in turn order - only index of the current player is stored separately
 	private List<ServerPlayer> players;
 	private int currentPlayerIndex;
 
@@ -47,7 +45,7 @@ public class ServerGame extends Game {
 		this.players = new ArrayList<>();
 		for (Player p : playersFromLobby) {
 			//move players into the game
-			players.add(new ServerPlayer(p, this));
+			players.add(new ServerPlayer(p));
 		}
 
 		List<TrainCard> allTrainCards = initializeTrainCards();
@@ -55,6 +53,17 @@ public class ServerGame extends Game {
 		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
 		players.get(0).startTurn();
 	}
+
+	public void initializeAllPlayers() {
+	    for (ServerPlayer player : players) {
+            List<TrainCard> hand = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                hand.add(trainCardArea.drawCard());
+            }
+            List<DestinationCard> destinations = destinationDeck.drawCards();
+            player.initPlayer(hand, destinations);
+        }
+    }
 
 	private List<TrainCard> initializeTrainCards() {
 		List<TrainCard> allTrainCards = new ArrayList<>();
@@ -76,156 +85,84 @@ public class ServerGame extends Game {
 	}
 
 	//----------------------------------------------------------------------------------------------
+    // *** GETTERS ***
 
-	public ServerPlayer getCurrentPlayer() { return players.get(currentPlayerIndex); }
+    public List<TrainCard> getFaceUpCards() {
+	    return new ArrayList<>(Arrays.asList(trainCardArea.getFaceUpCards()));
+    }
 
-	public String getPlayerID(String authToken) {
-		for (ServerPlayer player : players) {
-			if (player.getAssociatedAuthToken().equals(authToken)) return player.getPlayerId();
-		}
-		return null;
-	}
-
-	public ServerPlayer getServerPlayer(String authToken) {
-		for (ServerPlayer player : players) {
-			if (player.getAssociatedAuthToken().equals(authToken)) {
-				return player;
-			}
-		}
-		return null;
-	}
-
-	public void nextTurn() {
-		currentPlayerIndex++;
-		if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
-		getCurrentPlayer().startTurn();
-	}
-
-	public TrainCard drawTrainCard() {
-		return trainCardArea.drawCard();
-	}
-
-	public TrainCard drawFaceUpCard(int position) {
-		return trainCardArea.drawFaceUpCard(position);
-	}
-
-	public boolean isFaceUpCardWild(int position) {
-		return trainCardArea.isFaceUpCardWild(position);
-	}
-
-	public DestinationCard drawDestinationCard() {
-		return destinationDeck.drawCard();
-	}
-
-	public boolean discardTrainCard(TrainCard discard) {
-		return trainCardArea.discardCard(discard);
-	}
-
-	public TrainCardArea getTrainCardArea(){
-		return this.trainCardArea;
-	}
-	public boolean discardDestinationCard(DestinationCard discard) {
-		return destinationDeck.discardCard(discard);
-	}
+    public ServerPlayer getServerPlayer(String authToken) {
+        for (ServerPlayer player : players) {
+            if (player.getAssociatedAuthToken().equals(authToken)) {
+                return player;
+            }
+        }
+        return null;
+    }
 
 	//----------------------------------------------------------------------------------------------
-	//	nested abstract class provides an interface for ServerPlayer and
-	//	ServerGame to ineract with each other without circular dependencies
+    // *** PLAYER ACTIONS ***
 
-	abstract class IServerPlayer extends Player {
-			//inherited:
-			// public Player(String playerId, String associatedAuthToken);
-			// public String getPlayerId();
-			// public String getAssociatedAuthToken();
-			// public Faction getPlayerFaction();
-			// public void setPlayerFaction(Faction playerFaction);
-			// public HandTrainCard getTrainCards();
-			// public void addTrainCardToHand(TrainCard card);
-	    // public void addDestinationCardToHand(DestinationCard card);
+	public TrainCard drawTrainCard(String authToken) throws Exception {
+	    ServerPlayer player = getServerPlayer(authToken);
+	    if (player == null) throw new Exception("You are not a member of this game!");
 
-		IServerPlayer(Player copy) {
-			super(copy);
-		}
+		TrainCard card = trainCardArea.getTopCard();
+		if (card == null) throw new Exception("There are no cards left in the deck.");
 
-		IServerPlayer(String playerID, String authToken) {
-			super(playerID, authToken);
-		}
-
-		//   The player class already has this method
-		// private void scorePoints(int points) {
-		// 	int currentScore = this.getScore();
-		// 	this.setScore(currentScore + points);
-		// 	return;
-		// }
-
-		//-------------------------------------------------------------------
-		//	Methods defining actions players can take within the game
-
-		public abstract TrainCard takeAction_drawTrainCard() throws Exception;
-		public abstract TrainCard takeAction_drawFaceUpCard(int position) throws Exception;
-		public abstract void takeAction_claimRoute(Route route) throws Exception;
-		public abstract List<DestinationCard> takeAction_drawDestinationCards() throws Exception;
-		public abstract void takeAction_discardDestinationCard(DestinationCard discard) throws Exception;
-		public abstract void takeAction_endTurn() throws Exception;
-
-		public abstract void takeAction_addToChat(String message);
-
-		//-------------------------------------------------------------------
-		//  Signals the player that it is now their turn
-		abstract void startTurn();
-
-		//-------------------------------------------------------------------
-		//	These methods provide access to the Game to players
-
-		protected TrainCard drawTrainCard_fromGame() {
-			return ServerGame.this.drawTrainCard();
-		}
-
-		protected TrainCard drawFaceUpCard_fromGame(int position) {
-			return ServerGame.this.drawFaceUpCard(position);
-		}
-
-		protected boolean isFaceUpCardWild_fromGame(int position) {
-			return ServerGame.this.isFaceUpCardWild(position);
-		}
-
-		protected boolean claimRoute_fromGame(Route route, IServerPlayer player) {
-			// Route route = ServerGame.this.getRoute(route, numWildCards);
-			// if (! route.isOwned()) {
-			//   route.setOwner(player);
-			//	 player.scorePoints(route.getLength());
-			//	 return true;
-			// }
-			// else return false;
-
-			return false;
-		}
-
-		protected DestinationCard drawDestinationCard_fromGame() {
-			return ServerGame.this.drawDestinationCard();
-		}
-
-		protected void discardDestinationCard_fromGame(DestinationCard discard) {
-			ServerGame.this.discardDestinationCard(discard);
-			return;
-		}
-
-		protected void addToHistory_fromGame(String msg) {
-			ServerGame.this.addToHistory(msg);
-			return;
-		}
-
-		protected void addToChat_fromGame(String msg) {
-			ServerGame.this.addToChat(msg);
-			return;
-		}
-
-		protected void endTurn_fromGame() {
-			ServerGame.this.nextTurn();
-			return;
-		}
-
+		String errorMsg = player.drawTrainCard(card);
+		if (errorMsg != null) throw new Exception(errorMsg);
+		else return trainCardArea.drawCard();
 	}
 
+	public TrainCard drawFaceUpCard(int position, String authToken) throws Exception {
+        ServerPlayer player = getServerPlayer(authToken);
+        if (player == null) throw new Exception("You are not a member of this game!");
 
+        TrainCard card = trainCardArea.getFaceUpCards()[position];
+        if (card == null) throw new Exception("There is no card at that position.");
+
+        String errorMsg = player.drawFaceUpCard(card);
+        if (errorMsg != null) throw new Exception(errorMsg);
+        else return trainCardArea.drawCard();
+	}
+
+	public void claimRoute(Route route, String authToken) throws Exception {
+        ServerPlayer player = getServerPlayer(authToken);
+        if (player == null) throw new Exception("You are not a member of this game!");
+
+        // TODO: Implement check for route already claimed. Something like the code below
+        //if (route.getOwner() != null) throw new Exception("That route is already claimed.");
+
+        String errorMsg = player.claimRoute(route);
+        if (errorMsg != null) throw new Exception(errorMsg);
+    }
+
+	public List<DestinationCard> drawDestinationCards(String authToken) throws Exception {
+        ServerPlayer player = getServerPlayer(authToken);
+        if (player == null) throw new Exception("You are not a member of this game!");
+
+        List<DestinationCard> cards = destinationDeck.getTopThreeCards();
+        if (cards == null) throw new Exception("There are not enough destination cards left.");
+
+        String errorMsg = player.drawDestinationCards(cards);
+        if (errorMsg != null) throw new Exception(errorMsg);
+        else return destinationDeck.drawCards();
+	}
+
+	public void discardDestinationCard(DestinationCard card, String authToken) throws Exception {
+        ServerPlayer player = getServerPlayer(authToken);
+        if (player == null) throw new Exception("You are not a member of this game!");
+
+        String errorMsg = player.discardDestinationCard(card);
+        if (errorMsg != null) throw new Exception(errorMsg);
+        else if (!destinationDeck.discardCard(card))
+            throw new Exception("This card is already in the destination deck.");
+    }
+
+    public void nextTurn() {
+        players.get(currentPlayerIndex).endTurn();
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        players.get(currentPlayerIndex).startTurn();
+    }
 }
