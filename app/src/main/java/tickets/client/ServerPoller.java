@@ -34,7 +34,6 @@ public class ServerPoller implements IObserver {
 	*/
     public ServerPoller() {
         ClientFacade.getInstance().linkObserver(this);
-        clientState = null;
         lastCommand = null;
         timer = new Timer();
         running = false;
@@ -106,5 +105,13 @@ public class ServerPoller implements IObserver {
     	        System.err.println(updates.getException().getMessage());
             }
     	}
-    };    
+    };
+
+	public void notify(IMessage message) {
+
+	}
+
+	public void setObservable(IObservable observable) {
+
+	}
 }

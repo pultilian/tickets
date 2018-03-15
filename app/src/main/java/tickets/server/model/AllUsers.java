@@ -37,16 +37,9 @@ public class AllUsers {
         return false;
     }
 
-    public boolean authenticateUser(String authToken) {
-        for (UserData user : users) {
-            if (user.getAuthenticationToken().equals(authToken)) return true;
-        }
-        return false;
-    }
-
     public String getUsername(String authToken){
         for (UserData user : users){
-            if (user.getUsername().equals(authToken)) return user.getUsername();
+            if (user.getAuthenticationToken().equals(authToken)) return user.getUsername();
         }
         return null;
     }
