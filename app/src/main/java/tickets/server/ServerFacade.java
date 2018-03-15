@@ -79,7 +79,9 @@ public class ServerFacade implements IServer {
             Player player = new Player(UUID.randomUUID().toString(), authToken);
             lobby.addPlayer(player);
             lobby.assignFaction(player);
-            lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has joined the lobby.");
+            lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
+                            " (" + player.getPlayerFaction().getName() + ") " +
+                            "has joined the lobby.");
 
             // Move current client
             ClientProxy currentClient = getProxy(authToken);
@@ -108,7 +110,9 @@ public class ServerFacade implements IServer {
         Player player = new Player(UUID.randomUUID().toString(), authToken);
         lobby.addPlayer(player);
         lobby.assignFaction(player);
-        lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has joined the lobby.");
+        lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
+                        " (" + player.getPlayerFaction().getName() + ") " +
+                        "has joined the lobby.");
 
         // Move current client
         ClientProxy currentClient = getProxy(authToken);
