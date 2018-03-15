@@ -15,7 +15,7 @@ import tickets.common.response.ClientUpdate;
  * ServerPoller class is responsible for sending regular (once per minute)
  *  requests to the server for commands to be executed on the client model.
 */
-public class ServerPoller implements IObserver {
+public class ServerPoller {
 	/** Last command received from the server is sent with each request for 
 	 *   updates from the server to ensure that commands which are lost can
 	 *   be sent again
@@ -33,7 +33,6 @@ public class ServerPoller implements IObserver {
 	/** Public constructor initializes member variables
 	*/
     public ServerPoller() {
-        ClientFacade.getInstance().linkObserver(this);
         lastCommand = null;
         timer = new Timer();
         running = false;
@@ -106,12 +105,4 @@ public class ServerPoller implements IObserver {
             }
     	}
     };
-
-	public void notify(IMessage message) {
-
-	}
-
-	public void setObservable(IObservable observable) {
-
-	}
 }
