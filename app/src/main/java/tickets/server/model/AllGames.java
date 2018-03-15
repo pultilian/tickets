@@ -1,9 +1,9 @@
 package tickets.server.model;
 
-import tickets.server.model.game.ServerGame;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import tickets.server.model.game.ServerGame;
 
 public class AllGames {
 

@@ -5,7 +5,7 @@ public class CL_GameView extends CommandlineView {
 
 	@Override
 	void printMenu() {
-		System.out.println("*** You are in a game ***\n");
+		System.out.println("\n*** You are in a game ***\n");
 		System.out.println("  Select an option: ");
 		System.out.println("    1. Leave game");
 		System.out.println();

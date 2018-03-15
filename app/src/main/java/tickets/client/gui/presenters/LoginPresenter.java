@@ -1,17 +1,16 @@
 
 package tickets.client.gui.presenters;
 
-import tickets.client.async.AsyncManager;
-import tickets.common.ClientModelUpdate;
-import tickets.common.IMessage;
-import tickets.common.IObservable;
-import tickets.common.ClientStateChange;
-import tickets.common.ExceptionMessage;
-import tickets.common.UserData;
-
 import tickets.client.ClientFacade;
 import tickets.client.ITaskManager;
 import tickets.client.TaskManager;
+import tickets.client.async.AsyncManager;
+import tickets.common.ClientModelUpdate;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
+import tickets.common.IMessage;
+import tickets.common.IObservable;
+import tickets.common.UserData;
 
 
 public class LoginPresenter implements ILoginPresenter {
@@ -68,7 +67,6 @@ public class LoginPresenter implements ILoginPresenter {
 
     @Override
     public void notify(IMessage state) {
-        System.out.println("Being notified");
         if (state.getClass() == ClientStateChange.class) {
             ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();
             checkClientStateFlag(flag);
@@ -76,7 +74,10 @@ public class LoginPresenter implements ILoginPresenter {
         	//Do nothing
         }else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
-            holder.toastException(e);
+            if (holder != null)
+                holder.toastException(e);
+            else
+                System.out.println(e.getMessage());
         } else {
             Exception err = new Exception("Observer err: unrecognized IMessage of type " + state.getClass());
             holder.toastException(err);
@@ -100,7 +101,8 @@ public class LoginPresenter implements ILoginPresenter {
                 //do nothing
                 break;
             case lobbylist:
-                holder.makeTransition(IHolderActivity.Transition.toLobbyList);
+                if (holder != null)
+                    holder.makeTransition(IHolderActivity.Transition.toLobbyList);
                 break;
             case lobby:
                 //do nothing

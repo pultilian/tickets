@@ -40,14 +40,14 @@ public class CL_LoginView extends CommandlineView {
 		boolean success = presenter.register(getUserData());
 		if (success)
 			this.returnValue = new CL_LobbyListView();
-		return !success;
+		return success;
 	}
 	
 	private boolean login() {
 		boolean success = presenter.login(getUserData());
 		if (success)
 			this.returnValue = new CL_LobbyListView();
-		return !success;
+		return success;
 	}
 	
 	private UserData getUserData() { 

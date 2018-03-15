@@ -1,10 +1,12 @@
 
 package tickets.testing;
 
-import tickets.common.*;
-import tickets.common.response.*;
-
 import tickets.client.ClientCommunicator;
+import tickets.common.Command;
+import tickets.common.Lobby;
+import tickets.common.UserData;
+import tickets.common.response.JoinLobbyResponse;
+import tickets.common.response.LoginResponse;
 
 
 // these test cases require that the ServerCommunicator be hard reset

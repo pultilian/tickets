@@ -31,7 +31,7 @@ public abstract class CommandlineView {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NumberFormatException e){
-			e.printStackTrace();
+			System.out.println("Only numeric options are valid.");
 		}
 		
 		return 0;

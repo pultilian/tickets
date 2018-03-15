@@ -1,17 +1,16 @@
 
 package tickets.client.gui.presenters;
 
-import tickets.client.async.AsyncManager;
-import tickets.common.Lobby;
-import tickets.common.IMessage;
-import tickets.common.ClientModelUpdate;
-import tickets.common.ClientStateChange;
-import tickets.common.ExceptionMessage;
-import tickets.common.IObservable;
-
 import tickets.client.ClientFacade;
 import tickets.client.ITaskManager;
 import tickets.client.TaskManager;
+import tickets.client.async.AsyncManager;
+import tickets.common.ClientModelUpdate;
+import tickets.common.ClientStateChange;
+import tickets.common.ExceptionMessage;
+import tickets.common.IMessage;
+import tickets.common.IObservable;
+import tickets.common.Lobby;
 
 
 public class LobbyPresenter implements ILobbyPresenter {
@@ -60,7 +59,10 @@ public class LobbyPresenter implements ILobbyPresenter {
         	//do nothing?
         } else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
-            holder.toastException(e);
+            if (holder != null)
+                holder.toastException(e);
+            else
+                System.out.println(e.getMessage());
         } else {
             Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
             holder.toastException(err);
@@ -83,13 +85,15 @@ public class LobbyPresenter implements ILobbyPresenter {
                 //do nothing
                 break;
             case lobbylist:
-                holder.makeTransition(IHolderActivity.Transition.toLobbyList);
+                if (holder != null)
+                    holder.makeTransition(IHolderActivity.Transition.toLobbyList);
                 break;
             case lobby:
                 //do nothing
                 break;
             case game:
-                holder.makeTransition(IHolderActivity.Transition.toGame);
+                if (holder != null)
+                    holder.makeTransition(IHolderActivity.Transition.toGame);
                 break;
             case update:
                 holder.checkUpdate();

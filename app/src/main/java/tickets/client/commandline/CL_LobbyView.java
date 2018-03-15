@@ -8,7 +8,7 @@ public class CL_LobbyView extends CommandlineView {
 
 	@Override
 	void printMenu() {
-		System.out.println("*** You are in lobby: " + presenter.getLobby().getName() +" ***\n");
+		System.out.println("\n*** You are in lobby: " + presenter.getLobby().getName() +" ***\n");
 		System.out.println("  Select an option: ");
 		System.out.println("    1. Print lobby member list");
 		System.out.println("    2. Print lobby history");

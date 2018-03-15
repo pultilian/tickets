@@ -1,8 +1,8 @@
 package tickets.common.response;
 
-import tickets.common.Lobby;
-
 import java.util.List;
+
+import tickets.common.Lobby;
 
 public class LoginResponse extends Response {
 

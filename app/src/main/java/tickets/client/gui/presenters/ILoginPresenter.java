@@ -1,10 +1,10 @@
 
 package tickets.client.gui.presenters;
 
-import tickets.common.UserData;
 import tickets.common.IMessage;
-import tickets.common.IObserver;
 import tickets.common.IObservable;
+import tickets.common.IObserver;
+import tickets.common.UserData;
 
 
 public interface ILoginPresenter extends IObserver {

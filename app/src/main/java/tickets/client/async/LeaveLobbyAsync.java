@@ -3,12 +3,10 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.common.response.LeaveLobbyResponse;
-import tickets.common.ClientStateChange;
-import tickets.common.ExceptionMessage;
-
 import tickets.client.ClientFacade;
+import tickets.client.ResponseManager;
 import tickets.client.ServerProxy;
+import tickets.common.response.LeaveLobbyResponse;
 
 
 public class LeaveLobbyAsync extends AsyncTask<String, Void, LeaveLobbyResponse> {
@@ -33,26 +31,6 @@ public class LeaveLobbyAsync extends AsyncTask<String, Void, LeaveLobbyResponse>
 
 	@Override
 	public void onPostExecute(LeaveLobbyResponse response) {
-		if (response == null) {
-			Exception ex = new Exception("The Server could not be reached");
-			ExceptionMessage msg = new ExceptionMessage(ex);
-			modelRoot.updateObservable(msg);
-		}
-		else if (response.getException() == null) {
-			ClientStateChange.ClientState stateVal;
-			stateVal = ClientStateChange.ClientState.lobbylist;
-			ClientStateChange state = new ClientStateChange(stateVal);
-			modelRoot.setCurrentLobby(null);
-
-			modelRoot.updateObservable(state);
-		}
-		else {
-			Exception ex = response.getException();
-			ExceptionMessage msg = new ExceptionMessage(ex);
-
-			modelRoot.updateObservable(msg);
-		}
-
-		return;
+		ResponseManager.handleResponse(response);
 	}
 }

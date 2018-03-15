@@ -1,14 +1,8 @@
 package tickets.client.gui.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,17 +11,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import tickets.client.gui.presenters.IHolderActivity;
 import tickets.client.gui.presenters.LobbyListPresenter;
-import tickets.client.gui.views.CreateLobbyDialog;
 import tickets.common.Lobby;
 
 /**
@@ -181,12 +173,10 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
 
     public void makeTransition(Transition toActivity){
         if(toActivity == Transition.toLobby) {
-            System.out.println("Calling transition");
             Intent intent = new Intent(this, LobbyActivity.class);
             startActivity(intent);
         }
         if(toActivity == Transition.toLogin) {
-            System.out.println("Calling transition");
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         }

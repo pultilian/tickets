@@ -12,7 +12,7 @@ public class CL_LobbyListView extends CommandlineView {
 	
 	@Override
 	void printMenu() {
-		System.out.println("***Lobby List View***\n");
+		System.out.println("\n***Lobby List View***\n");
 		System.out.println("  Select an option: ");
 		System.out.println("    1. Create a lobby");
 		System.out.println("    2. Join existing lobby");
@@ -55,7 +55,7 @@ public class CL_LobbyListView extends CommandlineView {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			System.err.println("Number of players should be numeric.");
 		}
 		return false;
 	}
@@ -74,10 +74,10 @@ public class CL_LobbyListView extends CommandlineView {
 		try {
 			System.out.print("Enter number of lobby you wish to enter: ");
 			String option = input.readLine();
-			if (option == "x") {
+			if (option.equals("x")) {
 				return false;
 			}
-			int lobbyNum = Integer.parseInt(option);
+			int lobbyNum = Integer.parseInt(option) - 1;
 			if (lobbyNum > presenter.getLobbyList().size()) {
 				System.out.println("Option exceeds available lobbies");
 				return false;
