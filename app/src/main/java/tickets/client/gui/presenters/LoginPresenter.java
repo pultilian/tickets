@@ -2,6 +2,7 @@
 package tickets.client.gui.presenters;
 
 import tickets.client.async.AsyncManager;
+import tickets.common.ClientModelUpdate;
 import tickets.common.IMessage;
 import tickets.common.IObservable;
 import tickets.common.ClientStateChange;
@@ -9,14 +10,24 @@ import tickets.common.ExceptionMessage;
 import tickets.common.UserData;
 
 import tickets.client.ClientFacade;
+import tickets.client.ITaskManager;
+import tickets.client.TaskManager;
 
 
 public class LoginPresenter implements ILoginPresenter {
     private IHolderActivity holder;
     private IObservable observable;
+    private ITaskManager manager;
 
     public LoginPresenter(IHolderActivity setHolder) {
         holder = setHolder;
+        manager = AsyncManager.getInstance();
+        ClientFacade.getInstance().linkObserver(this);
+    }
+    
+    public LoginPresenter() {
+    	holder = null;
+        manager = TaskManager.getInstance();
         ClientFacade.getInstance().linkObserver(this);
     }
 
@@ -26,11 +37,13 @@ public class LoginPresenter implements ILoginPresenter {
     @Override
     public void register(UserData registerData) {
         if (!registerData.checkValues()) {
-            holder.toastException(new Exception("invalid username or password"));
+        	if (holder != null)
+        		holder.toastException(new Exception("Invalid username or password"));
+        	else
+        		System.out.println("Invalid username or password");
         }
         else {
-            System.out.println("presenter calling model facade");
-            AsyncManager.getInstance().register(registerData);
+            manager.register(registerData);
         }
         return;
     }
@@ -38,10 +51,13 @@ public class LoginPresenter implements ILoginPresenter {
     @Override
     public void login(UserData loginData) {
         if (!loginData.checkValues()) {
-            holder.toastException(new Exception("invalid username or password"));
+        	if (holder != null)
+        		holder.toastException(new Exception("Invalid username or password"));
+        	else
+        		System.out.println("Invalid username or password");
         }
         else {
-            AsyncManager.getInstance().login(loginData);
+            manager.login(loginData);
         }
         return;
     }
@@ -52,11 +68,13 @@ public class LoginPresenter implements ILoginPresenter {
         if (state.getClass() == ClientStateChange.class) {
             ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();
             checkClientStateFlag(flag);
-        } else if (state.getClass() == ExceptionMessage.class) {
+        } else if (state.getClass() == ClientModelUpdate.class){
+        	//Do nothing
+        }else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
             holder.toastException(e);
         } else {
-            Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
+            Exception err = new Exception("Observer err: unrecognized IMessage of type " + state.getClass());
             holder.toastException(err);
         }
 
