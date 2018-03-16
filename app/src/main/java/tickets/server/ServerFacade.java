@@ -312,7 +312,7 @@ public class ServerFacade implements IServer {
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " has claimed the route " + route.toString();
+                    " claimed the route " + route.toString();
             game.addToHistory(historyMessage);
 
             //update other clients in the game
@@ -320,7 +320,7 @@ public class ServerFacade implements IServer {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
                 if (!client.getAuthToken().equals(authToken)) {
-                    // client.addClaimedRoute(game.getPlayerID(authToken), route);
+                    client.addClaimedRoute(route);
                 }
             }
 
@@ -341,7 +341,7 @@ public class ServerFacade implements IServer {
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " has drawn three destination cards.";
+                    " drew destination cards.";
             game.addToHistory(historyMessage);
 
             //update other game members
@@ -349,7 +349,7 @@ public class ServerFacade implements IServer {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a destination card response rather than this command.
                 if (!client.getAuthToken().equals(authToken)) {
-                    // client.addPlayerDestinationCards(game.getPlayerID(authToken));
+                    client.addPlayerDestinationCards(drawnCards.size());
                 }
             }
 
@@ -368,17 +368,19 @@ public class ServerFacade implements IServer {
             // Any reason for failing here will be thrown as an exception
             game.discardDestinationCard(discard, authToken);
 
-            //update game history
-            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " has discarded a destination card.";
-            game.addToHistory(historyMessage);
+            if (discard != null) {
+                //update game history
+                String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                        " discarded a destination card.";
+                game.addToHistory(historyMessage);
 
-            //update other game members
-            for (ClientProxy client : getClientsInGame(game.getGameId())) {
-                client.addToGameHistory(historyMessage);
-                // The current client will receive a destination card response rather than this command.
-                if (!client.getAuthToken().equals(authToken)) {
-                    // client.removePlayerDestinationCard(game.getPlayerID(authToken));
+                //update other game members
+                for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                    client.addToGameHistory(historyMessage);
+                    // The current client will receive a response rather than this command.
+                    if (!client.getAuthToken().equals(authToken)) {
+                        client.removePlayerDestinationCard();
+                    }
                 }
             }
 
@@ -398,7 +400,7 @@ public class ServerFacade implements IServer {
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " has ended their turn.";
+                    " ended their turn.";
             game.addToHistory(historyMessage);
 
             //update other clients in the game

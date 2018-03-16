@@ -2,17 +2,15 @@ package tickets.server;
 
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.Command;
-import tickets.common.DestinationCard;
 import tickets.common.Game;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
-import tickets.common.TrainCard;
+import tickets.common.Route;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -152,28 +150,28 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void addPlayerPoints(int points) {
-        Command command = new Command("addPlayerPoints",
-                new String[]{Integer.class.getName()},
-                new Object[]{points});
+    public void addClaimedRoute(Route route) {
+        Command command = new Command("addClaimedRoute",
+                new String[]{Route.class.getName()},
+                new Object[]{route});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
 
     @Override
-    public void removePlayerShips(int numShips) {
-        Command command = new Command("removePlayerShips",
+    public void addPlayerDestinationCards(int num) {
+        Command command = new Command("addPlayerDestinationCards",
                 new String[]{Integer.class.getName()},
-                new Object[]{numShips});
+                new Object[]{num});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
 
     @Override
-    public void addPlayerDestinationCard() {
-        Command command = new Command("addPlayerDestinationCard",
+    public void removePlayerDestinationCard() {
+        Command command = new Command("removePlayerDestinationCard",
                 new String[0],
                 new Object[0]);
         unprocessedCommands.add(command);

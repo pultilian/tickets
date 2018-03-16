@@ -78,6 +78,10 @@ public class PlayerInfo {
         destinationCardCount++;
     }
 
+    public void removeDestinationCard() {
+		destinationCardCount--;
+	}
+
     public int getDestinationCardCount() {
         return destinationCardCount;
     }

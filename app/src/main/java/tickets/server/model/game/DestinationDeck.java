@@ -17,18 +17,18 @@ public class DestinationDeck {
 	}
 
 	public List<DestinationCard> getTopThreeCards() {
-	    if (cards.size() < 3) return null;
+	    if (cards.isEmpty()) return null;
 	    List<DestinationCard> result = new ArrayList<>();
 	    result.add(cards.get(0));
-	    result.add(cards.get(1));
-	    result.add(cards.get(2));
+	    if (cards.size() > 1) result.add(cards.get(1));
+	    if (cards.size() > 2) result.add(cards.get(2));
 	    return result;
     }
 
 	public List<DestinationCard> drawCards() {
 		List<DestinationCard> result = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
-		    result.add(cards.remove(0));
+		    if (!cards.isEmpty()) result.add(cards.remove(0));
         }
         return result;
 	}

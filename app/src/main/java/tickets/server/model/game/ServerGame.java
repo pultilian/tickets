@@ -143,7 +143,7 @@ public class ServerGame extends Game {
         if (player == null) throw new Exception("You are not a member of this game!");
 
         List<DestinationCard> cards = destinationDeck.getTopThreeCards();
-        if (cards == null) throw new Exception("There are not enough destination cards left.");
+        if (cards == null) throw new Exception("There are no destination cards left.");
 
         String errorMsg = player.drawDestinationCards(cards);
         if (errorMsg != null) throw new Exception(errorMsg);
