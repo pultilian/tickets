@@ -4,10 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import tickets.common.Command;
-import tickets.common.IMessage;
-import tickets.common.IObserver;
-import tickets.common.IObservable;
-import tickets.common.ClientStateChange.ClientState;
 import tickets.common.response.ClientUpdate;
 
 
@@ -15,7 +11,7 @@ import tickets.common.response.ClientUpdate;
  * ServerPoller class is responsible for sending regular (once per minute)
  *  requests to the server for commands to be executed on the client model.
 */
-public class ServerPoller implements IObserver {
+public class ServerPoller {
 	/** Last command received from the server is sent with each request for 
 	 *   updates from the server to ensure that commands which are lost can
 	 *   be sent again
@@ -33,8 +29,6 @@ public class ServerPoller implements IObserver {
 	/** Public constructor initializes member variables
 	*/
     public ServerPoller() {
-        ClientFacade.getInstance().linkObserver(this);
-        clientState = null;
         lastCommand = null;
         timer = new Timer();
         running = false;

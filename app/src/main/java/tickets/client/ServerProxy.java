@@ -2,13 +2,20 @@ package tickets.client;
 
 import tickets.common.Command;
 import tickets.common.DestinationCard;
-import tickets.common.response.*;
 import tickets.common.IServer;
 import tickets.common.Lobby;
-import tickets.common.UserData;
 import tickets.common.Route;
-
-import tickets.client.ClientCommunicator;
+import tickets.common.UserData;
+import tickets.common.response.AddToChatResponse;
+import tickets.common.response.ClientUpdate;
+import tickets.common.response.DestinationCardResponse;
+import tickets.common.response.JoinLobbyResponse;
+import tickets.common.response.LeaveLobbyResponse;
+import tickets.common.response.LoginResponse;
+import tickets.common.response.LogoutResponse;
+import tickets.common.response.Response;
+import tickets.common.response.StartGameResponse;
+import tickets.common.response.TrainCardResponse;
 
 public class ServerProxy implements IServer {
     //Singleton structure

@@ -1,10 +1,10 @@
 package tickets.server.model;
 
-import tickets.common.UserData;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import tickets.common.UserData;
 
 public class AllUsers {
 

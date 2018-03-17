@@ -1,17 +1,12 @@
 package tickets.client.gui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,9 +16,6 @@ import java.util.List;
 
 import tickets.client.gui.activities.R;
 import tickets.client.gui.presenters.DestinationPresenter;
-import tickets.client.gui.presenters.GamePresenter;
-import tickets.client.gui.presenters.IHolderActivity;
-import tickets.client.gui.presenters.IHolderGameActivity;
 import tickets.common.DestinationCard;
 
 /**

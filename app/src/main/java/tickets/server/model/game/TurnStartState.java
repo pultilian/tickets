@@ -1,15 +1,13 @@
 
 package tickets.server.model.game;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
 import tickets.common.RouteColors;
-
-import tickets.server.model.game.ServerPlayer;
+import tickets.common.TrainCard;
 import tickets.server.model.game.ServerPlayer.PlayerTurnState;
 
 

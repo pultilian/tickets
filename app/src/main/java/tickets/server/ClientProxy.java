@@ -1,20 +1,17 @@
 package tickets.server;
 
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.Command;
-import tickets.common.DestinationCard;
 import tickets.common.Game;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
-import tickets.common.TrainCard;
-
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 
 public class ClientProxy implements IClient {
 

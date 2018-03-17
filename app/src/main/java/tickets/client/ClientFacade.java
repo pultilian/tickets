@@ -2,20 +2,19 @@ package tickets.client;
 
 import java.util.List;
 
+import tickets.client.model.ClientObservable;
+import tickets.client.model.LobbyManager;
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.Game;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
+import tickets.common.IMessage;
+import tickets.common.IObserver;
 import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.UserData;
-import tickets.common.IObserver;
-import tickets.common.IMessage;
-
-import tickets.client.model.ClientObservable;
-import tickets.client.model.LobbyManager;
 
 
 public class ClientFacade implements IClient {
@@ -143,7 +142,11 @@ public class ClientFacade implements IClient {
 //These methods are called when commands are retrieved
 //	by the poller from the Server.
 	public void addLobbyToList(Lobby lobby) {
+		if (lobbyManager.getLobbyList().contains(lobby))
+			return;
 		lobbyManager.addLobby(lobby);
+		ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.lobbyAdded);
+        updateObservable(update);
 	}
 
 	public void removeLobbyFromList(Lobby lobby) {
