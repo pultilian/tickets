@@ -4,10 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import tickets.common.Command;
-import tickets.common.IMessage;
-import tickets.common.IObserver;
-import tickets.common.IObservable;
-import tickets.common.ClientStateChange.ClientState;
 import tickets.common.response.ClientUpdate;
 
 

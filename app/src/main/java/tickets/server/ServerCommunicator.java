@@ -1,19 +1,18 @@
 package tickets.server;
 
+import com.google.gson.Gson;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 
-import com.google.gson.Gson;
-
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-
-import tickets.common.ResultTransferObject;
 import tickets.common.Command;
+import tickets.common.ResultTransferObject;
 
 public class ServerCommunicator {
 
@@ -64,7 +63,7 @@ public class ServerCommunicator {
 		try {
 			server = HttpServer.create(new InetSocketAddress(SERVER_PORT_NUMBER), MAX_WAITING_CONNECTIONS);
 		} catch (IOException e) {
-			System.out.println("Could not create HTTP server: " + e.getMessage());
+			System.err.println("Could not create HTTP server: " + e.getMessage());
 			e.printStackTrace();
 			return;
 		}

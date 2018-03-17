@@ -1,7 +1,5 @@
 package tickets.common;
 
-import java.util.List;
-
 public interface IClient {
 
     // FOR CLIENTS IN LOBBY LIST

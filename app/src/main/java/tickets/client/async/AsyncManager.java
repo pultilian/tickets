@@ -1,12 +1,11 @@
 package tickets.client.async;
 
+import tickets.client.ClientFacade;
 import tickets.client.ITaskManager;
 import tickets.common.DestinationCard;
 import tickets.common.Lobby;
 import tickets.common.Route;
 import tickets.common.UserData;
-
-import tickets.client.ClientFacade;
 
 // AsyncTask<Params, Progress, Result>
 //

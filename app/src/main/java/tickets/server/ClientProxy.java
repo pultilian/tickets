@@ -1,5 +1,10 @@
 package tickets.server;
 
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.Command;
 import tickets.common.Game;
@@ -8,11 +13,6 @@ import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.Route;
-
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
 
 public class ClientProxy implements IClient {
 

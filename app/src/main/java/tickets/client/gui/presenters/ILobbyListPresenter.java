@@ -3,10 +3,10 @@ package tickets.client.gui.presenters;
 
 import java.util.List;
 
-import tickets.common.Lobby;
 import tickets.common.IMessage;
-import tickets.common.IObserver;
 import tickets.common.IObservable;
+import tickets.common.IObserver;
+import tickets.common.Lobby;
 
 
 public interface ILobbyListPresenter extends IObserver {

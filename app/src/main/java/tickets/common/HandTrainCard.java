@@ -1,12 +1,10 @@
 
 package tickets.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
-
-import tickets.common.TrainCard;
 
 public class HandTrainCard {
 	private Map<RouteColors, List<TrainCard>> colorsListMap;

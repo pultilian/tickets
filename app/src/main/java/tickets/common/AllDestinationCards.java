@@ -1,7 +1,6 @@
 package tickets.common;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 // This is basically a fancy enumeration of all destination

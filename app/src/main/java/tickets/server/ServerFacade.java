@@ -1,16 +1,40 @@
 package tickets.server;
 
-import tickets.common.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.UUID;
+
+import tickets.common.ChoiceDestinationCards;
+import tickets.common.Command;
 import tickets.common.DestinationCard;
+import tickets.common.Game;
+import tickets.common.HandTrainCard;
+import tickets.common.IServer;
+import tickets.common.Lobby;
+import tickets.common.Player;
+import tickets.common.PlayerInfo;
+import tickets.common.Route;
+import tickets.common.TrainCard;
+import tickets.common.UserData;
+import tickets.common.response.AddToChatResponse;
+import tickets.common.response.ClientUpdate;
+import tickets.common.response.DestinationCardResponse;
+import tickets.common.response.JoinLobbyResponse;
+import tickets.common.response.LeaveLobbyResponse;
+import tickets.common.response.LoginResponse;
+import tickets.common.response.LogoutResponse;
+import tickets.common.response.Response;
+import tickets.common.response.StartGameResponse;
+import tickets.common.response.TrainCardResponse;
 import tickets.server.model.AllGames;
 import tickets.server.model.AllLobbies;
-import tickets.common.response.*;
 import tickets.server.model.AllUsers;
 import tickets.server.model.game.ServerGame;
-import tickets.common.Route;
 import tickets.server.model.game.ServerPlayer;
-
-import java.util.*;
 
 public class ServerFacade implements IServer {
 
