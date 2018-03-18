@@ -1,7 +1,6 @@
 package tickets.server;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -234,7 +233,7 @@ public class ServerFacade implements IServer {
                 lobby.unassignFaction(player);
 
                 for (ClientProxy client : getClientsInLobby(lobbyID)) {
-                    client.removePlayer(player);
+                    client.removePlayerFromLobbyInList(lobby, player);
                 }
                 for (ClientProxy client : clientsInLobbyList) {
                     client.removePlayerFromLobbyInList(lobby, player);

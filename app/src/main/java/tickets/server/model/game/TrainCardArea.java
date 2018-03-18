@@ -39,10 +39,6 @@ public class TrainCardArea {
 		return drawDeck.get(0);
 	}
 
-	public TrainCard getFaceUpCard(int position) {
-		return faceUpCards[position - 1];
-	}
-
 	public TrainCard drawCard() {
 		if (drawDeck.isEmpty() && discardDeck.isEmpty()) {
 			return null;
@@ -66,25 +62,7 @@ public class TrainCardArea {
 		return draw;
 	}
 
-	public boolean discardCard(TrainCard discard) {
-		if (drawDeck.contains(discard) || discardDeck.contains(discard)) {
-			return false;
-		}
-		for (int i = 0; i < faceUpCards.length; i++) {
-			if (discard == faceUpCards[i]) return false;
-		}
-
+	public void discardCard(TrainCard discard) {
 		discardDeck.add(discard);
-		return true;
-	}
-
-	public boolean isFaceUpCardWild(int position) {
-		if (position < 1 || position > 5) {
-			return false;
-		}
-		if (faceUpCards[position - 1].getColor() == RouteColors.Wild) {
-			return true;
-		}
-		else return false;
 	}
 }
