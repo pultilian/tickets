@@ -10,6 +10,10 @@ import tickets.common.ExceptionMessage;
 import tickets.common.IMessage;
 import tickets.common.IObservable;
 
+import tickets.client.ClientFacade;
+import tickets.client.async.AsyncManager;
+
+
 public class GameChatPresenter implements IGameChatPresenter {
 	private IHolderGameChatFragment holder;
 	private IObservable observable;
@@ -20,11 +24,11 @@ public class GameChatPresenter implements IGameChatPresenter {
 	}
 
 	public void addToChat(String message){
-		ModelFacade.getInstance().addToChat(message);
+		AsyncManager.getInstance().addToChat(message);
 	}
 
 	public List<String> getChatHistory(){
-		return ModelFacade.getInstance().getGame().getChat();
+		return ClientFacade.getInstance().getGame().getChat();
 	}
 
 	@Override

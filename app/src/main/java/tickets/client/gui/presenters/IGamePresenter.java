@@ -6,9 +6,8 @@ import java.util.List;
 import tickets.common.DestinationCard;
 import tickets.common.HandTrainCard;
 import tickets.common.IMessage;
-import tickets.common.IObserver;
 import tickets.common.IObservable;
-import tickets.common.TrainCard;
+import tickets.common.IObserver;
 
 public interface IGamePresenter extends IObserver {
 

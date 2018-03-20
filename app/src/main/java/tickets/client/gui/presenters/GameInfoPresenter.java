@@ -2,10 +2,8 @@ package tickets.client.gui.presenters;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import tickets.client.ModelFacade;
-import tickets.common.Player;
+import tickets.client.ClientFacade;
 import tickets.common.PlayerInfo;
 
 /**
@@ -14,9 +12,9 @@ import tickets.common.PlayerInfo;
 
 public class GameInfoPresenter implements IGameInfoPresenter{
     public List<String> getGameHistory(){
-        return ModelFacade.getInstance().getGame().getGameHistory();
+        return ClientFacade.getInstance().getGame().getGameHistory();
     }
     public List<PlayerInfo> getPlayerInfo(){
-        return new ArrayList<PlayerInfo>(ModelFacade.getInstance().getGame().getAllPlayers());
+        return new ArrayList<PlayerInfo>(ClientFacade.getInstance().getGame().getAllPlayers());
     }
 }

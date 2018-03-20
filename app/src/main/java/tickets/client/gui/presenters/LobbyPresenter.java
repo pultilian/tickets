@@ -1,23 +1,33 @@
 
 package tickets.client.gui.presenters;
 
-import tickets.common.Lobby;
-import tickets.common.IMessage;
+import tickets.client.ClientFacade;
+import tickets.client.ITaskManager;
+import tickets.client.TaskManager;
+import tickets.client.async.AsyncManager;
+import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
-import tickets.common.IObserver;
+import tickets.common.IMessage;
 import tickets.common.IObservable;
-
-import tickets.client.ModelFacade;
+import tickets.common.Lobby;
 
 
 public class LobbyPresenter implements ILobbyPresenter {
     private IObservable observable;
     private IHolderActivity holder;
+    private ITaskManager manager;
 
     public LobbyPresenter(IHolderActivity setHolder) {
         holder = setHolder;
-        ModelFacade.getInstance().linkObserver(this);
+        manager = AsyncManager.getInstance();
+        ClientFacade.getInstance().linkObserver(this);
+    }
+    
+    public LobbyPresenter() {
+    	holder = null;
+        manager = TaskManager.getInstance();
+        ClientFacade.getInstance().linkObserver(this);
     }
 
 //----------------------------------------------------------------------------
@@ -25,18 +35,18 @@ public class LobbyPresenter implements ILobbyPresenter {
 
     @Override
     public Lobby getLobby() {
-        return ModelFacade.getInstance().getLobby();
+        return ClientFacade.getInstance().getLobby();
     }
 
     @Override
     public void startGame(String lobbyID) {
-        ModelFacade.getInstance().startGame(lobbyID);
+        manager.startGame(lobbyID);
         return;
     }
 
     @Override
     public void leaveLobby(String lobbyID) {
-        ModelFacade.getInstance().leaveLobby(lobbyID);
+        manager.leaveLobby(lobbyID);
         return;
     }
 
@@ -45,9 +55,14 @@ public class LobbyPresenter implements ILobbyPresenter {
         if (state.getClass() == ClientStateChange.class) {
             ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();
             checkClientStateFlag(flag);
+        } else if (state.getClass() == ClientModelUpdate.class) {
+        	//do nothing?
         } else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
-            holder.toastException(e);
+            if (holder != null)
+                holder.toastException(e);
+            else
+                System.out.println(e.getMessage());
         } else {
             Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
             holder.toastException(err);
@@ -70,13 +85,15 @@ public class LobbyPresenter implements ILobbyPresenter {
                 //do nothing
                 break;
             case lobbylist:
-                holder.makeTransition(IHolderActivity.Transition.toLobbyList);
+                if (holder != null)
+                    holder.makeTransition(IHolderActivity.Transition.toLobbyList);
                 break;
             case lobby:
                 //do nothing
                 break;
             case game:
-                holder.makeTransition(IHolderActivity.Transition.toGame);
+                if (holder != null)
+                    holder.makeTransition(IHolderActivity.Transition.toGame);
                 break;
             case update:
                 holder.checkUpdate();

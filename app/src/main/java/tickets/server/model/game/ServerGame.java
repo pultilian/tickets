@@ -1,20 +1,16 @@
 
 package tickets.server.model.game;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import tickets.common.AllDestinationCards;
-import tickets.common.Game;
-import tickets.common.RouteColors;
-import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
+import tickets.common.Game;
 import tickets.common.Player;
 import tickets.common.Route;
-
-import tickets.server.model.game.ServerPlayer;
-import tickets.server.model.game.TrainCardArea;
-import tickets.server.model.game.DestinationDeck;
+import tickets.common.RouteColors;
+import tickets.common.TrainCard;
 
 public class ServerGame extends Game {
 	//inherited:

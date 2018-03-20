@@ -2,20 +2,15 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
+import tickets.client.ResponseManager;
 import tickets.client.ServerProxy;
-import tickets.common.ClientStateChange;
-import tickets.common.ExceptionMessage;
 import tickets.common.response.AddToChatResponse;
 
-/**
- * Created by Derek Mines on 2/23/2018.
- */
-
 public class AddToChatAsync extends AsyncTask<String, Void, AddToChatResponse> {
-    ModelFacade modelRoot;
+    ClientFacade modelRoot;
 
-    public AddToChatAsync(ModelFacade root) {
+    public AddToChatAsync(ClientFacade root) {
         modelRoot = root;
     }
 
@@ -34,16 +29,6 @@ public class AddToChatAsync extends AsyncTask<String, Void, AddToChatResponse> {
 
     @Override
     public void onPostExecute(AddToChatResponse response) {
-        if (response == null) {
-            Exception ex = new Exception("The Server could not be reached");
-            ExceptionMessage msg = new ExceptionMessage(ex);
-            modelRoot.updateObservable(msg);
-        } else if (response.getException() != null) {
-            Exception ex = response.getException();
-            ExceptionMessage msg = new ExceptionMessage(ex);
-            modelRoot.updateObservable(msg);
-        }
-
-        return;
+        ResponseManager.handleResponse(response);
     }
 }

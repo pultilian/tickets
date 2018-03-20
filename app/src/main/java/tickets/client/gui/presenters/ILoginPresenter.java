@@ -1,18 +1,16 @@
 
 package tickets.client.gui.presenters;
 
-import tickets.common.UserData;
 import tickets.common.IMessage;
-import tickets.common.IObserver;
 import tickets.common.IObservable;
-
-import tickets.client.ModelFacade;
+import tickets.common.IObserver;
+import tickets.common.UserData;
 
 
 public interface ILoginPresenter extends IObserver {
 
-	public void register(UserData registerData);
-	public void login(UserData loginData);
+	public boolean register(UserData registerData);
+	public boolean login(UserData loginData);
 
 	// from IObserver
 	public void notify(IMessage state);

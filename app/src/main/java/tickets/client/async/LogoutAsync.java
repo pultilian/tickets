@@ -3,19 +3,16 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
-import tickets.common.response.LogoutResponse;
-import tickets.common.IMessage;
-import tickets.common.ClientStateChange;
-import tickets.common.ExceptionMessage;
-
-import tickets.client.ModelFacade;
+import tickets.client.ClientFacade;
+import tickets.client.ResponseManager;
 import tickets.client.ServerProxy;
+import tickets.common.response.LogoutResponse;
 
 
 public class LogoutAsync extends AsyncTask<String, Void, LogoutResponse> {
-	ModelFacade modelRoot;
+	ClientFacade modelRoot;
 
-	public LogoutAsync(ModelFacade root) {
+	public LogoutAsync(ClientFacade root) {
 		modelRoot = root;
 	}
 
@@ -32,25 +29,6 @@ public class LogoutAsync extends AsyncTask<String, Void, LogoutResponse> {
 
 	@Override
 	public void onPostExecute(LogoutResponse response) {
-		if (response == null) {
-			Exception ex = new Exception("The Server could not be reached");
-			ExceptionMessage msg = new ExceptionMessage(ex);
-			modelRoot.updateObservable(msg);
-		}
-		else if (response.getException() == null) {
-			ClientStateChange.ClientState stateVal;
-			stateVal = ClientStateChange.ClientState.login;
-			ClientStateChange state = new ClientStateChange(stateVal);
-
-			modelRoot.updateObservable(state);
-		}
-		else {
-			Exception ex = response.getException();
-			ExceptionMessage msg = new ExceptionMessage(ex);
-			
-			modelRoot.updateObservable(msg);
-		}
-
-		return;
+		ResponseManager.handleResponse(response);
 	}
 }

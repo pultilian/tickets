@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import tickets.client.ModelFacade;
@@ -30,7 +28,6 @@ import tickets.common.DestinationCard;
 import tickets.common.Faction;
 import tickets.common.Game;
 import tickets.common.HandTrainCard;
-import tickets.common.Player;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 

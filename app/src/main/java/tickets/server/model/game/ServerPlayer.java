@@ -3,14 +3,10 @@ package tickets.server.model.game;
 
 import java.util.List;
 
-import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
-import tickets.common.HandDestinationCard;
-import tickets.common.HandTrainCard;
-import tickets.common.Route;
 import tickets.common.Player;
-
-import tickets.server.model.game.ServerGame;
+import tickets.common.Route;
+import tickets.common.TrainCard;
 import tickets.server.model.game.ServerGame.IServerPlayer;
 
 // A player in a game on the server
@@ -150,7 +146,7 @@ public class ServerPlayer extends IServerPlayer {
 					player.nextState = new PickingDestCardsState(player);
 					break;
 				default:
-					System.out.println("ERROR: in ServerPlayer.PlayerTurnState, invalid state transition");
+					System.err.println("ERROR: in ServerPlayer.PlayerTurnState, invalid state transition");
 					break;
 			}
 

@@ -1,63 +1,85 @@
 
 package tickets.client.gui.presenters;
 
-import tickets.common.IMessage;
-import tickets.common.IObserver;
-import tickets.common.IObservable;
+import tickets.client.ClientFacade;
+import tickets.client.ITaskManager;
+import tickets.client.TaskManager;
+import tickets.client.async.AsyncManager;
+import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
+import tickets.common.IMessage;
+import tickets.common.IObservable;
 import tickets.common.UserData;
-
-import tickets.client.ModelFacade;
-import tickets.client.gui.presenters.IHolderActivity;
 
 
 public class LoginPresenter implements ILoginPresenter {
     private IHolderActivity holder;
     private IObservable observable;
+    private ITaskManager manager;
 
     public LoginPresenter(IHolderActivity setHolder) {
         holder = setHolder;
-        ModelFacade.getInstance().linkObserver(this);
+        manager = AsyncManager.getInstance();
+        ClientFacade.getInstance().linkObserver(this);
+    }
+    
+    public LoginPresenter() {
+    	holder = null;
+        manager = TaskManager.getInstance();
+        ClientFacade.getInstance().linkObserver(this);
     }
 
 //----------------------------------------------------------------------------
 //	interface methods
 
     @Override
-    public void register(UserData registerData) {
+    public boolean register(UserData registerData) {
         if (!registerData.checkValues()) {
-            holder.toastException(new Exception("invalid username or password"));
+        	if (holder != null)
+        		holder.toastException(new Exception("Invalid username or password"));
+        	else {
+        		System.out.println("Invalid username or password");
+        		return false;
+        	}
         }
         else {
-            System.out.println("presenter calling model facade");
-            ModelFacade.getInstance().register(registerData);
+            manager.register(registerData);
         }
-        return;
+        return true;
     }
 
     @Override
-    public void login(UserData loginData) {
+    public boolean login(UserData loginData) {
         if (!loginData.checkValues()) {
-            holder.toastException(new Exception("invalid username or password"));
+        	if (holder != null)
+        		holder.toastException(new Exception("Invalid username or password"));
+        	else {
+        		System.out.println("Invalid username or password");
+        		return false;
+        	}
         }
         else {
-            ModelFacade.getInstance().login(loginData);
+            manager.login(loginData);
         }
-        return;
+        return true;
     }
 
     @Override
     public void notify(IMessage state) {
-        System.out.println("Being notified");
         if (state.getClass() == ClientStateChange.class) {
             ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();
             checkClientStateFlag(flag);
-        } else if (state.getClass() == ExceptionMessage.class) {
+        } else if (state.getClass() == ClientModelUpdate.class){
+        	//Do nothing
+        }else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
-            holder.toastException(e);
+            if (holder != null)
+                holder.toastException(e);
+            else
+                System.out.println(e.getMessage());
         } else {
-            Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
+            Exception err = new Exception("Observer err: unrecognized IMessage of type " + state.getClass());
             holder.toastException(err);
         }
 
@@ -79,7 +101,8 @@ public class LoginPresenter implements ILoginPresenter {
                 //do nothing
                 break;
             case lobbylist:
-                holder.makeTransition(IHolderActivity.Transition.toLobbyList);
+                if (holder != null)
+                    holder.makeTransition(IHolderActivity.Transition.toLobbyList);
                 break;
             case lobby:
                 //do nothing

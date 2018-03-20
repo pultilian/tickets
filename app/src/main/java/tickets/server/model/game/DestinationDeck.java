@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import tickets.common.DestinationCard;
 import tickets.common.AllDestinationCards;
+import tickets.common.DestinationCard;
 
 public class DestinationDeck {
 	private List<DestinationCard> cards;

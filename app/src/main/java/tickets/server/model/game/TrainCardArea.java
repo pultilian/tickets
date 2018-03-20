@@ -1,13 +1,13 @@
 
 package tickets.server.model.game;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Random;
 
-import tickets.common.TrainCard;
 import tickets.common.RouteColors;
+import tickets.common.TrainCard;
 
 public class TrainCardArea {
 	private List<TrainCard> drawDeck;
