@@ -49,9 +49,8 @@ class DrewDestCardsState extends PlayerTurnState {
 	@Override
 	String discardDestinationCard(DestinationCard card, ServerPlayer player) {
 		List<DestinationCard> options = player.getDestinationCardOptions();
-		if (card != null) options.remove(card);
-		for (DestinationCard keptCard : options) {
-		    player.addDestinationCardToHand(keptCard);
+		for (DestinationCard playerCard : options) {
+		    if (!playerCard.equals(card)) player.addDestinationCardToHand(playerCard);
         }
         player.changeState(States.NOT_MY_TURN);
 		return null;

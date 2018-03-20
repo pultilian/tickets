@@ -31,11 +31,6 @@ public interface IServer {
   public Response discardDestinationCard(DestinationCard discard, String authToken);
   public Response endTurn(String authToken);
   public AddToChatResponse addToChat(String message, String authToken);
-  
-
-  //TODO:
-  //  implement player in-game actions on ServerFacade
-  //  implement player in-game actions on ServerProxy
 
   //Poller response object
   public ClientUpdate updateClient(String lastReceivedCommandID, String authToken);
