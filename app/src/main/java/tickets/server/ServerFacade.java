@@ -17,6 +17,7 @@ import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.PlayerInfo;
 import tickets.common.Route;
+import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 import tickets.common.UserData;
 import tickets.common.response.AddToChatResponse;
@@ -180,7 +181,6 @@ public class ServerFacade implements IServer {
                 info.setFaction(player.getPlayerFaction());
                 clientGame.addPlayer(info);
             }
-            game.initializeAllPlayers();
             AllGames.getInstance().addGame(game);
 
             // Update relevant clients and move clients from lobby to game
@@ -326,24 +326,32 @@ public class ServerFacade implements IServer {
     }
 
     @Override
-    public Response claimRoute(Route route, String authToken) {
+    public Response claimRoute(Route route, List<TrainCard> cards, String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
 
             // Any reason for failing here will be thrown as an exception
-            game.claimRoute(route, authToken);
+            game.claimRoute(route, cards, authToken);
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
                     " claimed the route " + route.toString();
             game.addToHistory(historyMessage);
 
+            // Get color of route to be claimed from train card color
+            RouteColors color = null;
+            for (TrainCard card : cards) {
+                if (card.getColor() != RouteColors.Wild) {
+                    if (color == null) color = card.getColor();
+                }
+            }
+
             //update other clients in the game
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
                 if (!client.getAuthToken().equals(authToken)) {
-                    client.addClaimedRoute(route);
+                    client.addClaimedRoute(route, color, game.getPlayerColor(authToken));
                 }
             }
 

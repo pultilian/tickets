@@ -12,7 +12,9 @@ import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
+import tickets.common.PlayerColor;
 import tickets.common.Route;
+import tickets.common.RouteColors;
 
 public class ClientProxy implements IClient {
 
@@ -150,10 +152,10 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void addClaimedRoute(Route route) {
+    public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player) {
         Command command = new Command("addClaimedRoute",
-                new String[]{Route.class.getName()},
-                new Object[]{route});
+                new String[]{Route.class.getName(), RouteColors.class.getName(), PlayerColor.class.getName()},
+                new Object[]{route, routeColor, player});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;

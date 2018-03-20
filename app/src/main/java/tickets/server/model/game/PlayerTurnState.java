@@ -21,7 +21,7 @@ abstract class PlayerTurnState {
 
     abstract String drawFaceUpCard(TrainCard card, ServerPlayer player);
 
-    abstract String claimRoute(Route route, ServerPlayer player);
+    abstract String claimRoute(Route route, List<TrainCard> cards, ServerPlayer player);
 
     abstract String drawDestinationCards(List<DestinationCard> cards, ServerPlayer player);
 

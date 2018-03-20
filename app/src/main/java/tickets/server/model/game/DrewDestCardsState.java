@@ -37,7 +37,7 @@ class DrewDestCardsState extends PlayerTurnState {
 	}
 
 	@Override
-	String claimRoute(Route route, ServerPlayer player) {
+	String claimRoute(Route route, List<TrainCard> cards, ServerPlayer player) {
 		return "You must choose which destination cards (if any) to discard.";
 	}
 

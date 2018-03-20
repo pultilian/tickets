@@ -79,8 +79,8 @@ public class ServerPlayer extends Player {
         return turnState.drawFaceUpCard(card, this);
     }
 
-    public String claimRoute(Route route) {
-	    return turnState.claimRoute(route, this);
+    public String claimRoute(Route route, List<TrainCard> cards) {
+	    return turnState.claimRoute(route, cards, this);
     }
 
     public String drawDestinationCards(List<DestinationCard> cards) {

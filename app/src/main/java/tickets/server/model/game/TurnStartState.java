@@ -47,11 +47,25 @@ class TurnStartState extends PlayerTurnState {
     }
 
     @Override
-    String claimRoute(Route route, ServerPlayer player) {
-        // If route can be claimed, claim it. Otherwise, return an error message.
-        // TODO: Implement this
-        player.changeState(States.NOT_MY_TURN);
-        return null;
+    String claimRoute(Route route, List<TrainCard> cards, ServerPlayer player) {
+        // Get color of route to be claimed from train card color
+        RouteColors color = null;
+        for (TrainCard card : cards) {
+            if (card.getColor() != RouteColors.Wild) {
+                if (color == null) color = card.getColor();
+                else if (color != card.getColor()) return "Cards must all be the same color or wild.";
+            }
+        }
+
+        // Check correct number of cards
+        if (route.getLength() != cards.size()) return "Incorrect number of cards.";
+
+        // Attempt to claim route
+        if (route.claim(color, player.getPlayerFaction().getColor())) {
+            player.changeState(States.NOT_MY_TURN);
+            return null;
+        }
+        else return "You cannot claim this route.";
     }
 
     @Override

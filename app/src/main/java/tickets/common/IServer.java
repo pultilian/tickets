@@ -1,5 +1,7 @@
 package tickets.common;
 
+import java.util.List;
+
 import tickets.common.response.AddToChatResponse;
 import tickets.common.response.ClientUpdate;
 import tickets.common.response.DestinationCardResponse;
@@ -26,7 +28,7 @@ public interface IServer {
   //Game Actions
   public TrainCardResponse drawTrainCard(String authToken);
   public TrainCardResponse drawFaceUpCard(int position, String authToken);
-  public Response claimRoute(Route route, String authToken);
+  public Response claimRoute(Route route, List<TrainCard> cards, String authToken);
   public DestinationCardResponse drawDestinationCards(String authToken);
   public Response discardDestinationCard(DestinationCard discard, String authToken);
   public Response endTurn(String authToken);

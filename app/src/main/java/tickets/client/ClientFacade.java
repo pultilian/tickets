@@ -14,7 +14,9 @@ import tickets.common.IMessage;
 import tickets.common.IObserver;
 import tickets.common.Lobby;
 import tickets.common.Player;
+import tickets.common.PlayerColor;
 import tickets.common.Route;
+import tickets.common.RouteColors;
 import tickets.common.UserData;
 
 
@@ -187,7 +189,7 @@ public class ClientFacade implements IClient {
         updateObservable(message);
 	}
 
-	public void addClaimedRoute(Route route) {
+	public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player) {
 		// TODO: Implement this
 		// - update route ownership / color
 		// - add active player points

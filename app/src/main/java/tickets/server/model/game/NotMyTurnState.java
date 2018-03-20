@@ -35,7 +35,7 @@ class NotMyTurnState extends PlayerTurnState {
 	}
 
 	@Override
-	String claimRoute(Route route, ServerPlayer player) {
+	String claimRoute(Route route, List<TrainCard> cards, ServerPlayer player) {
 		return "It is not your turn.";
 	}
 

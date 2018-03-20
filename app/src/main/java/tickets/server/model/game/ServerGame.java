@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import tickets.common.AllDestinationCards;
 import tickets.common.Game;
+import tickets.common.GameMap;
+import tickets.common.PlayerColor;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
@@ -31,6 +33,7 @@ public class ServerGame extends Game {
 
 	private TrainCardArea trainCardArea;
 	private DestinationDeck destinationDeck;
+	private GameMap map;
 
 	// private List<Route> routes;
 	//		-> I'd much prefer if this was a map object that held the cities and routes together
@@ -51,19 +54,9 @@ public class ServerGame extends Game {
 		List<TrainCard> allTrainCards = initializeTrainCards();
 		trainCardArea = new TrainCardArea(allTrainCards);
 		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
-		players.get(0).startTurn();
+		initializeAllPlayers();
+		map = new GameMap();
 	}
-
-	public void initializeAllPlayers() {
-	    for (ServerPlayer player : players) {
-            List<TrainCard> hand = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                hand.add(trainCardArea.drawCard());
-            }
-            List<DestinationCard> destinations = destinationDeck.drawCards();
-            player.initPlayer(hand, destinations);
-        }
-    }
 
 	private List<TrainCard> initializeTrainCards() {
 		List<TrainCard> allTrainCards = new ArrayList<>();
@@ -84,6 +77,17 @@ public class ServerGame extends Game {
 		return allTrainCards;
 	}
 
+    private void initializeAllPlayers() {
+        for (ServerPlayer player : players) {
+            List<TrainCard> hand = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                hand.add(trainCardArea.drawCard());
+            }
+            List<DestinationCard> destinations = destinationDeck.drawCards();
+            player.initPlayer(hand, destinations);
+        }
+    }
+
 	//----------------------------------------------------------------------------------------------
     // *** GETTERS ***
 
@@ -95,6 +99,15 @@ public class ServerGame extends Game {
         for (ServerPlayer player : players) {
             if (player.getAssociatedAuthToken().equals(authToken)) {
                 return player;
+            }
+        }
+        return null;
+    }
+
+    public PlayerColor getPlayerColor(String authToken) {
+	    for (ServerPlayer player : players) {
+	        if (player.getAssociatedAuthToken().equals(authToken)) {
+	            return player.getPlayerFaction().getColor();
             }
         }
         return null;
@@ -127,15 +140,25 @@ public class ServerGame extends Game {
         else return trainCardArea.drawCard();
 	}
 
-	public void claimRoute(Route route, String authToken) throws Exception {
+	public void claimRoute(Route route, List<TrainCard> cards, String authToken) throws Exception {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
-        // TODO: Implement check for route already claimed. Something like the code below
-        //if (route.getOwner() != null) throw new Exception("That route is already claimed.");
-
-        String errorMsg = player.claimRoute(route);
+        String errorMsg = player.claimRoute(route, cards);
         if (errorMsg != null) throw new Exception(errorMsg);
+
+        // Success! Now update the server model
+        else {
+            // Get color of route to be claimed from train card color
+            RouteColors color = null;
+            for (TrainCard card : cards) {
+                player.removeTrainCard(card.getColor());
+                if (card.getColor() != RouteColors.Wild) {
+                    if (color == null) color = card.getColor();
+                }
+            }
+            map.claimRoute(route.getSrc(), route.getDest(), color, player.getPlayerFaction().getColor());
+        }
     }
 
 	public List<DestinationCard> drawDestinationCards(String authToken) throws Exception {

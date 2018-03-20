@@ -41,7 +41,17 @@ public class Route {
 		this.length = length;
 	}
 
+	public int getLength() {
+		return length;
+	}
 
+	public String getSrc() {
+		return src;
+	}
+
+	public String getDest() {
+		return dest;
+	}
 
 	// Check if a route is a double route or not
 	// 
