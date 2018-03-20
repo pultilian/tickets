@@ -16,6 +16,17 @@ import tickets.server.model.game.ServerPlayer;
 import tickets.server.model.game.TrainCardArea;
 import tickets.server.model.game.DestinationDeck;
 
+
+/** Defines a game of Ticket to Ride in terms of what the server knows
+ *	and what operations are available within it (i.e. player turns). 
+ *
+ *	@inv 1 < players.size() < 6
+ *	@inv 0 <= currentPlayerIndex < players.size()
+ *	@inv trainCardArea != null
+ *	@inv destinationDeck != null
+ *		
+ *
+ */
 public class ServerGame extends Game {
 	//inherited:
 	// public Game(String gameId);
@@ -27,20 +38,17 @@ public class ServerGame extends Game {
 
 //--------------
 
-		//Players are stored in turn order - only index of the current player is stored separately
+		//Players are stored in turn order - only the index of the current player is stored separately
 	private List<ServerPlayer> players;
 	private int currentPlayerIndex;
 
 	private TrainCardArea trainCardArea;
 	private DestinationDeck destinationDeck;
 
-	// private List<Route> routes;
-	//		-> I'd much prefer if this was a map object that held the cities and routes together
-	//		  private Map map;
-
 	//----------------------------------------------------------------------------------------------
 	// *** SET-UP METHODS ***
 
+	// @pre playersFromLobby.size() is 2, 3, 4, or 5
 	public ServerGame(String gameID, List<Player> playersFromLobby) {
 		super(gameID);
 
@@ -132,7 +140,7 @@ public class ServerGame extends Game {
 	//	nested abstract class provides an interface for ServerPlayer and
 	//	ServerGame to ineract with each other without circular dependencies
 
-	abstract class IServerPlayer extends Player {
+	public abstract class IServerPlayer extends Player {
 			//inherited:
 			// public Player(String playerId, String associatedAuthToken);
 			// public String getPlayerId();
