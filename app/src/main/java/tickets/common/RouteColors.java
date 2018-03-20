@@ -2,6 +2,7 @@
 package tickets.common;
 
 public enum RouteColors {
+	Gray,
 	Purple,
 	Blue,
 	Orange,
