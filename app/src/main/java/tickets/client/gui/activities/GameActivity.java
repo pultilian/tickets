@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import tickets.client.ModelFacade;
 import tickets.client.gui.fragments.ChatFragment;
 import tickets.client.gui.fragments.DestinationFragment;
 import tickets.client.gui.fragments.GameInfoFragment;
@@ -206,6 +207,8 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ModelFacade.getInstance().addPlayerPoints(15);
+                ModelFacade.getInstance().removePlayerShips(12);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment fragment = new MapFragment();
                 fragmentManager.beginTransaction()
@@ -420,7 +423,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
      */
     @Override
     public void updatePlayerDestHand(){
-        initVariables();
+        destinationAdapter.notifyDataSetChanged();
     }
 
     class DestinationAdapter extends RecyclerView.Adapter<DestinationHolder> {
