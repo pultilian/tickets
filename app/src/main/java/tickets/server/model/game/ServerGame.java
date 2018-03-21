@@ -31,6 +31,10 @@ public class ServerGame extends Game {
 	private List<ServerPlayer> players;
 	private int currentPlayerIndex;
 
+	// The number of players who chose their initial destination cards.
+    // Players cannot take any other action until all players are ready.
+	private int playersReady;
+
 	private TrainCardArea trainCardArea;
 	private DestinationDeck destinationDeck;
 	private GameMap map;
@@ -56,6 +60,7 @@ public class ServerGame extends Game {
 		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
 		initializeAllPlayers();
 		map = new GameMap();
+		playersReady = 0;
 	}
 
 	private List<TrainCard> initializeTrainCards() {
@@ -181,6 +186,13 @@ public class ServerGame extends Game {
         if (errorMsg != null) throw new Exception(errorMsg);
         else if (!destinationDeck.discardCard(card))
             throw new Exception("This card is already in the destination deck.");
+
+        // Success
+        playersReady++;
+        // When everyone is ready (at start of game) begin first player's turn.
+        if (playersReady == players.size()) {
+            players.get(currentPlayerIndex).startTurn();
+        }
     }
 
     public void nextTurn() {
