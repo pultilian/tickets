@@ -14,6 +14,9 @@ import tickets.common.IMessage;
 import tickets.common.IObserver;
 import tickets.common.Lobby;
 import tickets.common.Player;
+import tickets.common.PlayerColor;
+import tickets.common.Route;
+import tickets.common.RouteColors;
 import tickets.common.UserData;
 
 
@@ -120,7 +123,7 @@ public class ClientFacade implements IClient {
 	}
 
     public void endCurrentTurn() {
-        return;
+        currentGame.nextTurn();
     }
 
     public void addChatMessage(String message) {
@@ -186,27 +189,24 @@ public class ClientFacade implements IClient {
         updateObservable(message);
 	}
 
-    public void addPlayerPoints(int points) {
-        if (localPlayer.getPlayerFaction().getName().equals(currentGame.getActivePlayerInfo().getFaction().getName())) {
-            localPlayer.getInfo().addToScore(points);
-        }
-	    currentGame.getActivePlayerInfo().addToScore(points);
-        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-        updateObservable(message);
-    }
+	public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player) {
+		// TODO: Implement this
+		// - update route ownership / color
+		// - add active player points
+		// - remove active player ships
+	}
 
-    public void removePlayerShips(int numShips) {
-	    if (localPlayer.getPlayerFaction().getName().equals(currentGame.getActivePlayerInfo().getFaction().getName())) {
-	        localPlayer.getInfo().useShips(numShips);
-        }
-	    currentGame.getActivePlayerInfo().useShips(numShips);
-	    ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-	    updateObservable(message);
-    }
+	public void addPlayerDestinationCards(int numCards) {
+		for (int i = 0; i < numCards; i++) {
+			currentGame.getActivePlayerInfo().addDestinationCard();
+		}
+		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+		updateObservable(message);
+	}
 
-    public void addPlayerDestinationCard(){
-        currentGame.getActivePlayerInfo().addDestinationCard();
-        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-        updateObservable(message);
-    }
+	public void removePlayerDestinationCard() {
+		currentGame.getActivePlayerInfo().removeDestinationCard();
+		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+		updateObservable(message);
+	}
 }

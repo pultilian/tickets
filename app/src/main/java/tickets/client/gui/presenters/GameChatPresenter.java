@@ -3,9 +3,7 @@ package tickets.client.gui.presenters;
 
 import java.util.List;
 
-import tickets.client.ModelFacade;
 import tickets.common.ClientModelUpdate;
-import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
 import tickets.common.IMessage;
 import tickets.common.IObservable;
@@ -20,7 +18,7 @@ public class GameChatPresenter implements IGameChatPresenter {
 
 	public GameChatPresenter(IHolderGameChatFragment setHolder) {
 		holder = setHolder;
-		ModelFacade.getInstance().linkObserver(this);
+		ClientFacade.getInstance().linkObserver(this);
 	}
 
 	public void addToChat(String message){

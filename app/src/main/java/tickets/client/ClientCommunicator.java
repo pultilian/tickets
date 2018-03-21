@@ -16,7 +16,7 @@ import tickets.common.ResultTransferObject;
 
 public class ClientCommunicator {
 
-	private static final String SERVER_HOST = "10.34.248.79";
+	private static final String SERVER_HOST = "192.168.1.193";
 	private static final String PORT = "8080";
 	private static final String PATH = "/command";
 

@@ -54,6 +54,10 @@ public class Player {
         playerResourceCards.addCard(card);
     }
 
+    public void removeTrainCard(RouteColors cardColor) {
+        playerResourceCards.removeCard(cardColor);
+    }
+
     public HandDestinationCard getHandDestinationCards() {
         return playerDestinationCards;
     }

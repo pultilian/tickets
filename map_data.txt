@@ -1,0 +1,59 @@
+map text data:
+	location*
+location: 
+	city -> { route* }
+route:
+	city(route_data)
+route_data:
+	CL
+	CCL
+	 - (C: color code)
+	 - (L: length integer)
+
+Colors:
+	X - Gay
+	G - Green
+	P - pink
+	Y - yellow
+	O - orange
+	K - black
+	R - red
+	W - white
+
+
+Vancouver -> { Calgary(X3), Seattle(XX1) }
+Seattle -> { Vancouver(XX1), Calgary(X4), Helena(Y6), Portland(XX1) }
+Portland -> { Seattle(XX1), San Francisco(GP5), Salt Lake City(b6) }
+San Fransisco -> { Portland(GP5), Salt Lake City(OW5), Los Angeles(PY3) }
+Los Angeles -> { San Francisco(PY3), Las Vegas(X2), Phoenix(X3), El Paso(K6) }
+Las Vegas -> { Los Angeles(X2), Salt Lake City(O3) }
+Salt Lake City -> { Las Vegas(O3), San Francisco(OW5), Portland(B6), helena(O6), Denver(RY3) }
+Helena -> { Calgary(X4), Winnipeg(B4), duluth(O6), Omaha(R5), Denver(G4), Salt Lake City(P3), Seattle(Y6) }
+Calgary -> { vanc(X3), Seattle(X4), Helena(X4), Winnipeg(W6) }
+Winnipeg -> { Duluth(K4), Helena(B4), Calgary(W6), Sault St. Marie(X6) }
+Duluth -> { Sault St. Marie(X3), Toronto(P6), Chicago(R3), Omaha(XX2), Helena(O6), Winnipeg(K4) }
+Omaha -> { Denver(P4), Helena(R5), Duluth(XX2), Chicago(B4), Kansas City(XX1) }
+Kansas City -> { Denver(KO4), Omaha(XX1), Saint Louis(BP2), Oklahoma City(XX2),  }
+Denver -> { Helena(G4), Omaha(P4), Kansas City(KO4), Oklahoma City(R4), Santa Fe(X2), Phoenix(W5), Salt Lake City(RY3) }
+Phoenix -> { Los Angeles(X3), Denver(W5), Santa Fe(X3), El Paso(X3) }
+Santa Fe -> { Denver(X2), Oklahoma City(B3), El Paso(X2), Phoenix(X3) }
+El Paso -> { Los Angeles(K6), Phoenix(X3), Santa Fe(X2), Oklahoma City(Y5), Dallas(R4), Houston(G6) }
+Houston -> { El Paso(G6), Dallas(XX1), New Orleans(X2) }
+Dallas -> { El Paso(R4), Oklahoma City(XX2), Little Rock(X2), Houston(XX1) }
+Oklahoma City -> { El Paso(Y5), Santa Fe(B3), Denver(R4), Kansas City(XX2), Little Rock(X2), Dallas(XX2) }
+Little Rock -> { Dallas(X2), Oklahoma City(X2), Saint Louis(X2), Nashville(W3), New Orleans(G3) }
+New Orleans -> { Houston(X2), Little Rock(G3), Atlanta(YO4), Miami(R6) }
+Saint Louis -> { Kansas City(BP2), Chicago(GW2), Pittsburg(G5), Nashville(X2), Little Rock(X2) }
+Chicago -> { Omaha(B4), Duluth(R3), Toronto(W4), Pittsburg(OK3), Saint Louis(GW2) }
+Sault St. Marie -> { Winnipeg(X6), Duluth(X3), Toronto(X2), Montreal(K5) }
+Toronto -> { Pittsburg(X2), Chicago(W4), Duluth(P6), Sault St. Marie(X2), Montreal(X2) }
+Pittsburg -> { New York(WG2), Washington(X2), Raleigh(X2), Nashville(Y4), Saint Louis(G5), Chicago(YK3), Toronto(X2) }
+Nashville -> { Raleigh(K3), Atlanta(X1), Little Rock(W3), Saint Louis(X2), Pittsburg(Y4) }
+Atlanta -> { Raleigh(XX2), Charleston(X2), Miami(B5), New Orleans(YO4), Nashville(X1) }
+Miami -> { Charleston(P4), Atlanta(B5), New Orleans(R6) }
+Charleston -> { Raleigh(X2), Atlanta(X2), Miami(P4) }
+Raleigh -> { Washington(XX2), Pittsburg(X2), Nashville(K3), Atlanta(XX2), Charleston(X2) }
+Washington -> { New York(OK2), Pittsburg(X2), Raleigh(XX2) }
+New York -> { Pittsburg(WG2), Montreal(B3), Boston(YR2), Washington(OK2) }
+Boston -> { Montreal(XX2), New York(YR2) }
+Montreal -> { Sault St. Marie(K5), Toronto(X3), New York(B3), Boston(XX2) }
