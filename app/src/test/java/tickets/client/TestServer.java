@@ -464,8 +464,9 @@ public class TestServer {
         assertEquals("Wrong exception message (during attempt to play before all players initialize)",
                 trainCardResponse.getException().getMessage(), "It is not your turn.");
 
-        discardResponse = server.discardDestinationCard(cards2.get(0), auth2);
-        assertNull("Valid initial discard destination card rejected.", discardResponse.getException());
+        // Test able to not discard any cards
+        discardResponse = server.discardDestinationCard(null, auth2);
+        assertNull("Valid initial discard destination card rejected (no discard).", discardResponse.getException());
     }
 
     @Test
@@ -535,8 +536,10 @@ public class TestServer {
 
         for (TrainCard card : cards) {
             if (card.getColor() == RouteColors.Wild) {
+
                 // NOTE: I cannot guarantee that a wild face-up card will be found due to
                 // randomness of face-up cards. This code may not be run.
+
                 // Test cannot draw face-up wild card on second draw
                 trainCardResponse = server.drawFaceUpCard(position, auth1);
                 assertNotNull("Invalid draw train card allowed (face-up wild on 2nd draw).", trainCardResponse.getException());
@@ -559,17 +562,98 @@ public class TestServer {
     }
 
     @Test
+    public void testEndTurn() {
+        // *** SET UP ***
+        ServerFacade server = ServerFacade.getInstance();
+
+        UserData data = new UserData("EndTurnTest", "password");
+        LoginResponse response = server.register(data);
+        String auth1 = response.getAuthToken();
+
+        data = new UserData("EndTurnTest2", "password");
+        response = server.register(data);
+        String auth2 = response.getAuthToken();
+
+        Lobby lobby = new Lobby("End Turn Test", 2);
+        JoinLobbyResponse joinLobbyResponse = server.createLobby(lobby, auth1);
+        String lobbyID = joinLobbyResponse.getLobby().getId();
+        server.joinLobby(lobbyID, auth2);
+        ClientUpdate update1 = server.updateClient(null, auth1);
+        String lastID1 = update1.getLastCommandID();
+        ClientUpdate update2 = server.updateClient(null, auth2);
+        String lastID2 = update2.getLastCommandID();
+        StartGameResponse startGameResponse = server.startGame(lobbyID, auth1);
+
+        List<DestinationCard> cards1 = startGameResponse.getDestCardOptions().getDestinationCards();
+        update2 = server.updateClient(lastID2, auth2);
+        Queue<Command> commands = update2.getCommands();
+        Command command = commands.remove();
+        command.decode();
+        ChoiceDestinationCards cards2Choice = (ChoiceDestinationCards)command.getParameters()[2];
+        List<DestinationCard> cards2 = cards2Choice.getDestinationCards();
+        server.discardDestinationCard(cards1.get(0), auth1);
+        server.discardDestinationCard(cards2.get(0), auth2);
+
+        server.drawTrainCard(auth1);
+        server.drawTrainCard(auth1);
+
+        update1 = server.updateClient(lastID1, auth1);
+        lastID1 = update1.getLastCommandID();
+        update2 = server.updateClient(lastID2, auth2);
+        lastID2 = update2.getLastCommandID();
+        // *** END SET UP ***
+
+        // Test player 2 cannot perform actions until player 1 ends turn
+        TrainCardResponse trainCardResponse = server.drawTrainCard(auth2);
+        assertNotNull("Invalid action allowed (not my turn).", trainCardResponse.getException());
+        assertNull("Train card given on invalid action (not my turn).", trainCardResponse.getCard());
+
+        // Test player 2 end turn does nothing
+        Response serverResponse = server.endTurn(auth2);
+        assertNotNull("End turn allowed when not my turn.", serverResponse.getException());
+
+        // Test player 1 ends turn
+        serverResponse = server.endTurn(auth1);
+        assertNull("Valid end turn rejected.", serverResponse.getException());
+
+        // Test update history for both players
+        update1 = server.updateClient(lastID1, auth1);
+        assertNull("Update client failed.", update1.getException());
+        assertNotNull("Command queue not sent (update history).", update1.getCommands());
+        assertNotNull("Last command ID not sent (update history).", update1.getLastCommandID());
+        commands = update1.getCommands();
+        assertFalse("Command queue is empty (update history).", commands.isEmpty());
+        command = commands.remove();
+        assertEquals("Wrong command sent (update history).", "addToGameHistory", command.getMethodName());
+
+        update2 = server.updateClient(lastID2, auth2);
+        assertNull("Update client failed.", update2.getException());
+        assertNotNull("Command queue not sent (update history).", update2.getCommands());
+        assertNotNull("Last command ID not sent (update history).", update2.getLastCommandID());
+        commands = update2.getCommands();
+        assertFalse("Command queue is empty (update history).", commands.isEmpty());
+        command = commands.remove();
+        assertEquals("Wrong command sent (update history).", "addToGameHistory", command.getMethodName());
+
+        // Test player 2 can do actions now.
+        trainCardResponse = server.drawTrainCard(auth2);
+        assertNull("Valid action rejected after next turn.", trainCardResponse.getException());
+        server.drawTrainCard(auth2);
+
+        // Test end turn, goes back to player 1
+        serverResponse = server.endTurn(auth2);
+        assertNull("Valid end turn rejected (Player 2).", serverResponse.getException());
+        trainCardResponse = server.drawTrainCard(auth1);
+        assertNull("Valid action rejected after turn goes back to player 1.", trainCardResponse.getException());
+    }
+
+    @Test
     public void testDrawDestinationCards() {
 
     }
 
     @Test
     public void testClaimRoute() {
-
-    }
-
-    @Test
-    public void testEndTurn() {
 
     }
 }

@@ -427,7 +427,8 @@ public class ServerFacade implements IServer {
         try {
             ServerGame game = getGameForToken(authToken);
 
-            game.nextTurn();
+            // Any reason for failing here will be thrown as an exception
+            game.nextTurn(authToken);
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
