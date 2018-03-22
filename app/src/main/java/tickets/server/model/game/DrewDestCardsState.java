@@ -1,6 +1,7 @@
 
 package tickets.server.model.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tickets.common.TrainCard;
@@ -50,12 +51,16 @@ class DrewDestCardsState extends PlayerTurnState {
 	String discardDestinationCard(DestinationCard card, ServerPlayer player) {
 		if (card != null) {
 			List<DestinationCard> options = player.getDestinationCardOptions();
+			List<DestinationCard> toDiscard = new ArrayList<>();
+			// Find discarded cards and "mark" them. Add other cards to player's hand
 			for (DestinationCard playerCard : options) {
 				if (!playerCard.equals(card)) {
 					player.addDestinationCardToHand(playerCard);
-					options.remove(playerCard);
 				}
+				else toDiscard.add(playerCard);
 			}
+			// Delete marked cards from current options
+            options.removeAll(toDiscard);
 		}
         player.changeState(States.NOT_MY_TURN);
 		return null;
