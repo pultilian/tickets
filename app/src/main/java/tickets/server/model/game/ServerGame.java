@@ -178,7 +178,7 @@ public class ServerGame extends Game {
         else return destinationDeck.drawCards();
 	}
 
-	public void discardDestinationCard(DestinationCard card, String authToken) throws Exception {
+	public List<DestinationCard> discardDestinationCard(DestinationCard card, String authToken) throws Exception {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
@@ -193,6 +193,7 @@ public class ServerGame extends Game {
         if (playersReady == players.size()) {
             players.get(currentPlayerIndex).startTurn();
         }
+        return player.getDestinationCardOptions();
     }
 
     public void nextTurn(String authToken) throws Exception {

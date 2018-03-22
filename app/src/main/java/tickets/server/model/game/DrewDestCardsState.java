@@ -51,7 +51,10 @@ class DrewDestCardsState extends PlayerTurnState {
 		if (card != null) {
 			List<DestinationCard> options = player.getDestinationCardOptions();
 			for (DestinationCard playerCard : options) {
-				if (!playerCard.equals(card)) player.addDestinationCardToHand(playerCard);
+				if (!playerCard.equals(card)) {
+					player.addDestinationCardToHand(playerCard);
+					options.remove(playerCard);
+				}
 			}
 		}
         player.changeState(States.NOT_MY_TURN);
