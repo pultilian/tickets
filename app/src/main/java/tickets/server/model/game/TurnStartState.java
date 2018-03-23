@@ -64,7 +64,7 @@ class TurnStartState extends PlayerTurnState {
         // Attempt to claim route
         if (route.claim(color, player.getPlayerFaction().getColor())) {
             player.changeState(States.NOT_MY_TURN);
-            return ServerPlayer.END_TURN;
+            return null;
         }
         else return "You cannot claim this route.";
     }

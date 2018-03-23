@@ -206,7 +206,7 @@ public class ServerGame extends Game {
         if (playersReady == players.size()) {
             players.get(currentPlayerIndex).startTurn();
         }
-        startNextTurn();
+        else startNextTurn();
         return player.getDestinationCardOptions();
     }
 

@@ -63,7 +63,7 @@ class DrewDestCardsState extends PlayerTurnState {
             options.removeAll(toDiscard);
 		}
         player.changeState(States.NOT_MY_TURN);
-		return ServerPlayer.END_TURN;
+		return null;
 	}
 
 	@Override
