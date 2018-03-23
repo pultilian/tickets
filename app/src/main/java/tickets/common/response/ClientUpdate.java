@@ -1,8 +1,8 @@
 package tickets.common.response;
 
-import tickets.common.Command;
-
 import java.util.Queue;
+
+import tickets.common.Command;
 
 public class ClientUpdate extends Response{
 

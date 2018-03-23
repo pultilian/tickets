@@ -14,14 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import tickets.client.gui.activities.GameActivity;
 import tickets.client.gui.activities.R;
 import tickets.client.gui.presenters.GameChatPresenter;
-import tickets.client.gui.presenters.GamePresenter;
-import tickets.common.DestinationCard;
 
 /**
  * Created by Pultilian on 3/4/2018.

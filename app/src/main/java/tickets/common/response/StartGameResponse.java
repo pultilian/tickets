@@ -2,9 +2,7 @@ package tickets.common.response;
 
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.Game;
-import tickets.common.DestinationCard;
 import tickets.common.HandTrainCard;
-import tickets.common.TrainCard;
 
 public class StartGameResponse extends Response {
 

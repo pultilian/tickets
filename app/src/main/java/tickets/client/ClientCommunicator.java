@@ -1,5 +1,9 @@
 package tickets.client;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -10,13 +14,9 @@ import java.net.URL;
 import tickets.common.Command;
 import tickets.common.ResultTransferObject;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-
 public class ClientCommunicator {
 
-	private static final String SERVER_HOST = "192.168.1.220";
+	private static final String SERVER_HOST = "192.168.1.158";
 	private static final String PORT = "8080";
 	private static final String PATH = "/command";
 

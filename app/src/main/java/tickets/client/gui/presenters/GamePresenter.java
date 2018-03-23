@@ -5,16 +5,15 @@ import java.util.List;
 
 import tickets.client.ITaskManager;
 import tickets.client.TaskManager;
+import tickets.client.ClientFacade;
 import tickets.client.async.AsyncManager;
 import tickets.common.ClientModelUpdate;
+import tickets.common.ClientStateChange;
 import tickets.common.DestinationCard;
+import tickets.common.ExceptionMessage;
 import tickets.common.HandTrainCard;
 import tickets.common.IMessage;
 import tickets.common.IObservable;
-import tickets.common.ClientStateChange;
-import tickets.common.ExceptionMessage;
-
-import tickets.client.ClientFacade;
 import tickets.common.Player;
 import tickets.common.TrainCard;
 
