@@ -1,12 +1,17 @@
 
 package tickets.client.gui.presenters;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+
 import java.util.List;
 
 import tickets.client.ITaskManager;
 import tickets.client.TaskManager;
 import tickets.client.ClientFacade;
 import tickets.client.async.AsyncManager;
+import tickets.client.gui.activities.R;
+import tickets.client.gui.fragments.DestinationFragment;
 import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.DestinationCard;
@@ -121,6 +126,7 @@ public class GamePresenter implements IGamePresenter {
                     holder.updatePlayerDestHand();
                 break;
             case destCardOptionsUpdated:
+                holder.makeTransition(null);
                 break;
             case gameHistoryUpdated:
                 break;
