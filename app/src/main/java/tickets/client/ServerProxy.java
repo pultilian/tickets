@@ -1,10 +1,13 @@
 package tickets.client;
 
+import java.util.List;
+
 import tickets.common.Command;
 import tickets.common.DestinationCard;
 import tickets.common.IServer;
 import tickets.common.Lobby;
 import tickets.common.Route;
+import tickets.common.TrainCard;
 import tickets.common.UserData;
 import tickets.common.response.AddToChatResponse;
 import tickets.common.response.ClientUpdate;
@@ -131,14 +134,14 @@ public class ServerProxy implements IServer {
         return (ClientUpdate) result;
     }
 
-
-    public Response claimRoute(Route route, String authToken) {
-        Object[] parameters = {route, authToken};
-        String[] parameterTypes = {Route.class.getName(), String.class.getName()};
+    public Response claimRoute(Route route, List<TrainCard> cards, String authToken) {
+        Object[] parameters = {route, cards, authToken};
+        String[] parameterTypes = {Route.class.getName(), List.class.getName(), String.class.getName()};
         Command command = new Command("claimRoute", parameterTypes, parameters);
         Object result = clientCommunicator.send(command);
         return (Response) result;
     }
+
     public Response discardDestinationCard(DestinationCard discard, String authToken) {
         Object[] parameters = {discard, authToken};
         String[] parameterTypes = {DestinationCard.class.getName(), String.class.getName()};
@@ -146,6 +149,7 @@ public class ServerProxy implements IServer {
         Object result = clientCommunicator.send(command);
         return (Response) result;
     }
+
     public Response endTurn(String authToken) {
         Object[] parameters = {authToken};
         String[] parameterTypes = {String.class.getName()};

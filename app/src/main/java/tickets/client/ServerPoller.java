@@ -100,5 +100,5 @@ public class ServerPoller {
     	        System.err.println(updates.getException().getMessage());
             }
     	}
-    };    
+    };
 }

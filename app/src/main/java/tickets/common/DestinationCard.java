@@ -23,4 +23,10 @@ public class DestinationCard {
 	public int getValue() {
 		return value;
 	}
+
+	public boolean equals(DestinationCard other) {
+		return (this.firstCity.equals(other.firstCity) &&
+		this.secondCity.equals(other.secondCity) &&
+		this.value == other.value);
+	}
 }

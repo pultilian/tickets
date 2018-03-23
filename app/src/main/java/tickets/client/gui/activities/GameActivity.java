@@ -420,7 +420,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
      */
     @Override
     public void updatePlayerDestHand(){
-        initVariables();
+        destinationAdapter.notifyDataSetChanged();
     }
 
     class DestinationAdapter extends RecyclerView.Adapter<DestinationHolder> {

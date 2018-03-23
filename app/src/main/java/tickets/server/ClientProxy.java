@@ -12,6 +12,9 @@ import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
+import tickets.common.PlayerColor;
+import tickets.common.Route;
+import tickets.common.RouteColors;
 
 public class ClientProxy implements IClient {
 
@@ -149,28 +152,28 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void addPlayerPoints(int points) {
-        Command command = new Command("addPlayerPoints",
-                new String[]{Integer.class.getName()},
-                new Object[]{points});
+    public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player) {
+        Command command = new Command("addClaimedRoute",
+                new String[]{Route.class.getName(), RouteColors.class.getName(), PlayerColor.class.getName()},
+                new Object[]{route, routeColor, player});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
 
     @Override
-    public void removePlayerShips(int numShips) {
-        Command command = new Command("removePlayerShips",
+    public void addPlayerDestinationCards(int num) {
+        Command command = new Command("addPlayerDestinationCards",
                 new String[]{Integer.class.getName()},
-                new Object[]{numShips});
+                new Object[]{num});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
 
     @Override
-    public void addPlayerDestinationCard() {
-        Command command = new Command("addPlayerDestinationCard",
+    public void removePlayerDestinationCard() {
+        Command command = new Command("removePlayerDestinationCard",
                 new String[0],
                 new Object[0]);
         unprocessedCommands.add(command);

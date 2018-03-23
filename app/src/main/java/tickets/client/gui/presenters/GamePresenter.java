@@ -84,6 +84,9 @@ public class GamePresenter implements IGamePresenter {
         else if (state.getClass() == ClientModelUpdate.class) {
             ClientModelUpdate.ModelUpdate flag = (ClientModelUpdate.ModelUpdate) state.getMessage();
             checkClientModelUpdateFlag(flag);
+        } else if (state.getClass() == ClientModelUpdate.class) {
+            ClientModelUpdate.ModelUpdate flag = (ClientModelUpdate.ModelUpdate) state.getMessage();
+            checkClientModelUpdateFlag(flag);
         } else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
             if (holder != null)

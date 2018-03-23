@@ -1,7 +1,6 @@
 package tickets.server;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.PlayerInfo;
 import tickets.common.Route;
+import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 import tickets.common.UserData;
 import tickets.common.response.AddToChatResponse;
@@ -103,7 +103,9 @@ public class ServerFacade implements IServer {
             Player player = new Player(UUID.randomUUID().toString(), authToken);
             lobby.addPlayer(player);
             lobby.assignFaction(player);
-            lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has joined the lobby.");
+            lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
+                            " (" + player.getPlayerFaction().getName() + ") " +
+                            "has joined the lobby.");
 
             // Move current client
             ClientProxy currentClient = getProxy(authToken);
@@ -132,7 +134,9 @@ public class ServerFacade implements IServer {
         Player player = new Player(UUID.randomUUID().toString(), authToken);
         lobby.addPlayer(player);
         lobby.assignFaction(player);
-        lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has joined the lobby.");
+        lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
+                        " (" + player.getPlayerFaction().getName() + ") " +
+                        "has joined the lobby.");
 
         // Move current client
         ClientProxy currentClient = getProxy(authToken);
@@ -170,7 +174,7 @@ public class ServerFacade implements IServer {
             List<Player> playersInLobby = lobby.getPlayers();
             ServerGame game = new ServerGame(UUID.randomUUID().toString(), playersInLobby);
             Game clientGame = new Game(game.getGameId());
-            ArrayList<TrainCard> trainCards = new ArrayList<TrainCard>(Arrays.asList(game.getTrainCardArea().getFaceUpCards())); // converts from array to arraylist
+            List<TrainCard> trainCards = game.getFaceUpCards();
             clientGame.setFaceUpCards(trainCards);
             for (Player player : playersInLobby) {
                 PlayerInfo info = new PlayerInfo();
@@ -183,18 +187,13 @@ public class ServerFacade implements IServer {
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
                 // The current client will receive a start game response instead of this command.
                 if (!client.getAuthToken().equals(authToken)) {
-                    HandTrainCard playerHand = new HandTrainCard();
-                    List<DestinationCard> initialDestinationCards = new ArrayList<>();
-                    for (int i = 0; i < 4; i++) {
-                        playerHand.addCard(game.drawTrainCard());
-                    }
-                    for (int i = 0; i < 3; i++) {
-                        initialDestinationCards.add(game.drawDestinationCard());
-                    }
+                    ServerPlayer player = game.getServerPlayer(client.getAuthToken());
+                    HandTrainCard playerHand = player.getHandTrainCards();
                     ChoiceDestinationCards destinationCards = new ChoiceDestinationCards();
-                    destinationCards.setDestinationCards(initialDestinationCards);
+                    destinationCards.setDestinationCards(player.getDestinationCardOptions());
                     client.startGame(clientGame, playerHand, destinationCards);
                 }
+
                 clientsInALobby.remove(client);
                 clientsInAGame.put(client, game);
             }
@@ -204,16 +203,10 @@ public class ServerFacade implements IServer {
 
             AllLobbies.getInstance().removeLobby(lobbyID);
 
-            HandTrainCard playerHand = new HandTrainCard();
-            List<DestinationCard> initialDestinationCards = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                playerHand.addCard(game.drawTrainCard());
-            }
-            for (int i = 0; i < 3; i++) {
-                initialDestinationCards.add(game.drawDestinationCard());
-            }
+            ServerPlayer player = game.getServerPlayer(authToken);
+            HandTrainCard playerHand = player.getHandTrainCards();
             ChoiceDestinationCards destinationCards = new ChoiceDestinationCards();
-            destinationCards.setDestinationCards(initialDestinationCards);
+            destinationCards.setDestinationCards(player.getDestinationCardOptions());
             return new StartGameResponse(clientGame, playerHand, destinationCards);
         }
     }
@@ -240,7 +233,7 @@ public class ServerFacade implements IServer {
                 lobby.unassignFaction(player);
 
                 for (ClientProxy client : getClientsInLobby(lobbyID)) {
-                    client.removePlayer(player);
+                    client.removePlayerFromLobbyInList(lobby, player);
                 }
                 for (ClientProxy client : clientsInLobbyList) {
                     client.removePlayerFromLobbyInList(lobby, player);
@@ -277,32 +270,21 @@ public class ServerFacade implements IServer {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // *** In-Game Player Turn Actions ***
 
-    // Players take turns by calling action-specific methods
-    //   - drawTrainCard
-    //   - drawFaceUpCard
-    //   - claimRoute
-    //   - drawDestinationCards
-    //   - discardDestinationCard
-    //   - addToChat
-    //   - endTurn
-    //
-    // Each ServerPlayer tracks its progression through the actions available to it during its turn
-    // The ServerGame object owns the players playing the game, and makes sure that only one player
-    // can be in a current turn state at a time
+    // TODO: Question: do we want game history messages to say player's username, faction, or both?
 
     @Override
     public TrainCardResponse drawTrainCard(String authToken) {
-        ServerGame game;
         try {
-            game = getGameForToken(authToken);
-            ServerPlayer player = game.getServerPlayer(authToken);
-            TrainCard drawnCard = player.takeAction_drawTrainCard();
+            ServerGame game = getGameForToken(authToken);
 
-            //update game history
+            // Any reason for failing here will be thrown as an exception
+            TrainCard drawnCard = game.drawTrainCard(authToken);
+
+            // Update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) + " drew a resource card.";
             game.addToHistory(historyMessage);
 
-            //update other clients in the game
+            // Update other clients in the game
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
@@ -318,25 +300,24 @@ public class ServerFacade implements IServer {
 
     @Override
     public TrainCardResponse drawFaceUpCard(int position, String authToken) {
-        ServerGame game;
         try {
-            game = getGameForToken(authToken);
-            ServerPlayer player = game.getServerPlayer(authToken);
-            TrainCard drawnCard = player.takeAction_drawFaceUpCard(position);
+            ServerGame game = getGameForToken(authToken);
 
-            //update game history
-            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " drew a " + drawnCard.getColor().toString() + " face-up resource card.";
+            // Any reason for failing here will be thrown as an exception
+            TrainCard drawnCard = game.drawFaceUpCard(position, authToken);
+
+            // Update game history
+            String historyMessage = AllUsers.getInstance().getUsername(authToken) + " drew a " +
+                    drawnCard.getColor().toString() + " face-up resource card.";
             game.addToHistory(historyMessage);
 
-            //update other clients in the game
+            // Update other clients in the game
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
                 if (!client.getAuthToken().equals(authToken))
                     client.addPlayerTrainCard();
             }
-
             return new TrainCardResponse(drawnCard);
         }
         catch(Exception ex) {
@@ -345,23 +326,32 @@ public class ServerFacade implements IServer {
     }
 
     @Override
-    public Response claimRoute(Route route, String authToken) {
+    public Response claimRoute(Route route, List<TrainCard> cards, String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
-            ServerPlayer player = game.getServerPlayer(authToken);
-            player.takeAction_claimRoute(route);
+
+            // Any reason for failing here will be thrown as an exception
+            game.claimRoute(route, cards, authToken);
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " has claimed the route " + route.toString();
+                    " claimed the route " + route.toString();
             game.addToHistory(historyMessage);
+
+            // Get color of route to be claimed from train card color
+            RouteColors color = null;
+            for (TrainCard card : cards) {
+                if (card.getColor() != RouteColors.Wild) {
+                    if (color == null) color = card.getColor();
+                }
+            }
 
             //update other clients in the game
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
                 if (!client.getAuthToken().equals(authToken)) {
-                    // client.addClaimedRoute(game.getPlayerID(authToken), route);
+                    client.addClaimedRoute(route, color, game.getPlayerColor(authToken));
                 }
             }
 
@@ -376,12 +366,13 @@ public class ServerFacade implements IServer {
     public DestinationCardResponse drawDestinationCards(String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
-            ServerPlayer player = game.getServerPlayer(authToken);
-            List<DestinationCard> drawnCards = player.takeAction_drawDestinationCards();
+
+            // Any reason for failing here will be thrown as an exception
+            List<DestinationCard> drawnCards = game.drawDestinationCards(authToken);
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " has drawn two destination cards.";
+                    " drew destination cards.";
             game.addToHistory(historyMessage);
 
             //update other game members
@@ -389,16 +380,11 @@ public class ServerFacade implements IServer {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a destination card response rather than this command.
                 if (!client.getAuthToken().equals(authToken)) {
-                    // client.addPlayerDestinationCard(game.getPlayerID(authToken));
-                    // client.addPlayerDestinationCard(game.getPlayerID(authToken));
+                    client.addPlayerDestinationCards(drawnCards.size());
                 }
             }
 
-            List<DestinationCard> cards = new ArrayList<>();
-            cards.add(drawnCards.get(0));
-            cards.add(drawnCards.get(1));
-            cards.add(drawnCards.get(2));
-            return new DestinationCardResponse(cards);
+            return new DestinationCardResponse(drawnCards);
         }
         catch(Exception ex) {
             return new DestinationCardResponse(ex);
@@ -409,20 +395,23 @@ public class ServerFacade implements IServer {
     public Response discardDestinationCard(DestinationCard discard, String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
-            ServerPlayer player = game.getServerPlayer(authToken);
-            player.takeAction_discardDestinationCard(discard);
 
-            //update game history
-            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " has discarded a destination card.";
-            game.addToHistory(historyMessage);
+            // Any reason for failing here will be thrown as an exception
+            game.discardDestinationCard(discard, authToken);
 
-            //update other game members
-            for (ClientProxy client : getClientsInGame(game.getGameId())) {
-                client.addToGameHistory(historyMessage);
-                // The current client will receive a destination card response rather than this command.
-                if (!client.getAuthToken().equals(authToken)) {
-                    // client.removePlayerDestinationCard(game.getPlayerID(authToken));
+            if (discard != null) {
+                //update game history
+                String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                        " discarded a destination card.";
+                game.addToHistory(historyMessage);
+
+                //update other game members
+                for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                    client.addToGameHistory(historyMessage);
+                    // The current client will receive a response rather than this command.
+                    if (!client.getAuthToken().equals(authToken)) {
+                        client.removePlayerDestinationCard();
+                    }
                 }
             }
 
@@ -437,19 +426,19 @@ public class ServerFacade implements IServer {
     public Response endTurn(String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
-            ServerPlayer player = game.getServerPlayer(authToken);
-            player.takeAction_endTurn();
+
+            game.nextTurn();
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " has ended their turn.";
+                    " ended their turn.";
             game.addToHistory(historyMessage);
 
             //update other clients in the game
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
                 if (!client.getAuthToken().equals(authToken)) {
-                    // client.endCurrentTurn();
+                    client.endCurrentTurn();
                 }
             }
 

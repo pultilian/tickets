@@ -1,10 +1,13 @@
 package tickets.client.async;
 
+import java.util.List;
+
 import tickets.client.ClientFacade;
 import tickets.client.ITaskManager;
 import tickets.common.DestinationCard;
 import tickets.common.Lobby;
 import tickets.common.Route;
+import tickets.common.TrainCard;
 import tickets.common.UserData;
 
 // AsyncTask<Params, Progress, Result>
@@ -98,10 +101,10 @@ public class AsyncManager implements ITaskManager {
         task.execute(position, authToken);
     }
 
-    public void claimRoute(Route route) {
+    public void claimRoute(Route route, List<TrainCard> cards) {
         String authToken = root.getAuthToken();
         ClaimRouteAsync task = new ClaimRouteAsync(root);
-        task.execute(route, authToken);
+        task.execute(route, cards, authToken);
     }
 
     public void drawDestinationCard() {

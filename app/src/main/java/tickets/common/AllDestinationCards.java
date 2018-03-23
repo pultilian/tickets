@@ -66,7 +66,7 @@ public final class AllDestinationCards {
 	public static final DestinationCard LIN_SPHERAS =
 					new DestinationCard("Lin", "Spheras", 21);
 	public static final DestinationCard ZEEATLL_SPHERAS =
-					new DestinationCard("Zee-A'tll", "Spheras", 222);
+					new DestinationCard("Zee-A'tll", "Spheras", 22);
 
 	// Since all routes are undirected, the
 	//	 source-destination distinction is only internal
