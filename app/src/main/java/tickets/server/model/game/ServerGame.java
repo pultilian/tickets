@@ -178,13 +178,13 @@ public class ServerGame extends Game {
         else return destinationDeck.drawCards();
 	}
 
-	public void discardDestinationCard(DestinationCard card, String authToken) throws Exception {
+	public List<DestinationCard> discardDestinationCard(DestinationCard card, String authToken) throws Exception {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
         String errorMsg = player.discardDestinationCard(card);
         if (errorMsg != null) throw new Exception(errorMsg);
-        else if (!destinationDeck.discardCard(card))
+        else if (card != null && !destinationDeck.discardCard(card))
             throw new Exception("This card is already in the destination deck.");
 
         // Success
@@ -193,9 +193,17 @@ public class ServerGame extends Game {
         if (playersReady == players.size()) {
             players.get(currentPlayerIndex).startTurn();
         }
+        return player.getDestinationCardOptions();
     }
 
-    public void nextTurn() {
+    public void nextTurn(String authToken) throws Exception {
+	    ServerPlayer player = getServerPlayer(authToken);
+	    if (player == null) throw new Exception("You are not a member of this game!");
+
+	    if (players.get(currentPlayerIndex) != player) throw new Exception("It is not your turn.");
+	    String errorMsg = player.endTurn();
+	    if (errorMsg != null) throw new Exception(errorMsg);
+
         players.get(currentPlayerIndex).endTurn();
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
         players.get(currentPlayerIndex).startTurn();

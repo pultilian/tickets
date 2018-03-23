@@ -51,6 +51,7 @@ class NotMyTurnState extends PlayerTurnState {
 
 	@Override
 	String endTurn(ServerPlayer player) {
-		return "It is not your turn.";
+		// The game will check if you are the current player. If so, this method will be called.
+		return null;
 	}
 }

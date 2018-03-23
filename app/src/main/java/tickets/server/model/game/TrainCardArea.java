@@ -54,11 +54,11 @@ public class TrainCardArea {
 	}
 
 	public TrainCard drawFaceUpCard(int position) {
-		if (position < 1 || position > 5) {
+		if (position < 0 || position > 4) {
 			return null;
 		}
-		TrainCard draw = faceUpCards[position - 1];
-		faceUpCards[position - 1] = drawCard();
+		TrainCard draw = faceUpCards[position];
+		faceUpCards[position] = drawCard();
 		return draw;
 	}
 
