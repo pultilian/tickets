@@ -3,6 +3,8 @@ package tickets.client.gui.presenters;
 
 import java.util.List;
 
+import tickets.client.ITaskManager;
+import tickets.client.TaskManager;
 import tickets.common.ClientModelUpdate;
 import tickets.common.ExceptionMessage;
 import tickets.common.IMessage;
@@ -15,14 +17,22 @@ import tickets.client.async.AsyncManager;
 public class GameChatPresenter implements IGameChatPresenter {
 	private IHolderGameChatFragment holder;
 	private IObservable observable;
+	private ITaskManager manager;
+
+	public GameChatPresenter() {
+	    holder = null;
+	    ClientFacade.getInstance().linkObserver(this);
+	    manager = TaskManager.getInstance();
+    }
 
 	public GameChatPresenter(IHolderGameChatFragment setHolder) {
 		holder = setHolder;
 		ClientFacade.getInstance().linkObserver(this);
+		manager = AsyncManager.getInstance();
 	}
 
 	public void addToChat(String message){
-		AsyncManager.getInstance().addToChat(message);
+		manager.addToChat(message);
 	}
 
 	public List<String> getChatHistory(){
@@ -36,10 +46,16 @@ public class GameChatPresenter implements IGameChatPresenter {
 			checkClientModelUpdateFlag(flag);
 		} else if (state.getClass() == ExceptionMessage.class) {
 			Exception e = (Exception) state.getMessage();
-			holder.toastException(e);
+			if (holder != null)
+    			holder.toastException(e);
+			else
+			    System.err.println(e.getMessage());
 		} else {
 			Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
-			holder.toastException(err);
+			if (holder != null)
+    			holder.toastException(err);
+			else
+			    System.err.println(err.getMessage());
 		}
 		return;
 	}
@@ -64,13 +80,17 @@ public class GameChatPresenter implements IGameChatPresenter {
 			case playerInfoUpdated:
 				break;
 			case chatUpdated:
-				holder.updateChat();
+			    if (holder != null)
+    				holder.updateChat();
 				break;
 			case mapUpdated:
 				break;
 			default:
 				Exception err = new Exception("Observer err: invalid Transition " + flag.name());
-				holder.toastException(err);
+                if (holder != null)
+                    holder.toastException(err);
+                else
+                    System.err.println(err.getMessage());
 				break;
 		}
 	}

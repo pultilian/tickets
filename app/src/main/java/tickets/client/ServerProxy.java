@@ -121,7 +121,7 @@ public class ServerProxy implements IServer {
     public DestinationCardResponse drawDestinationCards(String authToken) {
         Object[] parameters = {authToken};
         String[] parameterTypes = {String.class.getName()};
-        Command command = new Command("drawDestinationCard", parameterTypes, parameters);
+        Command command = new Command("drawDestinationCards", parameterTypes, parameters);
         Object result = clientCommunicator.send(command);
         return (DestinationCardResponse) result;
     }
