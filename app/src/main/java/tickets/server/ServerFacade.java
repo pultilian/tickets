@@ -101,6 +101,7 @@ public class ServerFacade implements IServer {
         else {
             // Update the server model
             Player player = new Player(UUID.randomUUID().toString(), authToken);
+            player.setName(AllUsers.getInstance().getUsername(authToken));
             lobby.addPlayer(player);
             lobby.assignFaction(player);
             lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
@@ -132,6 +133,7 @@ public class ServerFacade implements IServer {
         // Update the server model
         AllLobbies.getInstance().addLobby(lobby);
         Player player = new Player(UUID.randomUUID().toString(), authToken);
+        player.setName(AllUsers.getInstance().getUsername(authToken));
         lobby.addPlayer(player);
         lobby.assignFaction(player);
         lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +

@@ -39,22 +39,16 @@ public class ServerCommunicator {
 	private HttpHandler commandHandler = new HttpHandler() {
 		@Override
 		public void handle(HttpExchange exchange) throws IOException {
-			System.out.println("Handling operation...");
 			Object result = null;
 			try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody())) {
 				Command command = new Command(reader);
-				System.out.println("  Processing command " + command.getMethodName());
 				result = command.execute(ServerFacade.getInstance());
-				System.out.println("  Command executed.");
 			}
 			try(OutputStreamWriter writer = new OutputStreamWriter(exchange.getResponseBody())) {
-				System.out.println("  Preparing server response...");
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 				ResultTransferObject transferObject = new ResultTransferObject(result.getClass().getName(), result);
-				System.out.println("  Returning result as json...");
 				gson.toJson(transferObject, writer);
 				writer.close();
-				System.out.println("Operation handled.");
 			}
 		}
 	};

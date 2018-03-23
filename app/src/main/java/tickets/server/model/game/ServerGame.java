@@ -213,8 +213,8 @@ public class ServerGame extends Game {
     //----------------------------------------------------------------------------------------------
     // *** PRIVATE HELPER METHODS
     private void startNextTurn() {
-	    ServerFacade.getInstance().endTurn(this, players.get(currentPlayerIndex).getInfo().getName());
-	    currentPlayerIndex++;
+	    ServerFacade.getInstance().endTurn(this, players.get(currentPlayerIndex).getName());
+	    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 	    players.get(currentPlayerIndex).startTurn();
     }
 }
