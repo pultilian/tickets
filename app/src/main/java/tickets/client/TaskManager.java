@@ -119,11 +119,4 @@ public class TaskManager implements ITaskManager {
         DestinationCardResponse response = ServerProxy.getInstance().discardDestinationCard(discard, token);
         ResponseManager.handleResponse(response, true);
     }
-
-    @Override
-    public void endTurn() {
-        String token = ClientFacade.getInstance().getAuthToken();
-        Response response = ServerProxy.getInstance().endTurn(token);
-        ResponseManager.handleResponse(response);
-    }
 }

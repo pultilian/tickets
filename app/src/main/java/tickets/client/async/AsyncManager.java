@@ -118,10 +118,4 @@ public class AsyncManager implements ITaskManager {
         DiscardDestinationCardAsync task = new DiscardDestinationCardAsync(root);
         task.execute(discard, authToken);
     }
-
-    public void endTurn() {
-        String authToken = root.getAuthToken();
-        EndTurnAsync task = new EndTurnAsync(root);
-        task.execute(authToken);
-    }
 }

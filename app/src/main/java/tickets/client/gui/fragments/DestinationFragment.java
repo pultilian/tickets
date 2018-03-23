@@ -119,6 +119,7 @@ public class DestinationFragment extends Fragment {
                             .add(R.id.fragment_container, fragment)
                             .commit();
                 } else if (check == 3){
+                    presenter.chooseDestinationCards(null);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     Fragment fragment = new MapFragment();
                     fragmentManager.beginTransaction()

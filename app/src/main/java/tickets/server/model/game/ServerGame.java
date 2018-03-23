@@ -14,6 +14,7 @@ import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Player;
 import tickets.common.Route;
+import tickets.server.ServerFacade;
 
 public class ServerGame extends Game {
 
@@ -61,6 +62,7 @@ public class ServerGame extends Game {
 		initializeAllPlayers();
 		map = new GameMap();
 		playersReady = 0;
+		currentPlayerIndex = 0;
 	}
 
 	private List<TrainCard> initializeTrainCards() {
@@ -128,9 +130,14 @@ public class ServerGame extends Game {
 		TrainCard card = trainCardArea.getTopCard();
 		if (card == null) throw new Exception("There are no cards left in the deck.");
 
-		String errorMsg = player.drawTrainCard(card);
-		if (errorMsg != null) throw new Exception(errorMsg);
-		else return trainCardArea.drawCard();
+		String msg = player.drawTrainCard(card);
+		if (msg != null) {
+		    if (msg.equals(ServerPlayer.END_TURN)) {
+		        startNextTurn();
+            }
+		    else throw new Exception(msg);
+        }
+		return trainCardArea.drawCard();
 	}
 
 	public TrainCard drawFaceUpCard(int position, String authToken) throws Exception {
@@ -140,9 +147,14 @@ public class ServerGame extends Game {
         TrainCard card = trainCardArea.getFaceUpCards()[position];
         if (card == null) throw new Exception("There is no card at that position.");
 
-        String errorMsg = player.drawFaceUpCard(card);
-        if (errorMsg != null) throw new Exception(errorMsg);
-        else return trainCardArea.drawCard();
+        String msg = player.drawTrainCard(card);
+        if (msg != null) {
+            if (msg.equals(ServerPlayer.END_TURN)) {
+                startNextTurn();
+            }
+            else throw new Exception(msg);
+        }
+        return trainCardArea.drawFaceUpCard(position);
 	}
 
 	public void claimRoute(Route route, List<TrainCard> cards, String authToken) throws Exception {
@@ -163,6 +175,7 @@ public class ServerGame extends Game {
                 }
             }
             map.claimRoute(route.getSrc(), route.getDest(), color, player.getPlayerFaction().getColor());
+            startNextTurn();
         }
     }
 
@@ -193,19 +206,15 @@ public class ServerGame extends Game {
         if (playersReady == players.size()) {
             players.get(currentPlayerIndex).startTurn();
         }
+        else startNextTurn();
         return player.getDestinationCardOptions();
     }
 
-    public void nextTurn(String authToken) throws Exception {
-	    ServerPlayer player = getServerPlayer(authToken);
-	    if (player == null) throw new Exception("You are not a member of this game!");
-
-	    if (players.get(currentPlayerIndex) != player) throw new Exception("It is not your turn.");
-	    String errorMsg = player.endTurn();
-	    if (errorMsg != null) throw new Exception(errorMsg);
-
-        players.get(currentPlayerIndex).endTurn();
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        players.get(currentPlayerIndex).startTurn();
+    //----------------------------------------------------------------------------------------------
+    // *** PRIVATE HELPER METHODS
+    private void startNextTurn() {
+	    ServerFacade.getInstance().endTurn(this, players.get(currentPlayerIndex).getName());
+	    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+	    players.get(currentPlayerIndex).startTurn();
     }
 }

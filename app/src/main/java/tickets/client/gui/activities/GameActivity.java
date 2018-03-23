@@ -187,7 +187,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         drawResourcePile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.drawDestinationCard();
+                presenter.drawTrainCard();
                 return;
             }
         });

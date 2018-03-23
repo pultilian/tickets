@@ -12,6 +12,7 @@ public class Player {
     private ChoiceDestinationCards destinationCardOptions;
 
     public Player(Player copy) {
+        this.info = copy.info;
         this.playerId = copy.playerId;
         this.associatedAuthToken = copy.associatedAuthToken;
         this.playerDestinationCards = copy.playerDestinationCards;
@@ -36,6 +37,14 @@ public class Player {
     public String getPlayerId(){ return playerId; }
 
     public String getAssociatedAuthToken(){ return associatedAuthToken; }
+
+    public String getName() {
+        return info.getName();
+    }
+
+    public void setName(String name) {
+        info.setName(name);
+    }
 
     public Faction getPlayerFaction() {
         return info.getFaction();

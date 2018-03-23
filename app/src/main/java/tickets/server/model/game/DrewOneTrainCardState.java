@@ -31,7 +31,7 @@ class DrewOneTrainCardState extends PlayerTurnState {
 	String drawTrainCard(TrainCard card, ServerPlayer player) {
 		player.addTrainCardToHand(card);
 		player.changeState(States.NOT_MY_TURN);
-		return null;
+		return ServerPlayer.END_TURN;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ class DrewOneTrainCardState extends PlayerTurnState {
         else {
 	        player.addTrainCardToHand(card);
 	        player.changeState(States.NOT_MY_TURN);
-	        return null;
+	        return ServerPlayer.END_TURN;
         }
 	}
 
