@@ -34,7 +34,6 @@ public class GameInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -44,7 +43,7 @@ public class GameInfoFragment extends Fragment {
         presenter = new GameInfoPresenter();
         playersInfo = view.findViewById(R.id.players_info);
         gameHistory = view.findViewById(R.id.game_history);
-        playerInfoManager = new LinearLayoutManager(this.getContext());
+        playerInfoManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         gameHistoryManager = new LinearLayoutManager(this.getContext());
         playersInfo.setLayoutManager(playerInfoManager);
         gameHistory.setLayoutManager(gameHistoryManager);

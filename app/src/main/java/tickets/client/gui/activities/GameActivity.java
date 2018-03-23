@@ -195,11 +195,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
             @Override
             public void onClick(View view) {
                 presenter.drawDestinationCard();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                Fragment fragment = new DestinationFragment();
-                fragmentManager.beginTransaction()
-                        .add(R.id.fragment_container, fragment)
-                        .commit();
+
                 return;
             }
         });
@@ -365,8 +361,11 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
      */
     @Override
     public void makeTransition(IHolderActivity.Transition toActivity) {
-        //what transitions should be made?
-        //GOH
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = new DestinationFragment();
+        fragmentManager.beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit();
         return;
     }
 
