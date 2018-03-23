@@ -392,12 +392,12 @@ public class ServerFacade implements IServer {
     }
 
     @Override
-    public Response discardDestinationCard(DestinationCard discard, String authToken) {
+    public DestinationCardResponse discardDestinationCard(DestinationCard discard, String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
 
             // Any reason for failing here will be thrown as an exception
-            game.discardDestinationCard(discard, authToken);
+            List<DestinationCard> keptCards = game.discardDestinationCard(discard, authToken);
 
             if (discard != null) {
                 //update game history
@@ -415,10 +415,10 @@ public class ServerFacade implements IServer {
                 }
             }
 
-            return new Response(); // "Destination successfully discarded"
+            return new DestinationCardResponse(keptCards);
         }
         catch(Exception ex) {
-            return new Response(ex);
+            return new DestinationCardResponse(ex);
         }
     }
 
@@ -427,7 +427,8 @@ public class ServerFacade implements IServer {
         try {
             ServerGame game = getGameForToken(authToken);
 
-            game.nextTurn();
+            // Any reason for failing here will be thrown as an exception
+            game.nextTurn(authToken);
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
