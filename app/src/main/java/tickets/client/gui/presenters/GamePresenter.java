@@ -3,6 +3,8 @@ package tickets.client.gui.presenters;
 
 import java.util.List;
 
+import tickets.client.ITaskManager;
+import tickets.client.TaskManager;
 import tickets.client.async.AsyncManager;
 import tickets.common.ClientModelUpdate;
 import tickets.common.DestinationCard;
@@ -20,10 +22,18 @@ import tickets.common.TrainCard;
 public class GamePresenter implements IGamePresenter {
     private IObservable observable;
     private IHolderGameActivity holder;
+    private ITaskManager manager;
 
     public GamePresenter(IHolderGameActivity setHolder) {
         holder = setHolder;
         ClientFacade.getInstance().linkObserver(this);
+        manager = AsyncManager.getInstance();
+    }
+
+    public GamePresenter() {
+        holder = null;
+        ClientFacade.getInstance().linkObserver(this);
+        manager = TaskManager.getInstance();
     }
 
     public void takeTurn() {
@@ -31,7 +41,7 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public void addToChat(String message) {
-        AsyncManager.getInstance().addToChat(message);
+        manager.addToChat(message);
     }
 
     public List<TrainCard> getFaceUpCards(){
@@ -43,15 +53,15 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public void drawTrainCard() {
-        AsyncManager.getInstance().drawTrainCard();
+        manager.drawTrainCard();
     }
 
     public void drawFaceUpTrainCard(int position) {
-        AsyncManager.getInstance().drawFaceUpCard(position);
+        manager.drawFaceUpCard(position);
     }
 
     public void drawDestinationCard() {
-        AsyncManager.getInstance().drawDestinationCard();
+        manager.drawDestinationCard();
     }
 
     public void claimPath() {
@@ -70,14 +80,23 @@ public class GamePresenter implements IGamePresenter {
     @Override
     public void notify(IMessage state) {
         if (state.getClass() == ClientStateChange.class) {
+
+        }
+        else if (state.getClass() == ClientModelUpdate.class) {
             ClientModelUpdate.ModelUpdate flag = (ClientModelUpdate.ModelUpdate) state.getMessage();
             checkClientModelUpdateFlag(flag);
         } else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
-            holder.toastException(e);
+            if (holder != null)
+                holder.toastException(e);
+            else
+                System.err.println(e.getMessage());
         } else {
             Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
-            holder.toastException(err);
+            if (holder != null)
+                holder.toastException(err);
+            else
+                System.err.println(err.getMessage());
         }
         return;
     }
