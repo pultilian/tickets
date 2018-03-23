@@ -31,7 +31,6 @@ public interface IServer {
   public Response claimRoute(Route route, List<TrainCard> cards, String authToken);
   public DestinationCardResponse drawDestinationCards(String authToken);
   public DestinationCardResponse discardDestinationCard(DestinationCard discard, String authToken);
-  public Response endTurn(String authToken);
   public AddToChatResponse addToChat(String message, String authToken);
 
   //Poller response object

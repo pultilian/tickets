@@ -35,6 +35,4 @@ public interface ITaskManager {
     void drawDestinationCard();
 
     void discardDestinationCard(DestinationCard discard);
-
-    void endTurn();
 }

@@ -39,6 +39,7 @@ class TurnStartState extends PlayerTurnState {
         player.addTrainCardToHand(card);
         if (card.getColor() == RouteColors.Wild) {
             player.changeState(States.NOT_MY_TURN);
+            return ServerPlayer.END_TURN;
         }
         else {
             player.changeState(States.DREW_ONE_TRAIN_CARD);
