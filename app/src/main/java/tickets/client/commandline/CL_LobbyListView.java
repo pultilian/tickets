@@ -63,10 +63,11 @@ public class CL_LobbyListView extends CommandlineView {
 	private boolean joinLobby() {
 		System.out.println("  Available Lobbies:");
 		int i = 1;
-		for(Lobby lobby : presenter.getLobbyList()) {
+		for (Lobby lobby : presenter.getLobbyList()) {
 			System.out.println(Integer.toString(i) + ". " + lobby.getName() + "  "
 					+ Integer.toString(lobby.getCurrentMembers()) + "/" + 
 					Integer.toString(lobby.getMaxMembers()));
+			i++;
 		}
 		System.out.println("x. Cancel");
 		

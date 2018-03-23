@@ -46,6 +46,7 @@ public class CL_LobbyView extends CommandlineView {
 		for (Player member : presenter.getLobby().getPlayers()) {
 			System.out.println(Integer.toString(i) + ". " + member.getPlayerFaction().getName() +
 					"  (" + member.getPlayerFaction().getColor().toString() + ")");
+			i++;
 		}
 	}
 	

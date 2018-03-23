@@ -307,6 +307,7 @@ public class ServerFacade implements IServer {
 
             // Any reason for failing here will be thrown as an exception
             TrainCard drawnCard = game.drawFaceUpCard(position, authToken);
+            TrainCard newCard = game.getFaceUpCards().get(position);
 
             // Update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) + " drew a " +
@@ -316,6 +317,7 @@ public class ServerFacade implements IServer {
             // Update other clients in the game
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
+                client.replaceFaceUpCard(position, newCard);
                 // The current client will receive a train card response rather than this command.
                 if (!client.getAuthToken().equals(authToken))
                     client.addPlayerTrainCard();

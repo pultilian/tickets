@@ -15,6 +15,7 @@ import tickets.common.Player;
 import tickets.common.PlayerColor;
 import tickets.common.Route;
 import tickets.common.RouteColors;
+import tickets.common.TrainCard;
 
 public class ClientProxy implements IClient {
 
@@ -176,6 +177,15 @@ public class ClientProxy implements IClient {
         Command command = new Command("removePlayerDestinationCard",
                 new String[0],
                 new Object[0]);
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
+
+    public void replaceFaceUpCard(Integer position, TrainCard card) {
+        Command command = new Command("replaceFaceUpCard",
+                new String[] {Integer.class.getName(), TrainCard.class.getName()},
+                new Object[] {position, card});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
