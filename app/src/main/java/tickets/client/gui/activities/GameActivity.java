@@ -85,7 +85,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
      * @post recyclerView is updated
      */
     public void initVariables() {
-        destinationManager = new LinearLayoutManager(this);
+        destinationManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         destinationCards.setLayoutManager(destinationManager);
         destinationAdapter = new DestinationAdapter(this, presenter.getPlayerDestinations());
         destinationCards.setAdapter(destinationAdapter);
@@ -460,17 +460,17 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         public DestinationHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            location1 = findViewById(R.id.location1);
-            location2 = findViewById(R.id.location2);
-            destinationScore = findViewById(R.id.destination_score);
+            location1 = view.findViewById(R.id.location1);
+            location2 = view.findViewById(R.id.location2);
+            destinationScore = view.findViewById(R.id.destination_score);
 
         }
 
         // Assigns values in the layout.
         void bind(DestinationCard item) {
-            location1.setText(item.toString());
-            location2.setText(item.toString());
-            destinationScore.setText(item.toString());
+            location1.setText(item.getFirstCity().toString());
+            location2.setText(item.getSecondCity().toString());
+            destinationScore.setText(Integer.toString(item.getValue()));
             return;
         }
 
