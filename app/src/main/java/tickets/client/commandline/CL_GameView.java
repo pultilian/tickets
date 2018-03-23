@@ -101,7 +101,7 @@ public class CL_GameView extends CommandlineView {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("Discard: ");
-            int discard = Integer.parseInt(input.readLine());
+            int discard = Integer.parseInt(input.readLine()) - 1;
             destinationPresenter.chooseDestinationCards(destinationCards.get(discard));
         } catch(IOException e) {
             e.printStackTrace();
@@ -145,7 +145,7 @@ public class CL_GameView extends CommandlineView {
     }
 
     private void drawResourceCard() {
-        presenter.drawDestinationCard();
+        presenter.drawTrainCard();
     }
 
     private void drawDestinationCards() {

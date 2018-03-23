@@ -21,4 +21,5 @@ public interface IClient {
     public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player);
     public void addPlayerDestinationCards(int numCards);
     public void removePlayerDestinationCard();
+    public void replaceFaceUpCard(Integer position, TrainCard card);
 }

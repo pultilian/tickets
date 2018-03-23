@@ -31,6 +31,7 @@ public class LobbyListPresenter implements ILobbyListPresenter {
     	holder = null;
         manager = TaskManager.getInstance();
         ClientFacade.getInstance().linkObserver(this);
+        ClientFacade.getInstance().startServerPoller();
     }
 
 //----------------------------------------------------------------------------
@@ -126,6 +127,7 @@ public class LobbyListPresenter implements ILobbyListPresenter {
     private void checkClientUpdateFlag(ClientModelUpdate.ModelUpdate flag) {
     	switch(flag) {
     		case lobbyAdded:
+    		    //Todo: This should update something, right?
     			System.out.println("New lobby added");
     			break;
     		default:

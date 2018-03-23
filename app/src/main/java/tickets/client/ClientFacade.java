@@ -17,6 +17,7 @@ import tickets.common.Player;
 import tickets.common.PlayerColor;
 import tickets.common.Route;
 import tickets.common.RouteColors;
+import tickets.common.TrainCard;
 import tickets.common.UserData;
 
 
@@ -157,10 +158,14 @@ public class ClientFacade implements IClient {
 	}
 
 	public void addPlayerToLobbyInList(Lobby lobby, Player playerToAdd) {
+		if (lobby.getId().equals(currentLobby))
+		    currentLobby.addPlayer(playerToAdd);
 		lobbyManager.addPlayer(lobby, playerToAdd);
 	}
 
 	public void removePlayerFromLobbyInList(Lobby lobby, Player player) {
+        if (lobby.getId().equals(currentLobby))
+            currentLobby.addPlayer(player);
 		lobbyManager.removePlayer(lobby, player);
 	}
 
@@ -209,4 +214,11 @@ public class ClientFacade implements IClient {
 		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
 		updateObservable(message);
 	}
+
+	@Override
+    public void replaceFaceUpCard(Integer position, TrainCard card) {
+        currentGame.replaceFaceUpCard(position, card);
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.faceUpCardUpdated);
+        updateObservable(message);
+    }
 }
