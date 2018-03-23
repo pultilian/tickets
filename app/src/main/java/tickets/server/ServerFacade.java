@@ -422,31 +422,15 @@ public class ServerFacade implements IServer {
         }
     }
 
-    @Override
-    public Response endTurn(String authToken) {
-        try {
-            ServerGame game = getGameForToken(authToken);
+    public void endTurn(ServerGame game, String playerName) {
+        // Update game history
+        String historyMessage = playerName + " ended their turn.";
+        game.addToHistory(historyMessage);
 
-            // Any reason for failing here will be thrown as an exception
-            game.nextTurn(authToken);
-
-            //update game history
-            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " ended their turn.";
-            game.addToHistory(historyMessage);
-
-            //update other clients in the game
-            for (ClientProxy client : getClientsInGame(game.getGameId())) {
-                client.addToGameHistory(historyMessage);
-                if (!client.getAuthToken().equals(authToken)) {
-                    client.endCurrentTurn();
-                }
-            }
-
-            return new Response(); // "Turn successfully ended"
-        }
-        catch(Exception ex) {
-            return new Response(ex);
+        // Update other clients in the game
+        for (ClientProxy client : getClientsInGame(game.getGameId())) {
+            client.addToGameHistory(historyMessage);
+            client.endCurrentTurn();
         }
     }
 

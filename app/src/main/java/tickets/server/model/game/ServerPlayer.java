@@ -22,6 +22,8 @@ public class ServerPlayer extends Player {
 	// State Pattern object
 	private PlayerTurnState turnState;
 
+	// Flag string for end turn
+    public static final String END_TURN = "EndTurn";
 	//----------------------------------------------------------------------------------------------
     // *** SET-UP METHODS ***
 
@@ -69,7 +71,7 @@ public class ServerPlayer extends Player {
 
 	//----------------------------------------------------------------------------------------------
 	// *** PLAYER ACTIONS ***
-    // Returns null on success and an error message on failure
+    // Returns null or end turn string (in the case of drawing train cards) on success and an error message on failure
 
 	public String drawTrainCard(TrainCard card) {
 	    return turnState.drawTrainCard(card, this);
@@ -89,9 +91,5 @@ public class ServerPlayer extends Player {
 
     public String discardDestinationCard(DestinationCard card) {
 	    return turnState.discardDestinationCard(card, this);
-    }
-
-    public String endTurn() {
-	    return turnState.endTurn(this);
     }
 }

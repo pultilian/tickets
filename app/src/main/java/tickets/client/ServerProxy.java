@@ -149,13 +149,4 @@ public class ServerProxy implements IServer {
         Object result = clientCommunicator.send(command);
         return (DestinationCardResponse) result;
     }
-
-    public Response endTurn(String authToken) {
-        Object[] parameters = {authToken};
-        String[] parameterTypes = {String.class.getName()};
-        Command command = new Command("endTurn", parameterTypes, parameters);
-        Object result = clientCommunicator.send(command);
-        return (Response) result;
-    }
-
 }
