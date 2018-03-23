@@ -110,14 +110,14 @@ public class TaskManager implements ITaskManager {
     public void drawDestinationCard() {
         String token = ClientFacade.getInstance().getAuthToken();
         DestinationCardResponse response = ServerProxy.getInstance().drawDestinationCards(token);
-        ResponseManager.handleResponse(response);
+        ResponseManager.handleResponse(response, false);
     }
 
     @Override
     public void discardDestinationCard(DestinationCard discard) {
         String token = ClientFacade.getInstance().getAuthToken();
-        Response response = ServerProxy.getInstance().discardDestinationCard(discard, token);
-        ResponseManager.handleResponse(response);
+        DestinationCardResponse response = ServerProxy.getInstance().discardDestinationCard(discard, token);
+        ResponseManager.handleResponse(response, true);
     }
 
     @Override

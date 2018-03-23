@@ -9,7 +9,7 @@ import tickets.common.DestinationCard;
 import tickets.common.response.DestinationCardResponse;
 import tickets.common.response.Response;
 
-class DiscardDestinationCardAsync extends AsyncTask<Object, Void, Response> {
+class DiscardDestinationCardAsync extends AsyncTask<Object, Void, DestinationCardResponse> {
     ClientFacade modelRoot;
 
     public DiscardDestinationCardAsync(ClientFacade setRoot) {
@@ -17,7 +17,7 @@ class DiscardDestinationCardAsync extends AsyncTask<Object, Void, Response> {
     }
 
     @Override
-    public Response doInBackground(Object... data) {
+    public DestinationCardResponse doInBackground(Object... data) {
         if (data.length != 2) {
             AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
             return new DestinationCardResponse(error);
@@ -25,12 +25,12 @@ class DiscardDestinationCardAsync extends AsyncTask<Object, Void, Response> {
 
         DestinationCard discard = (DestinationCard) data[0];
         String authToken = (String) data[1];
-        Response response = ServerProxy.getInstance().discardDestinationCard(discard, authToken);
+        DestinationCardResponse response = ServerProxy.getInstance().discardDestinationCard(discard, authToken);
         return response;
     }
 
     @Override
-    public void onPostExecute(Response response) {
-        ResponseManager.handleResponse(response);
+    public void onPostExecute(DestinationCardResponse response) {
+        ResponseManager.handleResponse(response, true);
     }
 }

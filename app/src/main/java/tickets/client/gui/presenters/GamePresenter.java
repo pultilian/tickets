@@ -84,7 +84,7 @@ public class GamePresenter implements IGamePresenter {
         else if (state.getClass() == ClientModelUpdate.class) {
             ClientModelUpdate.ModelUpdate flag = (ClientModelUpdate.ModelUpdate) state.getMessage();
             checkClientModelUpdateFlag(flag);
-        } else if (state.getClass() == ClientModelUpdate.class) {
+        } else if (state.getClass() == ClientStateChange.class) {
             ClientModelUpdate.ModelUpdate flag = (ClientModelUpdate.ModelUpdate) state.getMessage();
             checkClientModelUpdateFlag(flag);
         } else if (state.getClass() == ExceptionMessage.class) {
@@ -109,13 +109,16 @@ public class GamePresenter implements IGamePresenter {
     private void checkClientModelUpdateFlag(ClientModelUpdate.ModelUpdate flag) {
         switch (flag) {
             case playerTrainHandUpdated:
-                holder.updatePlayerTrainHand();
+                if (holder != null)
+                    holder.updatePlayerTrainHand();
                 break;
             case faceUpCardUpdated:
-                holder.updateFaceUpCards();
+                if (holder != null)
+                    holder.updateFaceUpCards();
                 break;
             case playerDestHandUpdated:
-                holder.updatePlayerDestHand();
+                if (holder != null)
+                    holder.updatePlayerDestHand();
                 break;
             case destCardOptionsUpdated:
                 break;
@@ -129,7 +132,10 @@ public class GamePresenter implements IGamePresenter {
                 break;
             default:
                 Exception err = new Exception("Observer err: invalid Transition " + flag.name());
-                holder.toastException(err);
+                if (holder != null)
+                    holder.toastException(err);
+                else
+                    System.err.println(err.getMessage());
                 break;
         }
     }

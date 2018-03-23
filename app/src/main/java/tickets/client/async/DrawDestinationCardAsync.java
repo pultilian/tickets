@@ -28,6 +28,6 @@ class DrawDestinationCardAsync extends AsyncTask<String, Void, DestinationCardRe
 
     @Override
     public void onPostExecute(DestinationCardResponse response) {
-        ResponseManager.handleResponse(response);
+        ResponseManager.handleResponse(response, false);
     }
 }

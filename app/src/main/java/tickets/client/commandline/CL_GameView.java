@@ -11,12 +11,10 @@ import tickets.client.gui.presenters.DestinationPresenter;
 import tickets.client.gui.presenters.GameChatPresenter;
 import tickets.client.gui.presenters.GameInfoPresenter;
 import tickets.client.gui.presenters.GamePresenter;
-import tickets.common.Command;
 import tickets.common.DestinationCard;
 import tickets.common.PlayerInfo;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
-import tickets.common.UserData;
 
 public class CL_GameView extends CommandlineView {
 	private GamePresenter presenter = new GamePresenter();
@@ -99,7 +97,7 @@ public class CL_GameView extends CommandlineView {
         System.out.println("Choose " + Integer.toString(canDiscard)  + " cards to discard: ");
         List<DestinationCard> destinationCards = destinationPresenter.getDestinationCards();
         printDestinationCards(destinationCards);
-        System.out.println("Type \'x\' when you' no longer wish to discard.");
+        System.out.println("Type \'x\' when you no longer wish to discard.");
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("Discard: ");
@@ -176,12 +174,14 @@ public class CL_GameView extends CommandlineView {
         System.out.println("*Game Chat*");
         int choice = 4;
         List<String> chat = gameChatPresenter.getChatHistory();
-        int lastMessage = Math.min(chat.size() - 6, 0);
+        int lastMessage = Math.max(chat.size() - 6, 0);
         while(choice != 3) {
-            for (int i = lastMessage; i < lastMessage+5;  i++) {
-                System.out.println("  " + chat.get(i));
+            if (chat.size() > 0 ) {
+                for (int i = lastMessage; i < lastMessage + 5; i++) {
+                    System.out.println("  " + chat.get(i));
+                }
             }
-            System.out.println("  1. See 10 more messages");
+            System.out.println("  1. See previous 10 messages");
             System.out.println("  2. Send a message");
             System.out.println("  3. Leave chat");
 
@@ -196,7 +196,7 @@ public class CL_GameView extends CommandlineView {
             }
             switch(choice) {
                 case 1:
-                    lastMessage = lastMessage - 5;
+                    lastMessage = Math.max(lastMessage - 5, 0);
                     break;
                 case 2:
                     System.out.print("Your message: ");

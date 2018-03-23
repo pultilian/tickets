@@ -128,17 +128,26 @@ public final class ResponseManager {
         }
     }
 
-    public static void handleResponse(DestinationCardResponse response) {
+    public static void handleResponse(DestinationCardResponse response, boolean selectedCards) {
         if (response == null) {
             handleException(new Exception("The Server could not be reached"));
         }
         else if (response.getException() == null) {
             List<DestinationCard> cards = response.getCards();
-            ChoiceDestinationCards choice = new ChoiceDestinationCards();
-            choice.setDestinationCards(cards);
-            ClientFacade.getInstance().getLocalPlayer().setDestinationCardOptions(choice);
-            ClientModelUpdate message = new ClientModelUpdate(
-                    ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
+            ClientModelUpdate message;
+            if (! selectedCards) {
+                ChoiceDestinationCards choice = new ChoiceDestinationCards();
+                choice.setDestinationCards(cards);
+                ClientFacade.getInstance().getLocalPlayer().setDestinationCardOptions(choice);
+                message = new ClientModelUpdate(
+                        ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
+            }
+            else {
+                for (DestinationCard card : cards)
+                    ClientFacade.getInstance().getLocalPlayer().addDestinationCardToHand(card);
+                message = new ClientModelUpdate(
+                        ClientModelUpdate.ModelUpdate.playerDestHandUpdated);
+            }
             ClientFacade.getInstance().updateObservable(message);
         }
         else {
