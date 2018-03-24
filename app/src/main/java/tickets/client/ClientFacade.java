@@ -146,8 +146,6 @@ public class ClientFacade implements IClient {
 //These methods are called when commands are retrieved
 //	by the poller from the Server.
 	public void addLobbyToList(Lobby lobby) {
-		if (lobbyManager.getLobbyList().contains(lobby))
-			return;
 		lobbyManager.addLobby(lobby);
 		ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.lobbyAdded);
         updateObservable(update);

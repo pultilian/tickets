@@ -31,6 +31,6 @@ class JoinLobbyAsync extends AsyncTask<String, Void, JoinLobbyResponse> {
 
 	@Override
 	public void onPostExecute(JoinLobbyResponse response) {
-		ResponseManager.handleResponse(response);
+		ResponseManager.handleResponse(response, false);
 	}
 }
