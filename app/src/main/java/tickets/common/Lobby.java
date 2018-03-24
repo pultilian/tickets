@@ -75,11 +75,13 @@ public class Lobby {
 
 	public void addPlayer(Player player) {
 		players.add(player);
+		addToHistory(player.getName() + " has joined the lobby.");
 		currentMembers++;
 	}
 
 	public void removePlayer(Player player) {
 		players.remove(player);
+		addToHistory(player.getName() + " has left the lobby.");
 		currentMembers--;
 	}
 
