@@ -9,4 +9,5 @@ import tickets.common.PlayerInfo;
 public interface IGameInfoPresenter {
 	public List<String> getGameHistory();
 	public List<PlayerInfo> getPlayerInfo();
+	public int getCurrentTurn();
 }
