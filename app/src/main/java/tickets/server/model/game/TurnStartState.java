@@ -49,6 +49,9 @@ class TurnStartState extends PlayerTurnState {
 
     @Override
     String claimRoute(Route route, List<TrainCard> cards, ServerPlayer player) {
+        // Check enough ships left
+        if (player.getInfo().getShipsLeft() < route.getLength()) return "Not enough ships left.";
+
         // Get color of route to be claimed from train card color
         RouteColors color = null;
         for (TrainCard card : cards) {
@@ -63,8 +66,15 @@ class TurnStartState extends PlayerTurnState {
 
         // Attempt to claim route
         if (route.claim(color, player.getPlayerFaction().getColor())) {
+            for (TrainCard card : cards) {
+                player.removeTrainCard(card.getColor());
+            }
+            player.getInfo().addToScore(route.getPointValue());
+            player.getInfo().useShips(route.getLength());
+            player.addRouteToMap(route.getSrc(), route.getDest());
             player.changeState(States.NOT_MY_TURN);
-            return null;
+            if (player.getInfo().getShipsLeft() < 3) return ServerPlayer.LAST_ROUND;
+            else return null;
         }
         else return "You cannot claim this route.";
     }

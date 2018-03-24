@@ -62,6 +62,11 @@ class DrewDestCardsState extends PlayerTurnState {
 			// Delete marked cards from current options
             options.removeAll(toDiscard);
 		}
+		else {
+			for (DestinationCard playerCard : player.getDestinationCardOptions()) {
+				player.addDestinationCardToHand(playerCard);
+			}
+		}
         player.changeState(States.NOT_MY_TURN);
 		return null;
 	}

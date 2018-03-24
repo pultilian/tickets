@@ -364,7 +364,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = new DestinationFragment();
         fragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .replace(R.id.fragment_container, fragment)
                 .commit();
         return;
     }

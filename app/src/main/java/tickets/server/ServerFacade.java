@@ -15,7 +15,9 @@ import tickets.common.HandTrainCard;
 import tickets.common.IServer;
 import tickets.common.Lobby;
 import tickets.common.Player;
+import tickets.common.PlayerColor;
 import tickets.common.PlayerInfo;
+import tickets.common.PlayerSummary;
 import tickets.common.Route;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
@@ -66,7 +68,7 @@ public class ServerFacade implements IServer {
     @Override
     public LoginResponse login(UserData userData) {
         if (AllUsers.getInstance().verifyLogin(userData.getUsername(), userData.getPassword())){
-            String authToken = AllUsers.getInstance().getAuthToken(userData.getUsername());
+            String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
             return new LoginResponse("Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
         }
@@ -104,9 +106,9 @@ public class ServerFacade implements IServer {
             player.setName(AllUsers.getInstance().getUsername(authToken));
             lobby.addPlayer(player);
             lobby.assignFaction(player);
-            lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
-                            " (" + player.getPlayerFaction().getName() + ") " +
-                            "has joined the lobby.");
+            String updateMessage = player.getName() + " (" + player.getPlayerFaction().getName() +
+                    ") has joined the lobby.";
+            lobby.addToHistory(updateMessage);
 
             // Move current client
             ClientProxy currentClient = getProxy(authToken);
@@ -136,9 +138,8 @@ public class ServerFacade implements IServer {
         player.setName(AllUsers.getInstance().getUsername(authToken));
         lobby.addPlayer(player);
         lobby.assignFaction(player);
-        lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
-                        " (" + player.getPlayerFaction().getName() + ") " +
-                        "has joined the lobby.");
+        lobby.addToHistory(player.getName() + " (" + player.getPlayerFaction().getName() +
+                ") has joined the lobby.");
 
         // Move current client
         ClientProxy currentClient = getProxy(authToken);
@@ -179,8 +180,7 @@ public class ServerFacade implements IServer {
             List<TrainCard> trainCards = game.getFaceUpCards();
             clientGame.setFaceUpCards(trainCards);
             for (Player player : playersInLobby) {
-                PlayerInfo info = new PlayerInfo();
-                info.setFaction(player.getPlayerFaction());
+                PlayerInfo info = player.getInfo();
                 clientGame.addPlayer(info);
             }
             AllGames.getInstance().addGame(game);
@@ -426,6 +426,9 @@ public class ServerFacade implements IServer {
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    // *** CALLED FROM IN-GAME ***
+
     public void endTurn(ServerGame game, String playerName) {
         // Update game history
         String historyMessage = playerName + " ended their turn.";
@@ -438,7 +441,21 @@ public class ServerFacade implements IServer {
         }
     }
 
+    public void endGame(ServerGame game) {
+        List<PlayerSummary> playerSummaries = new ArrayList<>();
+        List<PlayerColor> longestPathPlayers = game.getPlayersWithLongestPath();
+        for (ServerPlayer player : game.getServerPlayers()) {
+            if (longestPathPlayers.contains(player.getInfo().getFaction().getColor())) {
+                playerSummaries.add(player.calculateSummary(true));
+            }
+            else playerSummaries.add(player.calculateSummary(false));
+        }
 
+        // Send command to all clients in game
+        for (ClientProxy client : getClientsInGame(game.getGameId())) {
+            client.displayEndGame(playerSummaries);
+        }
+    }
     //----------------------------------------------------------------------------------------------
     // *** UPDATE CLIENT COMMAND FOR POLLER ***
 
