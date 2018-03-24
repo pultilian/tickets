@@ -15,6 +15,7 @@ import tickets.common.IObserver;
 import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.PlayerColor;
+import tickets.common.PlayerSummary;
 import tickets.common.Route;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
@@ -214,4 +215,8 @@ public class ClientFacade implements IClient {
 		ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.gameHistoryUpdated);
 		updateObservable(update);
 	}
+
+    public void displayEndGame(List<PlayerSummary> playerSummaries) {
+        // TODO: Implement displayEndGame on client side
+    }
 }

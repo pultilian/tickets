@@ -1,5 +1,7 @@
 package tickets.common;
 
+import java.util.List;
+
 public interface IClient {
 
     // FOR CLIENTS IN LOBBY LIST
@@ -22,4 +24,5 @@ public interface IClient {
     public void addPlayerDestinationCards(int numCards);
     public void removePlayerDestinationCard();
     public void replaceFaceUpCard(Integer position, TrainCard card);
+    public void displayEndGame(List<PlayerSummary> playerSummaries);
 }
