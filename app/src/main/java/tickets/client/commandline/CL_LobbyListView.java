@@ -79,11 +79,15 @@ public class CL_LobbyListView extends CommandlineView {
 				return false;
 			}
 			int lobbyNum = Integer.parseInt(option) - 1;
-			if (lobbyNum > presenter.getLobbyList().size()) {
+			if (lobbyNum >= presenter.getLobbyList().size()) {
 				System.out.println("Option exceeds available lobbies");
 				return false;
 			}
 			Lobby lobby = presenter.getLobbyList().get(lobbyNum);
+			if (lobby.getCurrentMembers() >= lobby.getMaxMembers()) {
+                System.out.println("Selected lobby is full");
+                return false;
+            }
 			presenter.joinLobby(lobby.getId());
 			returnValue = new CL_LobbyView();
 			return true;

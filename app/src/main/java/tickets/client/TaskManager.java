@@ -47,14 +47,14 @@ public class TaskManager implements ITaskManager {
     public void joinLobby(String id) {
         String token = ClientFacade.getInstance().getAuthToken();
         JoinLobbyResponse response = ServerProxy.getInstance().joinLobby(id, token);
-        ResponseManager.handleResponse(response);
+        ResponseManager.handleResponse(response, false);
     }
 
     @Override
     public void createLobby(Lobby lobby) {
         String token = ClientFacade.getInstance().getAuthToken();
         JoinLobbyResponse response = ServerProxy.getInstance().createLobby(lobby, token);
-        ResponseManager.handleResponse(response);
+        ResponseManager.handleResponse(response, true);
     }
 
     @Override
