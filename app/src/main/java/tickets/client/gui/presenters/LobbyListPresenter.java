@@ -126,9 +126,8 @@ public class LobbyListPresenter implements ILobbyListPresenter {
     
     private void checkClientUpdateFlag(ClientModelUpdate.ModelUpdate flag) {
     	switch(flag) {
-    		case lobbyAdded:
+            case lobbyListUpdated:
     		    //Todo: This should update something, right?
-    			System.out.println("New lobby added");
     			break;
     		default:
     			break;
