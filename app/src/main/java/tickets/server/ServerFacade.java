@@ -104,9 +104,6 @@ public class ServerFacade implements IServer {
             player.setName(AllUsers.getInstance().getUsername(authToken));
             lobby.addPlayer(player);
             lobby.assignFaction(player);
-            lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
-                            " (" + player.getPlayerFaction().getName() + ") " +
-                            "has joined the lobby.");
 
             // Move current client
             ClientProxy currentClient = getProxy(authToken);
@@ -134,11 +131,10 @@ public class ServerFacade implements IServer {
         AllLobbies.getInstance().addLobby(lobby);
         Player player = new Player(UUID.randomUUID().toString(), authToken);
         player.setName(AllUsers.getInstance().getUsername(authToken));
+        lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
+                " has created the lobby.");
         lobby.addPlayer(player);
         lobby.assignFaction(player);
-        lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
-                        " (" + player.getPlayerFaction().getName() + ") " +
-                        "has joined the lobby.");
 
         // Move current client
         ClientProxy currentClient = getProxy(authToken);
@@ -231,7 +227,6 @@ public class ServerFacade implements IServer {
             List<Player> playersForUser = lobby.getPlayersWithAuthToken(authToken);
             for (Player player : playersForUser) {
                 lobby.removePlayer(player);
-                lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) + " has left the lobby.");
                 lobby.unassignFaction(player);
 
                 for (ClientProxy client : getClientsInLobby(lobbyID)) {

@@ -45,11 +45,10 @@ public final class ResponseManager {
             handleException(new Exception("The Server could not be reached"));
         }
         else if (response.getException() == null) {
-            ClientFacade.getInstance().setCurrentLobby(response.getLobby());
+            ClientFacade.getInstance().setCurrentLobby(response.getLobby().getId());
             ClientStateChange.ClientState stateVal = ClientStateChange.ClientState.lobby;
             ClientStateChange state = new ClientStateChange(stateVal);
-            ClientFacade.getInstance().setCurrentLobby(response.getLobby());
-            if(created)
+            if (created)
                 ClientFacade.getInstance().addLobbyToList(response.getLobby());
             ClientFacade.getInstance().setPlayer(response.getPlayer());
             ClientFacade.getInstance().updateObservable(state);
