@@ -95,6 +95,7 @@ public final class ResponseManager {
             stateVal = ClientStateChange.ClientState.lobbylist;
             ClientStateChange state = new ClientStateChange(stateVal);
             ClientFacade.getInstance().setCurrentLobby(null);
+            ClientFacade.getInstance().updateLobbyList(response.getLobbyList());
             ClientFacade.getInstance().updateObservable(state);
         }
         else {
