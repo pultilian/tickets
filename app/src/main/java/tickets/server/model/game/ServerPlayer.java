@@ -60,8 +60,12 @@ public class ServerPlayer extends Player {
 	    isLastPlayer = true;
     }
 
-    void addRouteToMap(String src, String dest) {
-	    map.addRoute(src, dest);
+    void addRouteToMap(Route route) {
+	    map.addRoute(route);
+    }
+
+    int getLongestRouteLength() {
+	    return map.findLongestRoute();
     }
 
     //----------------------------------------------------------------------------------------------
