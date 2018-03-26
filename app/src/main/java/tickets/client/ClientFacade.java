@@ -8,7 +8,6 @@ import tickets.common.ChoiceDestinationCards;
 import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.Game;
-import tickets.common.GameMap;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.IMessage;
@@ -46,6 +45,7 @@ public class ClientFacade implements IClient {
 	private Game currentGame;
 	private ServerPoller serverPoller = null;
 	private Player localPlayer;
+	private List<PlayerSummary> gameSummary;
 
 //----------------------------------------------------------------------------
 //	methods
@@ -171,6 +171,10 @@ public class ClientFacade implements IClient {
 		updateObservable(state);
 	}
 
+	public List<PlayerSummary> getGameSummary(){
+	    return gameSummary;
+    }
+
 //-------------------------------------------------
 // Update public info
 	public void addPlayerTrainCard() {
@@ -220,6 +224,8 @@ public class ClientFacade implements IClient {
 	}
 
     public void displayEndGame(List<PlayerSummary> playerSummaries) {
-        // TODO: Implement displayEndGame on client side
+        gameSummary = playerSummaries;
+        ClientStateChange state = new ClientStateChange(ClientStateChange.ClientState.summary);
+        observable.notify(state);
     }
 }

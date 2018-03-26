@@ -8,7 +8,7 @@ public class ClientStateChange implements IMessage {
         lobbylist,
         lobby,
         game,
-        update
+        summary, update
     }
 
     private ClientState newState;
