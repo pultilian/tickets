@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import tickets.client.ClientCommunicator;
 import tickets.client.gui.presenters.IHolderActivity;
 import tickets.client.gui.presenters.LoginPresenter;
 import tickets.common.UserData;
@@ -20,6 +21,7 @@ import tickets.common.UserData;
 public class LoginActivity extends AppCompatActivity implements IHolderActivity {
     EditText username;
     EditText password;
+    EditText ipAddress;
     Button login;
     Button register;
     LoginPresenter presenter;
@@ -39,9 +41,27 @@ public class LoginActivity extends AppCompatActivity implements IHolderActivity 
         register = (Button) this.findViewById(R.id.register_button);
         username = (EditText) this.findViewById(R.id.username);
         password = (EditText) this.findViewById(R.id.password);
+        ipAddress = (EditText) this.findViewById(R.id.ip_address);
         register.setEnabled(false);
         login.setEnabled(false);
 
+
+        ipAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkButton();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         username.addTextChangedListener(new TextWatcher() {
             @Override
@@ -76,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements IHolderActivity 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ClientCommunicator.getInstance().setIP(ipAddress.getText().toString());
                 UserData userData = new UserData(username.getText().toString(), password.getText().toString());
                 presenter.login(userData);
                 return;
@@ -85,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements IHolderActivity 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ClientCommunicator.getInstance().setIP(ipAddress.getText().toString());
                 UserData userData = new UserData(username.getText().toString(), password.getText().toString());
                 presenter.register(userData);
                 return;
@@ -139,7 +161,8 @@ public class LoginActivity extends AppCompatActivity implements IHolderActivity 
     void checkButton() {
         // Register Button
         if (username.getText().toString().length() != 0 &&
-                password.getText().toString().length() != 0){
+                password.getText().toString().length() != 0 &&
+                ipAddress.getText().toString().length() != 0){
             register.setEnabled(true);
             login.setEnabled(true);
         } else {
