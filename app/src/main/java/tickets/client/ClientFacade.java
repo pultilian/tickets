@@ -101,6 +101,8 @@ public class ClientFacade implements IClient {
 	}
 
 	public Lobby getLobby() {
+		if (currentLobby == null)
+			return null;
 		return lobbyManager.getLobby(currentLobby);
 	}
 
