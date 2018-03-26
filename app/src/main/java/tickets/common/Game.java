@@ -11,6 +11,7 @@ public class Game {
     private int currentTurn;
     private List<PlayerInfo> gamePlayers;
     private List<TrainCard> faceUpCards;
+    private GameMap map;
 
     public Game(String gameId){
         this.gameId = gameId;
@@ -19,6 +20,7 @@ public class Game {
         gamePlayers = new ArrayList<>();
         currentTurn = 0;
         faceUpCards = new ArrayList<>();
+        map = new GameMap();
     }
 
     public String getGameId(){
@@ -71,5 +73,12 @@ public class Game {
 
     public List<TrainCard> getFaceUpCards(){
         return faceUpCards;
+    }
+
+    public void claimRoute(Route route, RouteColors routeColor, PlayerColor player) {
+        map.claimRoute(route.getSrc(), route.getDest(), routeColor, player);
+        getActivePlayerInfo().addToScore(route.getLength());
+        getActivePlayerInfo().useShips(route.getLength());
+        getActivePlayerInfo().useTrainCards(route.getLength());
     }
 }

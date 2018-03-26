@@ -45,6 +45,7 @@ public class ClientFacade implements IClient {
 	private Game currentGame;
 	private ServerPoller serverPoller = null;
 	private Player localPlayer;
+	private List<PlayerSummary> gameSummary;
 
 //----------------------------------------------------------------------------
 //	methods
@@ -170,6 +171,10 @@ public class ClientFacade implements IClient {
 		updateObservable(state);
 	}
 
+	public List<PlayerSummary> getGameSummary(){
+	    return gameSummary;
+    }
+
 //-------------------------------------------------
 // Update public info
 	public void addPlayerTrainCard() {
@@ -179,10 +184,7 @@ public class ClientFacade implements IClient {
 	}
 
 	public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player) {
-		// TODO: Implement this
-		// - update route ownership / color
-		// - add active player points
-		// - remove active player ships
+        currentGame.claimRoute(route, routeColor, player);
 	}
 
 	public void addPlayerDestinationCards(int numCards) {
@@ -199,7 +201,6 @@ public class ClientFacade implements IClient {
 		updateObservable(message);
 	}
 
-	@Override
     public void replaceFaceUpCard(Integer position, TrainCard card) {
         currentGame.replaceFaceUpCard(position, card);
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.faceUpCardUpdated);
@@ -223,6 +224,8 @@ public class ClientFacade implements IClient {
 	}
 
     public void displayEndGame(List<PlayerSummary> playerSummaries) {
-        // TODO: Implement displayEndGame on client side
+        gameSummary = playerSummaries;
+        ClientStateChange state = new ClientStateChange(ClientStateChange.ClientState.summary);
+        observable.notify(state);
     }
 }
