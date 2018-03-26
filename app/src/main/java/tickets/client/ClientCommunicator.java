@@ -16,7 +16,11 @@ import tickets.common.ResultTransferObject;
 
 public class ClientCommunicator {
 
-  private static final String SERVER_HOST = "192.168.1.220";
+  private static String SERVER_HOST;
+  public void setIP(String ip){
+      SERVER_HOST = ip;
+      URL_PREFIX = "http://" + SERVER_HOST + ":" + PORT;
+  }
 
 	private static final String PORT = "8080";
 	private static final String PATH = "/command";
@@ -32,7 +36,7 @@ public class ClientCommunicator {
     }
 
     private static Gson gson = new Gson();
-    private static final String URL_PREFIX = "http://" + SERVER_HOST + ":" + PORT;
+    private static String URL_PREFIX;
     private static final String HTTP_POST = "POST";
 
     public Object send(Command command) {
