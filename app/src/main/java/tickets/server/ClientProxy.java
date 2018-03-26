@@ -2,6 +2,7 @@ package tickets.server;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -13,6 +14,7 @@ import tickets.common.IClient;
 import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.PlayerColor;
+import tickets.common.PlayerSummary;
 import tickets.common.Route;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
@@ -182,6 +184,17 @@ public class ClientProxy implements IClient {
         totalCommandsSoFar++;
     }
 
+    @Override
+    public void displayEndGame(List<PlayerSummary> playerSummaries) {
+        Command command = new Command("displayEndGame",
+                new String[] {List.class.getName()},
+                new Object[] {playerSummaries});
+        unprocessedCommands.add(command);
+        commandIDs.put(command, totalCommandsSoFar.toString());
+        totalCommandsSoFar++;
+    }
+
+    @Override
     public void replaceFaceUpCard(Integer position, TrainCard card) {
         Command command = new Command("replaceFaceUpCard",
                 new String[] {Integer.class.getName(), TrainCard.class.getName()},

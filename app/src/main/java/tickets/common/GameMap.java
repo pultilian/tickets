@@ -30,17 +30,6 @@ public class GameMap {
 		return false;
 	}
 
-	public PlayerColor getPlayerWithLongestPath() {
-		// Haven't got around to this yet
-		return null;
-	}
-
-
-
-
-
-
-
 	private Map<String, List<Route>> makeMap() {
 		Map<String, List<Route>> map = new HashMap<>();
 

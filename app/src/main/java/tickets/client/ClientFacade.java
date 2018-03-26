@@ -15,6 +15,7 @@ import tickets.common.IObserver;
 import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.PlayerColor;
+import tickets.common.PlayerSummary;
 import tickets.common.Route;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
@@ -39,7 +40,7 @@ public class ClientFacade implements IClient {
 //	member variables
 	private ClientObservable observable;
 	private LobbyManager lobbyManager;
-	private Lobby currentLobby;
+	private String currentLobby;
 	private UserData userData;
 	private Game currentGame;
 	private ServerPoller serverPoller = null;
@@ -94,12 +95,12 @@ public class ClientFacade implements IClient {
 		return lobbyManager.getLobbyList();
 	}
 
-	public void setCurrentLobby(Lobby lobby) {
-		currentLobby = lobby;
+	public void setCurrentLobby(String lobbyId) {
+		currentLobby = lobbyId;
 	}
 
 	public Lobby getLobby() {
-		return currentLobby;
+		return lobbyManager.getLobby(currentLobby);
 	}
 
     public Lobby getLobby(String lobbyID) {
@@ -123,50 +124,33 @@ public class ClientFacade implements IClient {
 	    localPlayer = player;
 	}
 
-    public void endCurrentTurn() {
-        currentGame.nextTurn();
-    }
-
-    public void addChatMessage(String message) {
-        currentGame.addToChat(message);
-        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.chatUpdated);
-        updateObservable(update);
-    }
-
-    public void addToGameHistory(String message) {
-        currentGame.addToHistory(message);
-        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.gameHistoryUpdated);
-        updateObservable(update);
-    }
-
 //-------------------------------------------------
 //		IClient interface methods
 //
 //Represents the client to the server.
-//These methods are called when commands are retrieved
-//	by the poller from the Server.
+//These methods are called when commands are retrieved by the poller from the Server.
 	public void addLobbyToList(Lobby lobby) {
-		if (lobbyManager.getLobbyList().contains(lobby))
-			return;
 		lobbyManager.addLobby(lobby);
-		ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.lobbyAdded);
+		ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.lobbyListUpdated);
         updateObservable(update);
 	}
 
 	public void removeLobbyFromList(Lobby lobby) {
 		lobbyManager.removeLobby(lobby);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.lobbyListUpdated);
+        updateObservable(update);
 	}
 
 	public void addPlayerToLobbyInList(Lobby lobby, Player playerToAdd) {
-		if (lobby.getId().equals(currentLobby))
-		    currentLobby.addPlayer(playerToAdd);
 		lobbyManager.addPlayer(lobby, playerToAdd);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.lobbyListUpdated);
+        updateObservable(update);
 	}
 
 	public void removePlayerFromLobbyInList(Lobby lobby, Player player) {
-        if (lobby.getId().equals(currentLobby))
-            currentLobby.addPlayer(player);
 		lobbyManager.removePlayer(lobby, player);
+        ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.lobbyListUpdated);
+        updateObservable(update);
 	}
 
 	public void removePlayer(Player player) {
@@ -174,7 +158,7 @@ public class ClientFacade implements IClient {
 	}
 
 	public void startGame(Game game, HandTrainCard playerHand, ChoiceDestinationCards destCardOptions) {
-		currentGame = game;
+		addGame(game);
 		currentLobby = null;
 		localPlayer.setTrainCardHand(playerHand);
 		localPlayer.setDestinationCardOptions(destCardOptions);
@@ -220,5 +204,25 @@ public class ClientFacade implements IClient {
         currentGame.replaceFaceUpCard(position, card);
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.faceUpCardUpdated);
         updateObservable(message);
+    }
+
+	public void endCurrentTurn() {
+		currentGame.nextTurn();
+	}
+
+	public void addChatMessage(String message) {
+		currentGame.addToChat(message);
+		ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.chatUpdated);
+		updateObservable(update);
+	}
+
+	public void addToGameHistory(String message) {
+		currentGame.addToHistory(message);
+		ClientModelUpdate update = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.gameHistoryUpdated);
+		updateObservable(update);
+	}
+
+    public void displayEndGame(List<PlayerSummary> playerSummaries) {
+        // TODO: Implement displayEndGame on client side
     }
 }

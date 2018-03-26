@@ -40,10 +40,6 @@ public class ServerGame extends Game {
 	private DestinationDeck destinationDeck;
 	private GameMap map;
 
-	// private List<Route> routes;
-	//		-> I'd much prefer if this was a map object that held the cities and routes together
-	//		  private Map map;
-
 	//----------------------------------------------------------------------------------------------
 	// *** SET-UP METHODS ***
 
@@ -100,6 +96,27 @@ public class ServerGame extends Game {
 
     public List<TrainCard> getFaceUpCards() {
 	    return new ArrayList<>(Arrays.asList(trainCardArea.getFaceUpCards()));
+    }
+
+    public List<ServerPlayer> getServerPlayers() {
+	    return players;
+    }
+
+    public List<PlayerColor> getPlayersWithLongestPath() {
+	    int longestPathSoFar = 0;
+        List<PlayerColor> playersWithLongestPath = new ArrayList<>();
+        for (ServerPlayer player : players) {
+            int playerLongestRoute = player.getLongestRouteLength();
+            if (playerLongestRoute > longestPathSoFar) {
+                playersWithLongestPath.clear();
+                playersWithLongestPath.add(player.getPlayerFaction().getColor());
+                longestPathSoFar = playerLongestRoute;
+            }
+            else if (playerLongestRoute == longestPathSoFar) {
+                playersWithLongestPath.add(player.getPlayerFaction().getColor());
+            }
+        }
+	    return playersWithLongestPath;
     }
 
     public ServerPlayer getServerPlayer(String authToken) {
@@ -161,8 +178,8 @@ public class ServerGame extends Game {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
-        String errorMsg = player.claimRoute(route, cards);
-        if (errorMsg != null) throw new Exception(errorMsg);
+        String msg = player.claimRoute(route, cards);
+        if (msg != null && !msg.equals(ServerPlayer.LAST_ROUND)) throw new Exception(msg);
 
         // Success! Now update the server model
         else {
@@ -176,6 +193,8 @@ public class ServerGame extends Game {
             }
             map.claimRoute(route.getSrc(), route.getDest(), color, player.getPlayerFaction().getColor());
             startNextTurn();
+            // If it's the last round, everyone (including the current player) gets one more turn.
+            if (msg != null && msg.equals(ServerPlayer.LAST_ROUND)) player.becomeLastPlayer();
         }
     }
 
@@ -214,6 +233,10 @@ public class ServerGame extends Game {
     // *** PRIVATE HELPER METHODS
     private void startNextTurn() {
 	    ServerFacade.getInstance().endTurn(this, players.get(currentPlayerIndex).getName());
+	    if (players.get(currentPlayerIndex).isLastPlayer()) {
+	        ServerFacade.getInstance().endGame(this);
+	        return;
+        }
 	    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 	    players.get(currentPlayerIndex).startTurn();
     }

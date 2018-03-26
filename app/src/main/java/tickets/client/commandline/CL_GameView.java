@@ -69,10 +69,10 @@ public class CL_GameView extends CommandlineView {
                 break;
             case 6:
                 printPlayerInfo();
-                return true;
+                break;
             case 7:
 				goToChat();
-				return true;
+				break;
             case 8:
                 this.returnValue = new CL_LobbyListView();
                 return true;
@@ -154,17 +154,22 @@ public class CL_GameView extends CommandlineView {
     }
 
     private void printPlayerInfo(){
-        System.out.println("*Game Info*");
-        for(PlayerInfo info : gameInfoPresenter.getPlayerInfo()){
-            String nameString = info.getName() + " - " + info.getFaction().getName();
-            nameString += "(" + info.getFaction().getColor() + ")";
+        System.out.println("*Player Stats*");
+        List<PlayerInfo> info = gameInfoPresenter.getPlayerInfo();
+        for(int i = 0; i < info.size(); i++) {
+            PlayerInfo player = info.get(i);
+            if(i == gameInfoPresenter.getCurrentTurn()) {
+                System.out.print("**");
+            }
+            String nameString = player.getName() + " - " + player.getFaction().getName();
+            nameString += "(" + player.getFaction().getColor() + ")";
             System.out.println(nameString);
-            System.out.println("  score: " + info.getScore());
-            System.out.println("  ships: " + info.getShipsLeft());
-            System.out.println("  resources: " + info.getTrainCardCount());
-            System.out.println("  destinations: " + info.getDestinationCardCount());
+            System.out.println("  score: " + player.getScore());
+            System.out.println("  ships: " + player.getShipsLeft());
+            System.out.println("  resources: " + player.getTrainCardCount());
+            System.out.println("  destinations: " + player.getDestinationCardCount());
         }
-        System.out.println("Match history");
+        System.out.println("*Match history*");
         for (String hist : gameInfoPresenter.getGameHistory())
             System.out.println("  " + hist);
         System.out.println();
@@ -176,10 +181,9 @@ public class CL_GameView extends CommandlineView {
         List<String> chat = gameChatPresenter.getChatHistory();
         int lastMessage = Math.max(chat.size() - 6, 0);
         while(choice != 3) {
-            if (chat.size() > 0 ) {
-                for (int i = lastMessage; i < lastMessage + 5; i++) {
+            for (int i = lastMessage; i < lastMessage + 5; i++) {
+                if (i < chat.size())
                     System.out.println("  " + chat.get(i));
-                }
             }
             System.out.println("  1. See previous 10 messages");
             System.out.println("  2. Send a message");

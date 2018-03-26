@@ -4,6 +4,7 @@ package tickets.server.model.game;
 import java.util.List;
 
 import tickets.common.ChoiceDestinationCards;
+import tickets.common.PlayerSummary;
 import tickets.common.Route;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
@@ -22,17 +23,22 @@ public class ServerPlayer extends Player {
 	// State Pattern object
 	private PlayerTurnState turnState;
 
-	// Flag string for end turn
-    public static final String END_TURN = "EndTurn";
+	// Flag strings to be sent back by turn state actions
+    static final String END_TURN = "EndTurn";
+    static final String LAST_ROUND = "LastRound";
+
+    private PlayerSubmap map;
+    private boolean isLastPlayer;
 	//----------------------------------------------------------------------------------------------
     // *** SET-UP METHODS ***
 
-	public ServerPlayer(Player copy) {
+	ServerPlayer(Player copy) {
 		super(copy);
 		turnState = DrewDestCardsState.getInstance();
+		isLastPlayer = false;
 	}
 
-	public void initPlayer(List<TrainCard> hand, List<DestinationCard> destinations) {
+	void initPlayer(List<TrainCard> hand, List<DestinationCard> destinations) {
 		for (TrainCard card : hand) {
 			this.addTrainCardToHand(card);
 		}
@@ -40,7 +46,54 @@ public class ServerPlayer extends Player {
         ChoiceDestinationCards choices = new ChoiceDestinationCards();
 		choices.setDestinationCards(destinations);
 		this.setDestinationCardOptions(choices);
+		map = new PlayerSubmap();
 	}
+
+	//----------------------------------------------------------------------------------------------
+    // *** GETTERS / SETTERS ***
+
+    boolean isLastPlayer() {
+	    return isLastPlayer;
+    }
+
+    void becomeLastPlayer() {
+	    isLastPlayer = true;
+    }
+
+    void addRouteToMap(Route route) {
+	    map.addRoute(route);
+    }
+
+    int getLongestRouteLength() {
+	    return map.findLongestRoute();
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // *** END GAME CALCULATIONS
+
+    public PlayerSummary calculateSummary(boolean longestRoute) {
+	    return new PlayerSummary(getInfo(), calculateSuccessfulDestPoints(), calculateFailedDestPoints(), longestRoute);
+    }
+
+    private int calculateSuccessfulDestPoints() {
+	    int total = 0;
+	    for (DestinationCard card : getHandDestinationCards().getAllCards()) {
+	        if (map.pathExists(card.getFirstCity(), card.getSecondCity())) {
+	            total += card.getValue();
+            }
+        }
+        return total;
+    }
+
+    private int calculateFailedDestPoints() {
+	    int total = 0;
+	    for (DestinationCard card : getHandDestinationCards().getAllCards()) {
+	        if (!map.pathExists(card.getFirstCity(), card.getSecondCity())) {
+	            total += card.getValue();
+            }
+        }
+        return total;
+    }
 
 	//----------------------------------------------------------------------------------------------
     // *** STATE-CHANGING FUNCTIONS ***
