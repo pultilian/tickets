@@ -103,7 +103,20 @@ public class ServerGame extends Game {
     }
 
     public List<PlayerColor> getPlayersWithLongestPath() {
-	    return map.getPlayersWithLongestPath();
+	    int longestPathSoFar = 0;
+        List<PlayerColor> playersWithLongestPath = new ArrayList<>();
+        for (ServerPlayer player : players) {
+            int playerLongestRoute = player.getLongestRouteLength();
+            if (playerLongestRoute > longestPathSoFar) {
+                playersWithLongestPath.clear();
+                playersWithLongestPath.add(player.getPlayerFaction().getColor());
+                longestPathSoFar = playerLongestRoute;
+            }
+            else if (playerLongestRoute == longestPathSoFar) {
+                playersWithLongestPath.add(player.getPlayerFaction().getColor());
+            }
+        }
+	    return playersWithLongestPath;
     }
 
     public ServerPlayer getServerPlayer(String authToken) {

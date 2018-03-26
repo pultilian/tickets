@@ -1,19 +1,16 @@
 
 package tickets.common;
 
-import tickets.common.RouteColors;
-import tickets.common.PlayerColor;
-
 public class Route {
-	int length;
-	String src;
-	String dest;
+	private int length;
+	private String src;
+	private String dest;
 
-	RouteColors firstColor;
-	PlayerColor firstOwner;
+	private RouteColors firstColor;
+	private PlayerColor firstOwner;
 
-	RouteColors secondColor;
-	PlayerColor secondOwner;
+	private RouteColors secondColor;
+	private PlayerColor secondOwner;
 
 	public Route(String src, String dest, RouteColors firstColor, int length) {
 		this.src = src;
@@ -63,8 +60,8 @@ public class Route {
 	}
 
 	public boolean equals(String src, String dest) {
-		if (this.src == src  && this.dest == dest) return true;
-		if (this.src == dest && this.dest == src)  return true;
+		if (this.src.equals(src)  && this.dest.equals(dest)) return true;
+		if (this.src.equals(dest) && this.dest.equals(src))  return true;
 		else return false;
 	}
 
@@ -103,19 +100,18 @@ public class Route {
 	}
 
 	// Return true if the route is claimed successfully.
-	// Return false if the route is already claimed or
-	//   if neither of the routes between these two
-	// 	 cities have the specified color.
+	// Return false if the route is already claimed (or someone tries to claim both routes) or
+	//   if neither of the routes between these two cities have the specified color (or gray).
 	public boolean claim(RouteColors color, PlayerColor claimant) {
-		if (this.firstColor == color) {
-			if (this.firstOwner == null) {
+		if (this.firstColor == RouteColors.Gray || this.firstColor == color) {
+			if (this.firstOwner == null && this.secondOwner != claimant) {
 				this.firstOwner = claimant;
 				return true;
 			}
 			else return false;
 		}
-		else if (this.secondColor == color) {
-			if (this.secondOwner == null) {
+		else if (this.secondColor == RouteColors.Gray || this.secondColor == color) {
+			if (this.secondOwner == null && this.firstOwner != claimant) {
 				this.secondOwner = claimant;
 				return true;
 			}

@@ -30,20 +30,6 @@ public class GameMap {
 		return false;
 	}
 
-	// More than one player could have longest path
-	public List<PlayerColor> getPlayersWithLongestPath() {
-		// TODO: Actually calculate longest path
-		List<PlayerColor> colors = new ArrayList<>();
-		colors.add(PlayerColor.black);
-		return colors;
-	}
-
-
-
-
-
-
-
 	private Map<String, List<Route>> makeMap() {
 		Map<String, List<Route>> map = new HashMap<>();
 

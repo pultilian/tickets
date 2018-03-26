@@ -71,7 +71,7 @@ class TurnStartState extends PlayerTurnState {
             }
             player.getInfo().addToScore(route.getPointValue());
             player.getInfo().useShips(route.getLength());
-            player.addRouteToMap(route.getSrc(), route.getDest());
+            player.addRouteToMap(route);
             player.changeState(States.NOT_MY_TURN);
             if (player.getInfo().getShipsLeft() < 3) return ServerPlayer.LAST_ROUND;
             else return null;
