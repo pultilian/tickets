@@ -76,9 +76,10 @@ public class MapView extends View {
         // calculate the size allocated to this view
         int xPad = getPaddingLeft() + getPaddingRight();
         int yPad = getPaddingTop() + getPaddingBottom();
-        mViewWidth = w - xPad;
-        mViewHeight = h - yPad;
-
+        mViewWidth = getMeasuredWidth() - xPad;
+        mViewHeight = getMeasuredHeight() - yPad;
+        Log.e("onSizeChanged", "view size:" + mViewWidth + ", " + mViewHeight);
+        Log.e("onSizeChanged", "bitmap size:" + mGameMap.getWidth() + ", " + mGameMap.getHeight());
         mMapClickHandler.setDrawRatios(mViewWidth, mViewHeight);
         return;
     }
@@ -121,6 +122,7 @@ public class MapView extends View {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
+            Log.e("click location", "X:" + event.getX() + ", Y:" + event.getY());
             String citySelected = mMapClickHandler.onClick(event.getX(), event.getY());
             String msg = "response is " + citySelected;
             Log.d("MapClickListener", msg);
@@ -153,16 +155,19 @@ public class MapView extends View {
         void setDrawRatios(int viewX, int viewY) {
             widthRatio = (float) mapWidth / (float) viewX;
             heightRatio = (float) mapHeight / (float) viewY;
+            Log.e("setDrawRatios", "ratios set:" + widthRatio + ", " + heightRatio);
             return;
         }
 
         String onClick(float xP, float yP) {
             //Convert a point (x, y) in pixels to within the Bitmap
+            Log.e("onClick", "point clicked:" + xP + ", " + yP);
             int x = getX(xP);
             int y = getY(yP);
             if (x == -1 || y == -1) {
                 return IGNORE;
             }
+            Log.e("onClick", "map location calculated:" + x + ", " + y);
             MapPoints selected = findClosest(x, y);
 //            Log.d("City clicked", "city code: " + selected.getCode());
             if (selected == null) return IGNORE;
@@ -231,6 +236,7 @@ public class MapView extends View {
             }
             int xmap = (int) (x * widthRatio);
             if (xmap > mapWidth) {
+                Log.e("getX", "x value outside of map");
                 return -1;
             }
             return xmap;
@@ -245,6 +251,7 @@ public class MapView extends View {
             }
             int ymap = (int) (y * heightRatio);
             if (ymap > mapHeight) {
+                Log.e("getY", "y value outside of map");
                 return -1;
             }
             return ymap;
