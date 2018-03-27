@@ -164,7 +164,7 @@ public class ServerGame extends Game {
         TrainCard card = trainCardArea.getFaceUpCards()[position];
         if (card == null) throw new Exception("There is no card at that position.");
 
-        String msg = player.drawTrainCard(card);
+        String msg = player.drawFaceUpCard(card);
         if (msg != null) {
             if (msg.equals(ServerPlayer.END_TURN)) {
                 startNextTurn();
