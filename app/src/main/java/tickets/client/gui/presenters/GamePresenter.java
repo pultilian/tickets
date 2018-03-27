@@ -111,6 +111,32 @@ public class GamePresenter implements IGamePresenter {
 //----------------------------------------------------------------------------
 //  private methods
 
+    private void checkClientStateChangeFlag(ClientStateChange.ClientState flag) {
+        switch (flag) {
+            case login:
+                break;
+            case lobby:
+                break;
+            case lobbylist:
+                break;
+            case game:
+                break;
+            case update:
+                break;
+            case summary:
+                if (holder != null)
+                    holder.makeTransition(IHolderActivity.Transition.toGameSummary);
+                break;
+            default:
+                Exception err = new Exception("Observer err: invalid Transition " + flag.name());
+                if (holder != null)
+                    holder.toastException(err);
+                else
+                    System.err.println(err.getMessage());
+                break;
+        }
+    }
+
     private void checkClientModelUpdateFlag(ClientModelUpdate.ModelUpdate flag) {
         switch (flag) {
             case playerTrainHandUpdated:
@@ -126,7 +152,7 @@ public class GamePresenter implements IGamePresenter {
                     holder.updatePlayerDestHand();
                 break;
             case destCardOptionsUpdated:
-                holder.makeTransition(null);
+                holder.makeTransition(IHolderActivity.Transition.toDestinationFragment);
                 break;
             case gameHistoryUpdated:
                 break;
