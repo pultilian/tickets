@@ -261,40 +261,46 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
      * sets the face up cards and updates the screen.
      */
     public void setFaceUpCards(){
-        ImageView[] faceUpCard = {faceUpCard1,faceUpCard2,faceUpCard3,faceUpCard4,faceUpCard5};
-        List<TrainCard> cards = presenter.getFaceUpCards();
-        for(int i = 0; i < cards.size(); i++){
-            switch (cards.get(i).getColor().toString().toLowerCase()){
-                case "blue":
-                    faceUpCard[i].setImageResource(R.drawable.resource_blue);
-                    break;
-                case "red":
-                    faceUpCard[i].setImageResource(R.drawable.resource_red);
-                    break;
-                case "pink":
-                    faceUpCard[i].setImageResource(R.drawable.resource_pink);
-                    break;
-                case "orange":
-                    faceUpCard[i].setImageResource(R.drawable.resource_orange);
-                    break;
-                case "yellow":
-                    faceUpCard[i].setImageResource(R.drawable.resource_yellow);
-                    break;
-                case "black":
-                    faceUpCard[i].setImageResource(R.drawable.resource_black);
-                    break;
-                case "white":
-                    faceUpCard[i].setImageResource(R.drawable.resource_white);
-                    break;
-                case "green":
-                    faceUpCard[i].setImageResource(R.drawable.resource_green);
-                    break;
-                case "silver":
-                    faceUpCard[i].setImageResource(R.drawable.resource_silver);
-                    break;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ImageView[] faceUpCard = {faceUpCard1,faceUpCard2,faceUpCard3,faceUpCard4,faceUpCard5};
+                List<TrainCard> cards = presenter.getFaceUpCards();
+                for(int i = 0; i < cards.size(); i++){
+                    switch (cards.get(i).getColor()){
+                        case Blue:
+                            faceUpCard[i].setImageResource(R.drawable.resource_blue);
+                            break;
+                        case Red:
+                            faceUpCard[i].setImageResource(R.drawable.resource_red);
+                            break;
+                        case Purple:
+                            faceUpCard[i].setImageResource(R.drawable.resource_pink);
+                            break;
+                        case Orange:
+                            faceUpCard[i].setImageResource(R.drawable.resource_orange);
+                            break;
+                        case Yellow:
+                            faceUpCard[i].setImageResource(R.drawable.resource_yellow);
+                            break;
+                        case Black:
+                            faceUpCard[i].setImageResource(R.drawable.resource_black);
+                            break;
+                        case White:
+                            faceUpCard[i].setImageResource(R.drawable.resource_white);
+                            break;
+                        case Green:
+                            faceUpCard[i].setImageResource(R.drawable.resource_green);
+                            break;
+                        case Wild:
+                            faceUpCard[i].setImageResource(R.drawable.resource_silver);
+                            break;
 
+                    }
+                }
             }
-        }
+        });
+
     }
 
     /** UpdatePoints
