@@ -47,7 +47,24 @@ public class HandTrainCard {
         RouteColors color = route.getColor();
 	    List<TrainCard> cardsForClaim = colorsListMap.get(color);
 
-	    // TODO: handle case where route is gray
+	    if (color == RouteColors.Gray) {
+	        RouteColors preferredBuyColor = null;
+	        int closestMatch = 0;
+	        for (RouteColors cardColor : colorsListMap.keySet()) {
+	            if (colorsListMap.get(cardColor).size() == route.getLength()) {
+	                return colorsListMap.get(cardColor);
+                }
+                else if (closestMatch < route.getLength() && colorsListMap.get(cardColor).size() > closestMatch) {
+	                closestMatch = colorsListMap.get(cardColor).size();
+	                preferredBuyColor = cardColor;
+                }
+                else if (closestMatch > route.getLength() && colorsListMap.get(cardColor).size() < closestMatch && colorsListMap.get(cardColor).size() > route.getLength()) {
+                    closestMatch = colorsListMap.get(cardColor).size();
+                    preferredBuyColor = cardColor;
+                }
+            }
+            color = preferredBuyColor;
+        }
 	    int i = 0;
 	    while (cardsForClaim.size() != route.getLength()) {
 	        List<TrainCard> colorCards = colorsListMap.get(color);
