@@ -253,13 +253,16 @@ public class ServerFacade implements IServer {
         catch(Exception ex) {
             return new AddToChatResponse(ex);
         }
+        ServerPlayer player = game.getServerPlayer(authToken);
+        String fullMessage = player.getName() + " (" + player.getPlayerFaction().getName() + "): " +
+                message;
 
         // Update server model
-        game.addToChat(message);
+        game.addToChat(fullMessage);
 
         // Update relevant clients
         for (ClientProxy clientInGame : getClientsInGame(game.getGameId())) {
-            clientInGame.addChatMessage(message);
+            clientInGame.addChatMessage(fullMessage);
         }
 
         return new AddToChatResponse();

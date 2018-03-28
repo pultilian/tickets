@@ -38,7 +38,12 @@ public class ChatFragment extends Fragment implements IHolderGameChatFragment {
     private GameChatPresenter presenter;
 
     public void updateChat(){
-        chatAdapter.notifyDataSetChanged();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chatAdapter.notifyItemInserted(chatAdapter.getItemCount() - 1);
+            }
+        });
     }
 
     /** Make Transition
@@ -151,7 +156,7 @@ public class ChatFragment extends Fragment implements IHolderGameChatFragment {
 
         @Override
         public int getItemCount() {
-            return 0; //cards.size(); //TODO: get cards initialized.
+            return chatMessages.size();
         }
 
     }
