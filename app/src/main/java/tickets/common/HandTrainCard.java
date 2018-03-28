@@ -43,22 +43,26 @@ public class HandTrainCard {
         return handTotal;
 	}
 
-    public List<TrainCard> getCardsForRoute(Route route) {
-        RouteColors color = route.getColor();
+    public List<TrainCard> getCardsForRoute(RouteColors color, int length) {
+	    if (color == null)
+	        return null;
 	    List<TrainCard> cardsForClaim = colorsListMap.get(color);
 
 	    if (color == RouteColors.Gray) {
 	        RouteColors preferredBuyColor = null;
 	        int closestMatch = 0;
 	        for (RouteColors cardColor : colorsListMap.keySet()) {
-	            if (colorsListMap.get(cardColor).size() == route.getLength()) {
+	            if (colorsListMap.get(cardColor).size() == length) {
 	                return colorsListMap.get(cardColor);
                 }
-                else if (closestMatch < route.getLength() && colorsListMap.get(cardColor).size() > closestMatch) {
+                else if (closestMatch < length
+                        && colorsListMap.get(cardColor).size() > closestMatch) {
 	                closestMatch = colorsListMap.get(cardColor).size();
 	                preferredBuyColor = cardColor;
                 }
-                else if (closestMatch > route.getLength() && colorsListMap.get(cardColor).size() < closestMatch && colorsListMap.get(cardColor).size() > route.getLength()) {
+                else if (closestMatch > length
+                        && colorsListMap.get(cardColor).size() < closestMatch
+                        && colorsListMap.get(cardColor).size() > length) {
                     closestMatch = colorsListMap.get(cardColor).size();
                     preferredBuyColor = cardColor;
                 }
@@ -66,7 +70,7 @@ public class HandTrainCard {
             color = preferredBuyColor;
         }
 	    int i = 0;
-	    while (cardsForClaim.size() != route.getLength()) {
+	    while (cardsForClaim.size() != length) {
 	        List<TrainCard> colorCards = colorsListMap.get(color);
 	        List<TrainCard> wildCards = colorsListMap.get(RouteColors.Gray);
 	        int j = i - colorCards.size();

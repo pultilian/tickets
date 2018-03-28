@@ -93,4 +93,32 @@ public class Player {
             playerResourceCards.removeCards(color, removeCards.get(color));
         }
     }
+
+    public List<TrainCard> getCardsForRoute(Route route) {
+        if (! route.isAvailable())
+            return null;
+
+        List<TrainCard> claim1 = null;
+        List<TrainCard> claim2 = null;
+        if (route.getFirstOwner() == null)
+            claim1 = playerResourceCards.getCardsForRoute(route.getFirstColor(), route.getLength());
+        if (route.isDouble() && route.getSecondOwner() == null)
+            playerResourceCards.getCardsForRoute(route.getSecondColor(), route.getLength());
+
+        if (claim1 == null)
+            return claim2;
+        else {
+            int claim1Wilds = 0;
+            int claim2Wilds = 0;
+            for (int i = 0; i < claim1.size(); i++) {
+                if(claim1.get(i).getColor() == RouteColors.Gray)
+                    claim1Wilds++;
+                if(claim2.get(i).getColor() == RouteColors.Gray)
+                    claim2Wilds++;
+            }
+            if (claim1Wilds < claim2Wilds)
+                return claim2;
+        }
+        return claim1;
+    }
 }

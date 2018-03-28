@@ -233,7 +233,7 @@ public class ClientFacade implements IClient {
     }
 
 	public List<TrainCard> getCardsForRoute(Route route) {
-        return localPlayer.getHandTrainCards().getCardsForRoute(route);
+        return localPlayer.getCardsForRoute(route);
 	}
 
     public void removeUsedCardsFromPlayerHand(Map<RouteColors, Integer> removeCards) {
