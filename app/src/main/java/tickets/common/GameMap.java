@@ -30,6 +30,19 @@ public class GameMap {
 		return false;
 	}
 
+
+    public List<Route> getClaimedRoutes() {
+        List<Route> claimedRoutes = new ArrayList<>();
+        for (List<Route> routes: cityGraph.values()) {
+            for (Route route : routes) {
+                if (route.isOwned()) {
+                    claimedRoutes.add(route);
+                }
+            }
+        }
+        return claimedRoutes;
+    }
+
 	private Map<String, List<Route>> makeMap() {
 		Map<String, List<Route>> map = new HashMap<>();
 

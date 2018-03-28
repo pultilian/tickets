@@ -81,4 +81,8 @@ public class Game {
         getActivePlayerInfo().useShips(route.getLength());
         getActivePlayerInfo().useTrainCards(route.getLength());
     }
+
+    public List<Route> getClaimedRoutes() {
+        return map.getClaimedRoutes();
+    }
 }

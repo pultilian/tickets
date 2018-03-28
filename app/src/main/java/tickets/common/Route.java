@@ -87,6 +87,12 @@ public class Route {
 		return false;
 	}
 
+	public boolean isOwned() {
+		if (firstOwner == null)
+		    return false;
+		return true;
+	}
+
 	public boolean isOwned(RouteColors color) {
 		if (this.firstColor == color) {
 			if (this.firstOwner == null) return false;
