@@ -12,8 +12,6 @@ import tickets.common.PlayerSummary;
 
 public class GameSummaryPresenter {
     public List<PlayerSummary> getSummary(){
-        // TODO: return ClientFacade.getInstance().getPlayerSummary();
-        List<PlayerSummary> retVal = new ArrayList<>();
-        return retVal;
+        return ClientFacade.getInstance().getGameSummary();
     }
 }

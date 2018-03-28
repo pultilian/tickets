@@ -1,6 +1,7 @@
 package tickets.client.gui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -367,11 +368,20 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
      */
     @Override
     public void makeTransition(IHolderActivity.Transition toActivity) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = new DestinationFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+        switch(toActivity){
+            case toGameSummary:
+                Intent intent = new Intent(GameActivity.this, GameSummaryActivity.class);
+                startActivity(intent);
+                break;
+            case toDestinationFragment:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = new DestinationFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .commit();
+                break;
+
+        }
         return;
     }
 

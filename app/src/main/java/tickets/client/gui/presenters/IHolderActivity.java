@@ -8,7 +8,7 @@ public interface IHolderActivity {
     //If the transition is valid, 
     public void makeTransition(Transition toActivity);
     public enum Transition {
-        toLogin, toLobbyList, toLobby, toGame
+        toLogin, toLobbyList, toLobby, toGame, toGameSummary, toDestinationFragment
     }
 
     public void toastMessage(String message);
