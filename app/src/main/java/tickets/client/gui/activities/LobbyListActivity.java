@@ -211,8 +211,12 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
     //from IHolderActivity
     public void checkUpdate() {
         //update the lobby list by creating a new adapter for the list
-        lobbyListAdapter.notifyDataSetChanged();
-        return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                lobbyListAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     class LobbyListAdapter extends RecyclerView.Adapter<LobbyListHolder> {
