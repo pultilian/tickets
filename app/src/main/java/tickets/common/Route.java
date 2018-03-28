@@ -1,42 +1,34 @@
 
 package tickets.common;
 
+import java.util.List;
+
 public class Route {
 	private int length;
 	private String src;
 	private String dest;
 
-	private RouteColors firstColor;
+	private RouteColors color;
 	private PlayerColor firstOwner;
+    private PlayerColor secondOwner;
+	private boolean doubleRoute;
 
-	private RouteColors secondColor;
-	private PlayerColor secondOwner;
-
-	public Route(String src, String dest, RouteColors firstColor, int length) {
+	public Route(String src, String dest, RouteColors color, boolean doubleRoute, int length) {
 		this.src = src;
 		this.dest = dest;
 
-		this.firstColor = firstColor;
+		this.color = color;
 		this.firstOwner = null;
+        this.secondOwner = null;
 
 		this.length = length;
 
-		this.secondColor = null;
-		this.secondOwner = null;
+		this.doubleRoute = doubleRoute;
 	}
 
-	public Route(String src, String dest, RouteColors firstColor, RouteColors secondColor, int length) {
-		this.src = src;
-		this.dest = dest;
-
-		this.firstColor = firstColor;
-		this.firstOwner = null;
-
-		this.secondColor = secondColor;
-		this.secondOwner = null;
-
-		this.length = length;
-	}
+    public RouteColors getColor() {
+        return color;
+    }
 
 	public int getLength() {
 		return length;
@@ -50,13 +42,8 @@ public class Route {
 		return dest;
 	}
 
-	// Check if a route is a double route or not
-	// 
 	public boolean isDouble() {
-		if (this.secondColor == null) {
-			return false;
-		}
-		return true;
+		return doubleRoute;
 	}
 
 	public boolean equals(String src, String dest) {
@@ -64,8 +51,6 @@ public class Route {
 		if (this.src.equals(dest) && this.dest.equals(src))  return true;
 		else return false;
 	}
-
-
 
 	@Override
 	// Since edges on the map graph are undirected,
@@ -88,41 +73,46 @@ public class Route {
 	}
 
 	public boolean isOwned() {
-		if (firstOwner == null)
+        if (firstOwner == null)
+            return false;
+        return true;
+    }
+
+    public boolean isAvailable() {
+        if (firstOwner == null)
+            return false;
+		else if (doubleRoute && secondOwner == null)
 		    return false;
 		return true;
 	}
 
-	public boolean isOwned(RouteColors color) {
-		if (this.firstColor == color) {
-			if (this.firstOwner == null) return false;
-			else return true;
-		}
-		else if (this.secondColor == color) {
-			if (this.secondOwner == null) return false;
-			else return true;
-		}
-		return false;
-	}
 
 	// Return true if the route is claimed successfully.
 	// Return false if the route is already claimed (or someone tries to claim both routes) or
 	//   if neither of the routes between these two cities have the specified color (or gray).
-	public boolean claim(RouteColors color, PlayerColor claimant) {
-		if (this.firstColor == RouteColors.Gray || this.firstColor == color) {
-			if (this.firstOwner == null && this.secondOwner != claimant) {
-				this.firstOwner = claimant;
-				return true;
-			}
-			else return false;
-		}
-		else if (this.secondColor == RouteColors.Gray || this.secondColor == color) {
-			if (this.secondOwner == null && this.firstOwner != claimant) {
-				this.secondOwner = claimant;
-				return true;
-			}
-			else return false;
-		}
+	public boolean claim(List<TrainCard> cards, PlayerColor claimant) {
+	    // Test if claim is valid
+        if (cards.size() != length)
+            return false;
+        for (TrainCard card : cards) {
+            if (card.getColor() != this.color) {
+                if (!(card.getColor() == RouteColors.Gray || this.color == RouteColors.Gray))
+                    return false;
+            }
+        }
+
+        // If not already owned, set owner
+        if (firstOwner == null) {
+            firstOwner = claimant;
+            return true;
+        }
+        else {
+            // If it's a double route, try setting second owner
+            if (doubleRoute && secondOwner == null) {
+                secondOwner = claimant;
+                return true;
+            }
+        }
 
 		return false;
 	}

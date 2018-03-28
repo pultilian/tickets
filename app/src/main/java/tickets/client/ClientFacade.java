@@ -1,6 +1,7 @@
 package tickets.client;
 
 import java.util.List;
+import java.util.Map;
 
 import tickets.client.model.ClientObservable;
 import tickets.client.model.LobbyManager;
@@ -229,5 +230,13 @@ public class ClientFacade implements IClient {
         gameSummary = playerSummaries;
         ClientStateChange state = new ClientStateChange(ClientStateChange.ClientState.summary);
         observable.notify(state);
+    }
+
+	public List<TrainCard> getCardsForRoute(Route route) {
+        return localPlayer.getHandTrainCards().getCardsForRoute(route);
+	}
+
+    public void removeUsedCardsFromPlayerHand(Map<RouteColors, Integer> removeCards) {
+	    localPlayer.removeUsedTrainCards(removeCards);
     }
 }

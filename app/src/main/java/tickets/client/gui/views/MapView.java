@@ -122,10 +122,7 @@ public class MapView extends View {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
-            Log.e("click location", "X:" + event.getX() + ", Y:" + event.getY());
-            String citySelected = mMapClickHandler.onClick(event.getX(), event.getY());
-            String msg = "response is " + citySelected;
-            Log.d("MapClickListener", msg);
+            mMapClickHandler.onClick(event.getX(), event.getY());
             return true;
         }
     }

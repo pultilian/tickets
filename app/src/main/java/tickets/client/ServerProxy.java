@@ -10,6 +10,7 @@ import tickets.common.Route;
 import tickets.common.TrainCard;
 import tickets.common.UserData;
 import tickets.common.response.AddToChatResponse;
+import tickets.common.response.ClaimRouteResponse;
 import tickets.common.response.ClientUpdate;
 import tickets.common.response.DestinationCardResponse;
 import tickets.common.response.JoinLobbyResponse;
@@ -134,12 +135,12 @@ public class ServerProxy implements IServer {
         return (ClientUpdate) result;
     }
 
-    public Response claimRoute(Route route, List<TrainCard> cards, String authToken) {
+    public ClaimRouteResponse claimRoute(Route route, List<TrainCard> cards, String authToken) {
         Object[] parameters = {route, cards, authToken};
         String[] parameterTypes = {Route.class.getName(), List.class.getName(), String.class.getName()};
         Command command = new Command("claimRoute", parameterTypes, parameters);
         Object result = clientCommunicator.send(command);
-        return (Response) result;
+        return (ClaimRouteResponse) result;
     }
 
     public DestinationCardResponse discardDestinationCard(DestinationCard discard, String authToken) {

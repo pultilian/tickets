@@ -1,6 +1,7 @@
 package tickets.common;
 
 import java.util.List;
+import java.util.Map;
 
 public class Player {
     private PlayerInfo info;
@@ -85,5 +86,11 @@ public class Player {
 
     public void setTrainCardHand(HandTrainCard playerHand) {
         playerResourceCards = playerHand;
+    }
+
+    public void removeUsedTrainCards(Map<RouteColors, Integer> removeCards) {
+        for (RouteColors color : removeCards.keySet()) {
+            playerResourceCards.removeCards(color, removeCards.get(color));
+        }
     }
 }

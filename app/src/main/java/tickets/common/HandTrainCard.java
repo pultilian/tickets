@@ -42,4 +42,36 @@ public class HandTrainCard {
         }
         return handTotal;
 	}
+
+    public List<TrainCard> getCardsForRoute(Route route) {
+        RouteColors color = route.getColor();
+	    List<TrainCard> cardsForClaim = colorsListMap.get(color);
+
+	    // TODO: handle case where route is gray
+	    int i = 0;
+	    while (cardsForClaim.size() != route.getLength()) {
+	        List<TrainCard> colorCards = colorsListMap.get(color);
+	        List<TrainCard> wildCards = colorsListMap.get(RouteColors.Gray);
+	        int j = i - colorCards.size();
+	        if (i < colorCards.size())
+    	        cardsForClaim.add(colorCards.get(i));
+	        else if (j < wildCards.size()) {
+	            cardsForClaim.add(wildCards.get(j));
+            }
+            else {
+	            return null;
+            }
+            i++;
+        }
+
+        return cardsForClaim;
+    }
+
+    public void removeCards(RouteColors color, int amount) {
+	    List<TrainCard> colorCards = colorsListMap.get(color);
+	    while(amount > 0 && colorCards.size() > 0) {
+            colorCards.remove(colorCards.size() - 1);
+            amount --;
+        }
+    }
 }

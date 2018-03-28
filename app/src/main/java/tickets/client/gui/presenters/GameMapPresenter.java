@@ -31,7 +31,12 @@ public class GameMapPresenter implements IGameMapPresenter {
     }
 
     @Override
-    public void claimRoute(Route route, List<TrainCard> cards) {
+    public void claimRoute(Route route) {
+        List<TrainCard> cards = ClientFacade.getInstance().getCardsForRoute(route);
+        if (cards == null) {
+            holder.toastMessage("You do not have enough resources to claim that route");
+            return;
+        }
         manager.claimRoute(route, cards);
     }
 
@@ -57,7 +62,6 @@ public class GameMapPresenter implements IGameMapPresenter {
     private void checkUpdate(ClientModelUpdate.ModelUpdate update) {
         switch(update) {
             case mapUpdated:
-                getClaimedRoutes();
                 //TODO: update map visually
                 break;
             default:
