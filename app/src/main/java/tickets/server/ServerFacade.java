@@ -23,6 +23,7 @@ import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 import tickets.common.UserData;
 import tickets.common.response.AddToChatResponse;
+import tickets.common.response.ClaimRouteResponse;
 import tickets.common.response.ClientUpdate;
 import tickets.common.response.DestinationCardResponse;
 import tickets.common.response.JoinLobbyResponse;
@@ -330,7 +331,7 @@ public class ServerFacade implements IServer {
     }
 
     @Override
-    public Response claimRoute(Route route, List<TrainCard> cards, String authToken) {
+    public ClaimRouteResponse claimRoute(Route route, List<TrainCard> cards, String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
 
@@ -359,10 +360,19 @@ public class ServerFacade implements IServer {
                 }
             }
 
-            return new Response(); // "Route claimed successfully"
+            // Make return map
+            Map<RouteColors, Integer> removeCards = new HashMap<>();
+            for (TrainCard card : cards) {
+                RouteColors cardColor = card.getColor();
+                if (! removeCards.keySet().contains(cardColor)) {
+                    removeCards.put(cardColor, 0);
+                }
+                removeCards.put(cardColor, removeCards.get(cardColor) + 1);
+            }
+            return new ClaimRouteResponse(removeCards); // "Route claimed successfully"
         }
         catch(Exception ex) {
-            return new Response(ex);
+            return new ClaimRouteResponse(ex);
         }
     }
 

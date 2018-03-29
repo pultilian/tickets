@@ -217,7 +217,6 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
                 lobbyListAdapter.notifyDataSetChanged();
             }
         });
-        return;
     }
 
     class LobbyListAdapter extends RecyclerView.Adapter<LobbyListHolder> {

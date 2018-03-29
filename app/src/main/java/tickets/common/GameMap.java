@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import tickets.common.Route;
-import tickets.common.RouteColors;
-import tickets.common.Cities;
-
 
 public class GameMap {
 	private Map<String, List<Route>> cityGraph;
@@ -29,6 +25,18 @@ public class GameMap {
 		}
 		return false;
 	}
+
+
+    public List<Route> getClaimedRoutes() {
+        List<Route> claimedRoutes = new ArrayList<>();
+        for (List<Route> routes: cityGraph.values()) {
+            for (Route route : routes) {
+                if (route.isOwned())
+                    claimedRoutes.add(route);
+            }
+        }
+        return claimedRoutes;
+    }
 
 	private Map<String, List<Route>> makeMap() {
 		Map<String, List<Route>> map = new HashMap<>();
@@ -414,4 +422,14 @@ public class GameMap {
 
 		return map;
 	}
+
+    public List<Route> getAllRoutes() {
+        List<Route> allRoutes = new ArrayList<>();
+        for (List<Route> routes: cityGraph.values()) {
+            for (Route route : routes) {
+                allRoutes.add(route);
+            }
+        }
+        return allRoutes;
+    }
 }
