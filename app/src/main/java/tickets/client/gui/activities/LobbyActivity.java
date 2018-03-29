@@ -151,14 +151,13 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
     //from IHolderActivity
     public void checkUpdate() {
         //update the Lobby History
-        Lobby currentLobby = presenter.getLobby();
-        List<Player> allPlayers = currentLobby.getPlayers();
-        LobbyPlayerAdapter adapter = new LobbyPlayerAdapter(this, allPlayers);
-        lobbyPlayerList.setAdapter(adapter);
-
-        List<String> history = currentLobby.getHistory();
-        updateAdapter = new UpdateAdapter(this, history);
-        updateWindow.setAdapter(updateAdapter);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                lobbyPlayerAdapter.notifyDataSetChanged();
+                updateAdapter.notifyDataSetChanged();
+            }
+        });
         return;
     }
 
