@@ -3,9 +3,7 @@ package tickets.testing;
 import java.util.ArrayList;
 import java.util.List;
 
-import tickets.client.ClientFacade;
 import tickets.common.Faction;
-import tickets.common.Player;
 import tickets.common.PlayerInfo;
 import tickets.common.PlayerSummary;
 
