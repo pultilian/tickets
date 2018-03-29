@@ -10,18 +10,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import tickets.client.gui.activities.R;
 import tickets.client.gui.presenters.GameInfoPresenter;
+import tickets.client.gui.presenters.IHolderActivity;
+import tickets.client.gui.presenters.IHolderGameInfoFragment;
 import tickets.common.PlayerInfo;
 
 /**
  * Created by Pultilian on 3/4/2018.
  */
 
-public class GameInfoFragment extends Fragment {
+public class GameInfoFragment extends Fragment implements IHolderGameInfoFragment {
     private RecyclerView playersInfo;
     private RecyclerView gameHistory;
     private GameInfoPresenter presenter;
@@ -54,6 +57,56 @@ public class GameInfoFragment extends Fragment {
 
         return view;
     }
+
+    public void updatePlayerInfo(){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                playersInfoAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void updateGameHistory(){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                gameHistoryAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void checkUpdate(){
+
+    }
+
+    @Override
+    public void makeTransition(IHolderActivity.Transition toActivity) {
+        //what transitions should be made?
+        //GOH
+        return;
+    }
+
+    /** ToastMessage
+     * displays a toast upon request from the server.
+     * @param message
+     */
+    @Override
+    public void toastMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    /** ToastException
+     * throws an exception from the server in the form of a toast
+     * @param e
+     */
+    @Override
+    public void toastException(Exception e) {
+        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        return;
+    }
+
 
     class PlayersInfoAdapter extends RecyclerView.Adapter<GameInfoFragment.PlayersInfoHolder> {
         private LayoutInflater inflater;
