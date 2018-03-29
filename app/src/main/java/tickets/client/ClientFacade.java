@@ -239,4 +239,12 @@ public class ClientFacade implements IClient {
     public void removeUsedCardsFromPlayerHand(Map<RouteColors, Integer> removeCards) {
 	    localPlayer.removeUsedTrainCards(removeCards);
     }
+
+	public List<Route> getClaimedRoutes() {
+		return currentGame.getClaimedRoutes();
+	}
+
+	public List<Route> getAllRoutes() {
+	    return currentGame.getAllRoutes();
+	}
 }

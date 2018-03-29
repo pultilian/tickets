@@ -85,4 +85,8 @@ public class Game {
     public List<Route> getClaimedRoutes() {
         return map.getClaimedRoutes();
     }
+
+    public List<Route> getAllRoutes() {
+        return map.getAllRoutes();
+    }
 }

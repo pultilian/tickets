@@ -1,7 +1,4 @@
-
 package tickets.common;
-
-import java.util.List;
 
 public class Route {
 	private int length;

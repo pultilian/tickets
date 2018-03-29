@@ -13,7 +13,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import tickets.client.gui.activities.R;
+import tickets.client.gui.presenters.IGameMapPresenter;
 import tickets.common.Cities;
+import tickets.common.Route;
 
 /**
  * Created by Howl on 3/24/18.
@@ -31,23 +33,26 @@ public class MapView extends View {
 
     // gesture detector for registering clicks on the image
     GestureDetector mDetector;
-
+    IGameMapPresenter presenter;
 
     //--------------------------------------------------------------------------------
     //  constructors and setup functions
 
-    public MapView(Context context) {
+    public MapView(Context context, IGameMapPresenter presenter) {
         super(context);
+        this.presenter = presenter;
         init();
     }
 
-    public MapView(Context context, AttributeSet attrs) {
+    public MapView(Context context, AttributeSet attrs, IGameMapPresenter presenter) {
         super(context, attrs);
+        this.presenter = presenter;
         init();
     }
 
-    public MapView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MapView(Context context, AttributeSet attrs, int defStyleAttr, IGameMapPresenter presenter) {
         super(context, attrs, defStyleAttr);
+        this.presenter = presenter;
         init();
     }
 
@@ -132,7 +137,9 @@ public class MapView extends View {
     //  defines locations for areas of interest within the map
     //  in terms of the image's bitmap and the conversion
     //  between on-screen pixels and bits in the image bitmap
-    private static class MapClickHandler {
+    private class MapClickHandler {
+
+        // TODO: find a way for handler to use presenter
         // no valid area clicked
         final String IGNORE = "No city clicked";
 
@@ -143,6 +150,11 @@ public class MapView extends View {
         // size conversion to the size of the view
         float widthRatio;
         float heightRatio;
+
+        // keep track of selected cities
+        // TODO: add something to canvas to add highlight the selected cities
+        String city1;
+        String city2;
 
         MapClickHandler(int bitmapX, int bitmapY) {
             mapWidth = bitmapX;
@@ -156,63 +168,59 @@ public class MapView extends View {
             return;
         }
 
-        String onClick(float xP, float yP) {
-            //Convert a point (x, y) in pixels to within the Bitmap
+        void onClick(float xP, float yP) {
+            // Convert a point (x, y) in pixels to within the Bitmap
             Log.e("onClick", "point clicked:" + xP + ", " + yP);
             int x = getX(xP);
             int y = getY(yP);
-            if (x == -1 || y == -1) {
-                return IGNORE;
-            }
+            if (x == -1 || y == -1)
+                return;
+
+            // Find what city (map point) is closest to the click
             Log.e("onClick", "map location calculated:" + x + ", " + y);
             MapPoints selected = findClosest(x, y);
-//            Log.d("City clicked", "city code: " + selected.getCode());
-            if (selected == null) return IGNORE;
-            else return selected.getName();
+            Log.d("City clicked", "city code: " + selected.getName());
+
+            if (selected == null) {
+                city1 = null;
+                city2 = null;
+            }
+
+            String city = selected.getName();
+            if(city1 == null)
+                city1 = city;
+            else
+                city2 = city;
+        }
+
+        //TODO: add button to canvas for this function
+        void clearSelected() {
+            city1 = null;
+            city2 = null;
+        }
+
+        //TODO: add button to canvas for this function
+        void claimSelectedRoute() {
+            for (Route route : presenter.getAllRoutes()) {
+                if (route.equals(city1, city2))
+                    presenter.claimRoute(route);
+            }
+
+            clearSelected();
         }
 
         // return the city closest to the given location, or null
         //  if no city is close enough (within 100)
         private MapPoints findClosest(int x, int y) {
             MapPoints current = MapPoints.Jaqualind;
-            current = compareDistance(current, MapPoints.Lin, x, y);
-            current = compareDistance(current, MapPoints.Kiflamar, x, y);
-            current = compareDistance(current, MapPoints.Stratus, x, y);
-            current = compareDistance(current, MapPoints.Alpha_Lyrae, x, y);
-            current = compareDistance(current, MapPoints.Verdona, x, y);
-            current = compareDistance(current, MapPoints.Zee_A_Tll, x, y);
-            current = compareDistance(current, MapPoints.Magmarse, x, y);
-            current = compareDistance(current, MapPoints.Bynodia, x, y);
-            current = compareDistance(current, MapPoints.Aeuoni, x, y);
-            current = compareDistance(current, MapPoints.Aeontacht, x, y);
-            current = compareDistance(current, MapPoints.Boisey, x, y);
-            current = compareDistance(current, MapPoints.Nonnog, x, y);
-            current = compareDistance(current, MapPoints.Kerrectice, x, y);
-            current = compareDistance(current, MapPoints.Kita_Sota, x, y);
-            current = compareDistance(current, MapPoints.Ico_Col, x, y);
-            current = compareDistance(current, MapPoints.Igio, x, y);
-            current = compareDistance(current, MapPoints.Fractine, x, y);
-            current = compareDistance(current, MapPoints.Warfeld, x, y);
-            current = compareDistance(current, MapPoints.Little_Rock, x, y);
-            current = compareDistance(current, MapPoints.Zeroph, x, y);
-            current = compareDistance(current, MapPoints.Orthok, x, y);
-            current = compareDistance(current, MapPoints.Paradus, x, y);
-            current = compareDistance(current, MapPoints.Ayon, x, y);
-            current = compareDistance(current, MapPoints.Exen, x, y);
-            current = compareDistance(current, MapPoints.Astern, x, y);
-            current = compareDistance(current, MapPoints.Wence, x, y);
-            current = compareDistance(current, MapPoints.Spheras, x, y);
-            current = compareDistance(current, MapPoints.Petraqa, x, y);
-            current = compareDistance(current, MapPoints.Kalishen, x, y);
-            current = compareDistance(current, MapPoints.Darkrim, x, y);
-            current = compareDistance(current, MapPoints.Castine, x, y);
-            current = compareDistance(current, MapPoints.Dallaman, x, y);
-            current = compareDistance(current, MapPoints.Brytis, x, y);
-            current = compareDistance(current, MapPoints.Crepusculon, x, y);
-            current = compareDistance(current, MapPoints.Altiere, x, y);
+            for (MapPoints point : MapPoints.values()) {
+                current = compareDistance(current, point, x, y);
+            }
 
-            if (current.getDistance(x, y) > 100) return null;
-            else return current;
+            if (current.getDistance(x, y) > 100)
+                return null;
+            else
+                return current;
         }
 
         // TODO: changing target isn't actually changing the caller's value, find a way to fix this
@@ -253,69 +261,69 @@ public class MapView extends View {
             }
             return ymap;
         }
+    }
 
-        // Cities and their locations on the map
-        //  in terms of pixel coordinates on the actual image
-        //  (which is the same as bit coordinates in the
-        //   untransformed bitmap)
-        private enum MapPoints {
-            Jaqualind(Cities.SAN_FRANCISCO, 132, 581),
-            Lin(Cities.LOS_ANGELES, 255, 891),
-            Kiflamar(Cities.SALT_LAKE_CITY, 382, 520),
-            Stratus(Cities.PORTLAND, 327, 311),
-            Alpha_Lyrae(Cities.LAS_VEGAS, 309, 671),
-            Verdona(Cities.VANCOUVER, 437, 125),
-            Zee_A_Tll(Cities.SEATTLE, 489, 25),
-            Magmarse(Cities.EL_PASO, 566, 923),
-            Bynodia(Cities.DALLAS, 779, 877),
-            Aeuoni(Cities.OKLAHOMA_CITY, 697, 732),
-            Aeontacht(Cities.DENVER, 588, 46),
-            Boisey(Cities.HELENA, 666, 234),
-            Nonnog(Cities.CALGARY, 666, 54),
-            Kerrectice(Cities.WINNIPEG, 875, 123),
-            Kita_Sota(Cities.OMAHA, 794, 327),
-            Ico_Col(Cities.KANSAS_CITY, 736, 499),
-            Igio(Cities.PHOENIX, 377, 762),
-            Fractine(Cities.SANTA_FE, 502, 711),
-            Warfeld(Cities.HOUSTON, 862, 973),
-            Little_Rock(Cities.LITTLE_ROCK, 855, 761),
-            Zeroph(Cities.SAINT_LOUIS, 888, 562),
-            Orthok(Cities.CHICAGO, 920, 427),
-            Paradus(Cities.DULUTH, 971, 271),
-            Ayon(Cities.SAULT_ST_MARIE, 1065, 174),
-            Exen(Cities.MONTREAL, 1322, 144),
-            Astern(Cities.TORONTO, 1202, 258),
-            Wence(Cities.BOSTON, 1428, 253),
-            Spheras(Cities.NEW_YORK, 1325, 348),
-            Petraqa(Cities.PITTSBURG, 1132, 420),
-            Kalishen(Cities.WASHINGTON, 1347, 518),
-            Darkrim(Cities.RALEIGH, 1161, 602),
-            Castine(Cities.NASHVILLE, 1003, 656),
-            Dallaman(Cities.ATLANTA, 1093, 771),
-            Brytis(Cities.CHARLESTON, 1269, 745),
-            Crepusculon(Cities.NEW_ORLEANS, 980, 903),
-            Altiere(Cities.MIAMI, 1231, 957);
+    // Cities and their locations on the map
+    //  in terms of pixel coordinates on the actual image
+    //  (which is the same as bit coordinates in the
+    //   untransformed bitmap)
+    private enum MapPoints {
+        Jaqualind(Cities.SAN_FRANCISCO, 132, 581),
+        Lin(Cities.LOS_ANGELES, 255, 891),
+        Kiflamar(Cities.SALT_LAKE_CITY, 382, 520),
+        Stratus(Cities.PORTLAND, 327, 311),
+        Alpha_Lyrae(Cities.LAS_VEGAS, 309, 671),
+        Verdona(Cities.VANCOUVER, 437, 125),
+        Zee_A_Tll(Cities.SEATTLE, 489, 25),
+        Magmarse(Cities.EL_PASO, 566, 923),
+        Bynodia(Cities.DALLAS, 779, 877),
+        Aeuoni(Cities.OKLAHOMA_CITY, 697, 732),
+        Aeontacht(Cities.DENVER, 588, 46),
+        Boisey(Cities.HELENA, 666, 234),
+        Nonnog(Cities.CALGARY, 666, 54),
+        Kerrectice(Cities.WINNIPEG, 875, 123),
+        Kita_Sota(Cities.OMAHA, 794, 327),
+        Ico_Col(Cities.KANSAS_CITY, 736, 499),
+        Igio(Cities.PHOENIX, 377, 762),
+        Fractine(Cities.SANTA_FE, 502, 711),
+        Warfeld(Cities.HOUSTON, 862, 973),
+        Little_Rock(Cities.LITTLE_ROCK, 855, 761),
+        Zeroph(Cities.SAINT_LOUIS, 888, 562),
+        Orthok(Cities.CHICAGO, 920, 427),
+        Paradus(Cities.DULUTH, 971, 271),
+        Ayon(Cities.SAULT_ST_MARIE, 1065, 174),
+        Exen(Cities.MONTREAL, 1322, 144),
+        Astern(Cities.TORONTO, 1202, 258),
+        Wence(Cities.BOSTON, 1428, 253),
+        Spheras(Cities.NEW_YORK, 1325, 348),
+        Petraqa(Cities.PITTSBURG, 1132, 420),
+        Kalishen(Cities.WASHINGTON, 1347, 518),
+        Darkrim(Cities.RALEIGH, 1161, 602),
+        Castine(Cities.NASHVILLE, 1003, 656),
+        Dallaman(Cities.ATLANTA, 1093, 771),
+        Brytis(Cities.CHARLESTON, 1269, 745),
+        Crepusculon(Cities.NEW_ORLEANS, 980, 903),
+        Altiere(Cities.MIAMI, 1231, 957);
 
-            private String name;
-            private int x;
-            private int y;
+        private String name;
+        private int x;
+        private int y;
 
-            MapPoints(String name, int x, int y) {
-                this.name = name;
-                this.x = x;
-                this.y = y;
-            }
-
-            String getName() {
-                return name;
-            }
-
-            int getDistance(int x, int y) {
-                int xDif = x - this.x;
-                int yDif = y - this.y;
-                return (int) Math.sqrt(Math.pow(xDif, 2) + Math.pow(yDif, 2));
-            }
-
+        MapPoints(String name, int x, int y) {
+            this.name = name;
+            this.x = x;
+            this.y = y;
         }
+
+        String getName() {
+            return name;
+        }
+
+        int getDistance(int x, int y) {
+            int xDif = x - this.x;
+            int yDif = y - this.y;
+            return (int) Math.sqrt(Math.pow(xDif, 2) + Math.pow(yDif, 2));
+        }
+
     }
 }

@@ -27,7 +27,7 @@ public class GameMapPresenter implements IGameMapPresenter {
 
     @Override
     public List<Route> getClaimedRoutes() {
-        return ClientFacade.getInstance().getGame().getClaimedRoutes();
+        return ClientFacade.getInstance().getClaimedRoutes();
     }
 
     @Override
@@ -38,6 +38,11 @@ public class GameMapPresenter implements IGameMapPresenter {
             return;
         }
         manager.claimRoute(route, cards);
+    }
+
+    @Override
+    public List<Route> getAllRoutes() {
+        return ClientFacade.getInstance().getAllRoutes();
     }
 
 
