@@ -11,7 +11,6 @@ public class Lobby {
 	private String name;
 	private String id;
 	private List<String> history;
-	private int currentMembers;
 	private int maxMembers;
 	private List<Player> players;
 	private List<Faction> availableFactions;
@@ -19,7 +18,6 @@ public class Lobby {
 	public Lobby(String name, int maxMembers) {
 		this.name = name;
 		this.id = null;
-		currentMembers = 0;
 		this.maxMembers = maxMembers;
 		history = new ArrayList<>();
 		players = new ArrayList<>();
@@ -50,9 +48,7 @@ public class Lobby {
 
 	public void setHistory(List<String> setHistory) { history = setHistory;	}
 
-	public int getCurrentMembers() { return currentMembers; }
-
-	public void setCurrentMembers(int currentMembers) { this.currentMembers = currentMembers; }
+	public int getCurrentMembers() { return players.size(); }
 
 	public int getMaxMembers() {
 		return maxMembers;
@@ -76,13 +72,11 @@ public class Lobby {
 	public void addPlayer(Player player) {
 		players.add(player);
 		addToHistory(player.getName() + " has joined the lobby.");
-		currentMembers++;
 	}
 
 	public void removePlayer(Player player) {
 		players.remove(player);
 		addToHistory(player.getName() + " has left the lobby.");
-		currentMembers--;
 	}
 
 	public void assignFaction(Player player) {
