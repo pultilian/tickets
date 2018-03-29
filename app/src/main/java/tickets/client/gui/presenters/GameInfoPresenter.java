@@ -34,7 +34,7 @@ public class GameInfoPresenter implements IGameInfoPresenter{
         return ClientFacade.getInstance().getGame().getGameHistory();
     }
     public List<PlayerInfo> getPlayerInfo(){
-        return new ArrayList<PlayerInfo>(ClientFacade.getInstance().getGame().getAllPlayers());
+        return ClientFacade.getInstance().getGame().getAllPlayers();
     }
 
     public int getCurrentTurn(){
@@ -48,16 +48,19 @@ public class GameInfoPresenter implements IGameInfoPresenter{
             checkClientModelUpdateFlag(flag);
         } else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
-            if (holder != null)
-                holder.toastException(e);
-            else
+            if (holder != null){
+                //holder.toastException(e);
+            }
+            else {
                 System.err.println(e.getMessage());
+            }
         } else {
             Exception err = new Exception("Observer err: invalid IMessage of type " + state.getClass());
-            if (holder != null)
-                holder.toastException(err);
-            else
+            if (holder != null) {
+                //holder.toastException(err);
+            } else {
                 System.err.println(err.getMessage());
+            }
         }
         return;
     }
@@ -70,10 +73,14 @@ public class GameInfoPresenter implements IGameInfoPresenter{
     private void checkClientModelUpdateFlag(ClientModelUpdate.ModelUpdate flag) {
         switch (flag) {
             case playerTrainHandUpdated:
+                if (holder != null)
+                    holder.updatePlayerInfo();
                 break;
             case faceUpCardUpdated:
                 break;
             case playerDestHandUpdated:
+                if (holder != null)
+                    holder.updatePlayerInfo();
                 break;
             case destCardOptionsUpdated:
                 break;

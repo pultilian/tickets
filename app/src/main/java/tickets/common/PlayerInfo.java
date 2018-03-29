@@ -16,7 +16,7 @@ public class PlayerInfo {
 	    points = 0;
 	    shipsLeft = 45;
 	    trainCardCount = 4;
-	    destinationCardCount= 3; // Players start out with 3 destination cards. Discarding them lowers this count.
+	    destinationCardCount= 0;
     }
 
 	public void setFaction(Faction set) {
