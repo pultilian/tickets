@@ -211,7 +211,12 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
     //from IHolderActivity
     public void checkUpdate() {
         //update the lobby list by creating a new adapter for the list
-        lobbyListAdapter.notifyDataSetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                lobbyListAdapter.notifyDataSetChanged();
+            }
+        });
         return;
     }
 
@@ -277,6 +282,10 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
     }
 
     void checkButton() {
+        if (gameName.getText() == null || numPlayers.getText() == null) {
+            createGameButton.setEnabled(false);
+            return;
+        }
         // Register Button
         if (gameName.getText().toString().length() != 0 &&
                 numPlayers.getText().toString().length() != 0) {
