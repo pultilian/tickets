@@ -44,9 +44,8 @@ public class MapView extends View {
         init();
     }
 
-    public MapView(Context context, AttributeSet attrs, IGameMapPresenter presenter) {
+    public MapView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.presenter = presenter;
         init();
     }
 
@@ -179,7 +178,7 @@ public class MapView extends View {
             // Find what city (map point) is closest to the click
             Log.e("onClick", "map location calculated:" + x + ", " + y);
             MapPoints selected = findClosest(x, y);
-            Log.d("City clicked", "city code: " + selected.getName());
+            if (selected != null) Log.d("City clicked", "city code: " + selected.getName());
 
             if (selected == null) {
                 city1 = null;
