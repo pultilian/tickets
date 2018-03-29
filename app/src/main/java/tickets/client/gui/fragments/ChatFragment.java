@@ -79,7 +79,6 @@ public class ChatFragment extends Fragment implements IHolderGameChatFragment {
 
     @Override
     public void checkUpdate() {
-        //do nothing?
         return;
     }
 

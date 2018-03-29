@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import tickets.client.ClientCommunicator;
+import tickets.client.ClientFacade;
 import tickets.client.gui.presenters.LoginPresenter;
 import tickets.common.UserData;
 
@@ -53,6 +55,8 @@ public class CL_LoginView extends CommandlineView {
 	private UserData getUserData() { 
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		try {
+			System.out.print("Enter IP: ");
+			ClientCommunicator.getInstance().setIP(input.readLine());
 			System.out.print("Enter username: ");
 			String username = input.readLine();
 			System.out.print("Enter password: ");

@@ -127,8 +127,9 @@ public class LobbyListPresenter implements ILobbyListPresenter {
     private void checkClientUpdateFlag(ClientModelUpdate.ModelUpdate flag) {
     	switch(flag) {
             case lobbyListUpdated:
-    		    if (holder != null)
-    		        holder.checkUpdate();
+                if(holder != null) {
+                    holder.checkUpdate();
+                }
     			break;
     		default:
     			break;

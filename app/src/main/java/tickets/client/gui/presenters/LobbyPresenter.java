@@ -56,7 +56,7 @@ public class LobbyPresenter implements ILobbyPresenter {
             ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();
             checkClientStateFlag(flag);
         } else if (state.getClass() == ClientModelUpdate.class) {
-        	//do nothing?
+            checkClientModelUpdateFlag((ClientModelUpdate.ModelUpdate) state.getMessage());
         } else if (state.getClass() == ExceptionMessage.class) {
             Exception e = (Exception) state.getMessage();
             if (holder != null)
@@ -101,6 +101,19 @@ public class LobbyPresenter implements ILobbyPresenter {
             default:
                 Exception err = new Exception("Observer err: invalid Transition " + flag.name());
                 holder.toastException(err);
+                break;
+        }
+    }
+
+    private void checkClientModelUpdateFlag(ClientModelUpdate.ModelUpdate flag) {
+        switch (flag) {
+            case lobbyListUpdated:
+                if (holder != null) {
+                    holder.checkUpdate();
+                }
+            default:
+                Exception err = new Exception("Observer err: invalid Transition " + flag.name());
+//                holder.toastException(err);
                 break;
         }
     }
