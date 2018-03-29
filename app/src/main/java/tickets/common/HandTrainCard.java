@@ -42,4 +42,57 @@ public class HandTrainCard {
         }
         return handTotal;
 	}
+
+    public List<TrainCard> getCardsForRoute(RouteColors color, int length) {
+	    if (color == null)
+	        return null;
+	    List<TrainCard> cardsForClaim = colorsListMap.get(color);
+
+	    if (color == RouteColors.Gray) {
+	        RouteColors preferredBuyColor = null;
+	        int closestMatch = 0;
+	        for (RouteColors cardColor : colorsListMap.keySet()) {
+	            if (colorsListMap.get(cardColor).size() == length) {
+	                return colorsListMap.get(cardColor);
+                }
+                else if (closestMatch < length
+                        && colorsListMap.get(cardColor).size() > closestMatch) {
+	                closestMatch = colorsListMap.get(cardColor).size();
+	                preferredBuyColor = cardColor;
+                }
+                else if (closestMatch > length
+                        && colorsListMap.get(cardColor).size() < closestMatch
+                        && colorsListMap.get(cardColor).size() > length) {
+                    closestMatch = colorsListMap.get(cardColor).size();
+                    preferredBuyColor = cardColor;
+                }
+            }
+            color = preferredBuyColor;
+        }
+	    int i = 0;
+	    while (cardsForClaim.size() != length) {
+	        List<TrainCard> colorCards = colorsListMap.get(color);
+	        List<TrainCard> wildCards = colorsListMap.get(RouteColors.Gray);
+	        int j = i - colorCards.size();
+	        if (i < colorCards.size())
+    	        cardsForClaim.add(colorCards.get(i));
+	        else if (j < wildCards.size()) {
+	            cardsForClaim.add(wildCards.get(j));
+            }
+            else {
+	            return null;
+            }
+            i++;
+        }
+
+        return cardsForClaim;
+    }
+
+    public void removeCards(RouteColors color, int amount) {
+	    List<TrainCard> colorCards = colorsListMap.get(color);
+	    while(amount > 0 && colorCards.size() > 0) {
+            colorCards.remove(colorCards.size() - 1);
+            amount --;
+        }
+    }
 }

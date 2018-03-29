@@ -9,12 +9,12 @@ public class TrainCard {
 		this.color = cardColor;
 	}
 
-  public RouteColors getColor() {
+    public RouteColors getColor() {
       return color;
   }
 
-  public void setColor(RouteColors color) {
-      this.color = color;
-      return;
-  }
+    public void setColor(RouteColors color) {
+        this.color = color;
+        return;
+    }
 }

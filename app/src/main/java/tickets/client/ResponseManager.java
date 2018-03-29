@@ -7,6 +7,7 @@ import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.DestinationCard;
 import tickets.common.ExceptionMessage;
+import tickets.common.response.ClaimRouteResponse;
 import tickets.common.response.DestinationCardResponse;
 import tickets.common.response.JoinLobbyResponse;
 import tickets.common.response.LeaveLobbyResponse;
@@ -123,6 +124,18 @@ public final class ResponseManager {
             ClientModelUpdate message = new ClientModelUpdate(
                     ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
             ClientFacade.getInstance().updateObservable(message);
+        }
+        else {
+            handleException(response.getException());
+        }
+    }
+
+    public static void handleResponse(ClaimRouteResponse response) {
+        if (response == null) {
+            handleException(new Exception("The Server could not be reached"));
+        }
+        else if (response.getException() == null) {
+            ClientFacade.getInstance().removeUsedCardsFromPlayerHand(response.getRemoveCards());
         }
         else {
             handleException(response.getException());

@@ -10,9 +10,10 @@ import tickets.client.ResponseManager;
 import tickets.client.ServerProxy;
 import tickets.common.Route;
 import tickets.common.TrainCard;
+import tickets.common.response.ClaimRouteResponse;
 import tickets.common.response.Response;
 
-class ClaimRouteAsync extends AsyncTask<Object, Void, Response> {
+class ClaimRouteAsync extends AsyncTask<Object, Void, ClaimRouteResponse> {
     ClientFacade modelRoot;
 
     public ClaimRouteAsync(ClientFacade setRoot) {
@@ -20,21 +21,20 @@ class ClaimRouteAsync extends AsyncTask<Object, Void, Response> {
     }
 
     @Override
-    public Response doInBackground(Object... data) {
+    public ClaimRouteResponse doInBackground(Object... data) {
         if (data.length != 3) {
             AsyncException error = new AsyncException(this.getClass(), "invalid execute() parameters");
-            return new Response(error);
+            return new ClaimRouteResponse(error);
         }
 
         Route route = (Route) data[0];
         List<TrainCard> cards = Arrays.asList((TrainCard[]) data[1]);
         String authToken = (String) data[2];
-        Response response = ServerProxy.getInstance().claimRoute(route, cards, authToken);
-        return response;
+        return ServerProxy.getInstance().claimRoute(route, cards, authToken);
     }
 
     @Override
-    public void onPostExecute(Response response) {
+    public void onPostExecute(ClaimRouteResponse response) {
         ResponseManager.handleResponse(response);
     }
 }
