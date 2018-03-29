@@ -181,7 +181,7 @@ public class ClientFacade implements IClient {
 //-------------------------------------------------
 // Update public info
 	public void addPlayerTrainCard() {
-		currentGame.getActivePlayerInfo().addTrainCard();
+		currentGame.addTrainCardToActivePlayer();
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         updateObservable(message);
 	}

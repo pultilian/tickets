@@ -43,7 +43,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_info, container, false);
-        presenter = new GameInfoPresenter();
+        presenter = new GameInfoPresenter(this);
         playersInfo = view.findViewById(R.id.players_info);
         gameHistory = view.findViewById(R.id.game_history);
         playerInfoManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -59,21 +59,25 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
     }
 
     public void updatePlayerInfo(){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                playersInfoAdapter.notifyDataSetChanged();
-            }
-        });
+        if(this.isVisible()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    playersInfoAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     public void updateGameHistory(){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                gameHistoryAdapter.notifyDataSetChanged();
-            }
-        });
+        if(this.isVisible()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    gameHistoryAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     public void checkUpdate(){
@@ -212,7 +216,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
 
         @Override
         public int getItemCount() {
-            return 0; //cards.size(); //TODO: get cards initialized.
+            return gameHistory.size(); //cards.size(); //TODO: get cards initialized.
         }
 
     }
@@ -223,7 +227,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
         public GameHistoryHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            message.findViewById(R.id.game_history_text);
+            message = view.findViewById(R.id.game_history_text);
         }
 
         // Assigns values in the layout.

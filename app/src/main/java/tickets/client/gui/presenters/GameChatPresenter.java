@@ -87,10 +87,11 @@ public class GameChatPresenter implements IGameChatPresenter {
 				break;
 			default:
 				Exception err = new Exception("Observer err: invalid Transition " + flag.name());
-                if (holder != null)
-                    holder.toastException(err);
-                else
-                    System.err.println(err.getMessage());
+                if (holder != null) {
+//                    holder.toastException(err);
+				} else {
+					System.err.println(err.getMessage());
+				}
 				break;
 		}
 	}
