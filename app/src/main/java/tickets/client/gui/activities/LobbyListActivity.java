@@ -134,7 +134,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(Integer.parseInt(s.toString()) > 1 && Integer.parseInt(s.toString()) < 6){
+                if(s.length() > 0 && Integer.parseInt(s.toString()) > 1 && Integer.parseInt(s.toString()) < 6){
                     createGameButton.setEnabled(true);
                 }
             }
@@ -282,10 +282,6 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
     }
 
     void checkButton() {
-        if (gameName.getText() == null || numPlayers.getText() == null) {
-            createGameButton.setEnabled(false);
-            return;
-        }
         // Register Button
         if (gameName.getText().toString().length() != 0 &&
                 numPlayers.getText().toString().length() != 0) {
