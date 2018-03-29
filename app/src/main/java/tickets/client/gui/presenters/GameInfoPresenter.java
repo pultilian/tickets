@@ -38,7 +38,7 @@ public class GameInfoPresenter implements IGameInfoPresenter{
     }
 
     public int getCurrentTurn(){
-        return ClientFacade.getInstance().getGame().getCurrentTurn();
+        return ClientFacade.getInstance().getCurrentTurn();
     }
 
     @Override
