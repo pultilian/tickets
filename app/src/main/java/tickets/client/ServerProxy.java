@@ -8,6 +8,7 @@ import tickets.common.IServer;
 import tickets.common.Lobby;
 import tickets.common.Route;
 import tickets.common.TrainCard;
+import tickets.common.TrainCardWrapper;
 import tickets.common.UserData;
 import tickets.common.response.AddToChatResponse;
 import tickets.common.response.ClaimRouteResponse;
@@ -135,9 +136,9 @@ public class ServerProxy implements IServer {
         return (ClientUpdate) result;
     }
 
-    public ClaimRouteResponse claimRoute(Route route, List<TrainCard> cards, String authToken) {
+    public ClaimRouteResponse claimRoute(Route route, TrainCardWrapper cards, String authToken) {
         Object[] parameters = {route, cards, authToken};
-        String[] parameterTypes = {Route.class.getName(), List.class.getName(), String.class.getName()};
+        String[] parameterTypes = {Route.class.getName(), TrainCardWrapper.class.getName(), String.class.getName()};
         Command command = new Command("claimRoute", parameterTypes, parameters);
         Object result = clientCommunicator.send(command);
         return (ClaimRouteResponse) result;

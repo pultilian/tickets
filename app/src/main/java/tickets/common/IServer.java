@@ -28,7 +28,7 @@ public interface IServer {
   //Game Actions
   public TrainCardResponse drawTrainCard(String authToken);
   public TrainCardResponse drawFaceUpCard(int position, String authToken);
-  public Response claimRoute(Route route, List<TrainCard> cards, String authToken);
+  public Response claimRoute(Route route, TrainCardWrapper cards, String authToken);
   public DestinationCardResponse drawDestinationCards(String authToken);
   public DestinationCardResponse discardDestinationCard(DestinationCard discard, String authToken);
   public AddToChatResponse addToChat(String message, String authToken);

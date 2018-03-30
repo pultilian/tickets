@@ -12,6 +12,7 @@ import tickets.common.IMessage;
 import tickets.common.IObservable;
 import tickets.common.Route;
 import tickets.common.TrainCard;
+import tickets.common.TrainCardWrapper;
 
 public class GameMapPresenter implements IGameMapPresenter {
 
@@ -39,7 +40,7 @@ public class GameMapPresenter implements IGameMapPresenter {
             holder.toastMessage("That route is unavailable, or you do not have resources to claim it");
             return;
         }
-        manager.claimRoute(route, cards);
+        manager.claimRoute(route, new TrainCardWrapper(cards));
     }
 
     @Override
