@@ -21,7 +21,7 @@ public class DestinationPresenter implements IDestinationPresenter {
     }
 
 	public List<DestinationCard> getDestinationCards(){
-		return ClientFacade.getInstance().getLocalPlayer().getDestinationCardOptions();
+		return ClientFacade.getInstance().getDestinationCardOptions();
 	}
 
 	public void chooseDestinationCards(DestinationCard toDiscard){
