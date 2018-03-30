@@ -8,6 +8,7 @@ import tickets.client.model.LobbyManager;
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
+import tickets.common.DestinationCard;
 import tickets.common.Game;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
@@ -257,5 +258,13 @@ public class ClientFacade implements IClient {
 
 	public int getCurrentTurn() {
 	    return currentGame.getCurrentTurn();
+    }
+
+    public List<DestinationCard> getDestinationCardOptions() {
+		return localPlayer.getDestinationCardOptions();
+    }
+
+    public void setDestinationCardOptions(ChoiceDestinationCards cards) {
+	    localPlayer.setDestinationCardOptions(cards);
     }
 }

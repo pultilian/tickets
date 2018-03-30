@@ -153,14 +153,15 @@ public final class ResponseManager {
             if (! selectedCards) {
                 ChoiceDestinationCards choice = new ChoiceDestinationCards();
                 choice.setDestinationCards(cards);
-                ClientFacade.getInstance().getLocalPlayer().setDestinationCardOptions(choice);
+                ClientFacade.getInstance().setDestinationCardOptions(choice);
                 message = new ClientModelUpdate(
                         ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
             }
             else {
                 for (DestinationCard card : cards)
                     ClientFacade.getInstance().getLocalPlayer().addDestinationCardToHand(card);
-                    ClientFacade.getInstance().addPlayerDestinationCards(cards.size());
+                ClientFacade.getInstance().setDestinationCardOptions(null);
+                ClientFacade.getInstance().addPlayerDestinationCards(cards.size());
                 message = new ClientModelUpdate(
                         ClientModelUpdate.ModelUpdate.playerDestHandUpdated);
             }
