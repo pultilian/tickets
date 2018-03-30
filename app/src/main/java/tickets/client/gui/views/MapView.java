@@ -106,6 +106,25 @@ public class MapView extends View {
 
 
     //--------------------------------------------------------------------------------
+    //  update the game map image (bitmap)
+
+
+    public void markRouteClaimed(Route route) {
+        //
+        //
+        return;
+    }
+
+
+    public void markCitySelected(MapPoints city) {
+        if (city == MapPoints.No_city)
+            return;
+        //
+        //
+    }
+
+
+    //--------------------------------------------------------------------------------
     //  view functionality
 
     // defines how this view will respond to touch events based on which gesture is performed
@@ -186,7 +205,7 @@ public class MapView extends View {
 
             if (selected == MapPoints.No_city)
                 return;
-            
+
             String city = selected.getName();
             if(city1 == null)
                 city1 = city;
@@ -313,5 +332,16 @@ public class MapView extends View {
             return (int) Math.sqrt(Math.pow(xDif, 2) + Math.pow(yDif, 2));
         }
 
+    }
+
+    private int getRouteResource(Route route) {
+        String src  = route.getSrc();
+        String dest = route.getDest();
+        if (src.equals(Cities.SAN_FRANCISCO)) {
+            if (dest.equals(Cities.PORTLAND))
+                return R.drawable.jaqualind_stratus_1;
+        }
+
+        return 000;
     }
 }

@@ -1,6 +1,7 @@
 package tickets.common.response;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import tickets.common.RouteColors;
@@ -12,6 +13,7 @@ public class ClaimRouteResponse extends Response {
 
     public ClaimRouteResponse(Exception e){
         super(e);
+        removeCards = new ArrayList<>();
     }
 
     public ClaimRouteResponse(List<TrainCard> removeCards){
