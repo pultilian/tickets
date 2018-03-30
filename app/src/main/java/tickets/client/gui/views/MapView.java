@@ -169,6 +169,15 @@ public class MapView extends View {
         String city1;
         String city2;
 
+        String getCities() {
+            String val = "";
+            if (city1.equals(null)) val += "null";
+            else val += city1;
+            if (city2.equals(null)) val += "null";
+            else val += city2;
+            return val;
+        }
+
         void onClick(int viewX, int viewY) {
             MapPoints selected = findClosest(viewX, viewY);
             Toast.makeText(MapView.this.getContext(), selected.getName(), Toast.LENGTH_SHORT).show();
@@ -219,7 +228,9 @@ public class MapView extends View {
 
         // TODO: changing target isn't actually changing the caller's value, find a way to fix this
         MapPoints compareDistance(MapPoints current, MapPoints next, int x, int y) {
-            if (next.getDistance(x, y) < current.getDistance(x, y)) {
+            int currentDistance = current.getDistance(x, y);
+            int nextDistance = next.getDistance(x, y);
+            if (nextDistance < currentDistance) {
                 return next;
             } else
                 return current;

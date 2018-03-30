@@ -6,6 +6,7 @@
     android:background="@drawable/background">
 
     <tickets.client.gui.views.MapView
+        android:id="@+id/gameMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
