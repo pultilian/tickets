@@ -106,10 +106,10 @@ public class Route {
 
     public boolean isAvailable() {
         if (firstOwner == null)
-            return false;
+            return true;
 		else if (isDouble() && secondOwner == null)
-		    return false;
-		return true;
+		    return true;
+		return false;
 	}
 
 

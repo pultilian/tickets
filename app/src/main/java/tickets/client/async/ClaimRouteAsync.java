@@ -28,7 +28,7 @@ class ClaimRouteAsync extends AsyncTask<Object, Void, ClaimRouteResponse> {
         }
 
         Route route = (Route) data[0];
-        List<TrainCard> cards = Arrays.asList((TrainCard[]) data[1]);
+        List<TrainCard> cards = (List<TrainCard>) data[1];
         String authToken = (String) data[2];
         return ServerProxy.getInstance().claimRoute(route, cards, authToken);
     }

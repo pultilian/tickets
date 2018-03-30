@@ -130,18 +130,21 @@ public class MapView extends View {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Toast.makeText(MapView.this.getContext(), "Claiming: " + mMapClickHandler.getCities() , Toast.LENGTH_SHORT).show();
             mMapClickHandler.onFling();
             return true;
         }
 
+        // For debugging, use right click or long press on emulator instead of trying to fling
         @Override
         public void onLongPress(MotionEvent e) {
+            Toast.makeText(MapView.this.getContext(), "Claiming: " + mMapClickHandler.getCities() , Toast.LENGTH_SHORT).show();
             mMapClickHandler.onFling();
         }
 
-        // For debugging, use right click on emulator instead of trying to fling
         @Override
         public boolean onContextClick(MotionEvent e) {
+            Toast.makeText(MapView.this.getContext(), "Claiming: " + mMapClickHandler.getCities() , Toast.LENGTH_SHORT).show();
             mMapClickHandler.onFling();
             return true;
         }
@@ -149,6 +152,7 @@ public class MapView extends View {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             mMapClickHandler.onDoubleClick((int)e.getX(), (int)e.getY());
+            Toast.makeText(MapView.this.getContext(), "locations cleared", Toast.LENGTH_SHORT).show();
             return true;
         }
 
