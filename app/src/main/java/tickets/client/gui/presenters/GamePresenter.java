@@ -65,7 +65,8 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public void drawDestinationCard() {
-        manager.drawDestinationCard();
+        if (ClientFacade.getInstance().getDestinationCardOptions() != null)
+            manager.drawDestinationCard();
     }
 
     public void claimPath() {
