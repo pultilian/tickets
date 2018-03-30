@@ -32,6 +32,8 @@ public class GameMapPresenter implements IGameMapPresenter {
 
     @Override
     public void claimRoute(Route route) {
+        holder.toastMessage("claiming route from " + route.getSrc() + " to " + route.getDest());
+
         List<TrainCard> cards = ClientFacade.getInstance().getCardsForRoute(route);
         if (cards == null) {
             holder.toastMessage("That route is unavailable, or you do not have resources to claim it");

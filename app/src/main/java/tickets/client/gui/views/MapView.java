@@ -112,7 +112,6 @@ public class MapView extends View {
     private class MapClickListener extends GestureDetector.SimpleOnGestureListener {
         // other gestures that could be detected:
 //        public boolean onContextClick(MotionEvent e)
-//        public boolean onDoubleTap(MotionEvent e)
 //        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
 //        public boolean onDoubleTapEvent(MotionEvent e)
 //        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
@@ -123,6 +122,12 @@ public class MapView extends View {
         @Override
         public boolean onDown(MotionEvent event) {
             // default returns false, disregarding all further events related to this action
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            Toast.makeText(MapView.this.getContext(), mMapClickHandler.getCities(), Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -148,6 +153,15 @@ public class MapView extends View {
         // TODO: add something to canvas to add highlight the selected cities
         String city1;
         String city2;
+
+        String getCities() {
+            String val = "";
+            if (city1.equals(null)) val += "null";
+            else val += city1;
+            if (city2.equals(null)) val += "null";
+            else val += city2;
+            return val;
+        }
 
         void onClick(int viewX, int viewY) {
             MapPoints selected = findClosest(viewX, viewY);
@@ -199,7 +213,7 @@ public class MapView extends View {
         MapPoints compareDistance(MapPoints current, MapPoints next, int x, int y) {
             int currentDistance = current.getDistance(x, y);
             int nextDistance = next.getDistance(x, y);
-            if (next.getDistance(x, y) < currentDistance) {
+            if (nextDistance < currentDistance) {
                 return next;
             } else return current;
         }
