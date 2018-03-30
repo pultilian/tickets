@@ -1,6 +1,7 @@
 package tickets.client.gui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,8 +43,15 @@ public class GameSummaryActivity extends AppCompatActivity {
         gameSummaryManager = new LinearLayoutManager(this);
         gameSummary.setLayoutManager(gameSummaryManager);
         gameSummaryAdapter = new GameSummaryAdapter(this, presenter.getSummary());
-    }
 
+        endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GameSummaryActivity.this, LobbyListActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
     class GameSummaryAdapter extends RecyclerView.Adapter<GameSummaryHolder> {
         private LayoutInflater inflater;
         private List<PlayerSummary> players;
@@ -100,7 +108,34 @@ public class GameSummaryActivity extends AppCompatActivity {
 
         // Assigns values in the layout.
         void bind(PlayerSummary item) {
+            playerName.setText(item.getPlayerName().toString());
+            shipsLeft.setText(Integer.toString(item.getShipsLeft()));
+            shipPoints.setText(Integer.toString(item.getShipPoints()));
+            successDest.setText(Integer.toString(item.getSuccessDestPoints()));
+            failDest.setText(Integer.toString(item.getFailDestPoints()));
+            int totalPointsCalc = item.getShipPoints() + item.getSuccessDestPoints() - item.getFailDestPoints();
+            totalPoints.setText(totalPointsCalc);
+            if(item.isLongestRoute()){
+                longestRoute.setImageResource(R.drawable.longest_route);
+            }
 
+            switch(item.getFaction().toLowerCase()){
+                case "altian":
+                    faction.setImageResource(R.drawable.race_altian);
+                    break;
+                case "murtoken":
+                    faction.setImageResource(R.drawable.race_murtoken);
+                    break;
+                case "pathian":
+                    faction.setImageResource(R.drawable.race_pathian);
+                    break;
+                case "kit":
+                    faction.setImageResource(R.drawable.race_kit);
+                    break;
+                case "tacht":
+                    faction.setImageResource(R.drawable.race_tacht);
+                    break;
+            }
             return;
         }
 

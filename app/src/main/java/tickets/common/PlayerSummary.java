@@ -5,6 +5,34 @@ package tickets.common;
  */
 
 public class PlayerSummary {
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public String getFaction() {
+        return faction;
+    }
+
+    public int getShipsLeft() {
+        return shipsLeft;
+    }
+
+    public int getShipPoints() {
+        return shipPoints;
+    }
+
+    public int getSuccessDestPoints() {
+        return successDestPoints;
+    }
+
+    public int getFailDestPoints() {
+        return failDestPoints;
+    }
+
+    public boolean isLongestRoute() {
+        return longestRoute;
+    }
+
     private String playerName;
     private String faction;
     private int shipsLeft;

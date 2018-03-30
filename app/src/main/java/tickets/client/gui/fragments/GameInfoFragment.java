@@ -131,7 +131,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
         @Override
         public void onBindViewHolder(PlayersInfoHolder holder, int position) {
             PlayerInfo item = playerInfoList.get(position);
-            holder.bind(item);
+            holder.bind(item, position);
         }
 
         @Override
@@ -161,28 +161,48 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
         }
 
         // Assigns values in the layout.
-        void bind(PlayerInfo item) {
+        void bind(PlayerInfo item, int position) {
             name.setText(item.getFaction().getName());
             points.setText("Points " + Integer.toString(item.getScore()));
             shipsLeft.setText("Ships Left " + Integer.toString(item.getShipsLeft()));
             resourcesCount.setText("Resources " + Integer.toString(item.getTrainCardCount()));
             destinationCount.setText("Destination " + Integer.toString(item.getDestinationCardCount()));
-            switch (item.getFaction().getName().toLowerCase()){
-                case "altian":
-                    cardImage.setImageResource(R.drawable.card_altian);
-                    break;
-                case "kit":
-                    cardImage.setImageResource(R.drawable.card_kit);
-                    break;
-                case "murtoken":
-                    cardImage.setImageResource(R.drawable.card_murtoken);
-                    break;
-                case "tacht":
-                    cardImage.setImageResource(R.drawable.card_tacht);
-                    break;
-                case "pathian":
-                    cardImage.setImageResource(R.drawable.card_pathian);
-                    break;
+            if(presenter.getCurrentTurn() == position){
+                switch (item.getFaction().getName().toLowerCase()) {
+                    case "altian":
+                        cardImage.setImageResource(R.drawable.card_altian_highlight);
+                        break;
+                    case "kit":
+                        cardImage.setImageResource(R.drawable.card_kit_highlight);
+                        break;
+                    case "murtoken":
+                        cardImage.setImageResource(R.drawable.card_murtoken_highlight);
+                        break;
+                    case "tacht":
+                        cardImage.setImageResource(R.drawable.card_tacht_highlight);
+                        break;
+                    case "pathian":
+                        cardImage.setImageResource(R.drawable.card_pathian_highlight);
+                        break;
+                }
+            } else {
+                switch (item.getFaction().getName().toLowerCase()) {
+                    case "altian":
+                        cardImage.setImageResource(R.drawable.card_altian);
+                        break;
+                    case "kit":
+                        cardImage.setImageResource(R.drawable.card_kit);
+                        break;
+                    case "murtoken":
+                        cardImage.setImageResource(R.drawable.card_murtoken);
+                        break;
+                    case "tacht":
+                        cardImage.setImageResource(R.drawable.card_tacht);
+                        break;
+                    case "pathian":
+                        cardImage.setImageResource(R.drawable.card_pathian);
+                        break;
+                }
             }
         }
 
