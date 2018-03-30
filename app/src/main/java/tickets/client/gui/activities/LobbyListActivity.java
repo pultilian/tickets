@@ -221,6 +221,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         @Override
         public void onBindViewHolder(LobbyListHolder holder, int position) {
             Lobby item = lobbyList.get(position);
+
             holder.bind(item);
         }
 
@@ -258,6 +259,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         public void onClick(View view) {
             if(curPlayers < maxPlayers) {
                 joinButton.setEnabled(true);
+
             }
 
         }
