@@ -20,6 +20,9 @@ public class Game {
         gamePlayers = new ArrayList<>();
         currentTurn = 0;
         faceUpCards = new ArrayList<>();
+    }
+
+    public void initializeMap() {
         map = new GameMap();
     }
 
