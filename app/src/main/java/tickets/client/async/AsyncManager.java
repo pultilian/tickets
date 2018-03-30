@@ -1,5 +1,7 @@
 package tickets.client.async;
 
+import java.util.List;
+
 import tickets.client.ClientFacade;
 import tickets.client.ITaskManager;
 import tickets.common.DestinationCard;
@@ -111,7 +113,7 @@ public class AsyncManager implements ITaskManager {
         task.execute(authToken);
     }
 
-    public void discardDestinationCard(DestinationCard discard) {
+    public void discardDestinationCard(List<DestinationCard> discard) {
         String authToken = root.getAuthToken();
         DiscardDestinationCardAsync task = new DiscardDestinationCardAsync(root);
         task.execute(discard, authToken);

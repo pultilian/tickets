@@ -8,5 +8,5 @@ import tickets.common.DestinationCard;
 
 public interface IDestinationPresenter {
 	public List<DestinationCard> getDestinationCards();
-	public void chooseDestinationCards(DestinationCard toDiscard);
+	public void chooseDestinationCards(List<DestinationCard> toDiscard);
 }

@@ -97,17 +97,19 @@ public class CL_GameView extends CommandlineView {
         System.out.println("Choose " + Integer.toString(canDiscard)  + " cards to discard: ");
         List<DestinationCard> destinationCards = destinationPresenter.getDestinationCards();
         printDestinationCards(destinationCards);
+        List<DestinationCard> discard = new ArrayList<>();
         System.out.println("Type \'x\' when you no longer wish to discard.");
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("Discard: ");
-            int discard = Integer.parseInt(input.readLine()) - 1;
-            destinationPresenter.chooseDestinationCards(destinationCards.get(discard));
+            int toDiscard = Integer.parseInt(input.readLine()) - 1;
+            discard.add(destinationCards.get(toDiscard));
         } catch(IOException e) {
             e.printStackTrace();
         } catch(NumberFormatException e) {
             e.printStackTrace();
         }
+        destinationPresenter.chooseDestinationCards(discard);
         System.out.println();
     }
 

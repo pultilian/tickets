@@ -26,7 +26,7 @@ abstract class PlayerTurnState {
     abstract String drawDestinationCards(List<DestinationCard> cards, ServerPlayer player);
 
     // TODO: Maybe change this parameter to a list of cards?
-    abstract String discardDestinationCard(DestinationCard card, ServerPlayer player);
+    abstract String discardDestinationCard(List<DestinationCard> card, ServerPlayer player);
 
     abstract String endTurn(ServerPlayer player);
 }

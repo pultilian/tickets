@@ -398,12 +398,12 @@ public class ServerFacade implements IServer {
     }
 
     @Override
-    public DestinationCardResponse discardDestinationCard(DestinationCard discard, String authToken) {
+    public DestinationCardResponse discardDestinationCard(ChoiceDestinationCards discard, String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
 
             // Any reason for failing here will be thrown as an exception
-            List<DestinationCard> keptCards = game.discardDestinationCard(discard, authToken);
+            List<DestinationCard> keptCards = game.discardDestinationCard(discard.getDestinationCards(), authToken);
 
             if (discard != null) {
                 //update game history

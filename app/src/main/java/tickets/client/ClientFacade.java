@@ -109,8 +109,8 @@ public class ClientFacade implements IClient {
 	}
 
     public Lobby getLobby(String lobbyID) {
-  	return lobbyManager.getLobby(lobbyID);
-  }
+  	    return lobbyManager.getLobby(lobbyID);
+    }
 
     public Player getLocalPlayer() {
         return localPlayer;

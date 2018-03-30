@@ -210,13 +210,13 @@ public class ServerGame extends Game {
         else return destinationDeck.drawCards();
 	}
 
-	public List<DestinationCard> discardDestinationCard(DestinationCard card, String authToken) throws Exception {
+	public List<DestinationCard> discardDestinationCard(List<DestinationCard> cards, String authToken) throws Exception {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
-        String errorMsg = player.discardDestinationCard(card);
+        String errorMsg = player.discardDestinationCard(cards);
         if (errorMsg != null) throw new Exception(errorMsg);
-        else if (card != null && !destinationDeck.discardCard(card))
+        else if (cards != null && !destinationDeck.discardCard(cards))
             throw new Exception("This card is already in the destination deck.");
 
         // Success

@@ -1,5 +1,7 @@
 package tickets.client;
 
+import java.util.List;
+
 import tickets.common.DestinationCard;
 import tickets.common.Lobby;
 import tickets.common.Route;
@@ -32,5 +34,5 @@ public interface ITaskManager {
 
     void drawDestinationCard();
 
-    void discardDestinationCard(DestinationCard discard);
+    void discardDestinationCard(List<DestinationCard> discard);
 }
