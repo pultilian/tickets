@@ -111,11 +111,9 @@ public class MapView extends View {
     // defines how this view will respond to touch events based on which gesture is performed
     private class MapClickListener extends GestureDetector.SimpleOnGestureListener {
         // other gestures that could be detected:
-//        public boolean onContextClick(MotionEvent e)
 //        public boolean onDoubleTapEvent(MotionEvent e)
 //        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 //        public boolean onSingleTapUp(MotionEvent e)
-//        public void onLongPress(MotionEvent e)
 //        public void onShowPress(MotionEvent e)
 
         @Override
@@ -137,10 +135,24 @@ public class MapView extends View {
         }
 
         @Override
+        public void onLongPress(MotionEvent e) {
+            mMapClickHandler.onFling();
+        }
+
+        // For debugging, use right click on emulator instead of trying to fling
+        @Override
+        public boolean onContextClick(MotionEvent e) {
+            mMapClickHandler.onFling();
+            return true;
+        }
+
+        @Override
         public boolean onDoubleTap(MotionEvent e) {
             mMapClickHandler.onDoubleClick((int)e.getX(), (int)e.getY());
             return true;
         }
+
+
     }
 
 
@@ -180,10 +192,14 @@ public class MapView extends View {
         //TODO: add button to canvas for this function
         void claimSelectedRoute() {
             for (Route route : presenter.getAllRoutes()) {
-                if (route.equals(city1, city2))
+                if (route.equals(city1, city2)) {
                     presenter.claimRoute(route);
+                    clearSelected();
+                    return;
+                }
             }
 
+            Toast.makeText(MapView.this.getContext(), "The cities you have selected are not adjacent", Toast.LENGTH_LONG).show();
             clearSelected();
         }
 
