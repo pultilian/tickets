@@ -65,7 +65,7 @@ public class GamePresenter implements IGamePresenter {
     }
 
     public void drawDestinationCard() {
-        if (ClientFacade.getInstance().getDestinationCardOptions() != null)
+        if (ClientFacade.getInstance().getDestinationCardOptions() == null)
             manager.drawDestinationCard();
         else {
             holder.makeTransition(IHolderActivity.Transition.toDestinationFragment);
