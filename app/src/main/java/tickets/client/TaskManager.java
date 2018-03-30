@@ -1,11 +1,9 @@
 package tickets.client;
 
-import java.util.List;
-
 import tickets.common.DestinationCard;
 import tickets.common.Lobby;
 import tickets.common.Route;
-import tickets.common.TrainCard;
+import tickets.common.TrainCardWrapper;
 import tickets.common.UserData;
 import tickets.common.response.AddToChatResponse;
 import tickets.common.response.DestinationCardResponse;
@@ -100,7 +98,7 @@ public class TaskManager implements ITaskManager {
     }
 
     @Override
-    public void claimRoute(Route route, List<TrainCard> cards) {
+    public void claimRoute(Route route, TrainCardWrapper cards) {
         String token = ClientFacade.getInstance().getAuthToken();
         Response response = ServerProxy.getInstance().claimRoute(route, cards, token);
         ResponseManager.handleResponse(response);

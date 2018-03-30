@@ -1,11 +1,9 @@
 package tickets.client;
 
-import java.util.List;
-
 import tickets.common.DestinationCard;
 import tickets.common.Lobby;
 import tickets.common.Route;
-import tickets.common.TrainCard;
+import tickets.common.TrainCardWrapper;
 import tickets.common.UserData;
 
 public interface ITaskManager {
@@ -30,7 +28,7 @@ public interface ITaskManager {
 
     void drawFaceUpCard(int position);
 
-    void claimRoute(Route route, List<TrainCard> cards);
+    void claimRoute(Route route, TrainCardWrapper cards);
 
     void drawDestinationCard();
 

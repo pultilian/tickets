@@ -5,20 +5,21 @@ import java.util.Map;
 
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
+import tickets.common.TrainCardWrapper;
 
 public class ClaimRouteResponse extends Response {
 
-    private List<TrainCard> removeCards;
+    private TrainCardWrapper removeCards;
 
     public ClaimRouteResponse(Exception e){
         super(e);
     }
 
-    public ClaimRouteResponse(List<TrainCard> removeCards){
+    public ClaimRouteResponse(TrainCardWrapper removeCards){
         this.removeCards = removeCards;
     }
 
     public List<TrainCard> getRemoveCards() {
-        return removeCards;
+        return removeCards.getTrainCards();
     }
 }
