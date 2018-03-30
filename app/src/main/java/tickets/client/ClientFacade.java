@@ -162,6 +162,7 @@ public class ClientFacade implements IClient {
 	}
 
 	public void startGame(Game game, HandTrainCard playerHand, ChoiceDestinationCards destCardOptions) {
+		game.initializeMap();
 		addGame(game);
 		currentLobby = null;
 		localPlayer.setTrainCardHand(playerHand);
