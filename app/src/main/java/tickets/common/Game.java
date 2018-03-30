@@ -92,4 +92,8 @@ public class Game {
     public List<Route> getAllRoutes() {
         return map.getAllRoutes();
     }
+
+    public void addTrainCardToActivePlayer(){
+        getActivePlayerInfo().addTrainCard();
+    }
 }

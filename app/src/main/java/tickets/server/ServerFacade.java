@@ -234,8 +234,9 @@ public class ServerFacade implements IServer {
                 for (ClientProxy client : getClientsInLobby(lobbyID)) {
                     client.removePlayerFromLobbyInList(lobby, player);
                 }
+                // The current client will receive the updated lobby list instead of this command.
                 for (ClientProxy client : clientsInLobbyList) {
-                    client.removePlayerFromLobbyInList(lobby, player);
+                    if (!client.getAuthToken().equals(authToken)) client.removePlayerFromLobbyInList(lobby, player);
                 }
             }
             return new LeaveLobbyResponse("You have left the lobby.", AllLobbies.getInstance().getAllLobbies());

@@ -186,7 +186,7 @@ public class MapView extends View {
 
             if (selected == MapPoints.No_city)
                 return;
-
+            
             String city = selected.getName();
             if(city1 == null)
                 city1 = city;

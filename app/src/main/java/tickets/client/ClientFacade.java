@@ -182,7 +182,7 @@ public class ClientFacade implements IClient {
 //-------------------------------------------------
 // Update public info
 	public void addPlayerTrainCard() {
-		currentGame.getActivePlayerInfo().addTrainCard();
+		currentGame.addTrainCardToActivePlayer();
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         updateObservable(message);
 	}
@@ -217,6 +217,8 @@ public class ClientFacade implements IClient {
 
 	public void endCurrentTurn() {
 		currentGame.nextTurn();
+		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+		updateObservable(message);
 	}
 
 	public void addChatMessage(String message) {
@@ -252,4 +254,8 @@ public class ClientFacade implements IClient {
 	public List<Route> getAllRoutes() {
 	    return currentGame.getAllRoutes();
 	}
+
+	public int getCurrentTurn() {
+	    return currentGame.getCurrentTurn();
+    }
 }

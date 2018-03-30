@@ -121,6 +121,7 @@ public final class ResponseManager {
         }
         else if (response.getException() == null) {
             ClientFacade.getInstance().getLocalPlayer().addTrainCardToHand(response.getCard());
+            ClientFacade.getInstance().addPlayerTrainCard();
             ClientModelUpdate message = new ClientModelUpdate(
                     ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
             ClientFacade.getInstance().updateObservable(message);
@@ -159,6 +160,7 @@ public final class ResponseManager {
             else {
                 for (DestinationCard card : cards)
                     ClientFacade.getInstance().getLocalPlayer().addDestinationCardToHand(card);
+                    ClientFacade.getInstance().addPlayerDestinationCards(cards.size());
                 message = new ClientModelUpdate(
                         ClientModelUpdate.ModelUpdate.playerDestHandUpdated);
             }

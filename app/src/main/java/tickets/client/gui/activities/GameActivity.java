@@ -206,7 +206,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment fragment = new MapFragment();
                 fragmentManager.beginTransaction()
-                            .add(R.id.fragment_container, fragment)
+                            .replace(R.id.fragment_container, fragment)
                             .commit();
                 return;
             }
@@ -217,7 +217,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment fragment = new ChatFragment();
                 fragmentManager.beginTransaction()
-                        .add(R.id.fragment_container, fragment)
+                        .replace(R.id.fragment_container, fragment)
                         .commit();
                 return;
             }
@@ -228,7 +228,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment fragment = new GameInfoFragment();
                 fragmentManager.beginTransaction()
-                        .add(R.id.fragment_container, fragment)
+                        .replace(R.id.fragment_container, fragment)
                         .commit();
                 return;
             }

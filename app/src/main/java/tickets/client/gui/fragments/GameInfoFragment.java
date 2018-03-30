@@ -10,18 +10,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import tickets.client.gui.activities.R;
 import tickets.client.gui.presenters.GameInfoPresenter;
+import tickets.client.gui.presenters.IHolderActivity;
+import tickets.client.gui.presenters.IHolderGameInfoFragment;
 import tickets.common.PlayerInfo;
 
 /**
  * Created by Pultilian on 3/4/2018.
  */
 
-public class GameInfoFragment extends Fragment {
+public class GameInfoFragment extends Fragment implements IHolderGameInfoFragment {
     private RecyclerView playersInfo;
     private RecyclerView gameHistory;
     private GameInfoPresenter presenter;
@@ -40,7 +43,7 @@ public class GameInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_info, container, false);
-        presenter = new GameInfoPresenter();
+        presenter = new GameInfoPresenter(this);
         playersInfo = view.findViewById(R.id.players_info);
         gameHistory = view.findViewById(R.id.game_history);
         playerInfoManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -54,6 +57,60 @@ public class GameInfoFragment extends Fragment {
 
         return view;
     }
+
+    public void updatePlayerInfo(){
+        if(this.isVisible()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    playersInfoAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
+    public void updateGameHistory(){
+        if(this.isVisible()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    gameHistoryAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
+    public void checkUpdate(){
+
+    }
+
+    @Override
+    public void makeTransition(IHolderActivity.Transition toActivity) {
+        //what transitions should be made?
+        //GOH
+        return;
+    }
+
+    /** ToastMessage
+     * displays a toast upon request from the server.
+     * @param message
+     */
+    @Override
+    public void toastMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    /** ToastException
+     * throws an exception from the server in the form of a toast
+     * @param e
+     */
+    @Override
+    public void toastException(Exception e) {
+        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        return;
+    }
+
 
     class PlayersInfoAdapter extends RecyclerView.Adapter<GameInfoFragment.PlayersInfoHolder> {
         private LayoutInflater inflater;
@@ -159,7 +216,7 @@ public class GameInfoFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 0; //cards.size(); //TODO: get cards initialized.
+            return gameHistory.size(); //cards.size(); //TODO: get cards initialized.
         }
 
     }
@@ -170,7 +227,7 @@ public class GameInfoFragment extends Fragment {
         public GameHistoryHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            message.findViewById(R.id.game_history_text);
+            message = view.findViewById(R.id.game_history_text);
         }
 
         // Assigns values in the layout.
