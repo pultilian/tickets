@@ -112,7 +112,6 @@ public class MapView extends View {
     private class MapClickListener extends GestureDetector.SimpleOnGestureListener {
         // other gestures that could be detected:
 //        public boolean onContextClick(MotionEvent e)
-//        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
 //        public boolean onDoubleTapEvent(MotionEvent e)
 //        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 //        public boolean onSingleTapUp(MotionEvent e)
@@ -126,14 +125,20 @@ public class MapView extends View {
         }
 
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            Toast.makeText(MapView.this.getContext(), mMapClickHandler.getCities(), Toast.LENGTH_SHORT).show();
+        public boolean onSingleTapConfirmed(MotionEvent event) {
+            mMapClickHandler.onClick((int)event.getX(), (int)event.getY());
             return true;
         }
 
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent event) {
-            mMapClickHandler.onClick((int)event.getX(), (int)event.getY());
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            mMapClickHandler.onFling();
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            mMapClickHandler.onDoubleClick((int)e.getX(), (int)e.getY());
             return true;
         }
     }
@@ -146,8 +151,6 @@ public class MapView extends View {
     private class MapClickHandler {
 
         // TODO: find a way for handler to use presenter
-        // no valid area clicked
-        final String IGNORE = "No city clicked";
 
         // keep track of selected cities
         // TODO: add something to canvas to add highlight the selected cities
@@ -167,10 +170,8 @@ public class MapView extends View {
             MapPoints selected = findClosest(viewX, viewY);
             Toast.makeText(MapView.this.getContext(), selected.getName(), Toast.LENGTH_SHORT).show();
 
-            if (selected == null) {
-                city1 = null;
-                city2 = null;
-            }
+            if (selected == MapPoints.No_city)
+                return;
 
             String city = selected.getName();
             if(city1 == null)
@@ -215,7 +216,19 @@ public class MapView extends View {
             int nextDistance = next.getDistance(x, y);
             if (nextDistance < currentDistance) {
                 return next;
-            } else return current;
+            } else
+                return current;
+        }
+
+        void onFling() {
+            if(city1 != null && city2 != null)
+                claimSelectedRoute();
+        }
+
+        public void onDoubleClick(int x, int y) {
+            MapPoints selected = findClosest(x, y);
+            if (selected == MapPoints.No_city)
+                clearSelected();
         }
     }
 
