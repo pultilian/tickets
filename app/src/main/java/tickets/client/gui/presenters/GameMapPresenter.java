@@ -12,6 +12,7 @@ import tickets.common.IMessage;
 import tickets.common.IObservable;
 import tickets.common.Route;
 import tickets.common.TrainCard;
+import tickets.common.TrainCardWrapper;
 
 public class GameMapPresenter implements IGameMapPresenter {
 
@@ -32,12 +33,14 @@ public class GameMapPresenter implements IGameMapPresenter {
 
     @Override
     public void claimRoute(Route route) {
+        holder.toastMessage("claiming route from " + route.getSrc() + " to " + route.getDest());
+
         List<TrainCard> cards = ClientFacade.getInstance().getCardsForRoute(route);
         if (cards == null) {
             holder.toastMessage("That route is unavailable, or you do not have resources to claim it");
             return;
         }
-        manager.claimRoute(route, cards);
+        manager.claimRoute(route, new TrainCardWrapper(cards));
     }
 
     @Override
@@ -68,6 +71,8 @@ public class GameMapPresenter implements IGameMapPresenter {
         switch(update) {
             case mapUpdated:
                 //TODO: update map visually
+                // which route has been claimed?
+                // which player has claimed the route?
                 break;
             default:
                 break;

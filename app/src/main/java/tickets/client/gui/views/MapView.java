@@ -4,13 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import tickets.client.gui.activities.R;
 import tickets.client.gui.presenters.IGameMapPresenter;
@@ -38,9 +38,8 @@ public class MapView extends View {
     //--------------------------------------------------------------------------------
     //  constructors and setup functions
 
-    public MapView(Context context, IGameMapPresenter presenter) {
+    public MapView(Context context) {
         super(context);
-        this.presenter = presenter;
         init();
     }
 
@@ -49,23 +48,28 @@ public class MapView extends View {
         init();
     }
 
-    public MapView(Context context, AttributeSet attrs, int defStyleAttr, IGameMapPresenter presenter) {
+    public MapView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.presenter = presenter;
         init();
+    }
+
+    public void setPresenter(IGameMapPresenter presenter) {
+        this.presenter = presenter;
     }
 
     private void init() {
         // load the map image into this view's bitmap
-        mGameMap = BitmapFactory.decodeResource(this.getResources(), R.drawable.map);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inDensity = 100;
+
+        mGameMap = BitmapFactory.decodeResource(this.getResources(), R.drawable.map, options);
         if (mGameMap == null) {
             throw new RuntimeException("the map was not loaded into the bitmap!");
         }
-        mMapClickHandler = new MapClickHandler(mGameMap.getWidth(), mGameMap.getHeight());
 
+        mMapClickHandler = new MapClickHandler();
         // set the gesture detector - it will handle all touch events
         mDetector = new GestureDetector(this.getContext(), new MapView.MapClickListener());
-
         return;
     }
 
@@ -77,23 +81,21 @@ public class MapView extends View {
     public void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldW, oldH);
 
-        // calculate the size allocated to this view
-        int xPad = getPaddingLeft() + getPaddingRight();
-        int yPad = getPaddingTop() + getPaddingBottom();
-        mViewWidth = getMeasuredWidth() - xPad;
-        mViewHeight = getMeasuredHeight() - yPad;
-        Log.e("onSizeChanged", "view size:" + mViewWidth + ", " + mViewHeight);
-        Log.e("onSizeChanged", "bitmap size:" + mGameMap.getWidth() + ", " + mGameMap.getHeight());
-        mMapClickHandler.setDrawRatios(mViewWidth, mViewHeight);
+        // width and height allocated to this view
+        //   it's easier to just ignore the possibility of padding
+        mViewWidth = w;
+        mViewHeight = h;
+
+        // scale the bitmap to the view size - this changes actual bitmap to the size of the view
+        mGameMap = Bitmap.createScaledBitmap(mGameMap, mViewWidth, mViewHeight, false);
         return;
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        // draw the map to the screen, stretching the image to fill the screen area allocated to this view
-        canvas.drawBitmap(mGameMap, null, new Rect(0, 0, mViewWidth, mViewHeight),
-                new Paint(Paint.FILTER_BITMAP_FLAG & Paint.ANTI_ALIAS_FLAG));
+        // draw the pre-scaled map to the view
+        canvas.drawBitmap(mGameMap, new Matrix(), new Paint());
         return;
     }
 
@@ -104,18 +106,33 @@ public class MapView extends View {
 
 
     //--------------------------------------------------------------------------------
+    //  update the game map image (bitmap)
+
+
+    public void markRouteClaimed(Route route) {
+        //
+        //
+        return;
+    }
+
+
+    public void markCitySelected(MapPoints city) {
+        if (city == MapPoints.No_city)
+            return;
+        //
+        //
+    }
+
+
+    //--------------------------------------------------------------------------------
     //  view functionality
 
     // defines how this view will respond to touch events based on which gesture is performed
     private class MapClickListener extends GestureDetector.SimpleOnGestureListener {
         // other gestures that could be detected:
-//        public boolean onContextClick(MotionEvent e)
-//        public boolean onDoubleTap(MotionEvent e)
-//        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
 //        public boolean onDoubleTapEvent(MotionEvent e)
 //        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 //        public boolean onSingleTapUp(MotionEvent e)
-//        public void onLongPress(MotionEvent e)
 //        public void onShowPress(MotionEvent e)
 
         @Override
@@ -126,9 +143,39 @@ public class MapView extends View {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
-            mMapClickHandler.onClick(event.getX(), event.getY());
+            mMapClickHandler.onClick((int)event.getX(), (int)event.getY());
             return true;
         }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Toast.makeText(MapView.this.getContext(), "Claiming: " + mMapClickHandler.getCities() , Toast.LENGTH_SHORT).show();
+            mMapClickHandler.onFling();
+            return true;
+        }
+
+        // For debugging, use right click or long press on emulator instead of trying to fling
+        @Override
+        public void onLongPress(MotionEvent e) {
+            Toast.makeText(MapView.this.getContext(), "Claiming: " + mMapClickHandler.getCities() , Toast.LENGTH_SHORT).show();
+            mMapClickHandler.onFling();
+        }
+
+        @Override
+        public boolean onContextClick(MotionEvent e) {
+            Toast.makeText(MapView.this.getContext(), "Claiming: " + mMapClickHandler.getCities() , Toast.LENGTH_SHORT).show();
+            mMapClickHandler.onFling();
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            mMapClickHandler.onDoubleClick((int)e.getX(), (int)e.getY());
+            Toast.makeText(MapView.this.getContext(), "locations cleared", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+
     }
 
 
@@ -138,52 +185,26 @@ public class MapView extends View {
     //  between on-screen pixels and bits in the image bitmap
     private class MapClickHandler {
 
-        // TODO: find a way for handler to use presenter
-        // no valid area clicked
-        final String IGNORE = "No city clicked";
-
-        // size of the bitmap
-        int mapWidth;
-        int mapHeight;
-
-        // size conversion to the size of the view
-        float widthRatio;
-        float heightRatio;
-
         // keep track of selected cities
         // TODO: add something to canvas to add highlight the selected cities
         String city1;
         String city2;
 
-        MapClickHandler(int bitmapX, int bitmapY) {
-            mapWidth = bitmapX;
-            mapHeight = bitmapY;
+        String getCities() {
+            String val = "";
+            if (city1.equals(null)) val += "null";
+            else val += city1;
+            if (city2.equals(null)) val += "null";
+            else val += city2;
+            return val;
         }
 
-        void setDrawRatios(int viewX, int viewY) {
-            widthRatio = (float) mapWidth / (float) viewX;
-            heightRatio = (float) mapHeight / (float) viewY;
-            Log.e("setDrawRatios", "ratios set:" + widthRatio + ", " + heightRatio);
-            return;
-        }
+        void onClick(int viewX, int viewY) {
+            MapPoints selected = findClosest(viewX, viewY);
+            Toast.makeText(MapView.this.getContext(), selected.getName(), Toast.LENGTH_SHORT).show();
 
-        void onClick(float xP, float yP) {
-            // Convert a point (x, y) in pixels to within the Bitmap
-            Log.e("onClick", "point clicked:" + xP + ", " + yP);
-            int x = getX(xP);
-            int y = getY(yP);
-            if (x == -1 || y == -1)
+            if (selected == MapPoints.No_city)
                 return;
-
-            // Find what city (map point) is closest to the click
-            Log.e("onClick", "map location calculated:" + x + ", " + y);
-            MapPoints selected = findClosest(x, y);
-            if (selected != null) Log.d("City clicked", "city code: " + selected.getName());
-
-            if (selected == null) {
-                city1 = null;
-                city2 = null;
-            }
 
             String city = selected.getName();
             if(city1 == null)
@@ -201,10 +222,14 @@ public class MapView extends View {
         //TODO: add button to canvas for this function
         void claimSelectedRoute() {
             for (Route route : presenter.getAllRoutes()) {
-                if (route.equals(city1, city2))
+                if (route.equals(city1, city2)) {
                     presenter.claimRoute(route);
+                    clearSelected();
+                    return;
+                }
             }
 
+            Toast.makeText(MapView.this.getContext(), "The cities you have selected are not adjacent", Toast.LENGTH_LONG).show();
             clearSelected();
         }
 
@@ -217,7 +242,7 @@ public class MapView extends View {
             }
 
             if (current.getDistance(x, y) > 100)
-                return null;
+                return MapPoints.No_city;
             else
                 return current;
         }
@@ -226,39 +251,21 @@ public class MapView extends View {
         MapPoints compareDistance(MapPoints current, MapPoints next, int x, int y) {
             int currentDistance = current.getDistance(x, y);
             int nextDistance = next.getDistance(x, y);
-            if (next.getDistance(x, y) < currentDistance) {
+            if (nextDistance < currentDistance) {
                 return next;
-            } else return current;
+            } else
+                return current;
         }
 
-        // Returns -1 if the given x value is incorrect.
-        //   Otherwise, returns the bitmap's x index
-        //   corresponding to the specified pixel value
-        private int getX(float x) {
-            if (x < 0) {
-                return -1;
-            }
-            int xmap = (int) (x * widthRatio);
-            if (xmap > mapWidth) {
-                Log.e("getX", "x value outside of map");
-                return -1;
-            }
-            return xmap;
+        void onFling() {
+            if(city1 != null && city2 != null)
+                claimSelectedRoute();
         }
 
-        // Returns -1 if the given y value is incorrect.
-        //   Otherwise, returns the bitmap's y index
-        //   corresponding to the specified pixel value
-        private int getY(float y) {
-            if (y < 0) {
-                return -1;
-            }
-            int ymap = (int) (y * heightRatio);
-            if (ymap > mapHeight) {
-                Log.e("getY", "y value outside of map");
-                return -1;
-            }
-            return ymap;
+        public void onDoubleClick(int x, int y) {
+            MapPoints selected = findClosest(x, y);
+            if (selected == MapPoints.No_city)
+                clearSelected();
         }
     }
 
@@ -267,42 +274,43 @@ public class MapView extends View {
     //  (which is the same as bit coordinates in the
     //   untransformed bitmap)
     private enum MapPoints {
-        Jaqualind(Cities.SAN_FRANCISCO, 132, 581),
-        Lin(Cities.LOS_ANGELES, 255, 891),
-        Kiflamar(Cities.SALT_LAKE_CITY, 382, 520),
-        Stratus(Cities.PORTLAND, 327, 311),
-        Alpha_Lyrae(Cities.LAS_VEGAS, 309, 671),
-        Verdona(Cities.VANCOUVER, 437, 125),
-        Zee_A_Tll(Cities.SEATTLE, 489, 25),
-        Magmarse(Cities.EL_PASO, 566, 923),
-        Bynodia(Cities.DALLAS, 779, 877),
-        Aeuoni(Cities.OKLAHOMA_CITY, 697, 732),
-        Aeontacht(Cities.DENVER, 588, 46),
-        Boisey(Cities.HELENA, 666, 234),
-        Nonnog(Cities.CALGARY, 666, 54),
-        Kerrectice(Cities.WINNIPEG, 875, 123),
-        Kita_Sota(Cities.OMAHA, 794, 327),
-        Ico_Col(Cities.KANSAS_CITY, 736, 499),
-        Igio(Cities.PHOENIX, 377, 762),
-        Fractine(Cities.SANTA_FE, 502, 711),
-        Warfeld(Cities.HOUSTON, 862, 973),
-        Little_Rock(Cities.LITTLE_ROCK, 855, 761),
-        Zeroph(Cities.SAINT_LOUIS, 888, 562),
-        Orthok(Cities.CHICAGO, 920, 427),
-        Paradus(Cities.DULUTH, 971, 271),
-        Ayon(Cities.SAULT_ST_MARIE, 1065, 174),
-        Exen(Cities.MONTREAL, 1322, 144),
-        Astern(Cities.TORONTO, 1202, 258),
-        Wence(Cities.BOSTON, 1428, 253),
-        Spheras(Cities.NEW_YORK, 1325, 348),
-        Petraqa(Cities.PITTSBURG, 1132, 420),
-        Kalishen(Cities.WASHINGTON, 1347, 518),
-        Darkrim(Cities.RALEIGH, 1161, 602),
-        Castine(Cities.NASHVILLE, 1003, 656),
-        Dallaman(Cities.ATLANTA, 1093, 771),
-        Brytis(Cities.CHARLESTON, 1269, 745),
-        Crepusculon(Cities.NEW_ORLEANS, 980, 903),
-        Altiere(Cities.MIAMI, 1231, 957);
+        No_city("invalid selection", -1, -1),
+        Jaqualind(Cities.SAN_FRANCISCO, 94, 333),
+        Lin(Cities.LOS_ANGELES, 188, 501),
+        Kiflamar(Cities.SALT_LAKE_CITY, 284, 300),
+        Stratus(Cities.PORTLAND, 240, 185),
+        Alpha_Lyrae(Cities.LAS_VEGAS, 230, 380),
+        Verdona(Cities.VANCOUVER, 325, 83),
+        Zee_A_Tll(Cities.SEATTLE, 365, 153),
+        Magmarse(Cities.EL_PASO, 425, 518),
+        Bynodia(Cities.DALLAS, 590, 493),
+        Aeuoni(Cities.OKLAHOMA_CITY, 528, 415),
+        Aeontacht(Cities.DENVER, 441, 269),
+        Boisey(Cities.HELENA, 544, 104),
+        Nonnog(Cities.CALGARY, 503, 45),
+        Kerrectice(Cities.WINNIPEG, 661, 83),
+        Kita_Sota(Cities.OMAHA, 600, 192),
+        Ico_Col(Cities.KANSAS_CITY, 557, 288),
+        Igio(Cities.PHOENIX, 281, 430),
+        Fractine(Cities.SANTA_FE, 377, 401),
+        Warfeld(Cities.HOUSTON, 654, 545),
+        Little_Rock(Cities.LITTLE_ROCK, 646, 431),
+        Zeroph(Cities.SAINT_LOUIS, 674, 322),
+        Orthok(Cities.CHICAGO, 697, 248),
+        Paradus(Cities.DULUTH, 737, 163),
+        Ayon(Cities.SAULT_ST_MARIE, 810, 109),
+        Exen(Cities.MONTREAL, 1008, 95),
+        Astern(Cities.TORONTO, 913, 157),
+        Wence(Cities.BOSTON, 1090, 153),
+        Spheras(Cities.NEW_YORK, 1010, 205),
+        Petraqa(Cities.PITTSBURG, 862, 256),
+        Kalishen(Cities.WASHINGTON, 1027, 299),
+        Darkrim(Cities.RALEIGH, 885, 345),
+        Castine(Cities.NASHVILLE, 759, 374),
+        Dallaman(Cities.ATLANTA, 830, 436),
+        Brytis(Cities.CHARLESTON, 967, 421),
+        Crepusculon(Cities.NEW_ORLEANS, 744, 509),
+        Altiere(Cities.MIAMI, 938, 537);
 
         private String name;
         private int x;
@@ -324,5 +332,16 @@ public class MapView extends View {
             return (int) Math.sqrt(Math.pow(xDif, 2) + Math.pow(yDif, 2));
         }
 
+    }
+
+    private int getRouteResource(Route route) {
+        String src  = route.getSrc();
+        String dest = route.getDest();
+        if (src.equals(Cities.SAN_FRANCISCO)) {
+            if (dest.equals(Cities.PORTLAND))
+                return R.drawable.jaqualind_stratus_1;
+        }
+
+        return 000;
     }
 }

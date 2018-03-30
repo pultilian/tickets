@@ -162,6 +162,7 @@ public class ClientFacade implements IClient {
 	}
 
 	public void startGame(Game game, HandTrainCard playerHand, ChoiceDestinationCards destCardOptions) {
+		game.initializeMap();
 		addGame(game);
 		currentLobby = null;
 		localPlayer.setTrainCardHand(playerHand);
@@ -188,6 +189,10 @@ public class ClientFacade implements IClient {
 
 	public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player) {
         currentGame.claimRoute(route, routeColor, player);
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+        updateObservable(message);
+        message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.mapUpdated);
+        updateObservable(message);
 	}
 
 	public void addPlayerDestinationCards(int numCards) {
@@ -238,7 +243,7 @@ public class ClientFacade implements IClient {
         return localPlayer.getCardsForRoute(route);
 	}
 
-    public void removeUsedCardsFromPlayerHand(Map<RouteColors, Integer> removeCards) {
+    public void removeUsedCardsFromPlayerHand(List<TrainCard> removeCards) {
 	    localPlayer.removeUsedTrainCards(removeCards);
     }
 

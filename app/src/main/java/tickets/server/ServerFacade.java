@@ -21,6 +21,7 @@ import tickets.common.PlayerSummary;
 import tickets.common.Route;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
+import tickets.common.TrainCardWrapper;
 import tickets.common.UserData;
 import tickets.common.response.AddToChatResponse;
 import tickets.common.response.ClaimRouteResponse;
@@ -331,12 +332,12 @@ public class ServerFacade implements IServer {
     }
 
     @Override
-    public ClaimRouteResponse claimRoute(Route route, List<TrainCard> cards, String authToken) {
+    public ClaimRouteResponse claimRoute(Route route, TrainCardWrapper cards, String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
 
             // Any reason for failing here will be thrown as an exception
-            game.claimRoute(route, cards, authToken);
+            game.claimRoute(route, cards.getTrainCards(), authToken);
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
@@ -345,7 +346,7 @@ public class ServerFacade implements IServer {
 
             // Get color of route to be claimed from train card color
             RouteColors color = null;
-            for (TrainCard card : cards) {
+            for (TrainCard card : cards.getTrainCards()) {
                 if (card.getColor() != RouteColors.Wild) {
                     if (color == null) color = card.getColor();
                 }
@@ -355,21 +356,12 @@ public class ServerFacade implements IServer {
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
-                if (!client.getAuthToken().equals(authToken)) {
-                    client.addClaimedRoute(route, color, game.getPlayerColor(authToken));
-                }
+//                if (!client.getAuthToken().equals(authToken)) {
+                client.addClaimedRoute(route, color, game.getPlayerColor(authToken));
+//                }
             }
 
-            // Make return map
-            Map<RouteColors, Integer> removeCards = new HashMap<>();
-            for (TrainCard card : cards) {
-                RouteColors cardColor = card.getColor();
-                if (! removeCards.keySet().contains(cardColor)) {
-                    removeCards.put(cardColor, 0);
-                }
-                removeCards.put(cardColor, removeCards.get(cardColor) + 1);
-            }
-            return new ClaimRouteResponse(removeCards); // "Route claimed successfully"
+            return new ClaimRouteResponse(cards); // "Route claimed successfully"
         }
         catch(Exception ex) {
             return new ClaimRouteResponse(ex);

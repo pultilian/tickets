@@ -10,6 +10,7 @@ import tickets.client.ResponseManager;
 import tickets.client.ServerProxy;
 import tickets.common.Route;
 import tickets.common.TrainCard;
+import tickets.common.TrainCardWrapper;
 import tickets.common.response.ClaimRouteResponse;
 import tickets.common.response.Response;
 
@@ -28,7 +29,7 @@ class ClaimRouteAsync extends AsyncTask<Object, Void, ClaimRouteResponse> {
         }
 
         Route route = (Route) data[0];
-        List<TrainCard> cards = Arrays.asList((TrainCard[]) data[1]);
+        TrainCardWrapper cards = (TrainCardWrapper) data[1];
         String authToken = (String) data[2];
         return ServerProxy.getInstance().claimRoute(route, cards, authToken);
     }
