@@ -70,6 +70,8 @@ public class GameMapPresenter implements IGameMapPresenter {
         switch(update) {
             case mapUpdated:
                 //TODO: update map visually
+                // which route has been claimed?
+                // which player has claimed the route?
                 break;
             default:
                 break;

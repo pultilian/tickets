@@ -150,8 +150,6 @@ public class MapView extends View {
     //  between on-screen pixels and bits in the image bitmap
     private class MapClickHandler {
 
-        // TODO: find a way for handler to use presenter
-
         // keep track of selected cities
         // TODO: add something to canvas to add highlight the selected cities
         String city1;
