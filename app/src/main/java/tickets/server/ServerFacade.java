@@ -356,9 +356,9 @@ public class ServerFacade implements IServer {
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
-                if (!client.getAuthToken().equals(authToken)) {
-                    client.addClaimedRoute(route, color, game.getPlayerColor(authToken));
-                }
+//                if (!client.getAuthToken().equals(authToken)) {
+                client.addClaimedRoute(route, color, game.getPlayerColor(authToken));
+//                }
             }
 
             return new ClaimRouteResponse(cards); // "Route claimed successfully"

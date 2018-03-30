@@ -14,7 +14,7 @@ public class ClaimRouteResponse extends Response {
 
     public ClaimRouteResponse(Exception e){
         super(e);
-        removeCards = new ArrayList<>();
+        removeCards = new TrainCardWrapper(new ArrayList<TrainCard>());
     }
 
     public ClaimRouteResponse(TrainCardWrapper removeCards){
