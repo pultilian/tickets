@@ -88,9 +88,10 @@ public class Player {
         playerResourceCards = playerHand;
     }
 
-    public void removeUsedTrainCards(Map<RouteColors, Integer> removeCards) {
-        for (RouteColors color : removeCards.keySet()) {
-            playerResourceCards.removeCards(color, removeCards.get(color));
+    public void removeUsedTrainCards(List<TrainCard> removeCards) {
+        for (TrainCard card : removeCards) {
+            RouteColors color = card.getColor();
+            playerResourceCards.removeCards(color, 1);
         }
     }
 

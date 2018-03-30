@@ -243,7 +243,7 @@ public class ClientFacade implements IClient {
         return localPlayer.getCardsForRoute(route);
 	}
 
-    public void removeUsedCardsFromPlayerHand(Map<RouteColors, Integer> removeCards) {
+    public void removeUsedCardsFromPlayerHand(List<TrainCard> removeCards) {
 	    localPlayer.removeUsedTrainCards(removeCards);
     }
 

@@ -1,22 +1,24 @@
 package tickets.common.response;
 
+import java.util.List;
 import java.util.Map;
 
 import tickets.common.RouteColors;
+import tickets.common.TrainCard;
 
 public class ClaimRouteResponse extends Response {
 
-    private Map<RouteColors, Integer> removeCards;
+    private List<TrainCard> removeCards;
 
     public ClaimRouteResponse(Exception e){
         super(e);
     }
 
-    public ClaimRouteResponse(Map<RouteColors, Integer> removeCards){
+    public ClaimRouteResponse(List<TrainCard> removeCards){
         this.removeCards = removeCards;
     }
 
-    public Map<RouteColors, Integer> getRemoveCards() {
+    public List<TrainCard> getRemoveCards() {
         return removeCards;
     }
 }

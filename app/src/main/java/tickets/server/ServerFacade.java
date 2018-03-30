@@ -360,16 +360,7 @@ public class ServerFacade implements IServer {
                 }
             }
 
-            // Make return map
-            Map<RouteColors, Integer> removeCards = new HashMap<>();
-            for (TrainCard card : cards) {
-                RouteColors cardColor = card.getColor();
-                if (! removeCards.keySet().contains(cardColor)) {
-                    removeCards.put(cardColor, 0);
-                }
-                removeCards.put(cardColor, removeCards.get(cardColor) + 1);
-            }
-            return new ClaimRouteResponse(removeCards); // "Route claimed successfully"
+            return new ClaimRouteResponse(cards); // "Route claimed successfully"
         }
         catch(Exception ex) {
             return new ClaimRouteResponse(ex);
