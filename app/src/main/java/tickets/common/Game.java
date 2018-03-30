@@ -80,7 +80,7 @@ public class Game {
 
     public void claimRoute(Route route, RouteColors routeColor, PlayerColor player) {
         map.claimRoute(route.getSrc(), route.getDest(), routeColor, player);
-        getActivePlayerInfo().addToScore(route.getLength());
+        getActivePlayerInfo().addToScore(route.getPointValue());
         getActivePlayerInfo().useShips(route.getLength());
         getActivePlayerInfo().useTrainCards(route.getLength());
     }

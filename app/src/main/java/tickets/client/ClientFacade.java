@@ -189,6 +189,10 @@ public class ClientFacade implements IClient {
 
 	public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player) {
         currentGame.claimRoute(route, routeColor, player);
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+        updateObservable(message);
+        message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.mapUpdated);
+        updateObservable(message);
 	}
 
 	public void addPlayerDestinationCards(int numCards) {
