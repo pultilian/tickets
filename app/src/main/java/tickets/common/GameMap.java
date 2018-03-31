@@ -223,7 +223,7 @@ public class GameMap {
 															RouteColors.Red, 4);
 		Route pso_hst = new Route(Cities.EL_PASO, Cities.HOUSTON,
 															RouteColors.Green, 6);
-		Route[] psoRoutes = { la_pso, phx_pso, sfe_pso };
+		Route[] psoRoutes = { la_pso, phx_pso, sfe_pso, pso_okc, pso_dls, pso_hst };
 		map.put(Cities.EL_PASO, Arrays.asList(psoRoutes));
 
 		// Houston
@@ -308,7 +308,7 @@ public class GameMap {
 															RouteColors.Gray, 2);
 		Route ssm_mnt = new Route(Cities.SAULT_ST_MARIE, Cities.MONTREAL,
 															RouteColors.Black, 5);
-		Route[] ssmRoutes = { win_ssm, dul_ssm, ssm_tor, ssm_tor };
+		Route[] ssmRoutes = { win_ssm, dul_ssm, ssm_tor, ssm_mnt };
 		map.put(Cities.SAULT_ST_MARIE, Arrays.asList(ssmRoutes));
 
 		// Toronto
