@@ -159,14 +159,19 @@ public class MapView extends View {
         switch(color) {
             case black: // 0x231F20
                 colVal = 0xFF << 24 | 0x23 << 16 | 0x1F << 8 | 0x20;
+                break;
             case yellow: // 0xFFF200
                 colVal = 0xFF << 24 | 0xFF << 16 | 0xF2 << 8 | 0x00;
+                break;
             case red: // 0xED1C24
                 colVal = 0xFF << 24 | 0xED << 16 | 0x1C << 8 | 0x24;
+                break;
             case green: // 0x00A651
                 colVal = 0xFF << 24 | 0x00 << 16 | 0xA6 << 8 | 0x51;
+                break;
             case blue: // 0x2E3192
                 colVal = 0xFF << 24 | 0x2E << 16 | 0x31 << 8 | 0x92;
+                break;
         }
 //        Paint paintColor = new Paint();
 //        paintColor.setColor(col);
