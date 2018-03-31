@@ -182,14 +182,14 @@ public class ServerGame extends Game {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
-        String msg = player.claimRoute(route, cards);
-        if (msg != null && !msg.equals(ServerPlayer.LAST_ROUND)) throw new Exception(msg);
-
         // Players cannot claim both routes of a double route if there are fewer than 4 players.
         if (players.size() < 4) {
             if (route.isDouble() && (route.getFirstOwner() != null || route.getSecondOwner() != null))
-                throw new Exception("You may not claim this double route (fewer than 4 players)");
+                throw new Exception("This double route is unavailable (fewer than 4 players)");
         }
+
+        String msg = player.claimRoute(route, cards);
+        if (msg != null && !msg.equals(ServerPlayer.LAST_ROUND)) throw new Exception(msg);
 
         // Success! Now update the server model
         else {
