@@ -128,6 +128,10 @@ public class ServerGame extends Game {
         return null;
     }
 
+    public ServerPlayer getCurrentPlayer() {
+	    return players.get(currentPlayerIndex);
+    }
+
     public PlayerColor getPlayerColor(String authToken) {
 	    for (ServerPlayer player : players) {
 	        if (player.getAssociatedAuthToken().equals(authToken)) {
@@ -231,14 +235,13 @@ public class ServerGame extends Game {
         if (playersReady == players.size()) {
             players.get(currentPlayerIndex).startTurn();
         }
-        else startNextTurn();
+        else if (playersReady > players.size()) startNextTurn();
         return player.getDestinationCardOptions();
     }
 
     //----------------------------------------------------------------------------------------------
     // *** PRIVATE HELPER METHODS
     private void startNextTurn() {
-	    ServerFacade.getInstance().endTurn(this, players.get(currentPlayerIndex).getName());
 	    if (players.get(currentPlayerIndex).isLastPlayer()) {
 	        ServerFacade.getInstance().endGame(this);
 	        return;

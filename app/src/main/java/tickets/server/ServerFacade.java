@@ -274,18 +274,17 @@ public class ServerFacade implements IServer {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // *** In-Game Player Turn Actions ***
 
-    // TODO: Question: do we want game history messages to say player's username, faction, or both?
-
     @Override
     public TrainCardResponse drawTrainCard(String authToken) {
         try {
             ServerGame game = getGameForToken(authToken);
 
+            ServerPlayer currentPlayer = game.getCurrentPlayer();
             // Any reason for failing here will be thrown as an exception
             TrainCard drawnCard = game.drawTrainCard(authToken);
 
             // Update game history
-            String historyMessage = AllUsers.getInstance().getUsername(authToken) + " drew a resource card.";
+            String historyMessage = currentPlayer.getName() + " drew a resource card.";
             game.addToHistory(historyMessage);
 
             // Update other clients in the game
@@ -295,6 +294,8 @@ public class ServerFacade implements IServer {
                 if (!client.getAuthToken().equals(authToken))
                     client.addPlayerTrainCard();
             }
+            // If current player changed, add an end turn
+            if (!game.getCurrentPlayer().equals(currentPlayer)) endTurn(game, currentPlayer.getName());
             return new TrainCardResponse(drawnCard);
         }
         catch(Exception ex) {
@@ -307,12 +308,13 @@ public class ServerFacade implements IServer {
         try {
             ServerGame game = getGameForToken(authToken);
 
+            ServerPlayer currentPlayer = game.getCurrentPlayer();
             // Any reason for failing here will be thrown as an exception
             TrainCard drawnCard = game.drawFaceUpCard(position, authToken);
             TrainCard newCard = game.getFaceUpCards().get(position);
 
             // Update game history
-            String historyMessage = AllUsers.getInstance().getUsername(authToken) + " drew a " +
+            String historyMessage = currentPlayer.getName() + " drew a " +
                     drawnCard.getColor().toString() + " face-up resource card.";
             game.addToHistory(historyMessage);
 
@@ -324,6 +326,8 @@ public class ServerFacade implements IServer {
                 if (!client.getAuthToken().equals(authToken))
                     client.addPlayerTrainCard();
             }
+            // If current player changed, add an end turn
+            if (!game.getCurrentPlayer().equals(currentPlayer)) endTurn(game, currentPlayer.getName());
             return new TrainCardResponse(drawnCard);
         }
         catch(Exception ex) {
@@ -336,12 +340,13 @@ public class ServerFacade implements IServer {
         try {
             ServerGame game = getGameForToken(authToken);
 
+            ServerPlayer currentPlayer = game.getCurrentPlayer();
             // Any reason for failing here will be thrown as an exception
             game.claimRoute(route, cards.getTrainCards(), authToken);
 
             //update game history
-            String historyMessage = AllUsers.getInstance().getUsername(authToken) +
-                    " claimed the route " + route.toString();
+            String historyMessage = currentPlayer.getName() +
+                    " claimed a route " + route.toString();
             game.addToHistory(historyMessage);
 
             // Get color of route to be claimed from train card color
@@ -360,6 +365,8 @@ public class ServerFacade implements IServer {
                 client.addClaimedRoute(route, color, game.getPlayerColor(authToken));
 //                }
             }
+
+            endTurn(game, currentPlayer.getName());
 
             return new ClaimRouteResponse(cards); // "Route claimed successfully"
         }
@@ -402,12 +409,13 @@ public class ServerFacade implements IServer {
         try {
             ServerGame game = getGameForToken(authToken);
 
+            ServerPlayer currentPlayer = game.getCurrentPlayer();
             // Any reason for failing here will be thrown as an exception
             List<DestinationCard> keptCards = game.discardDestinationCard(discard, authToken);
 
             if (discard != null) {
                 //update game history
-                String historyMessage = AllUsers.getInstance().getUsername(authToken) +
+                String historyMessage = currentPlayer.getName() +
                         " discarded a destination card.";
                 game.addToHistory(historyMessage);
 
@@ -421,6 +429,7 @@ public class ServerFacade implements IServer {
                 }
             }
 
+            endTurn(game, currentPlayer.getName());
             return new DestinationCardResponse(keptCards);
         }
         catch(Exception ex) {
@@ -430,18 +439,6 @@ public class ServerFacade implements IServer {
 
     //----------------------------------------------------------------------------------------------
     // *** CALLED FROM IN-GAME ***
-
-    public void endTurn(ServerGame game, String playerName) {
-        // Update game history
-        String historyMessage = playerName + " ended their turn.";
-        game.addToHistory(historyMessage);
-
-        // Update other clients in the game
-        for (ClientProxy client : getClientsInGame(game.getGameId())) {
-            client.addToGameHistory(historyMessage);
-            client.endCurrentTurn();
-        }
-    }
 
     public void endGame(ServerGame game) {
         List<PlayerSummary> playerSummaries = new ArrayList<>();
@@ -458,6 +455,7 @@ public class ServerFacade implements IServer {
             client.displayEndGame(playerSummaries);
         }
     }
+
     //----------------------------------------------------------------------------------------------
     // *** UPDATE CLIENT COMMAND FOR POLLER ***
 
@@ -547,5 +545,17 @@ public class ServerFacade implements IServer {
             throw new Exception("Game does not exist.");
         } 
         return game;
+    }
+
+    private void endTurn(ServerGame game, String playerName) {
+        // Update game history
+        String historyMessage = playerName + " ended their turn.";
+        game.addToHistory(historyMessage);
+
+        // Update other clients in the game
+        for (ClientProxy client : getClientsInGame(game.getGameId())) {
+            client.addToGameHistory(historyMessage);
+            client.endCurrentTurn();
+        }
     }
 }
