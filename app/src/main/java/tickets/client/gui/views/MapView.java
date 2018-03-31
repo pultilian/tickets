@@ -155,28 +155,37 @@ public class MapView extends View {
         Canvas canvas = new Canvas(mGameMap);
 
         // create the 32-bit color value
-        int col = 0;
+        int colVal = 0;
         switch(color) {
             case black: // 0x231F20
-                col = 0xFF << 24 | 0x23 << 16 | 0x1F << 8 | 0x20;
+                colVal = 0xFF << 24 | 0x23 << 16 | 0x1F << 8 | 0x20;
             case yellow: // 0xFFF200
-                col = 0xFF << 24 | 0xFF << 16 | 0xF2 << 8 | 0x00;
+                colVal = 0xFF << 24 | 0xFF << 16 | 0xF2 << 8 | 0x00;
             case red: // 0xED1C24
-                col = 0xFF << 24 | 0xED << 16 | 0x1C << 8 | 0x24;
+                colVal = 0xFF << 24 | 0xED << 16 | 0x1C << 8 | 0x24;
             case green: // 0x00A651
-                col = 0xFF << 24 | 0x00 << 16 | 0xA6 << 8 | 0x51;
+                colVal = 0xFF << 24 | 0x00 << 16 | 0xA6 << 8 | 0x51;
             case blue: // 0x2E3192
-                col = 0xFF << 24 | 0x2E << 16 | 0x31 << 8 | 0x92;
+                colVal = 0xFF << 24 | 0x2E << 16 | 0x31 << 8 | 0x92;
         }
-        Paint paintColor = new Paint();
-        paintColor.setColor(col);
+//        Paint paintColor = new Paint();
+//        paintColor.setColor(col);
 
         // get the image and scale it to the size of the screen
 
         Bitmap img = BitmapFactory.decodeResource(this.getResources(), routeImageId);
         img = Bitmap.createScaledBitmap(img, mViewWidth, mViewHeight, false);
+        for (int i = 0; i < img.getWidth(); i++) {
+            for (int j = 0; j < img.getHeight(); j++) {
+                int val = img.getPixel(i,j);
+                if (val == 0) img.setPixel(i,j,0);
+                else img.setPixel(i, j, colVal);
+            }
+        }
+
+
         // overlay the image on the game map
-        canvas.drawBitmap(img, new Matrix(), paintColor);
+        canvas.drawBitmap(img, new Matrix(), null);
         return;
     }
 
