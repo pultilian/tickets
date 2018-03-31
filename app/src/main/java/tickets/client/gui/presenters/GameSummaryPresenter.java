@@ -5,6 +5,7 @@ import java.util.List;
 
 import tickets.client.ClientFacade;
 import tickets.common.PlayerSummary;
+import tickets.testing.StubFacade;
 
 /**
  * Created by Pultilian on 3/23/2018.
@@ -12,6 +13,7 @@ import tickets.common.PlayerSummary;
 
 public class GameSummaryPresenter {
     public List<PlayerSummary> getSummary(){
-        return ClientFacade.getInstance().getGameSummary();
+        // return ClientFacade.getInstance().getGameSummary();
+        return new StubFacade().getGameSummary();
     }
 }
