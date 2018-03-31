@@ -147,4 +147,8 @@ public class Route {
 		else return 0;
 	}
 
+	@Override
+    public String toString() {
+        return "from " + src + " to " + dest;
+    }
 }
