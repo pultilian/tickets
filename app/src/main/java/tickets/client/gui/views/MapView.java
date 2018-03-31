@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -170,9 +172,9 @@ public class MapView extends View {
         paintColor.setColor(col);
 
         // get the image and scale it to the size of the screen
+
         Bitmap img = BitmapFactory.decodeResource(this.getResources(), routeImageId);
         img = Bitmap.createScaledBitmap(img, mViewWidth, mViewHeight, false);
-
         // overlay the image on the game map
         canvas.drawBitmap(img, new Matrix(), paintColor);
         return;
