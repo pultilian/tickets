@@ -33,12 +33,12 @@ public class DestinationDeck {
         return result;
 	}
 
-	public boolean discardCard(List<DestinationCard> cards) {
+	public boolean discardCards(List<DestinationCard> cards) {
 		for (DestinationCard discard : cards) {
-			if (cards.contains(discard)) {
+			if (this.cards.contains(discard)) {
 				return false;
 			}
-			cards.add(discard);
+			this.cards.add(discard);
 		}
 		return true;
 	}

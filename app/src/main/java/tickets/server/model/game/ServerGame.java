@@ -216,7 +216,7 @@ public class ServerGame extends Game {
 
         String errorMsg = player.discardDestinationCard(cards);
         if (errorMsg != null) throw new Exception(errorMsg);
-        else if (cards != null && !destinationDeck.discardCard(cards))
+        else if (cards != null && !destinationDeck.discardCards(cards))
             throw new Exception("This card is already in the destination deck.");
 
         // Success
