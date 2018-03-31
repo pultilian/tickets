@@ -89,7 +89,7 @@ class TurnStartState extends PlayerTurnState {
     }
 
     @Override
-    String discardDestinationCard(DestinationCard card, ServerPlayer player) {
+    String discardDestinationCard(List<DestinationCard> card, ServerPlayer player) {
         return "You must draw destination cards before discarding them.";
     }
 

@@ -57,7 +57,7 @@ class DrewOneTrainCardState extends PlayerTurnState {
 	}
 
 	@Override
-	String discardDestinationCard(DestinationCard card, ServerPlayer player) {
+	String discardDestinationCard(List<DestinationCard> card, ServerPlayer player) {
 		return "You must draw another resource card.";
 	}
 

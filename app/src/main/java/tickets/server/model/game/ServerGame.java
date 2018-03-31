@@ -128,6 +128,10 @@ public class ServerGame extends Game {
         return null;
     }
 
+    public ServerPlayer getCurrentPlayer() {
+	    return players.get(currentPlayerIndex);
+    }
+
     public PlayerColor getPlayerColor(String authToken) {
 	    for (ServerPlayer player : players) {
 	        if (player.getAssociatedAuthToken().equals(authToken)) {
@@ -178,6 +182,12 @@ public class ServerGame extends Game {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
+        // Players cannot claim both routes of a double route if there are fewer than 4 players.
+        if (players.size() < 4) {
+            if (route.isDouble() && (route.getFirstOwner() != null || route.getSecondOwner() != null))
+                throw new Exception("This double route is unavailable (fewer than 4 players)");
+        }
+
         String msg = player.claimRoute(route, cards);
         if (msg != null && !msg.equals(ServerPlayer.LAST_ROUND)) throw new Exception(msg);
 
@@ -210,13 +220,13 @@ public class ServerGame extends Game {
         else return destinationDeck.drawCards();
 	}
 
-	public List<DestinationCard> discardDestinationCard(DestinationCard card, String authToken) throws Exception {
+	public List<DestinationCard> discardDestinationCard(List<DestinationCard> cards, String authToken) throws Exception {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
-        String errorMsg = player.discardDestinationCard(card);
+        String errorMsg = player.discardDestinationCard(cards);
         if (errorMsg != null) throw new Exception(errorMsg);
-        else if (card != null && !destinationDeck.discardCard(card))
+        else if (cards != null && !destinationDeck.discardCards(cards))
             throw new Exception("This card is already in the destination deck.");
 
         // Success
@@ -225,14 +235,13 @@ public class ServerGame extends Game {
         if (playersReady == players.size()) {
             players.get(currentPlayerIndex).startTurn();
         }
-        else startNextTurn();
+        else if (playersReady > players.size()) startNextTurn();
         return player.getDestinationCardOptions();
     }
 
     //----------------------------------------------------------------------------------------------
     // *** PRIVATE HELPER METHODS
     private void startNextTurn() {
-	    ServerFacade.getInstance().endTurn(this, players.get(currentPlayerIndex).getName());
 	    if (players.get(currentPlayerIndex).isLastPlayer()) {
 	        ServerFacade.getInstance().endGame(this);
 	        return;

@@ -2,9 +2,12 @@ package tickets.client.async;
 
 import android.os.AsyncTask;
 
+import java.util.List;
+
 import tickets.client.ClientFacade;
 import tickets.client.ResponseManager;
 import tickets.client.ServerProxy;
+import tickets.common.ChoiceDestinationCards;
 import tickets.common.DestinationCard;
 import tickets.common.response.DestinationCardResponse;
 import tickets.common.response.Response;
@@ -23,9 +26,11 @@ class DiscardDestinationCardAsync extends AsyncTask<Object, Void, DestinationCar
             return new DestinationCardResponse(error);
         }
 
-        DestinationCard discard = (DestinationCard) data[0];
+        List<DestinationCard> discards = (List<DestinationCard>) data[0];
+        ChoiceDestinationCards choice = new ChoiceDestinationCards();
+        choice.setDestinationCards(discards);
         String authToken = (String) data[1];
-        DestinationCardResponse response = ServerProxy.getInstance().discardDestinationCard(discard, authToken);
+        DestinationCardResponse response = ServerProxy.getInstance().discardDestinationCard(choice, authToken);
         return response;
     }
 

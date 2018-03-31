@@ -1,5 +1,8 @@
 package tickets.client;
 
+import java.util.List;
+
+import tickets.common.ChoiceDestinationCards;
 import tickets.common.DestinationCard;
 import tickets.common.Lobby;
 import tickets.common.Route;
@@ -112,9 +115,11 @@ public class TaskManager implements ITaskManager {
     }
 
     @Override
-    public void discardDestinationCard(DestinationCard discard) {
+    public void discardDestinationCard(List<DestinationCard> discard) {
         String token = ClientFacade.getInstance().getAuthToken();
-        DestinationCardResponse response = ServerProxy.getInstance().discardDestinationCard(discard, token);
+        ChoiceDestinationCards choice = new ChoiceDestinationCards();
+        choice.setDestinationCards(discard);
+        DestinationCardResponse response = ServerProxy.getInstance().discardDestinationCard(choice, token);
         ResponseManager.handleResponse(response, true);
     }
 }
