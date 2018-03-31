@@ -142,7 +142,7 @@ public class ServerPlayer extends Player {
 	    return turnState.drawDestinationCards(cards, this);
     }
 
-    public String discardDestinationCard(DestinationCard card) {
-	    return turnState.discardDestinationCard(card, this);
+    public String discardDestinationCard(List<DestinationCard> cards) {
+	    return turnState.discardDestinationCard(cards, this);
     }
 }

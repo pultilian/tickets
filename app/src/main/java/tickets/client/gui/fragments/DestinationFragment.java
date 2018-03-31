@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tickets.client.gui.activities.R;
@@ -103,30 +104,31 @@ public class DestinationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 int check = 0;
-                int cardToDiscard = 0;
-                for (int i = 0; i < selectedButtons.length; i++){
-                    if(selectedButtons[i] == true){
+                List<DestinationCard> cardsToDiscard = new ArrayList<>();
+
+                for (int i = 0; i < selectedButtons.length; i++) {
+                    if (selectedButtons[i] == true) {
                         check++;
                     } else {
-                        cardToDiscard = i;
+                        cardsToDiscard.add(destinationCards.get(i));
                     }
                 }
-                if(check == 2){
-                    presenter.chooseDestinationCards(destinationCards.get(cardToDiscard)); // TODO: get the index of the card to discard.
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    Fragment fragment = new MapFragment();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.fragment_container, fragment)
-                            .commit();
-                } else if (check == 3){
+                if (check == 3) {
                     presenter.chooseDestinationCards(null);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     Fragment fragment = new MapFragment();
                     fragmentManager.beginTransaction()
                             .add(R.id.fragment_container, fragment)
                             .commit();
+                } else if(check > 0){
+                    presenter.chooseDestinationCards(cardsToDiscard);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    Fragment fragment = new MapFragment();
+                    fragmentManager.beginTransaction()
+                            .add(R.id.fragment_container, fragment)
+                           .commit();
                 } else {
-                    Toast.makeText(getActivity(),"You must click at least 2",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"You cannot discard all cards",Toast.LENGTH_SHORT).show();
                 }
             }
         });

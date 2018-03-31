@@ -25,7 +25,10 @@ class DrewDestCardsState extends PlayerTurnState {
 		return INSTANCE;
 	}
 
-	private DrewDestCardsState(){}
+	private boolean turn0;
+	private DrewDestCardsState() {
+	    turn0 = true;
+    }
 
 	@Override
 	String drawTrainCard(TrainCard card, ServerPlayer player) {
@@ -48,25 +51,31 @@ class DrewDestCardsState extends PlayerTurnState {
 	}
 
 	@Override
-	String discardDestinationCard(DestinationCard card, ServerPlayer player) {
-		if (card != null) {
-			List<DestinationCard> options = player.getDestinationCardOptions();
-			List<DestinationCard> toDiscard = new ArrayList<>();
-			// Find discarded cards and "mark" them. Add other cards to player's hand
-			for (DestinationCard playerCard : options) {
-				if (!playerCard.equals(card)) {
-					player.addDestinationCardToHand(playerCard);
-				}
-				else toDiscard.add(playerCard);
-			}
-			// Delete marked cards from current options
-            options.removeAll(toDiscard);
-		}
-		else {
-			for (DestinationCard playerCard : player.getDestinationCardOptions()) {
-				player.addDestinationCardToHand(playerCard);
-			}
-		}
+	String discardDestinationCard(List<DestinationCard> cards, ServerPlayer player) {
+		if (turn0 && cards.size() > 1)
+		    return "You may only discard one card during setup";
+		else if (!turn0 && cards.size() > 2)
+		    return "You may only discard up to two cards";
+
+		for (DestinationCard card : cards) {
+            if (card != null) {
+                List<DestinationCard> options = player.getDestinationCardOptions();
+                List<DestinationCard> toDiscard = new ArrayList<>();
+                // Find discarded cards and "mark" them. Add other cards to player's hand
+                for (DestinationCard playerCard : options) {
+                    if (!playerCard.equals(card)) {
+                        player.addDestinationCardToHand(playerCard);
+                    } else toDiscard.add(playerCard);
+                }
+                // Delete marked cards from current options
+                options.removeAll(toDiscard);
+            } else {
+                for (DestinationCard playerCard : player.getDestinationCardOptions()) {
+                    player.addDestinationCardToHand(playerCard);
+                }
+            }
+        }
+        turn0 = false;
         player.changeState(States.NOT_MY_TURN);
 		return null;
 	}

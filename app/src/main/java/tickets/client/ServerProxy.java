@@ -2,6 +2,7 @@ package tickets.client;
 
 import java.util.List;
 
+import tickets.common.ChoiceDestinationCards;
 import tickets.common.Command;
 import tickets.common.DestinationCard;
 import tickets.common.IServer;
@@ -144,9 +145,9 @@ public class ServerProxy implements IServer {
         return (ClaimRouteResponse) result;
     }
 
-    public DestinationCardResponse discardDestinationCard(DestinationCard discard, String authToken) {
+    public DestinationCardResponse discardDestinationCard(ChoiceDestinationCards discard, String authToken) {
         Object[] parameters = {discard, authToken};
-        String[] parameterTypes = {DestinationCard.class.getName(), String.class.getName()};
+        String[] parameterTypes = {ChoiceDestinationCards.class.getName(), String.class.getName()};
         Command command = new Command("discardDestinationCard", parameterTypes, parameters);
         Object result = clientCommunicator.send(command);
         return (DestinationCardResponse) result;

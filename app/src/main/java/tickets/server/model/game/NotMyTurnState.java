@@ -45,7 +45,7 @@ class NotMyTurnState extends PlayerTurnState {
 	}
 
 	@Override
-	String discardDestinationCard(DestinationCard card, ServerPlayer player) {
+	String discardDestinationCard(List<DestinationCard> card, ServerPlayer player) {
 		return "It is not your turn.";
 	}
 

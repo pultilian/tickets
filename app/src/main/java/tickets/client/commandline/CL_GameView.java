@@ -92,23 +92,35 @@ public class CL_GameView extends CommandlineView {
         System.out.println();
     }
 
-    //TODO: only supports single card discarding, so far
 	private void discardDestinationCards(int canDiscard) {
-        System.out.println("Choose " + Integer.toString(canDiscard)  + " cards to discard: ");
+        boolean discarded = false;
         List<DestinationCard> destinationCards = destinationPresenter.getDestinationCards();
-        printDestinationCards(destinationCards);
-        System.out.println("Type \'x\' when you no longer wish to discard.");
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            System.out.print("Discard: ");
-            int discard = Integer.parseInt(input.readLine()) - 1;
-            destinationPresenter.chooseDestinationCards(destinationCards.get(discard));
-        } catch(IOException e) {
-            e.printStackTrace();
-        } catch(NumberFormatException e) {
-            e.printStackTrace();
+        while(! discarded) {
+            List<DestinationCard> discard = new ArrayList<>();
+            for (int i = 0; i < canDiscard; i++) {
+                System.out.println("Choose " + Integer.toString(canDiscard) + " cards to discard: ");
+                printDestinationCards(destinationCards);
+                System.out.println("Type \'x\' when you no longer wish to discard.");
+                BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+                try {
+                    System.out.print("Discard: ");
+                    int toDiscard = Integer.parseInt(input.readLine()) - 1;
+                    discard.add(destinationCards.remove(toDiscard));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                destinationPresenter.chooseDestinationCards(discard);
+                discarded = true;
+                System.out.println();
+            } catch (Exception e) {
+                e.printStackTrace();
+                discarded = false;
+            }
         }
-        System.out.println();
     }
 
     private void printDestinationCards(List<DestinationCard> destinationCards) {

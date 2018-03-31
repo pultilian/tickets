@@ -81,6 +81,8 @@ public class Player {
     }
 
     public List<DestinationCard> getDestinationCardOptions(){
+        if (destinationCardOptions == null)
+            return null;
         return destinationCardOptions.getDestinationCards();
     }
 

@@ -20,11 +20,11 @@ public class DestinationPresenter implements IDestinationPresenter {
 	    this.manager = manager;
     }
 
-	public List<DestinationCard> getDestinationCards(){
+	public List<DestinationCard> getDestinationCards() {
 		return ClientFacade.getInstance().getDestinationCardOptions();
 	}
 
-	public void chooseDestinationCards(DestinationCard toDiscard){
+	public void chooseDestinationCards(List<DestinationCard> toDiscard){
 		manager.discardDestinationCard(toDiscard);
 	}
 }
