@@ -8,9 +8,10 @@ import tickets.common.PlayerInfo;
 import tickets.common.PlayerSummary;
 
 public class StubFacade {
-    private static List<PlayerSummary> gameSummary = new ArrayList<>();
+    private List<PlayerSummary> gameSummary;
 
     public StubFacade() {
+        gameSummary = new ArrayList<>();
         PlayerInfo playerInfo1 = new PlayerInfo();
         PlayerInfo playerInfo2 = new PlayerInfo();
         playerInfo1.setFaction(Faction.Player1);

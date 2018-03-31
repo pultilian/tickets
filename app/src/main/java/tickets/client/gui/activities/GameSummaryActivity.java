@@ -39,10 +39,12 @@ public class GameSummaryActivity extends AppCompatActivity {
 
         presenter = new GameSummaryPresenter();
 
+        gameSummary = findViewById(R.id.game_summary);
         endButton = findViewById(R.id.button_end_game);
         gameSummaryManager = new LinearLayoutManager(this);
         gameSummary.setLayoutManager(gameSummaryManager);
         gameSummaryAdapter = new GameSummaryAdapter(this, presenter.getSummary());
+        gameSummary.setAdapter(gameSummaryAdapter);
 
         endButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,14 +97,14 @@ public class GameSummaryActivity extends AppCompatActivity {
         public GameSummaryHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            faction = findViewById(R.id.faction);
-            playerName = findViewById(R.id.player_name_summary);
-            shipsLeft = findViewById(R.id.ships_left_summary);
-            shipPoints = findViewById(R.id.ship_points_summary);
-            successDest = findViewById(R.id.success_dest);
-            failDest = findViewById(R.id.fail_dest);
-            totalPoints = findViewById(R.id.total_points);
-            longestRoute = findViewById(R.id.longest_route);
+            faction = view.findViewById(R.id.faction);
+            playerName = view.findViewById(R.id.player_name_summary);
+            shipsLeft = view.findViewById(R.id.ships_left_summary);
+            shipPoints = view.findViewById(R.id.ship_points_summary);
+            successDest = view.findViewById(R.id.success_dest);
+            failDest = view.findViewById(R.id.fail_dest);
+            totalPoints = view.findViewById(R.id.total_points);
+            longestRoute = view.findViewById(R.id.longest_route);
 
         }
 
@@ -114,9 +116,12 @@ public class GameSummaryActivity extends AppCompatActivity {
             successDest.setText(Integer.toString(item.getSuccessDestPoints()));
             failDest.setText(Integer.toString(item.getFailDestPoints()));
             int totalPointsCalc = item.getShipPoints() + item.getSuccessDestPoints() - item.getFailDestPoints();
-            totalPoints.setText(totalPointsCalc);
+            totalPoints.setText(String.format("%d", totalPointsCalc));
             if(item.isLongestRoute()){
                 longestRoute.setImageResource(R.drawable.longest_route);
+            }
+            else {
+                longestRoute.setImageResource(android.R.color.transparent);
             }
 
             switch(item.getFaction().toLowerCase()){
