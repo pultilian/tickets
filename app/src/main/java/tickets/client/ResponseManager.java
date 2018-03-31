@@ -137,6 +137,9 @@ public final class ResponseManager {
         }
         else if (response.getException() == null) {
             ClientFacade.getInstance().removeUsedCardsFromPlayerHand(response.getRemoveCards());
+            ClientModelUpdate message = new ClientModelUpdate(
+                    ClientModelUpdate.ModelUpdate.playerTrainHandUpdated);
+            ClientFacade.getInstance().updateObservable(message);
         }
         else {
             handleException(response.getException());
