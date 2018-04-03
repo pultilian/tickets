@@ -1,5 +1,7 @@
 package tickets.client.gui.presenters;
 
+import android.util.Log;
+
 import java.util.List;
 
 import tickets.client.ClientFacade;
@@ -70,13 +72,13 @@ public class GameMapPresenter implements IGameMapPresenter {
     private void checkUpdate(ClientModelUpdate.ModelUpdate update) {
         switch(update) {
             case mapUpdated:
-                //TODO: update map visually
-                // which route has been claimed?
-                // which player has claimed the route?
+                Log.d("Drawing", "checkUpdate has been called on GameMapPresenter");
+                holder.checkUpdate();
                 break;
             default:
                 break;
         }
+        return;
     }
 
     @Override

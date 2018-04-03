@@ -3,6 +3,7 @@ package tickets.client.gui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import tickets.client.gui.views.MapView;
 
 public class MapFragment extends Fragment implements IHolderActivity {
     IGameMapPresenter presenter;
+    MapView mGameMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,8 @@ public class MapFragment extends Fragment implements IHolderActivity {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        MapView map = view.findViewById(R.id.gameMap);
-        map.setPresenter(this.presenter);
+        mGameMap = view.findViewById(R.id.gameMap);
+        mGameMap.setPresenter(this.presenter);
         return view;
     }
 
@@ -53,7 +55,8 @@ public class MapFragment extends Fragment implements IHolderActivity {
 
     @Override
     public void checkUpdate() {
-        // TODO: what updates are needed?
-        //  a route has been claimed by a player
+        Log.d("Drawing", "checkUpdate on MapFragment called");
+        mGameMap.setClaimedRoutes(presenter.getClaimedRoutes());
+        return;
     }
 }
