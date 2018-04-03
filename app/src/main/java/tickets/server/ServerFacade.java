@@ -11,6 +11,7 @@ import tickets.common.ChoiceDestinationCards;
 import tickets.common.Command;
 import tickets.common.DestinationCard;
 import tickets.common.Game;
+import tickets.common.GameSummary;
 import tickets.common.HandTrainCard;
 import tickets.common.IServer;
 import tickets.common.Lobby;
@@ -452,7 +453,7 @@ public class ServerFacade implements IServer {
 
         // Send command to all clients in game
         for (ClientProxy client : getClientsInGame(game.getGameId())) {
-            client.displayEndGame(playerSummaries);
+            client.displayEndGame(new GameSummary(playerSummaries));
         }
     }
 

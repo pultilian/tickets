@@ -50,13 +50,20 @@ public class MapFragment extends Fragment implements IHolderActivity {
 
     @Override
     public void toastException(Exception e) {
-        Toast.makeText(this.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void checkUpdate() {
         Log.d("Drawing", "checkUpdate on MapFragment called");
-        mGameMap.setClaimedRoutes(presenter.getClaimedRoutes());
+        if (this.isVisible()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mGameMap.setClaimedRoutes(presenter.getClaimedRoutes());
+                }
+            });
+        }
         return;
     }
 }

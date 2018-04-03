@@ -24,5 +24,5 @@ public interface IClient {
     public void addPlayerDestinationCards(int numCards);
     public void removePlayerDestinationCard();
     public void replaceFaceUpCard(Integer position, TrainCard card);
-    public void displayEndGame(List<PlayerSummary> playerSummaries);
+    public void displayEndGame(GameSummary gameSummary);
 }

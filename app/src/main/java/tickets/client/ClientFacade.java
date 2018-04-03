@@ -10,6 +10,7 @@ import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.DestinationCard;
 import tickets.common.Game;
+import tickets.common.GameSummary;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.IMessage;
@@ -234,8 +235,8 @@ public class ClientFacade implements IClient {
 		updateObservable(update);
 	}
 
-    public void displayEndGame(List<PlayerSummary> playerSummaries) {
-        gameSummary = playerSummaries;
+    public void displayEndGame(GameSummary gameSummary) {
+        this.gameSummary = gameSummary.getPlayerSummaries();
         ClientStateChange state = new ClientStateChange(ClientStateChange.ClientState.summary);
         observable.notify(state);
     }
