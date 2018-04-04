@@ -9,6 +9,7 @@ import java.util.Queue;
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.Command;
 import tickets.common.Game;
+import tickets.common.GameSummary;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
@@ -185,10 +186,10 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void displayEndGame(List<PlayerSummary> playerSummaries) {
+    public void displayEndGame(GameSummary gameSummary) {
         Command command = new Command("displayEndGame",
-                new String[] {List.class.getName()},
-                new Object[] {playerSummaries});
+                new String[] {GameSummary.class.getName()},
+                new Object[] {gameSummary});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;

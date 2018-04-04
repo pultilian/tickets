@@ -95,6 +95,9 @@ public class LobbyPresenter implements ILobbyPresenter {
                 if (holder != null)
                     holder.makeTransition(IHolderActivity.Transition.toGame);
                 break;
+            case summary:
+                //do nothing
+                break;
             case update:
                 holder.checkUpdate();
                 break;

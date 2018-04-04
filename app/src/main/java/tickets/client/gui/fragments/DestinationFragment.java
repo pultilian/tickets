@@ -113,20 +113,13 @@ public class DestinationFragment extends Fragment {
                         cardsToDiscard.add(destinationCards.get(i));
                     }
                 }
-                if (check == 3) {
-                    presenter.chooseDestinationCards(null);
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    Fragment fragment = new MapFragment();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.fragment_container, fragment)
-                            .commit();
-                } else if(check > 0){
-                    presenter.chooseDestinationCards(cardsToDiscard);
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    Fragment fragment = new MapFragment();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.fragment_container, fragment)
-                           .commit();
+                if(check > 0){
+                presenter.chooseDestinationCards(cardsToDiscard);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment fragment = new MapFragment();
+                fragmentManager.beginTransaction()
+                        .add(R.id.fragment_container, fragment)
+                        .commit();
                 } else {
                     Toast.makeText(getActivity(),"You cannot discard all cards",Toast.LENGTH_SHORT).show();
                 }

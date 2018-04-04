@@ -113,6 +113,9 @@ public class LobbyListPresenter implements ILobbyListPresenter {
             case game:
                 //do nothing
                 break;
+            case summary:
+                //do nothing
+                break;
             case update:
                 holder.checkUpdate();
                 break;
