@@ -73,7 +73,7 @@ public class ChatFragment extends Fragment implements IHolderGameChatFragment {
      */
     @Override
     public void toastException(Exception e) {
-        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         return;
     }
 
