@@ -54,6 +54,13 @@ public class Game {
         return gamePlayers.get(currentTurn);
     }
 
+    public PlayerInfo getPlayerInfo(String playerName) {
+        for (PlayerInfo player : gamePlayers) {
+            if (player.getName().equals(playerName)) return player;
+        }
+        return null;
+    }
+
     public List<PlayerInfo> getAllPlayers() {
         return gamePlayers;
     }

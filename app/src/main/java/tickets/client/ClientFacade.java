@@ -197,17 +197,9 @@ public class ClientFacade implements IClient {
         updateObservable(message);
 	}
 
-	public void addPlayerDestinationCards(int numCards) {
-		for (int i = 0; i < numCards; i++) {
-			currentGame.getActivePlayerInfo().addDestinationCard();
-		}
-		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-		updateObservable(message);
-	}
-
-	public void removePlayerDestinationCard() {
-		currentGame.getActivePlayerInfo().removeDestinationCard();
-		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+	public void addPlayerDestinationCards(String playerName, Integer numCards) {
+        currentGame.getPlayerInfo(playerName).addDestinationCards(numCards);
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
 		updateObservable(message);
 	}
 

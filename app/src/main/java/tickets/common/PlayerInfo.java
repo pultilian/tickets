@@ -74,13 +74,9 @@ public class PlayerInfo {
 	    return trainCardCount;
     }
 
-    public void addDestinationCard() {
-        destinationCardCount++;
+    public void addDestinationCards(int numCards) {
+        destinationCardCount += numCards;
     }
-
-    public void removeDestinationCard() {
-		destinationCardCount--;
-	}
 
     public int getDestinationCardCount() {
         return destinationCardCount;
