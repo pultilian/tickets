@@ -136,7 +136,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
 
         @Override
         public int getItemCount() {
-            return playerInfoList.size(); //cards.size(); //TODO: get cards initialized.
+            return playerInfoList.size();
         }
 
     }
@@ -239,7 +239,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
 
         @Override
         public int getItemCount() {
-            return gameHistory.size(); //cards.size(); //TODO: get cards initialized.
+            return gameHistory.size();
         }
 
     }

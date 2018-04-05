@@ -291,13 +291,11 @@ public class MapView extends View {
                 city2 = city;
         }
 
-        //TODO: add button to canvas for this function
         void clearSelected() {
             city1 = null;
             city2 = null;
         }
 
-        //TODO: add button to canvas for this function
         void claimSelectedRoute() {
             for (Route route : presenter.getAllRoutes()) {
                 if (route.equals(city1, city2)) {
