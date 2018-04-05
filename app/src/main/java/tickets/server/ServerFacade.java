@@ -105,7 +105,7 @@ public class ServerFacade implements IServer {
         else if (lobby.getCurrentMembers() == lobby.getMaxMembers()) return new JoinLobbyResponse(new Exception("Lobby is full."));
         else {
             // Update the server model
-            Player player = new Player(UUID.randomUUID().toString(), authToken);
+            Player player = new Player(authToken);
             player.setName(AllUsers.getInstance().getUsername(authToken));
             lobby.addPlayer(player);
             lobby.assignFaction(player);
@@ -134,7 +134,7 @@ public class ServerFacade implements IServer {
 
         // Update the server model
         AllLobbies.getInstance().addLobby(lobby);
-        Player player = new Player(UUID.randomUUID().toString(), authToken);
+        Player player = new Player(authToken);
         player.setName(AllUsers.getInstance().getUsername(authToken));
         lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
                 " has created the lobby.");

@@ -7,7 +7,6 @@ import java.util.Map;
 public class Player {
     private PlayerInfo info;
 
-    private String playerId;
     private String associatedAuthToken;
     private HandDestinationCard playerDestinationCards;
     private HandTrainCard playerResourceCards;
@@ -15,17 +14,15 @@ public class Player {
 
     public Player(Player copy) {
         this.info = copy.info;
-        this.playerId = copy.playerId;
         this.associatedAuthToken = copy.associatedAuthToken;
         this.playerDestinationCards = copy.playerDestinationCards;
         this.playerResourceCards = copy.playerResourceCards;
         this.destinationCardOptions = copy.destinationCardOptions;
     }
 
-    public Player(String playerId, String associatedAuthToken) {
+    public Player(String associatedAuthToken) {
         info = new PlayerInfo();
 
-        this.playerId = playerId;
         this.associatedAuthToken = associatedAuthToken;
         playerDestinationCards = new HandDestinationCard();
         playerResourceCards = new HandTrainCard();
@@ -35,8 +32,6 @@ public class Player {
     public PlayerInfo getInfo() {
         return info;
     }
-
-    public String getPlayerId(){ return playerId; }
 
     public String getAssociatedAuthToken(){ return associatedAuthToken; }
 
