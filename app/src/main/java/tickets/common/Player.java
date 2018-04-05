@@ -1,5 +1,6 @@
 package tickets.common;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -97,32 +98,42 @@ public class Player {
         }
     }
 
-    public List<TrainCard> getCardsForRoute(Route route) {
+    public List<String> getPossibleColorsForRoute(Route route) {
+        List<String> result = new ArrayList<>();
 
-        List<TrainCard> claim1 = null;
-        List<TrainCard> claim2 = null;
-        if (route.getFirstOwner() == null)
-            claim1 = playerResourceCards.getCardsForRoute(route.getFirstColor(), route.getLength());
-        if (route.isDouble() && route.getSecondOwner() == null && route.getFirstOwner() != this.getPlayerFaction().getColor())
-            claim2 = playerResourceCards.getCardsForRoute(route.getSecondColor(), route.getLength());
-
-        if (claim1 == null)
-            return claim2;
-        else if (claim2 == null)
-            return claim1;
-
-        else {
-            int claim1Wilds = 0;
-            int claim2Wilds = 0;
-            for (int i = 0; i < claim1.size(); i++) {
-                if(claim1.get(i).getColor() == RouteColors.Gray)
-                    claim1Wilds++;
-                if(claim2.get(i).getColor() == RouteColors.Gray)
-                    claim2Wilds++;
+        // For wild routes, check all colors
+        if (route.getFirstColor() == RouteColors.Gray) {
+            int numWild = playerResourceCards.getCountForColor(RouteColors.Wild);
+            Map<RouteColors, List<TrainCard>> cards = playerResourceCards.getAllCards();
+            for (Map.Entry<RouteColors, List<TrainCard>> entry : cards.entrySet()) {
+                if (entry.getKey() == RouteColors.Wild) continue;
+                if (entry.getValue().size() > 0 && (entry.getValue().size() + numWild) >= route.getLength()) {
+                    result.add(entry.getKey().toString());
+                }
             }
-            if (claim1Wilds < claim2Wilds)
-                return claim2;
         }
-        return claim1;
+
+        // For all other routes, check both colors
+        else {
+            RouteColors color = route.getFirstColor();
+            int numWild = playerResourceCards.getCountForColor(RouteColors.Wild);
+            if (playerResourceCards.getCountForColor(color) + numWild >= route.getLength()) {
+                result.add(color.toString());
+            }
+            color = route.getSecondColor();
+            if (playerResourceCards.getCountForColor(color) + numWild >= route.getLength()) {
+                result.add(color.toString());
+            }
+        }
+        return result;
+    }
+
+    public List<TrainCard> getCards(int length, String color) {
+        RouteColors selectedColor = null;
+        for (RouteColors routeColor : RouteColors.values()) {
+            if (routeColor.toString().equals(color)) selectedColor = routeColor;
+        }
+        if (selectedColor == null) return null;
+        return playerResourceCards.getCards(length, selectedColor);
     }
 }

@@ -1,18 +1,17 @@
 package tickets.client.gui.views;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -208,6 +207,14 @@ public class MapView extends View {
     //--------------------------------------------------------------------------------
     //  view functionality
 
+    public void displayChooseColorDialog(List<String> colors) {
+        mMapClickHandler.displayChooseColorDialog(colors);
+    }
+
+    public void clearSelectedCities() {
+        mMapClickHandler.clearSelected();
+    }
+
     // defines how this view will respond to touch events based on which gesture is performed
     private class MapClickListener extends GestureDetector.SimpleOnGestureListener {
         // other gestures that could be detected:
@@ -300,13 +307,57 @@ public class MapView extends View {
             for (Route route : presenter.getAllRoutes()) {
                 if (route.equals(city1, city2)) {
                     presenter.claimRoute(route);
-                    clearSelected();
+//                    clearSelected();
                     return;
                 }
             }
 
-            Toast.makeText(MapView.this.getContext(), "The cities you have selected are not adjacent", Toast.LENGTH_LONG).show();
+            Toast.makeText(MapView.this.getContext(), "The cities you have selected are not adjacent", Toast.LENGTH_SHORT).show();
             clearSelected();
+        }
+
+        public void displayChooseColorDialog(List<String> colors) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Choose a color");
+
+            // Set options for radio buttons
+            final String[] options = colors.toArray(new String[colors.size()]);
+
+            // Set onClickListener
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                private int selection = 0;
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == DialogInterface.BUTTON_NEGATIVE) {
+                        clearSelected();
+                        dialog.dismiss();
+                    }
+                    else if (which == DialogInterface.BUTTON_POSITIVE) {
+                        claimSelectedRouteWithColor(options[selection]);
+                        dialog.dismiss();
+                    }
+                    else {
+                        selection = which;
+                    }
+                }
+            };
+            builder.setSingleChoiceItems(options, 0, listener);
+            builder.setPositiveButton("OK", listener);
+            builder.setNegativeButton("Cancel", listener);
+
+            builder.create();
+            builder.show();
+        }
+
+        void claimSelectedRouteWithColor(String color) {
+            for (Route route : presenter.getAllRoutes()) {
+                if (route.equals(city1, city2)) {
+                    presenter.claimRoute(route, color);
+                    clearSelected();
+                    return;
+                }
+            }
         }
 
         // return the city closest to the given location, or null

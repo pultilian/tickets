@@ -9,17 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.List;
+
 import tickets.client.gui.activities.R;
 import tickets.client.gui.presenters.GameMapPresenter;
 import tickets.client.gui.presenters.IGameMapPresenter;
 import tickets.client.gui.presenters.IHolderActivity;
+import tickets.client.gui.presenters.IHolderGameMapFragment;
 import tickets.client.gui.views.MapView;
 
 /**
  * Created by Pultilian on 3/4/2018.
  */
 
-public class MapFragment extends Fragment implements IHolderActivity {
+public class MapFragment extends Fragment implements IHolderGameMapFragment {
     IGameMapPresenter presenter;
     MapView mGameMap;
 
@@ -65,5 +68,15 @@ public class MapFragment extends Fragment implements IHolderActivity {
             });
         }
         return;
+    }
+
+    @Override
+    public void displayChooseColorDialog(List<String> colors) {
+        mGameMap.displayChooseColorDialog(colors);
+    }
+
+    @Override
+    public void clearSelectedCities() {
+        mGameMap.clearSelectedCities();
     }
 }
