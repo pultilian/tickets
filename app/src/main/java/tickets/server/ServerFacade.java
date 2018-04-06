@@ -105,7 +105,7 @@ public class ServerFacade implements IServer {
         else if (lobby.getCurrentMembers() == lobby.getMaxMembers()) return new JoinLobbyResponse(new Exception("Lobby is full."));
         else {
             // Update the server model
-            Player player = new Player(UUID.randomUUID().toString(), authToken);
+            Player player = new Player(authToken);
             player.setName(AllUsers.getInstance().getUsername(authToken));
             lobby.addPlayer(player);
             lobby.assignFaction(player);
@@ -134,7 +134,7 @@ public class ServerFacade implements IServer {
 
         // Update the server model
         AllLobbies.getInstance().addLobby(lobby);
-        Player player = new Player(UUID.randomUUID().toString(), authToken);
+        Player player = new Player(authToken);
         player.setName(AllUsers.getInstance().getUsername(authToken));
         lobby.addToHistory(AllUsers.getInstance().getUsername(authToken) +
                 " has created the lobby.");
@@ -392,10 +392,6 @@ public class ServerFacade implements IServer {
             //update other game members
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
-                // The current client will receive a destination card response rather than this command.
-                if (!client.getAuthToken().equals(authToken)) {
-                    client.addPlayerDestinationCards(drawnCards.size());
-                }
             }
 
             return new DestinationCardResponse(drawnCards);
@@ -410,23 +406,32 @@ public class ServerFacade implements IServer {
         try {
             ServerGame game = getGameForToken(authToken);
 
-            ServerPlayer currentPlayer = game.getCurrentPlayer();
+            ServerPlayer currentPlayer = game.getServerPlayer(authToken);
             // Any reason for failing here will be thrown as an exception
             List<DestinationCard> keptCards = game.discardDestinationCard(discard.getDestinationCards(), authToken);
 
-            if (discard != null) {
-                //update game history
-                String historyMessage = currentPlayer.getName() +
+            //update game history
+            String historyMessage;
+            if (discard.getDestinationCards().size() == 2) {
+                historyMessage = currentPlayer.getName() +
+                        " discarded two destination cards.";
+            }
+            else if (discard.getDestinationCards().size() == 1) {
+                historyMessage = currentPlayer.getName() +
                         " discarded a destination card.";
-                game.addToHistory(historyMessage);
+            }
+            else {
+                historyMessage = currentPlayer.getName() +
+                        " kept all destination cards.";
+            }
+            game.addToHistory(historyMessage);
 
-                //update other game members
-                for (ClientProxy client : getClientsInGame(game.getGameId())) {
-                    client.addToGameHistory(historyMessage);
-                    // The current client will receive a response rather than this command.
-                    if (!client.getAuthToken().equals(authToken)) {
-                        client.removePlayerDestinationCard();
-                    }
+            //update other game members
+            for (ClientProxy client : getClientsInGame(game.getGameId())) {
+                client.addToGameHistory(historyMessage);
+                // The current client will receive a response rather than this command.
+                if (!client.getAuthToken().equals(authToken)) {
+                    client.addPlayerDestinationCards(currentPlayer.getName(), keptCards.size());
                 }
             }
 

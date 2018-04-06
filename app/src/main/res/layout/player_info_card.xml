@@ -18,18 +18,25 @@
             android:id="@+id/race_image_card"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             app:srcCompat="@drawable/card_altian" />
+
+        <TextView
+            android:id="@+id/player_info_faction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_below="@+id/player_info_name"
+            android:textColor="#FFFFFF"
+            android:text="Player Faction" />
 
         <TextView
             android:id="@+id/player_info_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Player Name"
             android:textAlignment="center"
-            android:layout_marginTop="30dp"
-            android:textColor="#FFFFFF"
-            android:text="Player Name" />
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:id="@+id/player_info_points"

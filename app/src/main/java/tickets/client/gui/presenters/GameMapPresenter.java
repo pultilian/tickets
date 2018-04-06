@@ -13,16 +13,17 @@ import tickets.common.ExceptionMessage;
 import tickets.common.IMessage;
 import tickets.common.IObservable;
 import tickets.common.Route;
+import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 import tickets.common.TrainCardWrapper;
 
 public class GameMapPresenter implements IGameMapPresenter {
 
     private IObservable observable;
-    private IHolderActivity holder;
+    private IHolderGameMapFragment holder;
     private ITaskManager manager;
 
-    public GameMapPresenter(IHolderActivity setHolder) {
+    public GameMapPresenter(IHolderGameMapFragment setHolder) {
         holder = setHolder;
         manager = AsyncManager.getInstance();
         ClientFacade.getInstance().linkObserver(this);
@@ -35,11 +36,32 @@ public class GameMapPresenter implements IGameMapPresenter {
 
     @Override
     public void claimRoute(Route route) {
-        holder.toastMessage("claiming route from " + route.getSrc() + " to " + route.getDest());
+        if (route.isDouble() || route.getFirstColor() == RouteColors.Gray) {
+            List<String> colors = ClientFacade.getInstance().getPossibleColorsForRoute(route);
+            if (colors.size() == 0) {
+                holder.toastMessage("You do not have enough resources to claim this route.");
+                holder.clearSelectedCities();
+            }
+            else holder.displayChooseColorDialog(colors);
+        }
+        else {
+            holder.toastMessage("Claiming route " + route.toString());
 
-        List<TrainCard> cards = ClientFacade.getInstance().getCardsForRoute(route);
+            List<TrainCard> cards = ClientFacade.getInstance().getCards(route.getLength(), route.getFirstColor().toString());
+            if (cards == null) {
+                holder.toastMessage("You do not have enough resources to claim this route.");
+                return;
+            }
+            manager.claimRoute(route, new TrainCardWrapper(cards));
+        }
+    }
+
+    @Override
+    public void claimRoute(Route route, String color) {
+        holder.toastMessage("Claiming route " + route.toString() + " with " + color.toLowerCase() + " resources.");
+        List<TrainCard> cards = ClientFacade.getInstance().getCards(route.getLength(), color);
         if (cards == null) {
-            holder.toastMessage("That route is unavailable, or you do not have resources to claim it");
+            holder.toastMessage("You do not have enough resources to claim this route.");
             return;
         }
         manager.claimRoute(route, new TrainCardWrapper(cards));

@@ -136,7 +136,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
 
         @Override
         public int getItemCount() {
-            return playerInfoList.size(); //cards.size(); //TODO: get cards initialized.
+            return playerInfoList.size();
         }
 
     }
@@ -144,6 +144,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
     class PlayersInfoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView cardImage;
         TextView name;
+        TextView faction;
         TextView points;
         TextView shipsLeft;
         TextView resourcesCount;
@@ -154,6 +155,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
             view.setOnClickListener(this);
             cardImage = view.findViewById(R.id.race_image_card);
             name = view.findViewById(R.id.player_info_name);
+            faction = view.findViewById(R.id.player_info_faction);
             points = view.findViewById(R.id.player_info_points);
             shipsLeft = view.findViewById(R.id.player_info_ships_left);
             resourcesCount = view.findViewById(R.id.players_info_resource);
@@ -162,7 +164,8 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
 
         // Assigns values in the layout.
         void bind(PlayerInfo item, int position) {
-            name.setText(item.getFaction().getName());
+            name.setText(item.getName());
+            faction.setText(item.getFaction().getName());
             points.setText("Points " + Integer.toString(item.getScore()));
             shipsLeft.setText("Ships Left " + Integer.toString(item.getShipsLeft()));
             resourcesCount.setText("Resources " + Integer.toString(item.getTrainCardCount()));
@@ -236,7 +239,7 @@ public class GameInfoFragment extends Fragment implements IHolderGameInfoFragmen
 
         @Override
         public int getItemCount() {
-            return gameHistory.size(); //cards.size(); //TODO: get cards initialized.
+            return gameHistory.size();
         }
 
     }

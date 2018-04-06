@@ -7,6 +7,7 @@ import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.DestinationCard;
 import tickets.common.ExceptionMessage;
+import tickets.common.Player;
 import tickets.common.response.ClaimRouteResponse;
 import tickets.common.response.DestinationCardResponse;
 import tickets.common.response.JoinLobbyResponse;
@@ -161,10 +162,11 @@ public final class ResponseManager {
                         ClientModelUpdate.ModelUpdate.destCardOptionsUpdated);
             }
             else {
+                Player localPlayer = ClientFacade.getInstance().getLocalPlayer();
                 for (DestinationCard card : cards)
-                    ClientFacade.getInstance().getLocalPlayer().addDestinationCardToHand(card);
+                    localPlayer.addDestinationCardToHand(card);
                 ClientFacade.getInstance().setDestinationCardOptions(null);
-                ClientFacade.getInstance().addPlayerDestinationCards(cards.size());
+                ClientFacade.getInstance().addPlayerDestinationCards(localPlayer.getName(), cards.size());
                 message = new ClientModelUpdate(
                         ClientModelUpdate.ModelUpdate.playerDestHandUpdated);
             }

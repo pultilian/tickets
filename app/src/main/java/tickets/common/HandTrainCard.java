@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Math.min;
+
 public class HandTrainCard {
 	private Map<RouteColors, List<TrainCard>> colorsListMap;
 
@@ -35,58 +37,22 @@ public class HandTrainCard {
         return null;
 	}
 
-	public int getHandSize() {
-	    int handTotal = 0;
-		for(RouteColors key : colorsListMap.keySet()){
-		    handTotal += colorsListMap.get(key).size();
-        }
-        return handTotal;
+	public List<TrainCard> getCards(int length, RouteColors selectedColor) {
+		List<TrainCard> result = new ArrayList<>();
+		// Get as many of the selected color train card as possible
+		for (int i = 0; i < min(getCountForColor(selectedColor), length); i++)
+			result.add(colorsListMap.get(selectedColor).get(i));
+
+		// Fill in remaining train cards with wild cards
+		if (result.size() < length) {
+			int remaining = length - result.size();
+			// Not enough cards
+			if (getCountForColor(RouteColors.Wild) < remaining) return null;
+			for (int i = 0; i < remaining; i++)
+				result.add(colorsListMap.get(RouteColors.Wild).get(i));
+		}
+		return result;
 	}
-
-    public List<TrainCard> getCardsForRoute(RouteColors color, int length) {
-	    if (color == null)
-	        return null;
-	    List<TrainCard> cardsForClaim = colorsListMap.get(color);
-
-	    if (color == RouteColors.Gray) {
-	        RouteColors preferredBuyColor = null;
-	        int closestMatch = 0;
-	        for (RouteColors cardColor : colorsListMap.keySet()) {
-	            if (colorsListMap.get(cardColor).size() == length) {
-	                return colorsListMap.get(cardColor);
-                }
-                else if (closestMatch < length
-                        && colorsListMap.get(cardColor).size() > closestMatch) {
-	                closestMatch = colorsListMap.get(cardColor).size();
-	                preferredBuyColor = cardColor;
-                }
-                else if (closestMatch > length
-                        && colorsListMap.get(cardColor).size() < closestMatch
-                        && colorsListMap.get(cardColor).size() > length) {
-                    closestMatch = colorsListMap.get(cardColor).size();
-                    preferredBuyColor = cardColor;
-                }
-            }
-            color = preferredBuyColor;
-        }
-	    int i = 0;
-	    while (cardsForClaim.size() != length) {
-	        List<TrainCard> colorCards = colorsListMap.get(color);
-	        List<TrainCard> wildCards = colorsListMap.get(RouteColors.Gray);
-	        int j = i - colorCards.size();
-	        if (i < colorCards.size())
-    	        cardsForClaim.add(colorCards.get(i));
-	        else if (j < wildCards.size()) {
-	            cardsForClaim.add(wildCards.get(j));
-            }
-            else {
-	            return null;
-            }
-            i++;
-        }
-
-        return cardsForClaim;
-    }
 
     public void removeCards(RouteColors color, int amount) {
 	    List<TrainCard> colorCards = colorsListMap.get(color);

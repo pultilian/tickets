@@ -1,7 +1,6 @@
 package tickets.client;
 
 import java.util.List;
-import java.util.Map;
 
 import tickets.client.model.ClientObservable;
 import tickets.client.model.LobbyManager;
@@ -197,17 +196,9 @@ public class ClientFacade implements IClient {
         updateObservable(message);
 	}
 
-	public void addPlayerDestinationCards(int numCards) {
-		for (int i = 0; i < numCards; i++) {
-			currentGame.getActivePlayerInfo().addDestinationCard();
-		}
-		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-		updateObservable(message);
-	}
-
-	public void removePlayerDestinationCard() {
-		currentGame.getActivePlayerInfo().removeDestinationCard();
-		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+	public void addPlayerDestinationCards(String playerName, Integer numCards) {
+        currentGame.getPlayerInfo(playerName).addDestinationCards(numCards);
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
 		updateObservable(message);
 	}
 
@@ -241,8 +232,12 @@ public class ClientFacade implements IClient {
         observable.notify(state);
     }
 
-	public List<TrainCard> getCardsForRoute(Route route) {
-        return localPlayer.getCardsForRoute(route);
+	public List<String> getPossibleColorsForRoute(Route route) {
+		return localPlayer.getPossibleColorsForRoute(route);
+	}
+
+	public List<TrainCard> getCards(int length, String color) {
+		return localPlayer.getCards(length, color);
 	}
 
     public void removeUsedCardsFromPlayerHand(List<TrainCard> removeCards) {

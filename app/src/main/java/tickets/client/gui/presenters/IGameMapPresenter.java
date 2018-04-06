@@ -10,5 +10,7 @@ public interface IGameMapPresenter extends IObserver {
 
     void claimRoute(Route route);
 
+    void claimRoute(Route route, String color);
+
     List<Route> getAllRoutes();
 }

@@ -98,7 +98,7 @@ public class ChatFragment extends Fragment implements IHolderGameChatFragment {
 
         chatManager = new LinearLayoutManager(this.getContext());
         chatScreen.setLayoutManager(chatManager);
-        chatAdapter = new ChatAdapter(this.getContext(), presenter.getChatHistory()); //TODO: Destination Cards
+        chatAdapter = new ChatAdapter(this.getContext(), presenter.getChatHistory());
         chatScreen.setAdapter(chatAdapter);
         sendButton.setEnabled(false);
 
