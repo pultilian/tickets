@@ -3,6 +3,8 @@ package tickets.server.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import tickets.common.Game;
+import tickets.common.PlayerInfo;
 import tickets.server.model.game.ServerGame;
 
 public class AllGames {
@@ -29,5 +31,18 @@ public class AllGames {
             if (game.getGameId().equals(gameID)) return game;
         }
         return null;
+    }
+
+    public List<Game> getGamesWithUser(String username) {
+        List<Game> result = new ArrayList<>();
+        for (Game game : games) {
+            for (PlayerInfo player : game.getAllPlayers()) {
+                if (player.getName().equals(username)) {
+                    result.add(game);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }

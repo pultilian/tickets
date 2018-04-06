@@ -73,7 +73,11 @@ public class ServerFacade implements IServer {
         if (AllUsers.getInstance().verifyLogin(userData.getUsername(), userData.getPassword())){
             String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
-            return new LoginResponse("Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
+            LoginResponse response = new LoginResponse(
+                    "Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
+            response.setCurrentLobbies(AllLobbies.getInstance().getLobbiesWithUser(userData.getUsername()));
+            response.setCurrentGames(AllGames.getInstance().getGamesWithUser(userData.getUsername()));
+            return response;
         }
         else if (!AllUsers.getInstance().userExists(userData.getUsername())){
             return new LoginResponse(new Exception("Username is incorrect."));
