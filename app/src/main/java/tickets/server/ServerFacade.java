@@ -558,4 +558,12 @@ public class ServerFacade implements IServer {
             client.endCurrentTurn();
         }
     }
+
+//    this is a helper function at the moment
+    private void hardReset() {
+        ServerFacade server = ServerFacade.getInstance();
+        server.clientsInLobbyList = new ArrayList<>();
+        server.clientsInALobby = new HashMap<>();
+        server.clientsInAGame = new HashMap<>();
+    }
 }
