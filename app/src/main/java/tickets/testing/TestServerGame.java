@@ -29,8 +29,8 @@ public class TestServerGame {
     }
 
     private void testBasicInit() throws Exception {
-        Player player1 = new Player("player1_id", "player1_authToken");
-        Player player2 = new Player("player2_id", "player2_authToken");
+        Player player1 = new Player("player1_authToken");
+        Player player2 = new Player("player2_authToken");
         ArrayList<Player> listPlayers = new ArrayList<>();
         listPlayers.add(player1);
         listPlayers.add(player2);

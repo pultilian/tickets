@@ -13,7 +13,6 @@ import tickets.testing.StubFacade;
 
 public class GameSummaryPresenter {
     public List<PlayerSummary> getSummary(){
-        // return ClientFacade.getInstance().getGameSummary();
-        return new StubFacade().getGameSummary();
+        return ClientFacade.getInstance().getGameSummary();
     }
 }

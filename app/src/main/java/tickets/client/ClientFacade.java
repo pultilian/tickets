@@ -1,7 +1,6 @@
 package tickets.client;
 
 import java.util.List;
-import java.util.Map;
 
 import tickets.client.model.ClientObservable;
 import tickets.client.model.LobbyManager;
@@ -10,6 +9,7 @@ import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.DestinationCard;
 import tickets.common.Game;
+import tickets.common.GameSummary;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.IMessage;
@@ -196,17 +196,9 @@ public class ClientFacade implements IClient {
         updateObservable(message);
 	}
 
-	public void addPlayerDestinationCards(int numCards) {
-		for (int i = 0; i < numCards; i++) {
-			currentGame.getActivePlayerInfo().addDestinationCard();
-		}
-		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
-		updateObservable(message);
-	}
-
-	public void removePlayerDestinationCard() {
-		currentGame.getActivePlayerInfo().removeDestinationCard();
-		ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
+	public void addPlayerDestinationCards(String playerName, Integer numCards) {
+        currentGame.getPlayerInfo(playerName).addDestinationCards(numCards);
+        ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
 		updateObservable(message);
 	}
 
@@ -234,14 +226,18 @@ public class ClientFacade implements IClient {
 		updateObservable(update);
 	}
 
-    public void displayEndGame(List<PlayerSummary> playerSummaries) {
-        gameSummary = playerSummaries;
+    public void displayEndGame(GameSummary gameSummary) {
+        this.gameSummary = gameSummary.getPlayerSummaries();
         ClientStateChange state = new ClientStateChange(ClientStateChange.ClientState.summary);
         observable.notify(state);
     }
 
-	public List<TrainCard> getCardsForRoute(Route route) {
-        return localPlayer.getCardsForRoute(route);
+	public List<String> getPossibleColorsForRoute(Route route) {
+		return localPlayer.getPossibleColorsForRoute(route);
+	}
+
+	public List<TrainCard> getCards(int length, String color) {
+		return localPlayer.getCards(length, color);
 	}
 
     public void removeUsedCardsFromPlayerHand(List<TrainCard> removeCards) {

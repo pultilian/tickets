@@ -9,6 +9,7 @@ import java.util.Queue;
 import tickets.common.ChoiceDestinationCards;
 import tickets.common.Command;
 import tickets.common.Game;
+import tickets.common.GameSummary;
 import tickets.common.HandTrainCard;
 import tickets.common.IClient;
 import tickets.common.Lobby;
@@ -165,30 +166,20 @@ public class ClientProxy implements IClient {
     }
 
     @Override
-    public void addPlayerDestinationCards(int num) {
+    public void addPlayerDestinationCards(String playerName, Integer num) {
         Command command = new Command("addPlayerDestinationCards",
-                new String[]{Integer.class.getName()},
-                new Object[]{num});
+                new String[]{String.class.getName(), Integer.class.getName()},
+                new Object[]{playerName, num});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;
     }
 
     @Override
-    public void removePlayerDestinationCard() {
-        Command command = new Command("removePlayerDestinationCard",
-                new String[0],
-                new Object[0]);
-        unprocessedCommands.add(command);
-        commandIDs.put(command, totalCommandsSoFar.toString());
-        totalCommandsSoFar++;
-    }
-
-    @Override
-    public void displayEndGame(List<PlayerSummary> playerSummaries) {
+    public void displayEndGame(GameSummary gameSummary) {
         Command command = new Command("displayEndGame",
-                new String[] {List.class.getName()},
-                new Object[] {playerSummaries});
+                new String[] {GameSummary.class.getName()},
+                new Object[] {gameSummary});
         unprocessedCommands.add(command);
         commandIDs.put(command, totalCommandsSoFar.toString());
         totalCommandsSoFar++;

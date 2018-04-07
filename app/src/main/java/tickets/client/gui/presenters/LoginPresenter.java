@@ -110,6 +110,9 @@ public class LoginPresenter implements ILoginPresenter {
             case game:
                 //do nothing
                 break;
+            case summary:
+                //do nothing
+                break;
             case update:
                 //do nothing
                 break;

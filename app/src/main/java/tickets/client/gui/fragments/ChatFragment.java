@@ -73,7 +73,7 @@ public class ChatFragment extends Fragment implements IHolderGameChatFragment {
      */
     @Override
     public void toastException(Exception e) {
-        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         return;
     }
 
@@ -98,7 +98,7 @@ public class ChatFragment extends Fragment implements IHolderGameChatFragment {
 
         chatManager = new LinearLayoutManager(this.getContext());
         chatScreen.setLayoutManager(chatManager);
-        chatAdapter = new ChatAdapter(this.getContext(), presenter.getChatHistory()); //TODO: Destination Cards
+        chatAdapter = new ChatAdapter(this.getContext(), presenter.getChatHistory());
         chatScreen.setAdapter(chatAdapter);
         sendButton.setEnabled(false);
 

@@ -89,12 +89,10 @@ public class GamePresenter implements IGamePresenter {
     @Override
     public void notify(IMessage state) {
         if (state.getClass() == ClientStateChange.class) {
-
+            ClientStateChange.ClientState flag = (ClientStateChange.ClientState) state.getMessage();
+            checkClientStateChangeFlag(flag);
         }
         else if (state.getClass() == ClientModelUpdate.class) {
-            ClientModelUpdate.ModelUpdate flag = (ClientModelUpdate.ModelUpdate) state.getMessage();
-            checkClientModelUpdateFlag(flag);
-        } else if (state.getClass() == ClientStateChange.class) {
             ClientModelUpdate.ModelUpdate flag = (ClientModelUpdate.ModelUpdate) state.getMessage();
             checkClientModelUpdateFlag(flag);
         } else if (state.getClass() == ExceptionMessage.class) {
