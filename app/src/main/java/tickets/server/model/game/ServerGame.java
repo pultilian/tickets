@@ -43,8 +43,8 @@ public class ServerGame extends Game {
 	//----------------------------------------------------------------------------------------------
 	// *** SET-UP METHODS ***
 
-	public ServerGame(String gameID, List<Player> playersFromLobby) {
-		super(gameID);
+	public ServerGame(String gameID, String name, List<Player> playersFromLobby) {
+		super(gameID, name);
 
 		this.players = new ArrayList<>();
 		for (Player p : playersFromLobby) {
@@ -124,6 +124,13 @@ public class ServerGame extends Game {
             if (player.getAssociatedAuthToken().equals(authToken)) {
                 return player;
             }
+        }
+        return null;
+    }
+
+    public Player getPlayerWithName(String name) {
+	    for (Player player : players) {
+	        if (player.getName().equals(name)) return player;
         }
         return null;
     }

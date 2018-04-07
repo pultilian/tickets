@@ -6,6 +6,7 @@ import java.util.List;
 public class Game {
 
     private String gameId;
+    private String name;
     private List<String> chat;
     private List<String> gameHistory;
     private int currentTurn;
@@ -13,8 +14,9 @@ public class Game {
     private List<TrainCard> faceUpCards;
     private GameMap map;
 
-    public Game(String gameId){
+    public Game(String gameId, String name){
         this.gameId = gameId;
+        this.name = name;
         chat = new ArrayList<>();
         gameHistory = new ArrayList<>();
         gamePlayers = new ArrayList<>();
@@ -28,6 +30,10 @@ public class Game {
 
     public String getGameId(){
         return gameId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<String> getChat(){

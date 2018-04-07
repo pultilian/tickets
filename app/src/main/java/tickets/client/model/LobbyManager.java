@@ -3,11 +3,14 @@ package tickets.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import tickets.common.Game;
 import tickets.common.Lobby;
 import tickets.common.Player;
 
 public class LobbyManager {
 	private List<Lobby> lobbyList;
+	private List<Lobby> currentLobbies;
+	private List<Game> currentGames;
 
 	public List<Lobby> getLobbyList() {
 		return lobbyList;
@@ -15,6 +18,8 @@ public class LobbyManager {
 	
 	public LobbyManager() {
 		lobbyList = new ArrayList<>();
+		currentLobbies = new ArrayList<>();
+		currentGames = new ArrayList<>();
 	}
 	
 	public void updateLobbyList(List<Lobby> lobbyList) {
@@ -46,5 +51,21 @@ public class LobbyManager {
 	public void removePlayer(Lobby lobby, Player player) {
 		getLobby(lobby.getId()).removePlayer(player);
 		return;
+	}
+
+    public void updateCurrentLobbies(List<Lobby> currentLobbies) {
+		this.currentLobbies = currentLobbies;
+    }
+
+	public void updateCurrentGames(List<Game> currentGames) {
+		this.currentGames = currentGames;
+	}
+
+	public List<Lobby> getCurrentLobbies() {
+		return currentLobbies;
+	}
+
+	public List<Game> getCurrentGames() {
+		return currentGames;
 	}
 }

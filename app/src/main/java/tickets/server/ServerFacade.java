@@ -33,6 +33,8 @@ import tickets.common.response.LeaveLobbyResponse;
 import tickets.common.response.LoginResponse;
 import tickets.common.response.LogoutResponse;
 import tickets.common.response.Response;
+import tickets.common.response.ResumeGameResponse;
+import tickets.common.response.ResumeLobbyResponse;
 import tickets.common.response.StartGameResponse;
 import tickets.common.response.TrainCardResponse;
 import tickets.server.model.AllGames;
@@ -159,6 +161,50 @@ public class ServerFacade implements IServer {
     }
 
     @Override
+    public ResumeLobbyResponse resumeLobby(String lobbyID, String authToken) {
+        if (getProxy(authToken) == null) return new ResumeLobbyResponse(new Exception("You are not an authorized user!"));
+
+        Lobby lobby = AllLobbies.getInstance().getLobby(lobbyID);
+        if (lobby == null) return new ResumeLobbyResponse(new Exception("Lobby does not exist."));
+
+        // Remove current client (no need to modify server model or update other clients)
+        String name = AllUsers.getInstance().getUsername(authToken);
+        Player resumePlayer = lobby.getPlayerWithName(name);
+        String resumeAuthToken = resumePlayer.getAssociatedAuthToken();
+        clientsInLobbyList.remove(getProxy(authToken));
+        ClientProxy resumeClient = getProxy(resumeAuthToken);
+        if (resumeClient == null) {
+            resumeClient = new ClientProxy(resumeAuthToken);
+            clientsInALobby.put(resumeClient, lobby);
+        }
+        resumeClient.clearCommands();
+
+        return new ResumeLobbyResponse(lobby, resumePlayer, resumeAuthToken);
+    }
+
+    @Override
+    public ResumeGameResponse resumeGame(String gameID, String authToken) {
+        if (getProxy(authToken) == null) return new ResumeGameResponse(new Exception("You are not an authorized user!"));
+
+        ServerGame game = AllGames.getInstance().getGame(gameID);
+        if (game == null) return new ResumeGameResponse(new Exception("Game does not exist."));
+
+        // Remove current client (no need to modify server model or update other clients)
+        String name = AllUsers.getInstance().getUsername(authToken);
+        Player resumePlayer = game.getPlayerWithName(name);
+        String resumeAuthToken = resumePlayer.getAssociatedAuthToken();
+        clientsInLobbyList.remove(getProxy(authToken));
+        ClientProxy resumeClient = getProxy(resumeAuthToken);
+        if (resumeClient == null) {
+            resumeClient = new ClientProxy(resumeAuthToken);
+            clientsInAGame.put(resumeClient, game);
+        }
+        resumeClient.clearCommands();
+
+        return new ResumeGameResponse(game, resumePlayer, resumeAuthToken);
+    }
+
+    @Override
     public LogoutResponse logout(String authToken) {
         if (getProxy(authToken) == null) return new LogoutResponse(new Exception("You are not an authorized user!"));
 
@@ -179,8 +225,8 @@ public class ServerFacade implements IServer {
         else {
             // Update server model
             List<Player> playersInLobby = lobby.getPlayers();
-            ServerGame game = new ServerGame(UUID.randomUUID().toString(), playersInLobby);
-            Game clientGame = new Game(game.getGameId());
+            ServerGame game = new ServerGame(UUID.randomUUID().toString(), lobby.getName(), playersInLobby);
+            Game clientGame = new Game(game.getGameId(), game.getName());
             List<TrainCard> trainCards = game.getFaceUpCards();
             clientGame.setFaceUpCards(trainCards);
             for (Player player : playersInLobby) {
