@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_title">
+    android:background="@drawable/background">
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
@@ -21,11 +21,39 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/lobby_list"
-            android:layout_width="match_parent"
+            android:layout_width="280dp"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_below="@+id/available_lobbies_text"
             android:background="#FFFFFF" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/current_list"
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/current_games_text"
+            android:background="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/available_lobbies_text"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="#000088"
+            android:text="Available Games"
+            android:textColor="#FFFFFF"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/current_games_text"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="#000088"
+            android:text="Current Games"
+            android:textColor="#FFFFFF"
+            android:textAlignment="center"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -71,15 +99,13 @@
             android:layout_marginLeft="87dp"
             android:layout_marginStart="87dp"
             android:text="Create Game" />
-            
+
         <EditText
             android:id="@+id/num_players"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/create_game"
-            android:layout_alignLeft="@+id/create_game"
+            android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/create_game"
-            android:layout_marginBottom="10dp"
             android:background="#FFFFFF"
             android:hint="Num Players"
             android:inputType="number"
