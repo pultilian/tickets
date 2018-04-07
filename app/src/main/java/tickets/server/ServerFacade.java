@@ -95,7 +95,11 @@ public class ServerFacade implements IServer {
         else {
             String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
-            return new LoginResponse("Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
+            LoginResponse response = new LoginResponse(
+                    "Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
+            response.setCurrentLobbies(AllLobbies.getInstance().getLobbiesWithUser(userData.getUsername()));
+            response.setCurrentGames(AllGames.getInstance().getGamesWithUser(userData.getUsername()));
+            return response;
         }
     }
 
@@ -201,7 +205,7 @@ public class ServerFacade implements IServer {
         }
         resumeClient.clearCommands();
 
-        return new ResumeGameResponse(game, resumePlayer, resumeAuthToken);
+        return new ResumeGameResponse(game.getClientGame(), resumePlayer, resumeAuthToken);
     }
 
     @Override
@@ -518,6 +522,7 @@ public class ServerFacade implements IServer {
     @Override
     public ClientUpdate updateClient(String lastReceivedCommandID, String authToken) {
         ClientProxy client = getProxy(authToken);
+        if (client == null) return new ClientUpdate(new Exception("You are not an authorized user!"));
         Queue<Command> commands = client.getUnprocessedCommands();
         Map<Command, String> commandIDs = client.getCommandIDs();
 

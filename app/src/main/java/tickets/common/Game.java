@@ -24,6 +24,27 @@ public class Game {
         faceUpCards = new ArrayList<>();
     }
 
+    //----------------------------------------------------------------------------------------------
+    // The server can use these setters to convert from a ServerGame to a Game.
+
+    public void setChat(List<String> chat) {
+        this.chat = chat;
+    }
+
+    public void setGameHistory(List<String> gameHistory) {
+        this.gameHistory = gameHistory;
+    }
+
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    public void setMap(GameMap map) {
+        this.map = map;
+    }
+
+    //----------------------------------------------------------------------------------------------
+
     public void initializeMap() {
         map = new GameMap();
     }

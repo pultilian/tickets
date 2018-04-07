@@ -129,8 +129,10 @@ public class ServerGame extends Game {
     }
 
     public Player getPlayerWithName(String name) {
-	    for (Player player : players) {
-	        if (player.getName().equals(name)) return player;
+	    for (ServerPlayer serverPlayer : players) {
+	        if (serverPlayer.getName().equals(name)) {
+	            return new Player(serverPlayer);
+            }
         }
         return null;
     }
@@ -146,6 +148,23 @@ public class ServerGame extends Game {
             }
         }
         return null;
+    }
+
+    public GameMap getMap() {
+	    return map;
+    }
+
+    public Game getClientGame() {
+        Game game = new Game(getGameId(), getName());
+        for (ServerPlayer player : players) {
+            game.addPlayer(player.getInfo());
+        }
+        game.setMap(map);
+        game.setGameHistory(getGameHistory());
+        game.setFaceUpCards(getFaceUpCards());
+        game.setCurrentTurn(currentPlayerIndex);
+        game.setChat(getChat());
+        return game;
     }
 
 	//----------------------------------------------------------------------------------------------

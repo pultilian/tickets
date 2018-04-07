@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tickets.common.Game;
-import tickets.common.PlayerInfo;
 import tickets.server.model.game.ServerGame;
+import tickets.server.model.game.ServerPlayer;
 
 public class AllGames {
 
@@ -35,10 +35,10 @@ public class AllGames {
 
     public List<Game> getGamesWithUser(String username) {
         List<Game> result = new ArrayList<>();
-        for (Game game : games) {
-            for (PlayerInfo player : game.getAllPlayers()) {
+        for (ServerGame serverGame : games) {
+            for (ServerPlayer player : serverGame.getServerPlayers()) {
                 if (player.getName().equals(username)) {
-                    result.add(game);
+                    result.add(serverGame.getClientGame());
                     break;
                 }
             }
