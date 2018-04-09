@@ -29,6 +29,8 @@ import tickets.common.Route;
  * Created by Howl on 3/24/18.
  */
 
+//1983 x 1566 - raw image dimensions
+
 public class MapView extends View {
 
     // bitmap of the game's map image, and a handler to define clickable areas
@@ -72,6 +74,9 @@ public class MapView extends View {
         if (mGameMap == null) {
             throw new RuntimeException("the map was not loaded into the bitmap!");
         }
+        if (mGameMap.getWidth() != 1983 && mGameMap.getHeight() != 1566) {
+            throw new RuntimeException("Map loaded with incorrect dimensions");
+        }
 
         mDrawnRoutes = new ArrayList<>();
         mMapClickHandler = new MapClickHandler();
@@ -104,6 +109,7 @@ public class MapView extends View {
         super.onDraw(canvas);
         // draw the pre-scaled map to the view
         canvas.drawBitmap(mGameMap, new Matrix(), new Paint());
+        setClaimedRoutes(presenter.getClaimedRoutes());
         return;
     }
 
@@ -176,9 +182,9 @@ public class MapView extends View {
 //        paintColor.setColor(col);
 
         // get the image and scale it to the size of the screen
-
         Bitmap img = BitmapFactory.decodeResource(this.getResources(), routeImageId);
         img = Bitmap.createScaledBitmap(img, mViewWidth, mViewHeight, false);
+        // change the route's color (this is currently done pixel-by-pixel)
         for (int i = 0; i < img.getWidth(); i++) {
             for (int j = 0; j < img.getHeight(); j++) {
                 int val = img.getPixel(i,j);
@@ -197,8 +203,7 @@ public class MapView extends View {
     public void markCitySelected(MapPoints city) {
         if (city == MapPoints.No_city)
             return;
-        //
-        //
+
 
         return;
     }
@@ -363,6 +368,14 @@ public class MapView extends View {
         // return the city closest to the given location, or null
         //  if no city is close enough (within 100)
         private MapPoints findClosest(int x, int y) {
+            Log.e("locations", "x, y click:" + x + ", " + y);
+            //1983 x 1566 - raw image dimensions
+            double xRatio = (double) 1983 / MapView.this.mViewWidth;
+            double yRatio = (double) 1566 / MapView.this.mViewHeight;
+            Log.e("locations", "ratios: " + xRatio + ", " + yRatio);
+            x = (int) (x * xRatio);
+            y = (int) (y * yRatio);
+            Log.e("locations", "x, y calculated:" + x + ", " + y);
             MapPoints current = MapPoints.Jaqualind;
             for (MapPoints point : MapPoints.values()) {
                 current = compareDistance(current, point, x, y);
@@ -374,7 +387,6 @@ public class MapView extends View {
                 return current;
         }
 
-        // TODO: changing target isn't actually changing the caller's value, find a way to fix this
         MapPoints compareDistance(MapPoints current, MapPoints next, int x, int y) {
             int currentDistance = current.getDistance(x, y);
             int nextDistance = next.getDistance(x, y);
@@ -402,42 +414,78 @@ public class MapView extends View {
     //   untransformed bitmap)
     private enum MapPoints {
         No_city("invalid selection", -1, -1),
-        Jaqualind(Cities.SAN_FRANCISCO, 94, 333),
-        Lin(Cities.LOS_ANGELES, 188, 501),
-        Kiflamar(Cities.SALT_LAKE_CITY, 284, 300),
-        Stratus(Cities.PORTLAND, 240, 185),
-        Alpha_Lyrae(Cities.LAS_VEGAS, 230, 380),
-        Verdona(Cities.VANCOUVER, 325, 83),
-        Zee_A_Tll(Cities.SEATTLE, 365, 153),
-        Magmarse(Cities.EL_PASO, 425, 518),
-        Bynodia(Cities.DALLAS, 590, 493),
-        Aeuoni(Cities.OKLAHOMA_CITY, 528, 415),
-        Aeontacht(Cities.DENVER, 441, 269),
-        Boisey(Cities.HELENA, 544, 104),
-        Nonnog(Cities.CALGARY, 503, 45),
-        Kerrectice(Cities.WINNIPEG, 661, 83),
-        Kita_Sota(Cities.OMAHA, 600, 192),
-        Ico_Col(Cities.KANSAS_CITY, 557, 288),
-        Igio(Cities.PHOENIX, 281, 430),
-        Fractine(Cities.SANTA_FE, 377, 401),
-        Warfeld(Cities.HOUSTON, 654, 545),
-        Little_Rock(Cities.LITTLE_ROCK, 646, 431),
-        Zeroph(Cities.SAINT_LOUIS, 674, 322),
-        Orthok(Cities.CHICAGO, 697, 248),
-        Paradus(Cities.DULUTH, 737, 163),
-        Ayon(Cities.SAULT_ST_MARIE, 810, 109),
-        Exen(Cities.MONTREAL, 1008, 95),
-        Astern(Cities.TORONTO, 913, 157),
-        Wence(Cities.BOSTON, 1090, 153),
-        Spheras(Cities.NEW_YORK, 1010, 205),
-        Petraqa(Cities.PITTSBURG, 862, 256),
-        Kalishen(Cities.WASHINGTON, 1027, 299),
-        Darkrim(Cities.RALEIGH, 885, 345),
-        Castine(Cities.NASHVILLE, 759, 374),
-        Dallaman(Cities.ATLANTA, 830, 436),
-        Brytis(Cities.CHARLESTON, 967, 421),
-        Crepusculon(Cities.NEW_ORLEANS, 744, 509),
-        Altiere(Cities.MIAMI, 938, 537);
+        Jaqualind(Cities.SAN_FRANCISCO, 162, 819),
+        //94, 333
+        Lin(Cities.LOS_ANGELES, 328, 1230),
+        //188, 501
+        Kiflamar(Cities.SALT_LAKE_CITY, 494, 734),
+        //284, 300
+        Stratus(Cities.PORTLAND, 419, 455),
+        // 240, 185
+        Alpha_Lyrae(Cities.LAS_VEGAS, 398, 935),
+        //230, 380
+        Verdona(Cities.VANCOUVER, 568, 205),
+        //325, 83
+        Zee_A_Tll(Cities.SEATTLE, 636, 375),
+        //365, 153
+        Magmarse(Cities.EL_PASO, 741, 1275),
+        //425, 518
+        Bynodia(Cities.DALLAS, 1028, 1213),
+        //590, 493
+        Aeuoni(Cities.OKLAHOMA_CITY, 919, 1018),
+        //528, 415
+        Aeontacht(Cities.DENVER, 769, 663),
+        //441, 269
+        Boisey(Cities.HELENA, 878, 353),
+        //544, 104
+        Nonnog(Cities.CALGARY, 878, 108),
+        //503, 45
+        Kerrectice(Cities.WINNIPEG, 1156, 205),
+        //661, 83
+        Kita_Sota(Cities.OMAHA, 1047, 474),
+        //600, 192
+        Ico_Col(Cities.KANSAS_CITY, 972, 708),
+        //557, 288
+        Igio(Cities.PHOENIX, 488, 1057),
+        //281, 430
+        Fractine(Cities.SANTA_FE, 660, 993),
+        //377, 401
+        Warfeld(Cities.HOUSTON, 1140, 1340),
+        //654, 545
+        Little_Rock(Cities.LITTLE_ROCK, 1127, 1058),
+        //646, 431
+        Zeroph(Cities.SAINT_LOUIS, 1172, 788),
+        //674, 322
+        Orthok(Cities.CHICAGO, 1215, 610),
+        //697, 248
+        Paradus(Cities.DULUTH, 1285, 400),
+        //737, 163
+        Ayon(Cities.SAULT_ST_MARIE, 1408, 267),
+        //810, 109
+        Exen(Cities.MONTREAL, 1755, 229),
+        //1008, 95
+        Astern(Cities.TORONTO, 1592, 384),
+        //913, 157
+        Wence(Cities.BOSTON, 1899, 375),
+        //1090, 153
+        Spheras(Cities.NEW_YORK, 1762, 504),
+        //1010, 205
+        Petraqa(Cities.PITTSBURG, 1500, 600),
+        //862, 256
+        Kalishen(Cities.WASHINGTON, 1790, 730),
+        //1027, 299
+        Darkrim(Cities.RALEIGH, 1542, 845),
+        //885, 345
+        Castine(Cities.NASHVILLE, 1325, 915),
+        //759, 374
+        Dallaman(Cities.ATLANTA, 1448, 1070),
+        //830, 436
+        Brytis(Cities.CHARLESTON, 1683, 1034),
+        //967, 421
+        Crepusculon(Cities.NEW_ORLEANS, 1295, 1248),
+        //744, 509
+        Altiere(Cities.MIAMI, 1633, 1320);
+        //938, 537
 
         private String name;
         private int x;
