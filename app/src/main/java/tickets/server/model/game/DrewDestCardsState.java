@@ -62,19 +62,20 @@ class DrewDestCardsState extends PlayerTurnState {
 		List<DestinationCard> toDiscard = new ArrayList<>();
 		for (DestinationCard card : cards) {
 			if (card != null) {
-				// Find discarded cards and "mark" them.
+				// Find discarded card and "mark" them.
 				for (DestinationCard playerCard : options) {
 					if (playerCard.equals(card)) {
 						toDiscard.add(playerCard);
 					}
 				}
+				// Remove marked card
+				options.remove(card);
 			}
 		}
-		// Add all non-marked cards to the player's hand
+		// Add all non-marked cards to the player's hand and delete marked cards
 		for (DestinationCard card : player.getDestinationCardOptions()) {
 			if (!toDiscard.contains(card)) player.addDestinationCardToHand(card);
 		}
-		player.setDestinationCardOptions(null);
         turn0 = false;
         player.changeState(States.NOT_MY_TURN);
 		return null;
