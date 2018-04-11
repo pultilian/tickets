@@ -57,24 +57,24 @@ class DrewDestCardsState extends PlayerTurnState {
 		else if (!turn0 && cards.size() > 2)
 		    return "You may only discard up to two cards";
 
+
+		List<DestinationCard> options = player.getDestinationCardOptions();
+		List<DestinationCard> toDiscard = new ArrayList<>();
 		for (DestinationCard card : cards) {
-            if (card != null) {
-                List<DestinationCard> options = player.getDestinationCardOptions();
-                List<DestinationCard> toDiscard = new ArrayList<>();
-                // Find discarded cards and "mark" them. Add other cards to player's hand
-                for (DestinationCard playerCard : options) {
-                    if (!playerCard.equals(card)) {
-                        player.addDestinationCardToHand(playerCard);
-                    } else toDiscard.add(playerCard);
-                }
-                // Delete marked cards from current options
-                options.removeAll(toDiscard);
-            } else {
-                for (DestinationCard playerCard : player.getDestinationCardOptions()) {
-                    player.addDestinationCardToHand(playerCard);
-                }
-            }
-        }
+			if (card != null) {
+				// Find discarded cards and "mark" them.
+				for (DestinationCard playerCard : options) {
+					if (playerCard.equals(card)) {
+						toDiscard.add(playerCard);
+					}
+				}
+			}
+		}
+		// Add all non-marked cards to the player's hand
+		for (DestinationCard card : player.getDestinationCardOptions()) {
+			if (!toDiscard.contains(card)) player.addDestinationCardToHand(card);
+		}
+		player.setDestinationCardOptions(null);
         turn0 = false;
         player.changeState(States.NOT_MY_TURN);
 		return null;
