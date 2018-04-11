@@ -75,9 +75,15 @@ public class ServerFacade implements IServer {
         if (AllUsers.getInstance().verifyLogin(userData.getUsername(), userData.getPassword())){
             String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
+            List<Lobby> allLobbies = new ArrayList<>(AllLobbies.getInstance().getAllLobbies());
+            List<Lobby> currentLobbies = AllLobbies.getInstance().getLobbiesWithUser(userData.getUsername());
+            // Remove lobbies that this user has already joined from the available lobbies list.
+            for (Lobby lobby : currentLobbies) {
+                allLobbies.remove(lobby);
+            }
             LoginResponse response = new LoginResponse(
-                    "Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
-            response.setCurrentLobbies(AllLobbies.getInstance().getLobbiesWithUser(userData.getUsername()));
+                    "Welcome, " + userData.getUsername(), authToken, allLobbies);
+            response.setCurrentLobbies(currentLobbies);
             response.setCurrentGames(AllGames.getInstance().getGamesWithUser(userData.getUsername()));
             return response;
         }
