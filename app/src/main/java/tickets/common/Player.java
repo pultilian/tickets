@@ -58,6 +58,7 @@ public class Player {
 
     public void addTrainCardToHand(TrainCard card){
         playerResourceCards.addCard(card);
+        info.addTrainCard();
     }
 
     public void removeTrainCard(RouteColors cardColor) {
@@ -70,6 +71,7 @@ public class Player {
 
     public void addDestinationCardToHand(DestinationCard card){
         playerDestinationCards.addCard(card);
+        info.addDestinationCards(1);
     }
 
     public void setDestinationCardOptions(ChoiceDestinationCards cards) {
