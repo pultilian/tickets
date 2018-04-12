@@ -226,6 +226,7 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             @Override
             public void run() {
                 lobbyListAdapter.notifyDataSetChanged();
+                currentGamesAdapter.notifyDataSetChanged();
             }
         });
     }

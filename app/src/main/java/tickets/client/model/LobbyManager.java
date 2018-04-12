@@ -32,6 +32,11 @@ public class LobbyManager {
 				return l;
 			}
 		}
+		for (Lobby l : currentLobbies) {
+			if (l.getId().equals(id)) {
+				return l;
+			}
+		}
 		throw new RuntimeException("invalid lobby id");
 	}
 
@@ -40,7 +45,13 @@ public class LobbyManager {
 	}
 
 	public void removeLobby(Lobby lobby) {
-		lobbyList.remove(lobby.getId());
+		Lobby localLobby = getLobby(lobby.getId());
+		if (lobbyList.contains(localLobby))
+			lobbyList.remove(localLobby);
+		else if (currentLobbies.contains(localLobby)) {
+			currentLobbies.remove(localLobby);
+			currentGames.add(new Game(localLobby.getId(), localLobby.getName()));
+		}
 	}
 
 	public void addPlayer(Lobby lobby, Player player) {
