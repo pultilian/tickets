@@ -15,7 +15,7 @@ public class PlayerInfo {
 	    name = null;
 	    points = 0;
 	    shipsLeft = 45;
-	    trainCardCount = 4;
+	    trainCardCount = 0;
 	    destinationCardCount= 0;
     }
 

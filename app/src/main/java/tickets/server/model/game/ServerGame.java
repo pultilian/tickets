@@ -43,8 +43,8 @@ public class ServerGame extends Game {
 	//----------------------------------------------------------------------------------------------
 	// *** SET-UP METHODS ***
 
-	public ServerGame(String gameID, List<Player> playersFromLobby) {
-		super(gameID);
+	public ServerGame(String gameID, String name, List<Player> playersFromLobby) {
+		super(gameID, name);
 
 		this.players = new ArrayList<>();
 		for (Player p : playersFromLobby) {
@@ -128,6 +128,15 @@ public class ServerGame extends Game {
         return null;
     }
 
+    public Player getPlayerWithName(String name) {
+	    for (ServerPlayer serverPlayer : players) {
+	        if (serverPlayer.getName().equals(name)) {
+	            return new Player(serverPlayer);
+            }
+        }
+        return null;
+    }
+
     public ServerPlayer getCurrentPlayer() {
 	    return players.get(currentPlayerIndex);
     }
@@ -139,6 +148,23 @@ public class ServerGame extends Game {
             }
         }
         return null;
+    }
+
+    public GameMap getMap() {
+	    return map;
+    }
+
+    public Game getClientGame() {
+        Game game = new Game(getGameId(), getName());
+        for (ServerPlayer player : players) {
+            game.addPlayer(player.getInfo());
+        }
+        game.setMap(map);
+        game.setGameHistory(getGameHistory());
+        game.setFaceUpCards(getFaceUpCards());
+        game.setCurrentTurn(currentPlayerIndex);
+        game.setChat(getChat());
+        return game;
     }
 
 	//----------------------------------------------------------------------------------------------
@@ -236,7 +262,9 @@ public class ServerGame extends Game {
             players.get(currentPlayerIndex).startTurn();
         }
         else if (playersReady > players.size()) startNextTurn();
-        return player.getDestinationCardOptions();
+        List<DestinationCard> result = new ArrayList<>(player.getDestinationCardOptions());
+        player.setDestinationCardOptions(null);
+        return result;
     }
 
     //----------------------------------------------------------------------------------------------

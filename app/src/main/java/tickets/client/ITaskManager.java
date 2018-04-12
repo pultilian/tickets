@@ -18,6 +18,10 @@ public interface ITaskManager {
 
     void createLobby(Lobby lobby);
 
+    void resumeLobby(String lobbyID);
+
+    void resumeGame(String gameID);
+
     void logout();
 
     void startGame(String lobbyID);

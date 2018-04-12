@@ -60,6 +60,13 @@ public class Lobby {
 
 	public List<Player> getPlayers() { return players; }
 
+	public Player getPlayerWithName(String name) {
+		for (Player player : players) {
+			if (player.getName().equals(name)) return player;
+		}
+		return null;
+	}
+
 	// For when a user leaves a lobby
 	public List<Player> getPlayersWithAuthToken(String authToken){
 		List<Player> result = new ArrayList<>();

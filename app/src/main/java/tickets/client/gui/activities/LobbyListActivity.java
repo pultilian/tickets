@@ -21,6 +21,7 @@ import java.util.List;
 import tickets.client.gui.presenters.IHolderActivity;
 import tickets.client.gui.presenters.LobbyListPresenter;
 import tickets.common.Lobby;
+import tickets.common.Game;
 
 /**
  * Created by Pultilian on 2/10/2018.
@@ -32,13 +33,18 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
     private Button joinButton;
     private Button logoutButton;
     private Button createGameButton;
+    private Button resumeButton;
     private RecyclerView lobbyList;
     private RecyclerView.LayoutManager lobbyListManager;
     private LobbyListAdapter lobbyListAdapter;
+    private RecyclerView currentGamesList;
+    private RecyclerView.LayoutManager currentGamesListManager;
+    private CurrentGamesAdapter currentGamesAdapter;
     private LobbyListPresenter presenter;
     private EditText gameName;
     private EditText numPlayers;
     private String lobbyID;
+    private String gameID;
 
 
     @Override
@@ -51,14 +57,20 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         joinButton = this.findViewById(R.id.join);
         logoutButton = this.findViewById(R.id.log_out);
         createGameButton = this.findViewById(R.id.create_game);
-        lobbyList = findViewById(R.id.lobby_list);
+        resumeButton = this.findViewById(R.id.resume_button);
 
-        lobbyList.setLayoutManager(new LinearLayoutManager(this));
+        lobbyList = findViewById(R.id.lobby_list);
+//        lobbyList.setLayoutManager(new LinearLayoutManager(this));
         lobbyListManager = new LinearLayoutManager(this);
         lobbyList.setLayoutManager(lobbyListManager);
 
+        currentGamesList = findViewById(R.id.current_list);
+        currentGamesListManager = new LinearLayoutManager(this);
+        currentGamesList.setLayoutManager(currentGamesListManager);
+
         joinButton.setEnabled(false);
         createGameButton.setEnabled(false);
+        resumeButton.setEnabled(false);
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +105,14 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
                     Toast.makeText(LobbyListActivity.this, "Invalid number of players", Toast.LENGTH_SHORT).show();
                 }
                 return;
+            }
+        });
+
+        resumeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lobbyID != null) presenter.resumeLobby(lobbyID);
+                else if (gameID != null) presenter.resumeGame(gameID);
             }
         });
 
@@ -132,11 +152,15 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         return;
     }
 
-
     public void setUI(){
         List<Lobby> lobbies = presenter.getLobbyList();
         lobbyListAdapter = new LobbyListAdapter(this, lobbies);
         lobbyList.setAdapter(lobbyListAdapter);
+
+        List<Lobby> currentLobbies = presenter.getCurrentLobbies();
+        List<Game> currentGames = presenter.getCurrentGames();
+        currentGamesAdapter = new CurrentGamesAdapter(this, currentLobbies, currentGames);
+        currentGamesList.setAdapter(currentGamesAdapter);
     }
 
     @Override
@@ -161,6 +185,11 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         }
         if(toActivity == Transition.toLogin) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        }
+        if(toActivity == Transition.toGame) {
+            Intent intent = new Intent(this, GameActivity.class);
+            intent.putExtra(GameActivity.RESUMED, true);
             startActivity(intent);
         }
         return;
@@ -193,11 +222,11 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
     @Override
     //from IHolderActivity
     public void checkUpdate() {
-        //update the lobby list by creating a new adapter for the list
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 lobbyListAdapter.notifyDataSetChanged();
+                currentGamesAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -237,6 +266,9 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
         TextView numPlayers;
         int maxPlayers;
         int curPlayers;
+        String id;
+        boolean lobbyInProgress;
+        boolean gameInProgress;
 
         public LobbyListHolder(View view) {
             super(view);
@@ -244,6 +276,9 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             gameTitle = view.findViewById(R.id.title);
             numPlayers = view.findViewById(R.id.description);
             maxPlayers = 0;
+            id = null;
+            lobbyInProgress = false;
+            gameInProgress = false;
         }
 
         // Assigns values in the layout.
@@ -252,16 +287,80 @@ public class LobbyListActivity extends AppCompatActivity implements IHolderActiv
             numPlayers.setText(item.getCurrentMembers() + "/" + item.getMaxMembers());
             maxPlayers = item.getMaxMembers();
             curPlayers = item.getCurrentMembers();
-            lobbyID = item.getId();
+            id = item.getId();
+        }
+
+        // Assigns values in the layout for an in-progress lobby
+        void bindForResume(Lobby item) {
+            gameTitle.setText(item.getName());
+            numPlayers.setText(item.getCurrentMembers() + "/" + item.getMaxMembers());
+            id = item.getId();
+            lobbyInProgress = true;
+        }
+
+        // Assigns values in the layout for an in-progress game.
+        void bindForResume(Game item) {
+            gameTitle.setText(item.getName());
+            numPlayers.setText("IN PROGRESS");
+            id = item.getGameId();
+            gameInProgress = true;
         }
 
         @Override
         public void onClick(View view) {
             if(curPlayers < maxPlayers) {
+                lobbyID = id;
                 joinButton.setEnabled(true);
-
             }
+            if (lobbyInProgress) {
+                joinButton.setEnabled(false);
+                resumeButton.setEnabled(true);
+                gameID = null;
+                lobbyID = id;
+            }
+            if (gameInProgress) {
+                joinButton.setEnabled(false);
+                resumeButton.setEnabled(true);
+                gameID = id;
+                lobbyID = null;
+            }
+        }
+    }
 
+    class CurrentGamesAdapter extends RecyclerView.Adapter<LobbyListHolder> {
+        private List<Lobby> currentLobbies;
+        private List<Game> currentGames;
+        private LayoutInflater inflater;
+
+        public CurrentGamesAdapter(Context context, List<Lobby> currentLobbies, List<Game> currentGames) {
+            inflater = LayoutInflater.from(context);
+            this.currentLobbies = currentLobbies;
+            this.currentGames = currentGames;
+        }
+
+        @Override
+        public LobbyListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = inflater.inflate(R.layout.lobby_list_item, parent, false);
+            return new LobbyListHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(LobbyListHolder holder, int position) {
+            // Assign in-progress games first
+            if (position < currentGames.size()) {
+                Game item = currentGames.get(position);
+                holder.bindForResume(item);
+            }
+            // Assign in-progress lobbies last
+            else {
+                Lobby item = currentLobbies.get(position - currentGames.size());
+                holder.bindForResume(item);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return (currentLobbies.size() + currentGames.size());
         }
     }
 

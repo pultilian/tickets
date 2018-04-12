@@ -4,6 +4,7 @@ package tickets.server.model.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import tickets.common.ChoiceDestinationCards;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Route;
@@ -57,24 +58,29 @@ class DrewDestCardsState extends PlayerTurnState {
 		else if (!turn0 && cards.size() > 2)
 		    return "You may only discard up to two cards";
 
+
+		List<DestinationCard> options = player.getDestinationCardOptions();
+		List<DestinationCard> toDiscard = new ArrayList<>();
+
+		// Remove all discarded cards
 		for (DestinationCard card : cards) {
-            if (card != null) {
-                List<DestinationCard> options = player.getDestinationCardOptions();
-                List<DestinationCard> toDiscard = new ArrayList<>();
-                // Find discarded cards and "mark" them. Add other cards to player's hand
-                for (DestinationCard playerCard : options) {
-                    if (!playerCard.equals(card)) {
-                        player.addDestinationCardToHand(playerCard);
-                    } else toDiscard.add(playerCard);
-                }
-                // Delete marked cards from current options
-                options.removeAll(toDiscard);
-            } else {
-                for (DestinationCard playerCard : player.getDestinationCardOptions()) {
-                    player.addDestinationCardToHand(playerCard);
-                }
-            }
-        }
+			if (card != null) {
+				for (DestinationCard option : options) {
+					if (card.equals(option)) toDiscard.add(option);
+				}
+			}
+		}
+		options.removeAll(toDiscard);
+
+		// Set player's destination card options to the kept cards
+		ChoiceDestinationCards keptCards = new ChoiceDestinationCards();
+		keptCards.setDestinationCards(options);
+		player.setDestinationCardOptions(keptCards);
+
+		// Add all kept cards to the player's hand
+		for (DestinationCard card : player.getDestinationCardOptions()) {
+			player.addDestinationCardToHand(card);
+		}
         turn0 = false;
         player.changeState(States.NOT_MY_TURN);
 		return null;

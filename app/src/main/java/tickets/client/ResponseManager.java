@@ -15,6 +15,8 @@ import tickets.common.response.LeaveLobbyResponse;
 import tickets.common.response.LoginResponse;
 import tickets.common.response.LogoutResponse;
 import tickets.common.response.Response;
+import tickets.common.response.ResumeGameResponse;
+import tickets.common.response.ResumeLobbyResponse;
 import tickets.common.response.StartGameResponse;
 import tickets.common.response.TrainCardResponse;
 
@@ -35,6 +37,8 @@ public final class ResponseManager {
             stateVal = ClientStateChange.ClientState.lobbylist;
             ClientStateChange state = new ClientStateChange(stateVal);
             ClientFacade.getInstance().updateLobbyList(response.getLobbyList());
+            ClientFacade.getInstance().updateCurrentLobbies(response.getCurrentLobbies());
+            ClientFacade.getInstance().updateCurrentGames(response.getCurrentGames());
             ClientFacade.getInstance().updateObservable(state);
         }
         else {
@@ -53,6 +57,42 @@ public final class ResponseManager {
             if (created)
                 ClientFacade.getInstance().addLobbyToList(response.getLobby());
             ClientFacade.getInstance().setPlayer(response.getPlayer());
+            ClientFacade.getInstance().updateObservable(state);
+        }
+        else {
+            handleException(response.getException());
+        }
+    }
+
+    public static void handleResponse(ResumeLobbyResponse response) {
+        if (response == null) {
+            handleException(new Exception("The Server could not be reached"));
+        }
+        else if (response.getException() == null) {
+            ClientFacade.getInstance().setCurrentLobby(response.getLobby().getId());
+            ClientFacade.getInstance().addAuthToken(response.getAuthToken());
+            ClientFacade.getInstance().setPlayer(response.getPlayer());
+
+            ClientStateChange.ClientState stateVal = ClientStateChange.ClientState.lobby;
+            ClientStateChange state = new ClientStateChange(stateVal);
+            ClientFacade.getInstance().updateObservable(state);
+        }
+        else {
+            handleException(response.getException());
+        }
+    }
+
+    public static void handleResponse(ResumeGameResponse response) {
+        if (response == null) {
+            handleException(new Exception("The Server could not be reached"));
+        }
+        else if (response.getException() == null) {
+            ClientFacade.getInstance().addGame(response.getGame());
+            ClientFacade.getInstance().addAuthToken(response.getAuthToken());
+            ClientFacade.getInstance().setPlayer(response.getPlayer());
+
+            ClientStateChange.ClientState stateVal = ClientStateChange.ClientState.game;
+            ClientStateChange state = new ClientStateChange(stateVal);
             ClientFacade.getInstance().updateObservable(state);
         }
         else {

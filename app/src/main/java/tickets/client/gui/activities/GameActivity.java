@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import tickets.common.DestinationCard;
 import tickets.common.Faction;
 import tickets.common.Game;
 import tickets.common.HandTrainCard;
+import tickets.common.Player;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 
@@ -36,6 +38,10 @@ import tickets.common.TrainCard;
  * @author Dallin Pulsipher
  */
 public class GameActivity extends AppCompatActivity implements IHolderGameActivity {
+
+    // Flag used to determine in the bundle given whether or not this game was resumed.
+    // If resumed, the map fragment will load first. Otherwise, the destination fragment will load first.
+    public static final String RESUMED = "Resumed";
 
     //Face up cards
     private ImageView faceUpCard1;
@@ -122,12 +128,13 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         chatButton = this.findViewById(R.id.button_chat);
         gameButton = this.findViewById(R.id.button_game);
         logoutButton = this.findViewById(R.id.button_logout);
-        Faction currentPlayer = presenter.getCurrentPlayer().getPlayerFaction();
+        Player currentPlayer = presenter.getCurrentPlayer();
+        Faction currentRace = currentPlayer.getPlayerFaction();
         playerName.setText(currentPlayer.getName());
-        playerRace.setText(currentPlayer.getName());
+        playerRace.setText(currentRace.getName());
 
         //Sets the image based on the info
-        switch (currentPlayer.getColor().toString().toLowerCase()) {
+        switch (currentRace.getColor().toString().toLowerCase()) {
             case "blue":
                 playerIcon.setImageResource(R.drawable.race_altian);
                 break;
@@ -335,13 +342,23 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         updateFaceUpCards();
         setClickListeners();
 
-        // sets the destination fragment as the first
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = new DestinationFragment();
-        fragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit();
-
+        boolean resumed = getIntent().getBooleanExtra(RESUMED, false);
+        if (resumed) {
+            // sets the map fragment as the first
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = new MapFragment();
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit();
+        }
+        else {
+            // sets the destination fragment as the first
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = new DestinationFragment();
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit();
+        }
     }
 
     /** on Window FocusChanged
@@ -472,7 +489,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         TextView location2;
         TextView destinationScore;
 
-        public DestinationHolder(View view) {
+        public DestinationHolder(final View view) {
             super(view);
             view.setOnClickListener(this);
             location1 = view.findViewById(R.id.location1);

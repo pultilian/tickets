@@ -6,6 +6,7 @@ import java.util.List;
 public class Game {
 
     private String gameId;
+    private String name;
     private List<String> chat;
     private List<String> gameHistory;
     private int currentTurn;
@@ -13,8 +14,9 @@ public class Game {
     private List<TrainCard> faceUpCards;
     private GameMap map;
 
-    public Game(String gameId){
+    public Game(String gameId, String name){
         this.gameId = gameId;
+        this.name = name;
         chat = new ArrayList<>();
         gameHistory = new ArrayList<>();
         gamePlayers = new ArrayList<>();
@@ -22,12 +24,37 @@ public class Game {
         faceUpCards = new ArrayList<>();
     }
 
+    //----------------------------------------------------------------------------------------------
+    // The server can use these setters to convert from a ServerGame to a Game.
+
+    public void setChat(List<String> chat) {
+        this.chat = chat;
+    }
+
+    public void setGameHistory(List<String> gameHistory) {
+        this.gameHistory = gameHistory;
+    }
+
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    public void setMap(GameMap map) {
+        this.map = map;
+    }
+
+    //----------------------------------------------------------------------------------------------
+
     public void initializeMap() {
         map = new GameMap();
     }
 
     public String getGameId(){
         return gameId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<String> getChat(){

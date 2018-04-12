@@ -115,6 +115,22 @@ public class ClientFacade implements IClient {
     public Player getLocalPlayer() {
         return localPlayer;
     }
+
+	public void updateCurrentLobbies(List<Lobby> currentLobbies) {
+		lobbyManager.updateCurrentLobbies(currentLobbies);
+	}
+
+	public void updateCurrentGames(List<Game> currentGames) {
+		lobbyManager.updateCurrentGames(currentGames);
+	}
+
+	public List<Lobby> getCurrentLobbies() {
+		return lobbyManager.getCurrentLobbies();
+	}
+
+	public List<Game> getCurrentGames() {
+		return lobbyManager.getCurrentGames();
+	}
 	
 //Game data access
 	public void addGame(Game game) {
