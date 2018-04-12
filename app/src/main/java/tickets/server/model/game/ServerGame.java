@@ -262,7 +262,9 @@ public class ServerGame extends Game {
             players.get(currentPlayerIndex).startTurn();
         }
         else if (playersReady > players.size()) startNextTurn();
-        return player.getDestinationCardOptions();
+        List<DestinationCard> result = new ArrayList<>(player.getDestinationCardOptions());
+        player.setDestinationCardOptions(null);
+        return result;
     }
 
     //----------------------------------------------------------------------------------------------
