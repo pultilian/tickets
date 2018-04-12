@@ -8,6 +8,13 @@ import tickets.common.Game;
 import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.UserData;
+import tickets.server.dataAccess.Interfaces.DAOFactory;
+import tickets.server.dataAccess.Factory.FileFactory;
+import tickets.server.dataAccess.Factory.RelationalFactory;
+import tickets.server.dataAccess.Interfaces.GameDataAccess;
+import tickets.server.dataAccess.Interfaces.LobbyDataAccess;
+import tickets.server.dataAccess.Interfaces.PlayerDataAccess;
+import tickets.server.dataAccess.Interfaces.UserDataAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +28,25 @@ public class DAOFacade {
     private GameDataAccess gamesDA;
     private PlayerDataAccess playersDA;
     private UserDataAccess usersDA;
+
+
+    public DAOFacade(String type) throws Exception{
+        switch (type.toLowerCase()){
+            case "relational":
+                daoFactory = new RelationalFactory();
+                break;
+            case "file":
+                daoFactory = new FileFactory();
+                break;
+            default:
+                throw new Exception("Invalid Database Type");
+        }
+        daoFactory.createDAOs();
+        lobbiesDA = daoFactory.getLobbyDA();
+        usersDA = daoFactory.getUserDA();
+        gamesDA = daoFactory.getGameDA();
+        playersDA = daoFactory.getPlayerDA();
+    }
 
 
     public String objectToJSON(Game request) {

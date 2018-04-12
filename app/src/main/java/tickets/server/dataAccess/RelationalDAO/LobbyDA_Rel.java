@@ -1,22 +1,22 @@
-package tickets.server.dataAccess;
-
-import android.widget.EditText;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
+package tickets.server.dataAccess.RelationalDAO;
 
 import java.sql.ResultSet;
 import java.util.List;
 
-/**
- * Created by Pultilian on 4/9/2018.
- */
-public class LobbyDataAccess extends DataAccess{
+import tickets.server.dataAccess.DataAccess;
+import tickets.server.dataAccess.Interfaces.LobbyDataAccess;
 
-    public LobbyDataAccess() throws Exception {
+/**
+ * Created by Pultilian on 4/12/2018.
+ */
+
+public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
+
+    public LobbyDA_Rel() throws Exception {
 
     }
+
+    @Override
     public void addLobby(String lobby, String id) throws Exception {
         openConnection();
         String insert = "insert into Lobby values (?, ?) ";
@@ -28,6 +28,7 @@ public class LobbyDataAccess extends DataAccess{
         closeConnection();
     }
 
+    @Override
     public List<String> getLobbies()throws Exception {
         openConnection();
         List<String> newLobbies = null;
@@ -44,6 +45,7 @@ public class LobbyDataAccess extends DataAccess{
         return newLobbies;
     }
 
+    @Override
     public void removeLobbies(String lobbyID) throws Exception{
         openConnection();
         String delete = "delete from Lobby where id = ?";
@@ -54,6 +56,7 @@ public class LobbyDataAccess extends DataAccess{
         closeConnection();
     }
 
+    @Override
     public void clear() throws Exception {
         openConnection();
         String clear = "delete from Lobby";
@@ -63,6 +66,7 @@ public class LobbyDataAccess extends DataAccess{
         closeConnection();
     }
 
+    @Override
     public void addDeltas(String command, String lobbyID) throws Exception {
         openConnection();
         String insert = "insert into LobbyDeltas values (?, ?) ";
@@ -74,6 +78,7 @@ public class LobbyDataAccess extends DataAccess{
         closeConnection();
     }
 
+    @Override
     public List<String> getDeltas() throws Exception {
         openConnection();
         List<String> newDeltas = null;

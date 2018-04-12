@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Pultilian on 4/9/2018.
  */
-public class DataAccess {
+public abstract class DataAccess {
     private static String databaseName = "jdbc:sqlite:database.db";
     protected static Connection connection = null;
     protected PreparedStatement statement;

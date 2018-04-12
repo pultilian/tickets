@@ -1,55 +1,54 @@
-package tickets.server.dataAccess;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+package tickets.server.dataAccess.RelationalDAO;
 
 import java.sql.ResultSet;
 import java.util.List;
 
+import tickets.server.dataAccess.DataAccess;
+import tickets.server.dataAccess.Interfaces.GameDataAccess;
+
 /**
- * Created by Pultilian on 4/9/2018.
+ * Created by Pultilian on 4/12/2018.
  */
-public class PlayerDataAccess extends DataAccess {
-    public PlayerDataAccess() throws Exception {
+
+public class GameDA_Rel extends DataAccess implements GameDataAccess {
+
+    public GameDA_Rel()throws Exception {
 
     }
 
-    public void addPlayer(String player, String gameID, String username) throws Exception {
+    @Override
+    public void addGame(String game, String id) throws Exception {
         openConnection();
-        String insert = "insert into Player values (?, ?, ?) ";
+        String insert = "insert into Game values (?, ?) ";
         statement = connection.prepareStatement(insert);
-        statement.setString(1, username);
-        statement.setString(2, gameID);
-        statement.setString(3, player);
+        statement.setString(1, id);
+        statement.setString(2, game);
         statement.executeUpdate();
         statement.close();
         closeConnection();
     }
 
-    public List<String> getPlayers()throws Exception {
+    @Override
+    public List<String> getGames()throws Exception {
         openConnection();
-        List<String> newPlayers = null;
-        String query = "select player from Player";
+        List<String> newGames = null;
+        String query = "select game from Game";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);
-            newPlayers.add(jsonString);
+            newGames.add(jsonString);
         }
         results.close();
         statement.close();
         closeConnection();
-        return newPlayers;
+        return newGames;
     }
 
-    public void removePlayers(String gameID) throws Exception{
+    @Override
+    public void removeGames(String gameID) throws Exception{
         openConnection();
-        String delete = "delete from Player \n" +
-                "where exists ( \n" +
-                "select * \n" +
-                "from Player p1 \n" +
-                "Player.game_id = ? \n" +
-                "and Player.username = ?) \n";
+        String delete = "delete from Game where id = ?";
         statement = connection.prepareStatement(delete);
         statement.setString(1, gameID);
         statement.executeUpdate();
@@ -57,30 +56,33 @@ public class PlayerDataAccess extends DataAccess {
         closeConnection();
     }
 
+    @Override
     public void clear() throws Exception {
         openConnection();
-        String clear = "delete from Player";
+        String clear = "delete from Game";
         statement = connection.prepareStatement(clear);
         statement.executeUpdate();
         statement.close();
         closeConnection();
     }
-    public void addDeltas(String command, String gameID, String username) throws Exception {
+
+    @Override
+    public void addDeltas(String command, String gameID) throws Exception {
         openConnection();
-        String insert = "insert into PlayerDeltas values (?, ?, ?) ";
+        String insert = "insert into GameDeltas values (?, ?) ";
         statement = connection.prepareStatement(insert);
-        statement.setString(1, username);
-        statement.setString(2, gameID);
-        statement.setString(3, command);
+        statement.setString(1, gameID);
+        statement.setString(2, command);
         statement.executeUpdate();
         statement.close();
         closeConnection();
     }
 
+    @Override
     public List<String> getDeltas() throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from PlayerDeltas";
+        String query = "select deltas from GameDeltas";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
