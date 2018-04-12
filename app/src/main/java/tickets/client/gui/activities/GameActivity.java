@@ -29,6 +29,7 @@ import tickets.common.DestinationCard;
 import tickets.common.Faction;
 import tickets.common.Game;
 import tickets.common.HandTrainCard;
+import tickets.common.Player;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 
@@ -127,12 +128,13 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         chatButton = this.findViewById(R.id.button_chat);
         gameButton = this.findViewById(R.id.button_game);
         logoutButton = this.findViewById(R.id.button_logout);
-        Faction currentPlayer = presenter.getCurrentPlayer().getPlayerFaction();
+        Player currentPlayer = presenter.getCurrentPlayer();
+        Faction currentRace = currentPlayer.getPlayerFaction();
         playerName.setText(currentPlayer.getName());
-        playerRace.setText(currentPlayer.getName());
+        playerRace.setText(currentRace.getName());
 
         //Sets the image based on the info
-        switch (currentPlayer.getColor().toString().toLowerCase()) {
+        switch (currentRace.getColor().toString().toLowerCase()) {
             case "blue":
                 playerIcon.setImageResource(R.drawable.race_altian);
                 break;
@@ -464,13 +466,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
 
         @Override
         public DestinationHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            final View view = inflater.inflate(R.layout.destination_layout, parent, false);
-            view.post(new Runnable() {
-                @Override
-                public void run() {
-                    int height = view.getHeight();
-                }
-            });
+            View view = inflater.inflate(R.layout.destination_layout, parent, false);
             return new DestinationHolder(view);
         }
 
