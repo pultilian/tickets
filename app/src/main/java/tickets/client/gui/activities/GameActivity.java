@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -463,7 +464,13 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
 
         @Override
         public DestinationHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = inflater.inflate(R.layout.destination_layout, parent, false);
+            final View view = inflater.inflate(R.layout.destination_layout, parent, false);
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    int height = view.getHeight();
+                }
+            });
             return new DestinationHolder(view);
         }
 
@@ -486,7 +493,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
         TextView location2;
         TextView destinationScore;
 
-        public DestinationHolder(View view) {
+        public DestinationHolder(final View view) {
             super(view);
             view.setOnClickListener(this);
             location1 = view.findViewById(R.id.location1);
