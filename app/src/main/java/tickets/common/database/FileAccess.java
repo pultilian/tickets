@@ -11,64 +11,47 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gson.Gson;
-
-import tickets.common.Command;
-
 public class FileAccess {
 	private static final String OUTFOLDER = "files/";
-	private static Gson gson = new Gson();
 	
-	private String createJsonString(Object o) {
-		return gson.toJson(o);
-	}
-
-	private Object createObjectFromJsonString(String json, Class<?> type) {
-		return gson.fromJson(json, type);
-	}
-	
-	public <T> void checkpointUpdate(T o, String id) throws IOException {
-		String filename = OUTFOLDER + o.getClass().getName() + id;
+	public void checkpointUpdate(String object, String type, String id) throws IOException {
+		String filename = OUTFOLDER + type + id;
 		Path file = Paths.get(filename);
-		List<String> content = Arrays.asList(createJsonString(o));
+		List<String> content = Arrays.asList();
 		Files.write(file, content, Charset.forName("UTF-8"), StandardOpenOption.CREATE);
 	}
 	
-	public void removeFile(Class<?> type, String id) throws IOException {
-		String filename = OUTFOLDER + type.getName() + id;
+	public void removeFile(String type, String id) throws IOException {
+		String filename = OUTFOLDER + type + id;
 		Path file = Paths.get(filename);
 		Files.delete(file);
 	}
 	
-	public void addUpdate(Command c, Class<?> type, String id) throws IOException {
-		String filename = OUTFOLDER + type.getName() + id;
+	public void addUpdate(String command, String type, String id) throws IOException {
+		String filename = OUTFOLDER + type + id;
 		Path file = Paths.get(filename);
-		List<String> content = Arrays.asList(createJsonString(c));
+		List<String> content = Arrays.asList(command);
 		Files.write(file, content, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
 	}
 	
-	public List<Command> getDeltasForObject(Class<?> type, String id) throws IOException {
-		String filename = OUTFOLDER + type.getName() + id;
+	public List<String> getDeltasForObject(String type, String id) throws IOException {
+		String filename = OUTFOLDER + type + id;
 		Path file = Paths.get(filename);
 		List<String> lines = Files.readAllLines(file);
-		List<Command> commands = new ArrayList<>();
 		// Start at one to skip object json
-		for (int i = 1; i < lines.size(); i++) {
-			commands.add((Command) createObjectFromJsonString(lines.get(i), Command.class));
-		}
-		return commands;
+		lines.remove(0);
+		return lines;
 	}
 	
-	public <T> List<T> getAllObjects(Class T) throws IOException {
-		List<T> objects = new ArrayList<>();
+	public List<String> getAllObjects(String type) throws IOException {
+		List<String> objects = new ArrayList<>();
 		File folder = new File(OUTFOLDER);
 		File[] files = folder.listFiles();
-		String fileType = T.getName();
 		for (File file : files) {
-			if (file.getName().contains(fileType)) {
+			if (file.getName().contains(type)) {
 				Path theFile = Paths.get(OUTFOLDER + file.getName());
 				List<String> lines = Files.readAllLines(theFile);
-				objects.add((T) createObjectFromJsonString(lines.get(0), T));
+				objects.add(lines.get(0));
 			}
 		}
 		return objects;
