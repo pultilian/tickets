@@ -12,8 +12,8 @@ import java.util.List;
 public interface PlayerDataAccess {
     public void addPlayer(String player, String gameID, String username) throws Exception;
     public List<String> getPlayers()throws Exception;
-    public void removePlayers(String gameID) throws Exception;
+    public void removePlayers(String gameID, String username) throws Exception;
     public void clear() throws Exception;
     public void addDeltas(String command, String gameID, String username) throws Exception;
-    public List<String> getDeltas() throws Exception;
+    public List<String> getDeltas(String gameID, String username) throws Exception;
 }

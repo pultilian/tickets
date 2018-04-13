@@ -79,11 +79,12 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     }
 
     @Override
-    public List<String> getDeltas() throws Exception {
+    public List<String> getDeltas(String id) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from LobbyDeltas";
+        String query = "select deltas from LobbyDeltas where id = ?";
         statement = connection.prepareStatement(query);
+        statement.setString(1,id);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);

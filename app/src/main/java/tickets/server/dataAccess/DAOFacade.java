@@ -174,8 +174,8 @@ public class DAOFacade {
         return listPlayers;
     }
 
-    public void removePlayer(String playerID) throws Exception{
-        playersDA.removePlayers(playerID);
+    public void removePlayer(String username, String game_ID) throws Exception{
+        playersDA.removePlayers(username, game_ID);
     }
 
     /** AddDeltas
@@ -212,17 +212,17 @@ public class DAOFacade {
      * @param type (player,lobby,game)
      * @return a List of Commands
      */
-    public List<Command> getDeltas(String type) throws Exception{
+    public List<Command> getDeltas(String type, List<String> IDs) throws Exception{
         List<String> deltas = new ArrayList<>();
         switch (type) {
             case "player":
-                deltas = playersDA.getDeltas();
+                deltas = playersDA.getDeltas(IDs.get(0), IDs.get(1));
                 break;
             case "lobby":
-                deltas = lobbiesDA.getDeltas();
+                deltas = lobbiesDA.getDeltas(IDs.get(0));
                 break;
             case "game":
-                deltas = gamesDA.getDeltas();
+                deltas = gamesDA.getDeltas(IDs.get(0));
                 break;
             default:
                 throw new Exception(type + " is not a valid delta");
