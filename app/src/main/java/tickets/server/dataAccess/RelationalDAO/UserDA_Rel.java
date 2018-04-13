@@ -1,19 +1,22 @@
-package tickets.server.dataAccess;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+package tickets.server.dataAccess.RelationalDAO;
 
 import java.sql.ResultSet;
 import java.util.List;
 
+import tickets.server.dataAccess.DataAccess;
+import tickets.server.dataAccess.Interfaces.UserDataAccess;
+
 /**
- * Created by Pultilian on 4/9/2018.
+ * Created by Pultilian on 4/12/2018.
  */
-public class UserDataAccess extends DataAccess {
-    public UserDataAccess() throws Exception {
+
+public class UserDA_Rel extends DataAccess implements UserDataAccess {
+
+    public UserDA_Rel() throws Exception {
 
     }
-    
+
+    @Override
     public void addUserData(String userData, String authToken) throws Exception {
         openConnection();
         String insert = "insert into UserData values (?, ?) ";
@@ -25,6 +28,7 @@ public class UserDataAccess extends DataAccess {
         closeConnection();
     }
 
+    @Override
     public List<String> getUserData()throws Exception {
         openConnection();
         List<String> newUserData = null;
@@ -41,6 +45,7 @@ public class UserDataAccess extends DataAccess {
         return newUserData;
     }
 
+    @Override
     public void removeUserData(String authToken) throws Exception{
         openConnection();
         String delete = "delete from UserData where id = ?";
@@ -51,6 +56,7 @@ public class UserDataAccess extends DataAccess {
         closeConnection();
     }
 
+    @Override
     public void clear() throws Exception {
         openConnection();
         String clear = "delete from UserData";
