@@ -1,5 +1,6 @@
 package tickets.server.dataAccess;
 
+import tickets.common.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,6 @@ public class Main {
             gameList.add(game1);
             gameList.add(game2);
             gameList.add(game3);
-
-
             daoFacade.addGames(gameList);
 
         } catch (Exception e) {

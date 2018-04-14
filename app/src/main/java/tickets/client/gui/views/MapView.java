@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
@@ -178,24 +180,16 @@ public class MapView extends View {
                 colVal = 0xFF << 24 | 0x2E << 16 | 0x31 << 8 | 0x92;
                 break;
         }
-//        Paint paintColor = new Paint();
-//        paintColor.setColor(col);
 
         // get the image and scale it to the size of the screen
         Bitmap img = BitmapFactory.decodeResource(this.getResources(), routeImageId);
         img = Bitmap.createScaledBitmap(img, mViewWidth, mViewHeight, false);
-        // change the route's color (this is currently done pixel-by-pixel)
-        for (int i = 0; i < img.getWidth(); i++) {
-            for (int j = 0; j < img.getHeight(); j++) {
-                int val = img.getPixel(i,j);
-                if (val == 0) img.setPixel(i,j,0);
-                else img.setPixel(i, j, colVal);
-            }
-        }
-
+        Paint paint = new Paint();
+        ColorFilter filter = new LightingColorFilter(0, colVal);
+        paint.setColorFilter(filter);
 
         // overlay the image on the game map
-        canvas.drawBitmap(img, new Matrix(), null);
+        canvas.drawBitmap(img, new Matrix(), paint);
         return;
     }
 

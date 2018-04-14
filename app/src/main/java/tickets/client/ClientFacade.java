@@ -206,6 +206,10 @@ public class ClientFacade implements IClient {
 
 	public void addClaimedRoute(Route route, RouteColors routeColor, PlayerColor player) {
         currentGame.claimRoute(route, routeColor, player);
+        if (currentGame.getActivePlayerInfo().getName().equals(localPlayer.getName())) {
+        	localPlayer.getInfo().addToScore(route.getPointValue());
+        	localPlayer.getInfo().useShips(route.getLength());
+		}
         ClientModelUpdate message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.playerInfoUpdated);
         updateObservable(message);
         message = new ClientModelUpdate(ClientModelUpdate.ModelUpdate.mapUpdated);
