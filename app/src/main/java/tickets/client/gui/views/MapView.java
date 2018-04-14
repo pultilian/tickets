@@ -9,6 +9,7 @@ import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
@@ -194,10 +195,34 @@ public class MapView extends View {
     }
 
 
-    public void markCitySelected(MapPoints city) {
-        if (city == MapPoints.No_city)
-            return;
+    public void markCity(MapPoints city, boolean selected) {
+        if (city == MapPoints.No_city) return;
 
+        invalidate();
+
+        float scaleX = (float) (mViewWidth / 1983.0);
+        float scaleY =(float) (mViewHeight / 1566.0);
+
+        Canvas canvas = new Canvas(mGameMap);
+
+        // Clip the canvas to just the circle that was selected
+        Path circle = new Path();
+        circle.addCircle((city.x * scaleX), (city.y * scaleY), (30 * Math.min(scaleX, scaleY)), Path.Direction.CW);
+        canvas.clipPath(circle);
+        Paint paint = new Paint();
+
+        // Brighten selected cities
+        if (selected) {
+            ColorFilter filter = new LightingColorFilter(0xFFFFFFFF, 0x00666666);
+            paint.setColorFilter(filter);
+            canvas.drawBitmap(mGameMap, new Matrix(), paint);
+        }
+        // Bring unselected cities back to original
+        else {
+            Bitmap originalMap = BitmapFactory.decodeResource(this.getResources(), R.drawable.map);
+            Bitmap scaledMap = Bitmap.createScaledBitmap(originalMap, mViewWidth, mViewHeight, false);
+            canvas.drawBitmap(scaledMap, new Matrix(), paint);
+        }
 
         return;
     }
@@ -271,15 +296,15 @@ public class MapView extends View {
 
         // keep track of selected cities
         // TODO: add something to canvas to add highlight the selected cities
-        String city1;
-        String city2;
+        MapPoints city1;
+        MapPoints city2;
 
         String getCities() {
             String val = "";
             if (city1.equals(null)) val += "null";
-            else val += city1;
+            else val += city1.name;
             if (city2.equals(null)) val += "null";
-            else val += city2;
+            else val += city2.name;
             return val;
         }
 
@@ -290,21 +315,26 @@ public class MapView extends View {
             if (selected == MapPoints.No_city)
                 return;
 
-            String city = selected.getName();
-            if(city1 == null)
-                city1 = city;
-            else
-                city2 = city;
+            if(city1 == null) {
+                city1 = selected;
+                markCity(city1, true);
+            } else {
+                if (city2 != null) markCity(city2, false);
+                city2 = selected;
+                markCity(city2, true);
+            }
         }
 
         void clearSelected() {
+            if (city1 != null) markCity(city1, false);
+            if (city2 != null) markCity(city2, false);
             city1 = null;
             city2 = null;
         }
 
         void claimSelectedRoute() {
             for (Route route : presenter.getAllRoutes()) {
-                if (route.equals(city1, city2)) {
+                if (route.equals(city1.name, city2.name)) {
                     presenter.claimRoute(route);
 //                    clearSelected();
                     return;
@@ -351,7 +381,7 @@ public class MapView extends View {
 
         void claimSelectedRouteWithColor(String color) {
             for (Route route : presenter.getAllRoutes()) {
-                if (route.equals(city1, city2)) {
+                if (route.equals(city1.name, city2.name)) {
                     presenter.claimRoute(route, color);
                     clearSelected();
                     return;
