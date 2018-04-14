@@ -252,17 +252,22 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
      * sets the players resource cards count. and updates the screen.
      */
     public void setNumResourceCards() {
-        HandTrainCard cards = presenter.getPlayerHand();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                HandTrainCard cards = presenter.getPlayerHand();
 
-        blueCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Blue)));
-        redCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Red)));
-        greenCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Green)));
-        orangeCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Orange)));
-        yellowCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Yellow)));
-        whiteCount.setText(Integer.toString(cards.getCountForColor(RouteColors.White)));
-        blackCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Black)));
-        silverCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Wild)));
-        pinkCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Purple)));
+                blueCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Blue)));
+                redCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Red)));
+                greenCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Green)));
+                orangeCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Orange)));
+                yellowCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Yellow)));
+                whiteCount.setText(Integer.toString(cards.getCountForColor(RouteColors.White)));
+                blackCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Black)));
+                silverCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Wild)));
+                pinkCount.setText(Integer.toString(cards.getCountForColor(RouteColors.Purple)));
+            }
+        });
     }
 
     /** setFaceUpCards
@@ -315,14 +320,24 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
      * updates current players points for the observers.
      */
     public void updatePoints(){
-         points.setText(Integer.toString(presenter.getCurrentPlayer().getInfo().getScore()));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                points.setText(Integer.toString(presenter.getCurrentPlayer().getInfo().getScore()));
+            }
+        });
     }
 
     /** UpdateShips
      * updates the ships count for the observers.
      */
     public void updateShips(){
-        ships.setText(Integer.toString(presenter.getCurrentPlayer().getInfo().getShipsLeft()));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ships.setText(Integer.toString(presenter.getCurrentPlayer().getInfo().getShipsLeft()));
+            }
+        });
     }
 
     /** onCreate
