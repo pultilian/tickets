@@ -79,11 +79,12 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     }
 
     @Override
-    public List<String> getDeltas() throws Exception {
+    public List<String> getDeltas(String gameID) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from GameDeltas";
+        String query = "select deltas from GameDeltas where id = ?";
         statement = connection.prepareStatement(query);
+        statement.setString(1,gameID);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);

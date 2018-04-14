@@ -47,7 +47,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     }
 
     @Override
-    public void removePlayers(String gameID) throws Exception{
+    public void removePlayers(String gameID, String username) throws Exception{
         openConnection();
         String delete = "delete from Player \n" +
                 "where exists ( \n" +
@@ -86,11 +86,14 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     }
 
     @Override
-    public List<String> getDeltas() throws Exception {
+    public List<String> getDeltas(String gameID, String username) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from PlayerDeltas";
+        String query = "select deltas from PlayerDeltas where game_id = ? and username = ? ";
+
         statement = connection.prepareStatement(query);
+        statement.setString(1,gameID);
+        statement.setString(2,username);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);

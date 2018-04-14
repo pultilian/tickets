@@ -24,5 +24,5 @@ public interface LobbyDataAccess {
 
     public void addDeltas(String command, String lobbyID) throws Exception;
 
-    public List<String> getDeltas() throws Exception;
+    public List<String> getDeltas(String id) throws Exception;
 }
