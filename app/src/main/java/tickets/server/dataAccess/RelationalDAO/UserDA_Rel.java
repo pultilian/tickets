@@ -19,7 +19,7 @@ public class UserDA_Rel extends DataAccess implements UserDataAccess {
     @Override
     public void addUserData(String userData, String authToken) throws Exception {
         openConnection();
-        String insert = "insert into UserData values (?, ?) ";
+        String insert = "insert into users values (?, ?) ";
         statement = connection.prepareStatement(insert);
         statement.setString(1, authToken);
         statement.setString(2, userData);
@@ -32,7 +32,7 @@ public class UserDA_Rel extends DataAccess implements UserDataAccess {
     public List<String> getUserData()throws Exception {
         openConnection();
         List<String> newUserData = null;
-        String query = "select userData from UserData";
+        String query = "select userData from users";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
@@ -48,7 +48,7 @@ public class UserDA_Rel extends DataAccess implements UserDataAccess {
     @Override
     public void removeUserData(String authToken) throws Exception{
         openConnection();
-        String delete = "delete from UserData where id = ?";
+        String delete = "delete from users where id = ?";
         statement = connection.prepareStatement(delete);
         statement.setString(1, authToken);
         statement.executeUpdate();
@@ -59,7 +59,7 @@ public class UserDA_Rel extends DataAccess implements UserDataAccess {
     @Override
     public void clear() throws Exception {
         openConnection();
-        String clear = "delete from UserData";
+        String clear = "delete from users";
         statement = connection.prepareStatement(clear);
         statement.executeUpdate();
         statement.close();

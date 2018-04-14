@@ -19,7 +19,7 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     @Override
     public void addGame(String game, String id) throws Exception {
         openConnection();
-        String insert = "insert into Game values (?, ?) ";
+        String insert = "insert into games values (?, ?) ";
         statement = connection.prepareStatement(insert);
         statement.setString(1, id);
         statement.setString(2, game);
@@ -32,7 +32,7 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     public List<String> getGames()throws Exception {
         openConnection();
         List<String> newGames = null;
-        String query = "select game from Game";
+        String query = "select games from Game";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
@@ -48,7 +48,7 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     @Override
     public void removeGames(String gameID) throws Exception{
         openConnection();
-        String delete = "delete from Game where id = ?";
+        String delete = "delete from games where id = ?";
         statement = connection.prepareStatement(delete);
         statement.setString(1, gameID);
         statement.executeUpdate();
@@ -59,7 +59,7 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     @Override
     public void clear() throws Exception {
         openConnection();
-        String clear = "delete from Game";
+        String clear = "delete from games";
         statement = connection.prepareStatement(clear);
         statement.executeUpdate();
         statement.close();
@@ -69,7 +69,7 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     @Override
     public void addDeltas(String command, String gameID) throws Exception {
         openConnection();
-        String insert = "insert into GameDeltas values (?, ?) ";
+        String insert = "insert into gamedeltas values (?, ?) ";
         statement = connection.prepareStatement(insert);
         statement.setString(1, gameID);
         statement.setString(2, command);
@@ -79,11 +79,12 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     }
 
     @Override
-    public List<String> getDeltas() throws Exception {
+    public List<String> getDeltas(String gameID) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from GameDeltas";
+        String query = "select deltas from gamedeltas where id = ?";
         statement = connection.prepareStatement(query);
+        statement.setString(1,gameID);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);

@@ -19,7 +19,7 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     @Override
     public void addLobby(String lobby, String id) throws Exception {
         openConnection();
-        String insert = "insert into Lobby values (?, ?) ";
+        String insert = "insert into lobbies values (?, ?) ";
         statement = connection.prepareStatement(insert);
         statement.setString(1, id);
         statement.setString(2, lobby);
@@ -32,7 +32,7 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     public List<String> getLobbies()throws Exception {
         openConnection();
         List<String> newLobbies = null;
-        String query = "select lobby from Lobby";
+        String query = "select lobbies from Lobby";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
@@ -48,7 +48,7 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     @Override
     public void removeLobbies(String lobbyID) throws Exception{
         openConnection();
-        String delete = "delete from Lobby where id = ?";
+        String delete = "delete from lobbies where id = ?";
         statement = connection.prepareStatement(delete);
         statement.setString(1, lobbyID);
         statement.executeUpdate();
@@ -59,7 +59,7 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     @Override
     public void clear() throws Exception {
         openConnection();
-        String clear = "delete from Lobby";
+        String clear = "delete from lobbies";
         statement = connection.prepareStatement(clear);
         statement.executeUpdate();
         statement.close();
@@ -69,7 +69,7 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     @Override
     public void addDeltas(String command, String lobbyID) throws Exception {
         openConnection();
-        String insert = "insert into LobbyDeltas values (?, ?) ";
+        String insert = "insert into lobbydeltas values (?, ?) ";
         statement = connection.prepareStatement(insert);
         statement.setString(1, lobbyID);
         statement.setString(2, command);
@@ -79,11 +79,12 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     }
 
     @Override
-    public List<String> getDeltas() throws Exception {
+    public List<String> getDeltas(String id) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from LobbyDeltas";
+        String query = "select deltas from lobbydeltas where id = ?";
         statement = connection.prepareStatement(query);
+        statement.setString(1,id);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);

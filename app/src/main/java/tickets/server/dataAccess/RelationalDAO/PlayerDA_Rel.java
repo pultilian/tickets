@@ -19,7 +19,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     @Override
     public void addPlayer(String player, String gameID, String username) throws Exception {
         openConnection();
-        String insert = "insert into Player values (?, ?, ?) ";
+        String insert = "insert into players values (?, ?, ?) ";
         statement = connection.prepareStatement(insert);
         statement.setString(1, username);
         statement.setString(2, gameID);
@@ -33,7 +33,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     public List<String> getPlayers()throws Exception {
         openConnection();
         List<String> newPlayers = null;
-        String query = "select player from Player";
+        String query = "select player from players";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
@@ -47,9 +47,9 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     }
 
     @Override
-    public void removePlayers(String gameID) throws Exception{
+    public void removePlayers(String gameID, String username) throws Exception{
         openConnection();
-        String delete = "delete from Player \n" +
+        String delete = "delete from players \n" +
                 "where exists ( \n" +
                 "select * \n" +
                 "from Player p1 \n" +
@@ -65,7 +65,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     @Override
     public void clear() throws Exception {
         openConnection();
-        String clear = "delete from Player";
+        String clear = "delete from players";
         statement = connection.prepareStatement(clear);
         statement.executeUpdate();
         statement.close();
@@ -75,7 +75,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     @Override
     public void addDeltas(String command, String gameID, String username) throws Exception {
         openConnection();
-        String insert = "insert into PlayerDeltas values (?, ?, ?) ";
+        String insert = "insert into playerdeltas values (?, ?, ?) ";
         statement = connection.prepareStatement(insert);
         statement.setString(1, username);
         statement.setString(2, gameID);
@@ -86,11 +86,14 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     }
 
     @Override
-    public List<String> getDeltas() throws Exception {
+    public List<String> getDeltas(String gameID, String username) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from PlayerDeltas";
+        String query = "select deltas from playerdeltas where game_id = ? and username = ? ";
+
         statement = connection.prepareStatement(query);
+        statement.setString(1,gameID);
+        statement.setString(2,username);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);
