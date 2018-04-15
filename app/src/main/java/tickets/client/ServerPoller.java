@@ -81,6 +81,7 @@ public class ServerPoller {
 		*/
     	@Override
     	public void run() {
+    		token = ClientFacade.getInstance().getAuthToken();
     	    ClientUpdate updates = ServerProxy.getInstance().updateClient(lastCommand, token);
 			// If there are no exceptions from the server
     	    if(updates.getException() == null) {

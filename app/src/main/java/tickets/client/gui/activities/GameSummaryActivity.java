@@ -114,15 +114,16 @@ public class GameSummaryActivity extends AppCompatActivity {
             shipsLeft.setText(Integer.toString(item.getShipsLeft()));
             shipPoints.setText(Integer.toString(item.getShipPoints()));
             successDest.setText(Integer.toString(item.getSuccessDestPoints()));
-            failDest.setText(Integer.toString(item.getFailDestPoints()));
+            failDest.setText("-" + Integer.toString(item.getFailDestPoints()));
             int totalPointsCalc = item.getShipPoints() + item.getSuccessDestPoints() - item.getFailDestPoints();
-            totalPoints.setText(String.format("%d", totalPointsCalc));
             if(item.isLongestRoute()){
+                totalPointsCalc += 10;
                 longestRoute.setImageResource(R.drawable.longest_route);
             }
             else {
                 longestRoute.setImageResource(android.R.color.transparent);
             }
+            totalPoints.setText(String.format("%d", totalPointsCalc));
 
             switch(item.getFaction().toLowerCase()){
                 case "altian":

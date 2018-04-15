@@ -1,101 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_title">
+    android:background="@drawable/background"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout2"
+    <LinearLayout
+        android:id="@+id/lobby_list_left_space"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="97dp"
-        android:layout_marginStart="97dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:layout_weight="0.1"
+        android:orientation="vertical" />
 
+    <LinearLayout
+        android:id="@+id/lobby_list_main_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/lobby_list"
+        <LinearLayout
+            android:id="@+id/lobby_list_top_space"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="#FFFFFF" />
-    </RelativeLayout>
+            android:layout_height="0dp"
+            android:layout_weight="0.05"
+            android:orientation="horizontal" />
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout3"
+        <LinearLayout
+            android:id="@+id/recycler_area"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.55"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/available_lobbies_area"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/available_lobbies_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#000088"
+                    android:text="Available Games"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/lobby_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/current_lobbies_area"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.6"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/current_games_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#000088"
+                    android:text="Current Games"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/current_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/resume_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:text="Resume" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/textbox_area"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/num_players"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:background="#FFFFFF"
+                android:hint="Num Players"
+                android:inputType="number"
+                android:paddingEnd="10dp"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp" />
+
+            <EditText
+                android:id="@+id/name_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:background="#FFFFFF"
+                android:hint="Game Name"
+                android:paddingEnd="25dp"
+                android:paddingStart="25dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/button_area"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.15"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/create_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:text="Create Game" />
+
+            <Button
+                android:id="@+id/join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="80dp"
+                android:layout_marginStart="50dp"
+                android:text="Join" />
+
+            <Button
+                android:id="@+id/log_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:text="Log Out" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lobby_list_bottom_space"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.05"
+            android:orientation="horizontal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lobby_list_right_space"
         android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
-
-        <Button
-            android:id="@+id/join"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_alignBaseline="@+id/log_out"
-            android:layout_alignBottom="@+id/log_out"
-            android:layout_centerHorizontal="true"
-            android:text="Join" />
-
-        <Button
-            android:id="@+id/log_out"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="88dp"
-            android:layout_marginRight="88dp"
-            android:text="Log Out" />
-
-        <Button
-            android:id="@+id/create_game"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_alignBaseline="@+id/join"
-            android:layout_alignBottom="@+id/join"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="87dp"
-            android:layout_marginStart="87dp"
-            android:text="Create Game" />
-            
-        <EditText
-            android:id="@+id/num_players"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/create_game"
-            android:layout_alignLeft="@+id/create_game"
-            android:layout_alignStart="@+id/create_game"
-            android:layout_marginBottom="10dp"
-            android:background="#FFFFFF"
-            android:hint="Num Players"
-            android:inputType="number"
-            android:paddingLeft="10dp" />
-
-        <EditText
-            android:id="@+id/name_game"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/num_players"
-            android:layout_toRightOf="@+id/num_players"
-            android:background="#FFFFFF"
-            android:hint="Game Name"
-            android:paddingLeft="10dp" />
-    </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:layout_weight="0.1"
+        android:orientation="vertical" />
+</LinearLayout>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import tickets.common.Lobby;
+import tickets.common.Player;
 
 public class AllLobbies {
 
@@ -46,4 +47,17 @@ public class AllLobbies {
     }
 
     public List<Lobby> getAllLobbies(){ return lobbies; }
+
+    public List<Lobby> getLobbiesWithUser(String username) {
+        List<Lobby> result = new ArrayList<>();
+        for (Lobby lobby : lobbies) {
+            for (Player player : lobby.getPlayers()) {
+                if (player.getName().equals(username)) {
+                    result.add(lobby);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 }

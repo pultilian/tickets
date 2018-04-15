@@ -65,6 +65,18 @@ public class AsyncManager implements ITaskManager {
         task.execute(lobby, authToken);
     }
 
+    public void resumeLobby(String lobbyID) {
+        String authToken = root.getAuthToken();
+        ResumeLobbyAsync task = new ResumeLobbyAsync(root);
+        task.execute(lobbyID, authToken);
+    }
+
+    public void resumeGame(String gameID) {
+        String authToken = root.getAuthToken();
+        ResumeGameAsync task = new ResumeGameAsync(root);
+        task.execute(gameID, authToken);
+    }
+
     public void logout() {
         String authToken = root.getAuthToken();
         LogoutAsync task = new LogoutAsync(root);

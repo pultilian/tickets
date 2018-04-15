@@ -7,8 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,32 +18,27 @@ import tickets.client.gui.activities.R;
 import tickets.client.gui.presenters.DestinationPresenter;
 import tickets.common.DestinationCard;
 
-/**
- * Created by Pultilian on 3/4/2018.
- */
 
 public class DestinationFragment extends Fragment {
-    private TextView location1Left;
-    private TextView location1Middle;
-    private TextView location1Right;
-    private TextView location2Left;
-    private TextView location2Middle;
-    private TextView location2Right;
-    private TextView scoreLeft;
-    private TextView scoreMiddle;
-    private TextView scoreRight;
+    private LinearLayout card1;
+    private LinearLayout card2;
+    private LinearLayout card3;
+    private TextView card1Location1;
+    private TextView card1Score;
+    private TextView card1Location2;
+    private TextView card2Location1;
+    private TextView card2Score;
+    private TextView card2Location2;
+    private TextView card3Location1;
+    private TextView card3Score;
+    private TextView card3Location2;
     private Button continueButton;
+
     private DestinationPresenter presenter;
-    private RelativeLayout button1;
-    private RelativeLayout button2;
-    private RelativeLayout button3;
     private boolean button1Selected;
     private boolean button2Selected;
     private boolean button3Selected;
     private List<DestinationCard> destinationCards;
-    private ImageView card1;
-    private ImageView card2;
-    private ImageView card3;
     private Boolean[] selectedButtons;
 
     @Override
@@ -70,35 +64,31 @@ public class DestinationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_destination, container, false);
         presenter = new DestinationPresenter();
 
-        location1Left = view.findViewById(R.id.location1_left);
-        location2Left = view.findViewById(R.id.location2_left);
-        location1Middle = view.findViewById(R.id.location1_middle);
-        location2Middle = view.findViewById(R.id.location2_middle);
-        location1Right = view.findViewById(R.id.location1_right);
-        location2Right = view.findViewById(R.id.location2_right);
-        scoreLeft = view.findViewById(R.id.destination_score_left);
-        scoreMiddle = view.findViewById(R.id.destination_score_middle);
-        scoreRight = view.findViewById(R.id.destination_score_right);
-        continueButton = (Button) view.findViewById(R.id.button_continue);
-        card1 = view.findViewById(R.id.dest_card_1_image);
-        card2 = view.findViewById(R.id.dest_card_2_image);
-        card3 = view.findViewById(R.id.dest_card_3_image);
-
-        button1 = view.findViewById(R.id.dest_card_1);
-        button2 = view.findViewById(R.id.dest_card_2);
-        button3 = view.findViewById(R.id.dest_card_3);
+        card1 = view.findViewById(R.id.dest_card1);
+        card2 = view.findViewById(R.id.dest_card2);
+        card3 = view.findViewById(R.id.dest_card3);
+        card1Location1 = view.findViewById(R.id.card1_location1);
+        card1Location2 = view.findViewById(R.id.card1_location2);
+        card1Score = view.findViewById(R.id.card1_destination_score);
+        card2Location1 = view.findViewById(R.id.card2_location1);
+        card2Location2 = view.findViewById(R.id.card2_location2);
+        card2Score = view.findViewById(R.id.card2_destination_score);
+        card3Location1 = view.findViewById(R.id.card3_location1);
+        card3Location2 = view.findViewById(R.id.card3_location2);
+        card3Score = view.findViewById(R.id.card3_destination_score);
+        continueButton = view.findViewById(R.id.button_continue);
 
         destinationCards = presenter.getDestinationCards();
 
-        location1Left.setText(destinationCards.get(0).getFirstCity());
-        location2Left.setText(destinationCards.get(0).getSecondCity());
-        scoreLeft.setText(Integer.toString(destinationCards.get(0).getValue()));
-        location1Middle.setText(destinationCards.get(1).getFirstCity());
-        location2Middle.setText(destinationCards.get(1).getSecondCity());
-        scoreMiddle.setText(Integer.toString(destinationCards.get(1).getValue()));
-        location1Right.setText(destinationCards.get(2).getFirstCity());
-        location2Right.setText(destinationCards.get(2).getSecondCity());
-        scoreRight.setText(Integer.toString(destinationCards.get(2).getValue()));
+        card1Location1.setText(destinationCards.get(0).getFirstCity());
+        card1Location2.setText(destinationCards.get(0).getSecondCity());
+        card1Score.setText(Integer.toString(destinationCards.get(0).getValue()));
+        card2Location1.setText(destinationCards.get(1).getFirstCity());
+        card2Location2.setText(destinationCards.get(1).getSecondCity());
+        card2Score.setText(Integer.toString(destinationCards.get(1).getValue()));
+        card3Location1.setText(destinationCards.get(2).getFirstCity());
+        card3Location2.setText(destinationCards.get(2).getSecondCity());
+        card3Score.setText(Integer.toString(destinationCards.get(2).getValue()));
 
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,41 +116,41 @@ public class DestinationFragment extends Fragment {
             }
         });
 
-        button1.setOnClickListener(new View.OnClickListener(){
+        card1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 button1Selected = !button1Selected;
                 if(button1Selected){
                     selectedButtons[0] = button1Selected;
-                    card1.setImageResource(R.drawable.destination_card_selected);
+                    card1.setBackgroundResource(R.drawable.destination_card_selected);
                 } else {
-                    card1.setImageResource(R.drawable.destination_card);
+                    card1.setBackgroundResource(R.drawable.destination_card);
                 }
             }
         });
 
-        button2.setOnClickListener(new View.OnClickListener(){
+        card2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 button2Selected = !button2Selected;
                 selectedButtons[1] = button2Selected;
                 if(button2Selected){
-                    card2.setImageResource(R.drawable.destination_card_selected);
+                    card2.setBackgroundResource(R.drawable.destination_card_selected);
                 } else {
-                    card2.setImageResource(R.drawable.destination_card);
+                    card2.setBackgroundResource(R.drawable.destination_card);
                 }
             }
         });
 
-        button3.setOnClickListener(new View.OnClickListener(){
+        card3.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 button3Selected = !button3Selected;
                 if(button3Selected){
                     selectedButtons[2] = button3Selected;
-                    card3.setImageResource(R.drawable.destination_card_selected);
+                    card3.setBackgroundResource(R.drawable.destination_card_selected);
                 } else {
-                    card3.setImageResource(R.drawable.destination_card);
+                    card3.setBackgroundResource(R.drawable.destination_card);
                 }
             }
         });

@@ -118,6 +118,7 @@ public class LobbyActivity extends AppCompatActivity implements IHolderActivity 
         }
         if(toActivity == Transition.toGame) {
             Intent intent = new Intent(LobbyActivity.this, GameActivity.class);
+            intent.putExtra(GameActivity.RESUMED, false);
             startActivity(intent);
         }
         return;

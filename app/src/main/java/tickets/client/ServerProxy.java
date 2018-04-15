@@ -20,6 +20,8 @@ import tickets.common.response.LeaveLobbyResponse;
 import tickets.common.response.LoginResponse;
 import tickets.common.response.LogoutResponse;
 import tickets.common.response.Response;
+import tickets.common.response.ResumeGameResponse;
+import tickets.common.response.ResumeLobbyResponse;
 import tickets.common.response.StartGameResponse;
 import tickets.common.response.TrainCardResponse;
 
@@ -71,6 +73,22 @@ public class ServerProxy implements IServer {
         Command command = new Command("createLobby", parameterTypes, parameters);
         Object result = clientCommunicator.send(command);
         return (JoinLobbyResponse) result;
+    }
+
+    public ResumeLobbyResponse resumeLobby(String lobbyID, String authToken) {
+        Object[] parameters = {lobbyID, authToken};
+        String[] parameterTypes = {String.class.getName(), String.class.getName()};
+        Command command = new Command("resumeLobby", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (ResumeLobbyResponse) result;
+    }
+
+    public ResumeGameResponse resumeGame(String gameID, String authToken) {
+        Object[] parameters = {gameID, authToken};
+        String[] parameterTypes = {String.class.getName(), String.class.getName()};
+        Command command = new Command("resumeGame", parameterTypes, parameters);
+        Object result = clientCommunicator.send(command);
+        return (ResumeGameResponse) result;
     }
 
     public LogoutResponse logout(String authToken) {

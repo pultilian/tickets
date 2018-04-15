@@ -35,7 +35,7 @@ public class TestServerGame {
         listPlayers.add(player1);
         listPlayers.add(player2);
 
-        ServerGame game = new ServerGame("gameID 1", listPlayers);
+        ServerGame game = new ServerGame("gameID 1", "Game 1", listPlayers);
 
         ServerPlayer svrPlayer1 = game.getServerPlayer(player1.getAssociatedAuthToken());
         ServerPlayer svrPlayer2 = game.getServerPlayer(player2.getAssociatedAuthToken());

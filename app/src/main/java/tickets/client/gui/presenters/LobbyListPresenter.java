@@ -10,6 +10,7 @@ import tickets.client.async.AsyncManager;
 import tickets.common.ClientModelUpdate;
 import tickets.common.ClientStateChange;
 import tickets.common.ExceptionMessage;
+import tickets.common.Game;
 import tickets.common.IMessage;
 import tickets.common.IObservable;
 import tickets.common.Lobby;
@@ -44,6 +45,16 @@ public class LobbyListPresenter implements ILobbyListPresenter {
     }
 
     @Override
+    public List<Lobby> getCurrentLobbies() {
+        return ClientFacade.getInstance().getCurrentLobbies();
+    }
+
+    @Override
+    public List<Game> getCurrentGames() {
+        return ClientFacade.getInstance().getCurrentGames();
+    }
+
+    @Override
     public void createLobby(Lobby lobby) {
         manager.createLobby(lobby);
         return;
@@ -53,6 +64,16 @@ public class LobbyListPresenter implements ILobbyListPresenter {
     public void joinLobby(String id) {
         manager.joinLobby(id);
         return;
+    }
+
+    @Override
+    public void resumeLobby(String lobbyID) {
+        manager.resumeLobby(lobbyID);
+    }
+
+    @Override
+    public void resumeGame(String gameID) {
+        manager.resumeGame(gameID);
     }
 
     @Override
@@ -111,7 +132,9 @@ public class LobbyListPresenter implements ILobbyListPresenter {
                     holder.makeTransition(transition);
                 break;
             case game:
-                //do nothing
+                transition = IHolderActivity.Transition.toGame;
+                if (holder != null)
+                    holder.makeTransition(transition);
                 break;
             case summary:
                 //do nothing

@@ -15,6 +15,8 @@ import tickets.common.response.LeaveLobbyResponse;
 import tickets.common.response.LoginResponse;
 import tickets.common.response.LogoutResponse;
 import tickets.common.response.Response;
+import tickets.common.response.ResumeGameResponse;
+import tickets.common.response.ResumeLobbyResponse;
 import tickets.common.response.StartGameResponse;
 import tickets.common.response.TrainCardResponse;
 
@@ -56,6 +58,20 @@ public class TaskManager implements ITaskManager {
         String token = ClientFacade.getInstance().getAuthToken();
         JoinLobbyResponse response = ServerProxy.getInstance().createLobby(lobby, token);
         ResponseManager.handleResponse(response, true);
+    }
+
+    @Override
+    public void resumeLobby(String lobbyID) {
+        String token = ClientFacade.getInstance().getAuthToken();
+        ResumeLobbyResponse response = ServerProxy.getInstance().resumeLobby(lobbyID, token);
+        ResponseManager.handleResponse(response);
+    }
+
+    @Override
+    public void resumeGame(String gameID) {
+        String token = ClientFacade.getInstance().getAuthToken();
+        ResumeGameResponse response = ServerProxy.getInstance().resumeGame(gameID, token);
+        ResponseManager.handleResponse(response);
     }
 
     @Override

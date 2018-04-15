@@ -10,4 +10,6 @@ public interface IHolderGameActivity extends IHolderActivity {
     public void updateFaceUpCards();
     public void updatePlayerTrainHand();
     public void updatePlayerDestHand();
+    public void updatePoints();
+    public void updateShips();
 }
