@@ -82,7 +82,7 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     @Override
     public List<String> getDeltas(String id) throws Exception {
         openConnection();
-        List<String> newDeltas = null;
+        List<String> newDeltas = new ArrayList<>();
         String query = "select command from lobbydeltas where id = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1,id);

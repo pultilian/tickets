@@ -8,6 +8,8 @@ import java.util.List;
 import tickets.common.Command;
 import tickets.common.Game;
 import tickets.common.Lobby;
+import tickets.common.Player;
+import tickets.common.UserData;
 
 /**
  * Created by Pultilian on 4/10/2018.
@@ -29,15 +31,36 @@ public class Main {
             Lobby lobby3 = new Lobby("lobby3", 2);
             lobby3.setId("3");
 
+            Player p1 = new Player("1");
+            p1.setName("name1");
+            Player p2 = new Player("2");
+            p2.setName("name2");
+            Player p3 = new Player("3");
+            p3.setName("name3");
+
+            UserData u1 = new UserData("halla", "yolo");
+            u1.setAuthenticationToken("1");
+            UserData u2 = new UserData("jk", "jk");
+            u1.setAuthenticationToken("2");
+            UserData u3 = new UserData("spyro", "toomba");
+            u1.setAuthenticationToken("3");
+
             List<Lobby> lobbyList = new ArrayList<>();
             List<Game> gameList = new ArrayList<>();
+            List<Player> playerList = new ArrayList<>();
+            List<UserData> userDataList = new ArrayList<>();
             gameList.add(game1);
             gameList.add(game2);
             gameList.add(game3);
-<<<<<<< HEAD
             lobbyList.add(lobby1);
             lobbyList.add(lobby2);
             lobbyList.add(lobby3);
+            playerList.add(p1);
+            playerList.add(p2);
+            playerList.add(p3);
+            userDataList.add(u1);
+            userDataList.add(u2);
+            userDataList.add(u3);
 
             Object object = new Object();
             Object[] objects = {object};
@@ -46,21 +69,20 @@ public class Main {
             Command command1 = new Command("Hello1",strings, objects);
             Command command2 = new Command("Hello2",strings, objects);
             Command command3 = new Command("Hello3",strings, objects);
-=======
             daoFacade.addGames(gameList);
->>>>>>> 4a1b497fcd731d21390dd172116695840d22166b
-
-            daoFacade.addLobbies(lobbyList);
-            daoFacade.removeLobby("2");
-            lobbyList = daoFacade.getLobbies();
+            daoFacade.addUsers(userDataList);
+            daoFacade.addPlayers(playerList);
+            daoFacade.removeUser("3");
+            daoFacade.removePlayer("name1", "1");
+            userDataList = daoFacade.getUsers();
+            playerList = daoFacade.getPlayers();
 
             List<String> gameid = new ArrayList<>();
             gameid.add("1");
-            daoFacade.addDelta(command1,"lobby",gameid);
-            daoFacade.addDelta(command2,"lobby",gameid);
-            daoFacade.addDelta(command3,"lobby",gameid);
+            gameid.add("nugget");
+            daoFacade.addDelta(command1,"player",gameid);
 
-            List<Command> newObjects = daoFacade.getDeltas("lobby", gameid);
+            List<Command> newObjects = daoFacade.getDeltas("player", gameid);
 
             gameList = daoFacade.getGames();
             gameList = null;

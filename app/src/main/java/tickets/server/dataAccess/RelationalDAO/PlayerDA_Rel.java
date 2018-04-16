@@ -1,6 +1,7 @@
 package tickets.server.dataAccess.RelationalDAO;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import tickets.server.dataAccess.DataAccess;
@@ -32,7 +33,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     @Override
     public List<String> getPlayers()throws Exception {
         openConnection();
-        List<String> newPlayers = null;
+        List<String> newPlayers = new ArrayList<>();
         String query = "select player from players";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
@@ -49,12 +50,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     @Override
     public void removePlayers(String gameID, String username) throws Exception{
         openConnection();
-        String delete = "delete from players \n" +
-                "where exists ( \n" +
-                "select * \n" +
-                "from Player p1 \n" +
-                "Player.game_id = ? \n" +
-                "and Player.username = ?) \n";
+        String delete = "delete from players where players.game_id = ? and players.username = ?";
         statement = connection.prepareStatement(delete);
         statement.setString(1, gameID);
         statement.executeUpdate();
@@ -88,7 +84,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     @Override
     public List<String> getDeltas(String gameID, String username) throws Exception {
         openConnection();
-        List<String> newDeltas = null;
+        List<String> newDeltas = new ArrayList<>();
         String query = "select command from playerdeltas where game_id = ? and username = ? ";
 
         statement = connection.prepareStatement(query);
