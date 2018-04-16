@@ -1,5 +1,6 @@
 package tickets.server.dataAccess;
 
+import tickets.common.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class Main {
             gameList.add(game1);
             gameList.add(game2);
             gameList.add(game3);
+<<<<<<< HEAD
             lobbyList.add(lobby1);
             lobbyList.add(lobby2);
             lobbyList.add(lobby3);
@@ -44,6 +46,9 @@ public class Main {
             Command command1 = new Command("Hello1",strings, objects);
             Command command2 = new Command("Hello2",strings, objects);
             Command command3 = new Command("Hello3",strings, objects);
+=======
+            daoFacade.addGames(gameList);
+>>>>>>> 4a1b497fcd731d21390dd172116695840d22166b
 
             daoFacade.addLobbies(lobbyList);
             daoFacade.removeLobby("2");

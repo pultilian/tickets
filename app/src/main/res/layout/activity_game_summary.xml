@@ -1,44 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#a9b5ff">
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="4dp"
         android:text="Game Summary"
-        android:textSize="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/game_summary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="40sp"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/header_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1">
+
+        <TextView
+            android:id="@+id/summary_player_faction"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="0.12"
+            android:text="Faction" />
+
+        <TextView
+            android:id="@+id/summary_player_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="0.12"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/ships_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="0.12"
+            android:text="Ships Left" />
+
+        <TextView
+            android:id="@+id/ship_points"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="0.15"
+            android:text="Route Points" />
+
+        <TextView
+            android:id="@+id/summary_dest_points"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="0.24"
+            android:text="Destination Points" />
+
+        <TextView
+            android:id="@+id/summary_total_points"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="0.13"
+            android:text="Total Points" />
+
+        <TextView
+            android:id="@+id/longest_route"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="0.12"
+            android:text="Longest Route" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/game_summary"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="0.55"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_end_game"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        android:layout_marginStart="8dp"/>
 
     <Button
         android:id="@+id/button_end_game"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
         android:layout_marginBottom="16dp"
         android:text="End Game"
-        android:textSize="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_summary" />
-</android.support.constraint.ConstraintLayout>
+        android:textSize="15sp"
+        android:layout_gravity="center"/>
+</LinearLayout>

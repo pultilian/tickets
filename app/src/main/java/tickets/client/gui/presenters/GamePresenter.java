@@ -160,6 +160,10 @@ public class GamePresenter implements IGamePresenter {
             case gameHistoryUpdated:
                 break;
             case playerInfoUpdated:
+                if (holder != null) {
+                    holder.updatePoints();
+                    holder.updateShips();
+                }
                 break;
             case chatUpdated:
                 break;
