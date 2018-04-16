@@ -1,6 +1,7 @@
 package tickets.server.dataAccess.RelationalDAO;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import tickets.server.dataAccess.DataAccess;
@@ -31,8 +32,8 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     @Override
     public List<String> getLobbies()throws Exception {
         openConnection();
-        List<String> newLobbies = null;
-        String query = "select lobbies from Lobby";
+        List<String> newLobbies = new ArrayList<>();
+        String query = "select lobby from lobbies";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
@@ -82,7 +83,7 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
     public List<String> getDeltas(String id) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from lobbydeltas where id = ?";
+        String query = "select command from lobbydeltas where id = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1,id);
         ResultSet results = statement.executeQuery();

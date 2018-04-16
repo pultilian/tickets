@@ -1,6 +1,7 @@
 package tickets.server.dataAccess.RelationalDAO;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import tickets.server.dataAccess.DataAccess;
@@ -31,8 +32,8 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     @Override
     public List<String> getGames()throws Exception {
         openConnection();
-        List<String> newGames = null;
-        String query = "select games from Game";
+        List<String> newGames = new ArrayList<>();
+        String query = "select game from games";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
@@ -81,8 +82,8 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     @Override
     public List<String> getDeltas(String gameID) throws Exception {
         openConnection();
-        List<String> newDeltas = null;
-        String query = "select deltas from gamedeltas where id = ?";
+        List<String> newDeltas = new ArrayList<>();
+        String query = "select command from gamedeltas where id = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1,gameID);
         ResultSet results = statement.executeQuery();

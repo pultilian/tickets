@@ -89,7 +89,7 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
     public List<String> getDeltas(String gameID, String username) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from playerdeltas where game_id = ? and username = ? ";
+        String query = "select command from playerdeltas where game_id = ? and username = ? ";
 
         statement = connection.prepareStatement(query);
         statement.setString(1,gameID);
