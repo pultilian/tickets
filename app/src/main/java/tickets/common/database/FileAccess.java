@@ -1,43 +1,49 @@
 package tickets.common.database;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FileAccess {
-	private static final String OUTFOLDER = "files/";
+	private static final String OUTFOLDER = System.getProperty("user.dir") + "/files/";
 	
 	public void checkpointUpdate(String object, String type, String id) throws IOException {
 		String filename = OUTFOLDER + type + id;
-		Path file = Paths.get(filename);
-		List<String> content = Arrays.asList();
-		Files.write(file, content, Charset.forName("UTF-8"), StandardOpenOption.CREATE);
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+	    writer.write(object);
+	    writer.write("\n");
+	    writer.close();
 	}
 	
 	public void removeFile(String type, String id) throws IOException {
 		String filename = OUTFOLDER + type + id;
-		Path file = Paths.get(filename);
-		Files.delete(file);
+		File file = new File(filename);
+		file.delete();
 	}
 	
 	public void addUpdate(String command, String type, String id) throws IOException {
 		String filename = OUTFOLDER + type + id;
-		Path file = Paths.get(filename);
-		List<String> content = Arrays.asList(command);
-		Files.write(file, content, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true));
+	    writer.append(command);
+	    writer.append("\n");
+	    writer.close();
 	}
 	
 	public List<String> getDeltasForObject(String type, String id) throws IOException {
 		String filename = OUTFOLDER + type + id;
-		Path file = Paths.get(filename);
-		List<String> lines = Files.readAllLines(file);
+		List<String> lines = new ArrayList<>();
+		BufferedReader br = new BufferedReader(new FileReader(filename));
+	    String line = br.readLine();
+	    while (line != null) {
+	    	lines.add(line);
+	    	line = br.readLine();
+	    }
+	    br.close();
 		// Start at one to skip object json
 		lines.remove(0);
 		return lines;
@@ -48,11 +54,10 @@ public class FileAccess {
 		File folder = new File(OUTFOLDER);
 		File[] files = folder.listFiles();
 		for (File file : files) {
-			if (file.getName().contains(type)) {
-				Path theFile = Paths.get(OUTFOLDER + file.getName());
-				List<String> lines = Files.readAllLines(theFile);
-				objects.add(lines.get(0));
-			}
+			BufferedReader br = new BufferedReader(new FileReader(OUTFOLDER + file.getName()));
+		    String line = br.readLine();
+		    objects.add(line);
+		    br.close();
 		}
 		return objects;
 	}
@@ -61,9 +66,7 @@ public class FileAccess {
 		File folder = new File(OUTFOLDER);
 		File[] files = folder.listFiles();
 		for (File file : files) {
-			String filename = OUTFOLDER + file.getName();
-			Path theFile = Paths.get(filename);
-			Files.delete(theFile);
+			file.delete();
 		}
 	}
 }
