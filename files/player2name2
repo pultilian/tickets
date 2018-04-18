@@ -1,27 +1,3 @@
-{
-  "info": {
-    "name": "name2",
-    "points": 0,
-    "shipsLeft": 45,
-    "trainCardCount": 0,
-    "destinationCardCount": 0
-  },
-  "associatedAuthToken": "2",
-  "playerDestinationCards": {
-    "cards": []
-  },
-  "playerResourceCards": {
-    "colorsListMap": {
-      "Wild": [],
-      "Orange": [],
-      "Gray": [],
-      "Red": [],
-      "Black": [],
-      "Purple": [],
-      "Green": [],
-      "Yellow": [],
-      "Blue": [],
-      "White": []
-    }
-  }
-}
+{"info":{"name":"name2","points":0,"shipsLeft":45,"trainCardCount":0,"destinationCardCount":0},"associatedAuthToken":"2","playerDestinationCards":{"cards":[]},"playerResourceCards":{"colorsListMap":{"Wild":[],"Orange":[],"Gray":[],"Red":[],"Black":[],"Purple":[],"Green":[],"Yellow":[],"Blue":[],"White":[]}}}
+{"methodName":"Hello1","parameterTypeNames":["New","No"],"parametersAsJsonStrings":["{}"]}
+{"methodName":"Hello2","parameterTypeNames":["New","No"],"parametersAsJsonStrings":["{}"]}

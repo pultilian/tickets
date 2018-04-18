@@ -76,16 +76,15 @@ public class Main {
             userDataList = daoFacade.getUsers();
 
             List<String> gameid = new ArrayList<>();
-            gameid.add("1");
-            gameid.add("nugget");
+            gameid.add("2");
+            gameid.add("name2");
             daoFacade.addDelta(command1,"player",gameid);
+            daoFacade.addDelta(command2,"player",gameid);
 
             List<Command> newObjects = daoFacade.getDeltas("player", gameid);
 
             gameList = daoFacade.getGames();
             gameList = null;
-
-
         } catch (Exception e) {
             System.out.print(e);
         }

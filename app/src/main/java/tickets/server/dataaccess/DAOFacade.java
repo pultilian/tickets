@@ -43,52 +43,52 @@ public class DAOFacade {
 
 
     public String objectToJSON(Game request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public Game JSONToGame(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, Game.class);
     }
 
     public String objectToJSON(Command request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public Command JSONToCommand(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, Command.class);
     }
 
     public String objectToJSON(Player request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public Player JSONToPlayer(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, Player.class);
     }
 
     public String objectToJSON(Lobby request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public Lobby JSONToLobby(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, Lobby.class);
     }
 
     public String objectToJSON(UserData request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public UserData JSONToUserData(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, UserData.class);
     }
 

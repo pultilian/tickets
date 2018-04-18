@@ -56,14 +56,8 @@ public class FileAccess {
 		for (File file : files) {
 			if(file.getName().startsWith(type)) {
 				BufferedReader br = new BufferedReader(new FileReader(OUTFOLDER + file.getName()));
-
-				long length = 0;
-				String retVal = "";
-				String line;
-				while ((line = br.readLine()) != null) {
-					retVal += line;
-				}
-				objects.add(retVal);
+				String line = br.readLine();
+				objects.add(line);
 				br.close();
 			} else {
 				continue;
