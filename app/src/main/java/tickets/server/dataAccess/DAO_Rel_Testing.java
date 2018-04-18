@@ -14,7 +14,7 @@ import tickets.common.UserData;
 /**
  * Created by Pultilian on 4/10/2018.
  */
-public class Main {
+public class DAO_Rel_Testing {
 
 
     public static void main(String[] args) {

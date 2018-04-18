@@ -235,4 +235,31 @@ public class DAOFacade {
 
         return retCommands;
     }
+
+
+    public void clearDeltas(String type)throws Exception{
+        switch (type) {
+            case "player":
+                playersDA.clearDeltas();
+                break;
+            case "lobby":
+                lobbiesDA.clearDeltas();
+                break;
+            case "game":
+                gamesDA.clearDeltas();
+                break;
+            default:
+                throw new Exception(type + " is not a valid delta");
+        }
+    }
+
+    public void deleteAll() throws Exception{
+        playersDA.clear();
+        playersDA.clearDeltas();
+        lobbiesDA.clear();
+        lobbiesDA.clearDeltas();
+        usersDA.clear();
+        gamesDA.clear();
+        gamesDA.clearDeltas();
+    }
 }

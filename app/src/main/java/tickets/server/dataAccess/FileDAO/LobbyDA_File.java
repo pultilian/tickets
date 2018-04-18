@@ -45,4 +45,9 @@ public class LobbyDA_File extends DataAccess implements LobbyDataAccess {
     public List<String> getDeltas(String id) throws Exception {
         return fileAccess.getDeltasForObject("lobby", id);
     }
+
+
+    public void clearDeltas() throws Exception{
+        return;
+    }
 }
