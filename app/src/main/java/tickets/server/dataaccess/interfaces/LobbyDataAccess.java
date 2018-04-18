@@ -1,6 +1,12 @@
-package tickets.server.dataaccess.interfaces;
+package tickets.server.dataAccess.Interfaces;
+
+import android.widget.EditText;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -19,4 +25,6 @@ public interface LobbyDataAccess {
     public void addDeltas(String command, String lobbyID) throws Exception;
 
     public List<String> getDeltas(String id) throws Exception;
+    public void clearDeltas() throws Exception;
+
 }

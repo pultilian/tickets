@@ -1,11 +1,11 @@
-package tickets.relational_dao;
+package tickets.server.dataAccess.RelationalDAO;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import tickets.server.dataaccess.DataAccess;
-import tickets.server.dataaccess.interfaces.LobbyDataAccess;
+import tickets.server.dataAccess.DataAccess;
+import tickets.server.dataAccess.Interfaces.LobbyDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.
@@ -95,5 +95,14 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
         statement.close();
         closeConnection();
         return newDeltas;
+    }
+
+    public void clearDeltas() throws Exception{
+        openConnection();
+        String clear = "delete from lobbydeltas";
+        statement = connection.prepareStatement(clear);
+        statement.executeUpdate();
+        statement.close();
+        closeConnection();
     }
 }

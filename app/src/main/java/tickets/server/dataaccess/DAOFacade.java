@@ -1,4 +1,4 @@
-package tickets.server.dataaccess;
+package tickets.server.dataAccess;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,13 +8,13 @@ import tickets.common.Game;
 import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.UserData;
-import tickets.server.dataaccess.interfaces.DAOFactory;
-// import tickets.file_dao.FileFactory;
-// import tickets.relational_dao.RelationalFactory;
-import tickets.server.dataaccess.interfaces.GameDataAccess;
-import tickets.server.dataaccess.interfaces.LobbyDataAccess;
-import tickets.server.dataaccess.interfaces.PlayerDataAccess;
-import tickets.server.dataaccess.interfaces.UserDataAccess;
+import tickets.server.dataAccess.Interfaces.DAOFactory;
+import tickets.server.dataAccess.Factory.FileFactory;
+import tickets.server.dataAccess.Factory.RelationalFactory;
+import tickets.server.dataAccess.Interfaces.GameDataAccess;
+import tickets.server.dataAccess.Interfaces.LobbyDataAccess;
+import tickets.server.dataAccess.Interfaces.PlayerDataAccess;
+import tickets.server.dataAccess.Interfaces.UserDataAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +30,17 @@ public class DAOFacade {
     private UserDataAccess usersDA;
 
 
-    public DAOFacade(String type) throws Exception {
-        PluginManager manager = new PluginManager();
-        daoFactory = manager.getPlugin(type);
-
+    public DAOFacade(String type) throws Exception{
+        switch (type.toLowerCase()){
+            case "relational":
+                daoFactory = new RelationalFactory();
+                break;
+            case "file":
+                daoFactory = new FileFactory();
+                break;
+            default:
+                throw new Exception("Invalid Database Type");
+        }
         daoFactory.createDAOs();
         lobbiesDA = daoFactory.getLobbyDA();
         usersDA = daoFactory.getUserDA();
@@ -98,7 +105,7 @@ public class DAOFacade {
             gamesDA.addGame(objectToJSON(games.get(i)), games.get(i).getGameId());
         }
     }
-
+    
     public List<Game> getGames() throws Exception{
         List<String> listStrings = gamesDA.getGames();
         List<Game> listGames = new ArrayList<>();
@@ -227,5 +234,32 @@ public class DAOFacade {
         }
 
         return retCommands;
+    }
+
+
+    public void clearDeltas(String type)throws Exception{
+        switch (type) {
+            case "player":
+                playersDA.clearDeltas();
+                break;
+            case "lobby":
+                lobbiesDA.clearDeltas();
+                break;
+            case "game":
+                gamesDA.clearDeltas();
+                break;
+            default:
+                throw new Exception(type + " is not a valid delta");
+        }
+    }
+
+    public void deleteAll() throws Exception{
+        playersDA.clear();
+        playersDA.clearDeltas();
+        lobbiesDA.clear();
+        lobbiesDA.clearDeltas();
+        usersDA.clear();
+        gamesDA.clear();
+        gamesDA.clearDeltas();
     }
 }

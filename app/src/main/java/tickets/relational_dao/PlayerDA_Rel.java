@@ -1,11 +1,11 @@
-package tickets.relational_dao;
+package tickets.server.dataAccess.RelationalDAO;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import tickets.server.dataaccess.DataAccess;
-import tickets.server.dataaccess.interfaces.PlayerDataAccess;
+import tickets.server.dataAccess.DataAccess;
+import tickets.server.dataAccess.Interfaces.PlayerDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.
@@ -99,5 +99,14 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
         statement.close();
         closeConnection();
         return newDeltas;
+    }
+
+    public void clearDeltas() throws Exception{
+        openConnection();
+        String clear = "delete from playerdeltas";
+        statement = connection.prepareStatement(clear);
+        statement.executeUpdate();
+        statement.close();
+        closeConnection();
     }
 }

@@ -1,9 +1,9 @@
-package tickets.file_dao;
+package tickets.server.dataAccess.FileDAO;
 
 import java.util.List;
 
-import tickets.server.dataaccess.DataAccess;
-import tickets.server.dataaccess.interfaces.UserDataAccess;
+import tickets.server.dataAccess.DataAccess;
+import tickets.server.dataAccess.Interfaces.UserDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.

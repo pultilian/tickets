@@ -1,9 +1,9 @@
-package tickets.file_dao;
+package tickets.server.dataAccess.FileDAO;
 
 import java.util.List;
 
-import tickets.server.dataaccess.DataAccess;
-import tickets.server.dataaccess.interfaces.LobbyDataAccess;
+import tickets.server.dataAccess.DataAccess;
+import tickets.server.dataAccess.Interfaces.LobbyDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.
@@ -44,5 +44,10 @@ public class LobbyDA_File extends DataAccess implements LobbyDataAccess {
     @Override
     public List<String> getDeltas(String id) throws Exception {
         return fileAccess.getDeltasForObject("lobby", id);
+    }
+
+
+    public void clearDeltas() throws Exception{
+        return;
     }
 }

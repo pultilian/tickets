@@ -1,9 +1,9 @@
-package tickets.file_dao;
+package tickets.server.dataAccess.FileDAO;
 
 import java.util.List;
 
-import tickets.server.dataaccess.DataAccess;
-import tickets.server.dataaccess.interfaces.PlayerDataAccess;
+import tickets.server.dataAccess.DataAccess;
+import tickets.server.dataAccess.Interfaces.PlayerDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.
@@ -48,5 +48,9 @@ public class PlayerDA_File extends DataAccess implements PlayerDataAccess {
     public List<String> getDeltas(String gameID, String username) throws Exception {
         String newID = gameID + username;
         return fileAccess.getDeltasForObject("player", newID);
+    }
+
+    public void clearDeltas() throws Exception{
+        return;
     }
 }
