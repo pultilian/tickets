@@ -100,4 +100,13 @@ public class PlayerDA_Rel extends DataAccess implements PlayerDataAccess {
         closeConnection();
         return newDeltas;
     }
+
+    public void clearDeltas() throws Exception{
+        openConnection();
+        String clear = "delete from playerdeltas";
+        statement = connection.prepareStatement(clear);
+        statement.executeUpdate();
+        statement.close();
+        closeConnection();
+    }
 }

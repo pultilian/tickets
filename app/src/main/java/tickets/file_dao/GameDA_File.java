@@ -44,4 +44,9 @@ public class GameDA_File extends DataAccess implements GameDataAccess {
     public List<String> getDeltas(String gameID) throws Exception {
         return fileAccess.getDeltasForObject("game", gameID);
     }
+
+    public void clearDeltas() throws Exception{
+        return;
+    }
+
 }
