@@ -15,6 +15,7 @@ import tickets.server.dataaccess.interfaces.GameDataAccess;
 import tickets.server.dataaccess.interfaces.LobbyDataAccess;
 import tickets.server.dataaccess.interfaces.PlayerDataAccess;
 import tickets.server.dataaccess.interfaces.UserDataAccess;
+import tickets.server.model.game.ServerGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +48,9 @@ public class DAOFacade {
         return gson.toJson(request);
     }
 
-    public Game JSONToGame(String body) throws Exception {
+    public ServerGame JSONToGame(String body) throws Exception {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.fromJson(body, Game.class);
+        return gson.fromJson(body, ServerGame.class);
     }
 
     public String objectToJSON(Command request) {
@@ -93,15 +94,15 @@ public class DAOFacade {
     }
 
 
-    public void addGames(List<Game> games) throws Exception{
+    public void addGames(List<ServerGame> games) throws Exception{
         for(int i = 0; i < games.size(); i++) {
             gamesDA.addGame(objectToJSON(games.get(i)), games.get(i).getGameId());
         }
     }
 
-    public List<Game> getGames() throws Exception{
+    public List<ServerGame> getGames() throws Exception{
         List<String> listStrings = gamesDA.getGames();
-        List<Game> listGames = new ArrayList<>();
+        List<ServerGame> listGames = new ArrayList<>();
         for(int i = 0; i < listStrings.size(); i++){
             listGames.add(JSONToGame(listStrings.get(i)));
         }

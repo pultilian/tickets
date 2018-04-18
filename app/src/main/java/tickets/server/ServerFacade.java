@@ -37,6 +37,7 @@ import tickets.common.response.ResumeGameResponse;
 import tickets.common.response.ResumeLobbyResponse;
 import tickets.common.response.StartGameResponse;
 import tickets.common.response.TrainCardResponse;
+import tickets.server.dataaccess.DAOFacade;
 import tickets.server.model.AllGames;
 import tickets.server.model.AllLobbies;
 import tickets.server.model.AllUsers;
@@ -128,8 +129,8 @@ public class ServerFacade implements IServer {
     private void fillMaps() {
         List<UserData> users = AllUsers.getInstance().getUsers();
         for (UserData u : users) {
-            List<Game> userGames = AllGames.getGamesWithUser(u.getUsername());
-            List<Lobby> userLobbies = AllLobbies.getLobbiesWithUser(u.getUsername());
+            List<Game> userGames = AllGames.getInstance().getGamesWithUser(u.getUsername());
+            List<Lobby> userLobbies = AllLobbies.getInstance().getLobbiesWithUser(u.getUsername());
             if (userGames.size() > 0) {
                 clientsInAGame.put(new ClientProxy(u.getAuthenticationToken()), userGames[0]);
             }
@@ -157,7 +158,15 @@ public class ServerFacade implements IServer {
             for (Lobby lobby : currentLobbies) {
                 allLobbies.remove(lobby);
             }
+
             // Add this user to the database
+            List<UserData> user = new ArrayList<>();
+            user.add(userData);
+            try {
+                daoFacade.addUsers(user);
+            } catch (Exception e) {
+                return new LoginResponse(new Exception("Server error."));
+            }
 
             LoginResponse response = new LoginResponse(
                     "Welcome, " + userData.getUsername(), authToken, allLobbies);
@@ -179,6 +188,16 @@ public class ServerFacade implements IServer {
         else {
             String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
+
+            // Add this user to the database
+            List<UserData> user = new ArrayList<>();
+            user.add(userData);
+            try {
+                daoFacade.addUsers(user);
+            } catch (Exception e) {
+                return new LoginResponse(new Exception("Server error."));
+            }
+
             LoginResponse response = new LoginResponse(
                     "Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
             response.setCurrentLobbies(AllLobbies.getInstance().getLobbiesWithUser(userData.getUsername()));
@@ -234,6 +253,15 @@ public class ServerFacade implements IServer {
                 " has created the lobby.");
         lobby.addPlayer(player);
         lobby.assignFaction(player);
+
+        // Add the lobby to the database
+        List<Lobby> DBlobby = new ArrayList<>();
+        DBlobby.add(lobby);
+        try {
+            daoFacade.addLobbies(DBlobby);
+        } catch (Exception e) {
+            return new JoinLobbyResponse(new Exception("Server error."));
+        }
 
         // Move current client
         ClientProxy currentClient = getProxy(authToken);
