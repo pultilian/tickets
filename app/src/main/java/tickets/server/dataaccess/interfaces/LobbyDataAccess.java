@@ -1,12 +1,6 @@
-package tickets.server.dataAccess.Interfaces;
-
-import android.widget.EditText;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+package tickets.server.dataaccess.interfaces;
 
 
-import java.sql.ResultSet;
 import java.util.List;
 
 /**

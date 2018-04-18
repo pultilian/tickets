@@ -1,15 +1,11 @@
-package tickets.server.dataAccess.Factory;
+package tickets.relational_dao;
 
-import tickets.server.dataAccess.DataAccess;
-import tickets.server.dataAccess.Interfaces.DAOFactory;
-import tickets.server.dataAccess.Interfaces.GameDataAccess;
-import tickets.server.dataAccess.Interfaces.LobbyDataAccess;
-import tickets.server.dataAccess.Interfaces.PlayerDataAccess;
-import tickets.server.dataAccess.Interfaces.UserDataAccess;
-import tickets.server.dataAccess.RelationalDAO.GameDA_Rel;
-import tickets.server.dataAccess.RelationalDAO.LobbyDA_Rel;
-import tickets.server.dataAccess.RelationalDAO.PlayerDA_Rel;
-import tickets.server.dataAccess.RelationalDAO.UserDA_Rel;
+import tickets.server.dataaccess.DataAccess;
+import tickets.server.dataaccess.interfaces.DAOFactory;
+import tickets.server.dataaccess.interfaces.GameDataAccess;
+import tickets.server.dataaccess.interfaces.LobbyDataAccess;
+import tickets.server.dataaccess.interfaces.PlayerDataAccess;
+import tickets.server.dataaccess.interfaces.UserDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.

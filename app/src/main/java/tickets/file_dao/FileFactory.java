@@ -1,10 +1,10 @@
-package tickets.server.dataAccess.Factory;
+package tickets.file_dao;
 
-import tickets.server.dataAccess.Interfaces.DAOFactory;
-import tickets.server.dataAccess.Interfaces.GameDataAccess;
-import tickets.server.dataAccess.Interfaces.LobbyDataAccess;
-import tickets.server.dataAccess.Interfaces.PlayerDataAccess;
-import tickets.server.dataAccess.Interfaces.UserDataAccess;
+import tickets.server.dataaccess.interfaces.DAOFactory;
+import tickets.server.dataaccess.interfaces.GameDataAccess;
+import tickets.server.dataaccess.interfaces.LobbyDataAccess;
+import tickets.server.dataaccess.interfaces.PlayerDataAccess;
+import tickets.server.dataaccess.interfaces.UserDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.
