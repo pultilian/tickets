@@ -83,9 +83,55 @@ public class ServerFacade implements IServer {
             if (wipeDatabase) {
                 daoFacade.clearAll();
             }
+            loadUsers();
+            loadLobbies();
+            loadGames();
+            fillMaps();
         }
         catch (Exception ex) {
             System.out.println("An error occurred while starting up server plugin");
+        }
+        return;
+    }
+
+    private void loadUsers() throws Exception {
+        List<UserData> users = daoFacade.getUsers();
+        for (UserData u : users) {
+            AllUsers.getInstance().addUser(u);
+        }
+        return;
+    }
+
+    private void loadLobbies() throws Exception {
+        List<Lobby> lobbies = daoFacade.getLobbies();
+        for (Lobby l : lobbies) {
+            AllLobbies.getInstance().addLobby(l);
+        }
+        return;
+    }
+
+    private void loadGames() throws Exception {
+        List<Game> games = daoFacade.getGames();
+        for (Game g : games) {
+            AllGames.getInstance().addGame(g);
+        }
+        return;
+    }
+
+    private void fillMaps() {
+        List<UserData> users = AllUsers.getInstance().getUsers();
+        for (UserData u : users) {
+            List<Game> userGames = AllGames.getGamesWithUser(u.getUsername());
+            List<Lobby> userLobbies = AllLobbies.getLobbiesWithUser(u.getUsername());
+            if (userGames.size() > 0) {
+                clientsInAGame.put(new ClientProxy(u.getAuthenticationToken()), userGames[0]);
+            }
+            else if (userLobbies.size() > 0) {
+                clientsInALobby.put(new ClientProxy(u.getAuthenticationToken()), userLobbies[0]);
+            }
+            else {
+                clientsInLobbyList.add(new ClientProxy(u.getAuthenticationToken()));
+            }
         }
         return;
     }
