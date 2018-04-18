@@ -53,6 +53,8 @@ public class ServerFacade implements IServer {
     private Map<ServerPlayer, Integer> numPlayerDeltas;
     private Map<Lobby, Integer> numLobbyDeltas;
 
+    private DAOFacade daoFacade;
+
     //----------------------------------------------------------------------------------------------
     // *** SINGLETON PATTERN ***
 
@@ -76,8 +78,69 @@ public class ServerFacade implements IServer {
 
     //----------------------------------------------------------------------------------------------
     // *** STARTUP ***
-    public void startup(String persistenceType, int numCommands, boolean wipeDatabase) {
 
+    public void startup(String persistenceType, int numCommands, boolean wipeDatabase) {
+        if (daoFacade != null) {
+            return;
+        }
+        try {
+            daoFacade = new DAOFacade(persistenceType);
+            // how do you tell the database how many commands to store before rewriting the blob?
+
+            if (wipeDatabase) {
+                daoFacade.clearAll();
+            }
+            loadUsers();
+            loadLobbies();
+            loadGames();
+            fillMaps();
+        }
+        catch (Exception ex) {
+            System.out.println("An error occurred while starting up server plugin");
+        }
+        return;
+    }
+
+    private void loadUsers() throws Exception {
+        List<UserData> users = daoFacade.getUsers();
+        for (UserData u : users) {
+            AllUsers.getInstance().addUser(u);
+        }
+        return;
+    }
+
+    private void loadLobbies() throws Exception {
+        List<Lobby> lobbies = daoFacade.getLobbies();
+        for (Lobby l : lobbies) {
+            AllLobbies.getInstance().addLobby(l);
+        }
+        return;
+    }
+
+    private void loadGames() throws Exception {
+        List<Game> games = daoFacade.getGames();
+        for (Game g : games) {
+            AllGames.getInstance().addGame(g);
+        }
+        return;
+    }
+
+    private void fillMaps() {
+        List<UserData> users = AllUsers.getInstance().getUsers();
+        for (UserData u : users) {
+            List<Game> userGames = AllGames.getGamesWithUser(u.getUsername());
+            List<Lobby> userLobbies = AllLobbies.getLobbiesWithUser(u.getUsername());
+            if (userGames.size() > 0) {
+                clientsInAGame.put(new ClientProxy(u.getAuthenticationToken()), userGames[0]);
+            }
+            else if (userLobbies.size() > 0) {
+                clientsInALobby.put(new ClientProxy(u.getAuthenticationToken()), userLobbies[0]);
+            }
+            else {
+                clientsInLobbyList.add(new ClientProxy(u.getAuthenticationToken()));
+            }
+        }
+        return;
     }
 
     //----------------------------------------------------------------------------------------------
@@ -95,7 +158,7 @@ public class ServerFacade implements IServer {
                 allLobbies.remove(lobby);
             }
             // Add this user to the database
-            
+
             LoginResponse response = new LoginResponse(
                     "Welcome, " + userData.getUsername(), authToken, allLobbies);
             response.setCurrentLobbies(currentLobbies);
