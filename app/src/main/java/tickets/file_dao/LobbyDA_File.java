@@ -2,6 +2,7 @@ package tickets.file_dao;
 
 import java.util.List;
 
+import tickets.common.database.FileAccess;
 import tickets.server.dataaccess.DataAccess;
 import tickets.server.dataaccess.interfaces.LobbyDataAccess;
 
@@ -44,5 +45,8 @@ public class LobbyDA_File extends DataAccess implements LobbyDataAccess {
     @Override
     public List<String> getDeltas(String id) throws Exception {
         return fileAccess.getDeltasForObject("lobby", id);
+    }
+    public void clearDeltas() throws Exception{
+        return;
     }
 }
