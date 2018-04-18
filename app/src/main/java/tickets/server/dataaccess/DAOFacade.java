@@ -228,4 +228,12 @@ public class DAOFacade {
 
         return retCommands;
     }
+
+    public void clearAll() {
+        lobbiesDA.clear();
+        gamesDA.clear();
+        playersDA.clear();
+        usersDA.clear();
+        return;
+    }
 }

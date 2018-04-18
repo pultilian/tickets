@@ -49,6 +49,8 @@ public class ServerFacade implements IServer {
     private Map<ClientProxy, Lobby> clientsInALobby;
     private Map<ClientProxy, ServerGame> clientsInAGame;
 
+    private DAOFacade daoFacade;
+
     //----------------------------------------------------------------------------------------------
     // *** SINGLETON PATTERN ***
 
@@ -69,8 +71,23 @@ public class ServerFacade implements IServer {
 
     //----------------------------------------------------------------------------------------------
     // *** STARTUP ***
-    public void startup(String persistenceType, int numCommands, boolean wipeDatabase) {
 
+    public void startup(String persistenceType, int numCommands, boolean wipeDatabase) {
+        if (daoFacade != null) {
+            return;
+        }
+        try {
+            daoFacade = new DAOFacade(persistenceType);
+            // how do you tell the database how many commands to store before rewriting the blob?
+
+            if (wipeDatabase) {
+                daoFacade.clearAll();
+            }
+        }
+        catch (Exception ex) {
+            System.out.println("An error occurred while starting up server plugin");
+        }
+        return;
     }
 
     //----------------------------------------------------------------------------------------------
