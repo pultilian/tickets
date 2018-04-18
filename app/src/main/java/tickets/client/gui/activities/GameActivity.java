@@ -281,7 +281,7 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
                 List<TrainCard> cards = presenter.getFaceUpCards();
                 for(int i = 0; i < cards.size(); i++){
                 	if (cards.get(i) == null) {
-                		faceUpCard[i].setImageResource(R.color.transparent);
+                		faceUpCard[i].setImageResource(android.R.color.transparent);
                 		break;
                 	}
                     switch (cards.get(i).getColor()){
