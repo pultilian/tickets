@@ -68,6 +68,12 @@ public class ServerFacade implements IServer {
     }
 
     //----------------------------------------------------------------------------------------------
+    // *** STARTUP ***
+    public void startup(String persistenceType, int numCommands, boolean wipeDatabase) {
+
+    }
+
+    //----------------------------------------------------------------------------------------------
     // *** LOGIN/REGISTER COMMANDS ***
 
     @Override
