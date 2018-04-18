@@ -1,6 +1,7 @@
 package tickets.relational_dao;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import tickets.server.dataaccess.DataAccess;
@@ -31,7 +32,7 @@ public class UserDA_Rel extends DataAccess implements UserDataAccess {
     @Override
     public List<String> getUserData()throws Exception {
         openConnection();
-        List<String> newUserData = null;
+        List<String> newUserData = new ArrayList<>();
         String query = "select userData from users";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
