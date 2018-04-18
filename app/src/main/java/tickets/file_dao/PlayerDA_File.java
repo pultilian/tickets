@@ -49,4 +49,8 @@ public class PlayerDA_File extends DataAccess implements PlayerDataAccess {
         String newID = gameID + username;
         return fileAccess.getDeltasForObject("player", newID);
     }
+
+    public void clearDeltas() throws Exception{
+        return;
+    }
 }

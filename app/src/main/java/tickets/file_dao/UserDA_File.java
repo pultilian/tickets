@@ -33,4 +33,7 @@ public class UserDA_File extends DataAccess implements UserDataAccess {
         fileAccess.removeAllFiles();
     }
 
+    public void clearDeltas() throws Exception{
+        return;
+    }
 }

@@ -96,4 +96,13 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
         closeConnection();
         return newDeltas;
     }
+
+    public void clearDeltas() throws Exception{
+        openConnection();
+        String clear = "delete from gamedeltas";
+        statement = connection.prepareStatement(clear);
+        statement.executeUpdate();
+        statement.close();
+        closeConnection();
+    }
 }
