@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.io.File;
 
+import tickets.file_dao.FileFactory;
+import tickets.relational_dao.RelationalFactory;
 import tickets.server.dataaccess.interfaces.DAOFactory;
 
 
@@ -17,10 +19,13 @@ public class PluginManager {
 
     public PluginManager() {
         allJars = new ArrayList<>();
-
         //Get a file object of the directory holding all persistence plugins
-        File libs = new File("tickets");
+        File libs = new File("app/src/main/java/tickets/");
+        try {
+            System.out.print(libs.getCanonicalPath());
+        }catch (Exception e){
 
+        }
         //iterate through all of the files in the tickets/ directory
         //  for each .jar file, create a new URL for it, and add it
         //  to in allJars
@@ -40,27 +45,39 @@ public class PluginManager {
     }
 
     // for a plugin to be correctly loaded,
-    public DAOFactory getPlugin(String name) {
+    public DAOFactory getPlugin(String name) throws Exception {
         System.out.println("getting plugin");
         DAOFactory daoFactory = null;
-        name = "tickets." + name.toLowerCase() + "_dao." + name + "Factory";
-        try {
-            Class<? extends DAOFactory> plugin = Class.forName(name, true, loader)
-                    .asSubclass(DAOFactory.class);
-            daoFactory = plugin.getDeclaredConstructor().newInstance();
+
+        switch (name){
+            case "File":
+                daoFactory = new FileFactory();
+                break;
+            case "Relational":
+                daoFactory = new RelationalFactory();
+                break;
+            default:
+                throw new Exception("invalid type");
         }
-        catch (NoClassDefFoundError defFoundError) {
-            // I'm not positive that this is covered by the
-            //   general Exception catch-all, and since it's
-            //   a runtime exception it's better to be safe
-            return null;
-        }
-        catch (ClassNotFoundException classNotFound) {
-            return null;
-        }
-        catch (Exception ex) {
-            System.out.println(ex);
-        }
+
+//        name = "app.src.main.java.tickets." + name.toLowerCase() + "_dao." + name + "Factory";
+//        try {
+//            Class<? extends DAOFactory> plugin = Class.forName(name, true, loader)
+//                    .asSubclass(DAOFactory.class);
+//            daoFactory = plugin.getDeclaredConstructor().newInstance();
+//        }
+//        catch (NoClassDefFoundError defFoundError) {
+//            // I'm not positive that this is covered by the
+//            //   general Exception catch-all, and since it's
+//            //   a runtime exception it's better to be safe
+//            return null;
+//        }
+//        catch (ClassNotFoundException classNotFound) {
+//            return null;
+//        }
+//        catch (Exception ex) {
+//            System.out.println(ex);
+//        }
 
         return daoFactory;
     }

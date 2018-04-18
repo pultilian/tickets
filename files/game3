@@ -1,0 +1,9 @@
+{
+  "gameId": "3",
+  "name": "game3",
+  "chat": [],
+  "gameHistory": [],
+  "currentTurn": 0,
+  "gamePlayers": [],
+  "faceUpCards": []
+}

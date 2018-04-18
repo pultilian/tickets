@@ -2,6 +2,7 @@ package tickets.file_dao;
 
 import java.util.List;
 
+import tickets.common.database.FileAccess;
 import tickets.server.dataaccess.DataAccess;
 import tickets.server.dataaccess.interfaces.GameDataAccess;
 
