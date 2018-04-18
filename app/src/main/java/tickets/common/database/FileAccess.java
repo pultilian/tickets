@@ -15,7 +15,7 @@ public class FileAccess {
 	public void checkpointUpdate(String object, String type, String id) throws IOException {
 		String filename = OUTFOLDER + type + id;
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-	    writer.write(object);
+		writer.write(object);
 	    writer.write("\n");
 	    writer.close();
 	}
@@ -54,10 +54,20 @@ public class FileAccess {
 		File folder = new File(OUTFOLDER);
 		File[] files = folder.listFiles();
 		for (File file : files) {
-			BufferedReader br = new BufferedReader(new FileReader(OUTFOLDER + file.getName()));
-		    String line = br.readLine();
-		    objects.add(line);
-		    br.close();
+			if(file.getName().startsWith(type)) {
+				BufferedReader br = new BufferedReader(new FileReader(OUTFOLDER + file.getName()));
+
+				long length = 0;
+				String retVal = "";
+				String line;
+				while ((line = br.readLine()) != null) {
+					retVal += line;
+				}
+				objects.add(retVal);
+				br.close();
+			} else {
+				continue;
+			}
 		}
 		return objects;
 	}

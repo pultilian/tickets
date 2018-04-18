@@ -72,7 +72,7 @@ public class Main {
             daoFacade.addPlayers(playerList);
             daoFacade.removeUser("3");
             daoFacade.removePlayer("name1", "1");
-            playerList = daoFacade.getPlayers();
+            gameList = daoFacade.getGames();
             userDataList = daoFacade.getUsers();
 
             List<String> gameid = new ArrayList<>();
