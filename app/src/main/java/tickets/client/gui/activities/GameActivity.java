@@ -280,6 +280,10 @@ public class GameActivity extends AppCompatActivity implements IHolderGameActivi
                 ImageView[] faceUpCard = {faceUpCard1,faceUpCard2,faceUpCard3,faceUpCard4,faceUpCard5};
                 List<TrainCard> cards = presenter.getFaceUpCards();
                 for(int i = 0; i < cards.size(); i++){
+                	if (cards.get(i) == null) {
+                		faceUpCard[i].setImageResource(R.color.transparent);
+                		break;
+                	}
                     switch (cards.get(i).getColor()){
                         case Blue:
                             faceUpCard[i].setImageResource(R.drawable.resource_blue);
