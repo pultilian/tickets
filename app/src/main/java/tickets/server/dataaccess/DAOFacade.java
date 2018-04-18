@@ -229,7 +229,7 @@ public class DAOFacade {
         return retCommands;
     }
 
-    public void clearAll() {
+    public void clearAll() throws Exception {
         lobbiesDA.clear();
         gamesDA.clear();
         playersDA.clear();

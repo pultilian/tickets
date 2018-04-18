@@ -9,12 +9,14 @@ import tickets.common.AllDestinationCards;
 import tickets.common.Game;
 import tickets.common.GameMap;
 import tickets.common.PlayerColor;
+import tickets.common.PlayerInfo;
 import tickets.common.RouteColors;
 import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Player;
 import tickets.common.Route;
 import tickets.server.ServerFacade;
+import tickets.server.model.AllUsers;
 
 public class ServerGame extends Game {
 
@@ -60,6 +62,30 @@ public class ServerGame extends Game {
 		playersReady = 0;
 		currentPlayerIndex = 0;
 	}
+
+	public ServerGame(Game game) {
+	    super(game.getGameId(), game.getName());
+
+	    List<Player> playersFromLobby = new ArrayList<>();
+	    for (PlayerInfo info : game.getAllPlayers()) {
+	        String playerAuth = AllUsers.getInstance().getAuthToken(info.getName());
+	        playersFromLobby.add(new Player(playerAuth));
+        }
+
+        this.players = new ArrayList<>();
+        for (Player p : playersFromLobby) {
+            //move players into the game
+            players.add(new ServerPlayer(p));
+        }
+
+        List<TrainCard> allTrainCards = initializeTrainCards();
+        trainCardArea = new TrainCardArea(allTrainCards);
+        destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
+        initializeAllPlayers();
+        map = new GameMap();
+        playersReady = 0;
+        currentPlayerIndex = 0;
+    }
 
 	private List<TrainCard> initializeTrainCards() {
 		List<TrainCard> allTrainCards = new ArrayList<>();
