@@ -1,9 +1,5 @@
-package tickets.server.dataAccess.Interfaces;
+package tickets.server.dataaccess.interfaces;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.sql.ResultSet;
 import java.util.List;
 
 /**

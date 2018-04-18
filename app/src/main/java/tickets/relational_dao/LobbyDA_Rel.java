@@ -1,56 +1,56 @@
-package tickets.server.dataAccess.RelationalDAO;
+package tickets.relational_dao;
 
 import java.sql.ResultSet;
 import java.util.List;
 
-import tickets.server.dataAccess.DataAccess;
-import tickets.server.dataAccess.Interfaces.GameDataAccess;
+import tickets.server.dataaccess.DataAccess;
+import tickets.server.dataaccess.interfaces.LobbyDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.
  */
 
-public class GameDA_Rel extends DataAccess implements GameDataAccess {
+public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
 
-    public GameDA_Rel()throws Exception {
+    public LobbyDA_Rel() throws Exception {
 
     }
 
     @Override
-    public void addGame(String game, String id) throws Exception {
+    public void addLobby(String lobby, String id) throws Exception {
         openConnection();
-        String insert = "insert into games values (?, ?) ";
+        String insert = "insert into lobbies values (?, ?) ";
         statement = connection.prepareStatement(insert);
         statement.setString(1, id);
-        statement.setString(2, game);
+        statement.setString(2, lobby);
         statement.executeUpdate();
         statement.close();
         closeConnection();
     }
 
     @Override
-    public List<String> getGames()throws Exception {
+    public List<String> getLobbies()throws Exception {
         openConnection();
-        List<String> newGames = null;
-        String query = "select games from Game";
+        List<String> newLobbies = null;
+        String query = "select lobbies from Lobby";
         statement = connection.prepareStatement(query);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);
-            newGames.add(jsonString);
+            newLobbies.add(jsonString);
         }
         results.close();
         statement.close();
         closeConnection();
-        return newGames;
+        return newLobbies;
     }
 
     @Override
-    public void removeGames(String gameID) throws Exception{
+    public void removeLobbies(String lobbyID) throws Exception{
         openConnection();
-        String delete = "delete from games where id = ?";
+        String delete = "delete from lobbies where id = ?";
         statement = connection.prepareStatement(delete);
-        statement.setString(1, gameID);
+        statement.setString(1, lobbyID);
         statement.executeUpdate();
         statement.close();
         closeConnection();
@@ -59,7 +59,7 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     @Override
     public void clear() throws Exception {
         openConnection();
-        String clear = "delete from games";
+        String clear = "delete from lobbies";
         statement = connection.prepareStatement(clear);
         statement.executeUpdate();
         statement.close();
@@ -67,11 +67,11 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     }
 
     @Override
-    public void addDeltas(String command, String gameID) throws Exception {
+    public void addDeltas(String command, String lobbyID) throws Exception {
         openConnection();
-        String insert = "insert into gamedeltas values (?, ?) ";
+        String insert = "insert into lobbydeltas values (?, ?) ";
         statement = connection.prepareStatement(insert);
-        statement.setString(1, gameID);
+        statement.setString(1, lobbyID);
         statement.setString(2, command);
         statement.executeUpdate();
         statement.close();
@@ -79,12 +79,12 @@ public class GameDA_Rel extends DataAccess implements GameDataAccess {
     }
 
     @Override
-    public List<String> getDeltas(String gameID) throws Exception {
+    public List<String> getDeltas(String id) throws Exception {
         openConnection();
         List<String> newDeltas = null;
-        String query = "select deltas from gamedeltas where id = ?";
+        String query = "select deltas from lobbydeltas where id = ?";
         statement = connection.prepareStatement(query);
-        statement.setString(1,gameID);
+        statement.setString(1,id);
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             String jsonString = results.getString(1);

@@ -1,9 +1,4 @@
-package tickets.server.dataAccess.Interfaces;
-
-import tickets.server.dataAccess.Interfaces.GameDataAccess;
-import tickets.server.dataAccess.Interfaces.LobbyDataAccess;
-import tickets.server.dataAccess.Interfaces.PlayerDataAccess;
-import tickets.server.dataAccess.Interfaces.UserDataAccess;
+package tickets.server.dataaccess.interfaces;
 
 /**
  * Created by Pultilian on 4/11/2018.

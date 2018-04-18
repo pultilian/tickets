@@ -1,11 +1,9 @@
-package tickets.server.dataAccess.FileDAO;
+package tickets.file_dao;
 
-import java.sql.ResultSet;
 import java.util.List;
 
-import tickets.server.dataAccess.DAOFacade;
-import tickets.server.dataAccess.DataAccess;
-import tickets.server.dataAccess.Interfaces.GameDataAccess;
+import tickets.server.dataaccess.DataAccess;
+import tickets.server.dataaccess.interfaces.GameDataAccess;
 
 /**
  * Created by Pultilian on 4/12/2018.

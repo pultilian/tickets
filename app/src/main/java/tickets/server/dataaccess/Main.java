@@ -1,11 +1,9 @@
-package tickets.server.dataAccess;
+package tickets.server.dataaccess;
 
 import tickets.common.Game;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import tickets.common.Game;
 
 /**
  * Created by Pultilian on 4/10/2018.
