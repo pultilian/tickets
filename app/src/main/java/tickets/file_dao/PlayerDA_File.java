@@ -2,6 +2,7 @@ package tickets.file_dao;
 
 import java.util.List;
 
+import tickets.common.database.FileAccess;
 import tickets.server.dataaccess.DataAccess;
 import tickets.server.dataaccess.interfaces.PlayerDataAccess;
 
@@ -28,7 +29,7 @@ public class PlayerDA_File extends DataAccess implements PlayerDataAccess {
     }
 
     @Override
-    public void removePlayers(String gameID, String username) throws Exception {
+    public void removePlayers(String username, String gameID) throws Exception {
         String newID = gameID + username;
         fileAccess.removeFile("player", newID);
     }
