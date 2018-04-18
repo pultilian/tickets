@@ -49,6 +49,10 @@ public class ServerFacade implements IServer {
     private Map<ClientProxy, Lobby> clientsInALobby;
     private Map<ClientProxy, ServerGame> clientsInAGame;
 
+    private Map<ServerGame, Integer> numGameDeltas;
+    private Map<ServerPlayer, Integer> numPlayerDeltas;
+    private Map<Lobby, Integer> numLobbyDeltas;
+
     //----------------------------------------------------------------------------------------------
     // *** SINGLETON PATTERN ***
 
@@ -65,6 +69,9 @@ public class ServerFacade implements IServer {
         clientsInLobbyList = new ArrayList<>();
         clientsInALobby = new HashMap<>();
         clientsInAGame = new HashMap<>();
+        numGameDeltas = new HashMap<>();
+        numPlayerDeltas = new HashMap<>();
+        numLobbyDeltas = new HashMap<>();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -87,6 +94,8 @@ public class ServerFacade implements IServer {
             for (Lobby lobby : currentLobbies) {
                 allLobbies.remove(lobby);
             }
+            // Add this user to the database
+            
             LoginResponse response = new LoginResponse(
                     "Welcome, " + userData.getUsername(), authToken, allLobbies);
             response.setCurrentLobbies(currentLobbies);
