@@ -7,7 +7,7 @@ import tickets.common.Route;
 import tickets.common.TrainCard;
 
 // Using the State Pattern to represent player turn actions.
-abstract class PlayerTurnState {
+public abstract class PlayerTurnState {
 
     // package-private flags for the different possible states
     enum States {

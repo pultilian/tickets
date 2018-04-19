@@ -49,35 +49,35 @@ public class PluginManager {
         System.out.println("getting plugin");
         DAOFactory daoFactory = null;
 
-        switch (name){
-            case "File":
-                daoFactory = new FileFactory();
-                break;
-            case "Relational":
-                daoFactory = new RelationalFactory();
-                break;
-            default:
-                throw new Exception("invalid type");
-        }
+//        switch (name){
+//            case "File":
+//                daoFactory = new FileFactory();
+//                break;
+//            case "Relational":
+//                daoFactory = new RelationalFactory();
+//                break;
+//            default:
+//                throw new Exception("invalid type");
+//        }
 
-//        name = "app.src.main.java.tickets." + name.toLowerCase() + "_dao." + name + "Factory";
-//        try {
-//            Class<? extends DAOFactory> plugin = Class.forName(name, true, loader)
-//                    .asSubclass(DAOFactory.class);
-//            daoFactory = plugin.getDeclaredConstructor().newInstance();
-//        }
-//        catch (NoClassDefFoundError defFoundError) {
-//            // I'm not positive that this is covered by the
-//            //   general Exception catch-all, and since it's
-//            //   a runtime exception it's better to be safe
-//            return null;
-//        }
-//        catch (ClassNotFoundException classNotFound) {
-//            return null;
-//        }
-//        catch (Exception ex) {
-//            System.out.println(ex);
-//        }
+        name = "tickets." + name.toLowerCase() + "_dao." + name + "Factory";
+        try {
+            Class<? extends DAOFactory> plugin = Class.forName(name, true, loader)
+                    .asSubclass(DAOFactory.class);
+            daoFactory = plugin.getDeclaredConstructor().newInstance();
+        }
+        catch (NoClassDefFoundError defFoundError) {
+            // I'm not positive that this is covered by the
+            //   general Exception catch-all, and since it's
+            //   a runtime exception it's better to be safe
+            return null;
+        }
+        catch (ClassNotFoundException classNotFound) {
+            return null;
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
 
         return daoFactory;
     }

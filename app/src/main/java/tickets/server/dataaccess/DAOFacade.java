@@ -2,6 +2,10 @@ package tickets.server.dataaccess;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import tickets.common.Command;
 import tickets.common.Game;
@@ -15,9 +19,15 @@ import tickets.server.dataaccess.interfaces.GameDataAccess;
 import tickets.server.dataaccess.interfaces.LobbyDataAccess;
 import tickets.server.dataaccess.interfaces.PlayerDataAccess;
 import tickets.server.dataaccess.interfaces.UserDataAccess;
+import tickets.server.model.game.DrewDestCardsState;
+import tickets.server.model.game.DrewOneTrainCardState;
+import tickets.server.model.game.NotMyTurnState;
 import tickets.server.model.game.ServerGame;
 import tickets.server.model.game.ServerPlayer;
+import tickets.server.model.game.PlayerTurnState;
+import tickets.server.model.game.TurnStartState;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +60,31 @@ public class DAOFacade {
     }
 
     public ServerGame JSONToGame(String body) throws Exception {
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(PlayerTurnState.class,
+                    new JsonDeserializer<PlayerTurnState>() {
+                        @Override
+                        public PlayerTurnState deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+                            if (!typeOfT.equals(PlayerTurnState.class)) {
+                                System.out.println("deserialize called on the wrong thing!");
+                            }
+                            else {
+                                if (json.isJsonObject()) {
+                                    JsonObject obj = json.getAsJsonObject();
+                                    if (obj.has("turnStartStateFlag"))
+                                        return TurnStartState.getInstance();
+                                    else if (obj.has("drewDestCardsStateFlag"))
+                                        return DrewDestCardsState.getInstance();
+                                    else if (obj.has("drewOneTrainCardStateFlag"))
+                                        return DrewOneTrainCardState.getInstance();
+                                    else if (obj.has("notMyTurnStateFlag"))
+                                        return NotMyTurnState.getInstance();
+                                }
+                            }
+                            return context.deserialize(json, typeOfT);
+                        }
+                })
+                .create();
         return gson.fromJson(body, ServerGame.class);
     }
 

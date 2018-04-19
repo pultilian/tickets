@@ -10,48 +10,50 @@ import tickets.common.Route;
 // Part of the state pattern describing a player's overall turn
 //
 // At this state, the player is waiting for their turn to start.
-class NotMyTurnState extends PlayerTurnState {
+public class NotMyTurnState extends PlayerTurnState {
+    private String notMyTurnStateFlag = "flag";
 
-	// Singleton pattern
-	private static NotMyTurnState INSTANCE;
+    // Singleton pattern
+    private static NotMyTurnState INSTANCE;
 
-	static NotMyTurnState getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new NotMyTurnState();
-		}
-		return INSTANCE;
-	}
+    public static NotMyTurnState getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new NotMyTurnState();
+        }
+        return INSTANCE;
+    }
 
-	private NotMyTurnState(){}
+    private NotMyTurnState() {
+    }
 
-	@Override
-	String drawTrainCard(TrainCard card, ServerPlayer player) {
-		return "It is not your turn.";
-	}
+    @Override
+    String drawTrainCard(TrainCard card, ServerPlayer player) {
+        return "It is not your turn.";
+    }
 
-	@Override
-	String drawFaceUpCard(TrainCard card, ServerPlayer player) {
-		return "It is not your turn.";
-	}
+    @Override
+    String drawFaceUpCard(TrainCard card, ServerPlayer player) {
+        return "It is not your turn.";
+    }
 
-	@Override
-	String claimRoute(Route route, List<TrainCard> cards, ServerPlayer player) {
-		return "It is not your turn.";
-	}
+    @Override
+    String claimRoute(Route route, List<TrainCard> cards, ServerPlayer player) {
+        return "It is not your turn.";
+    }
 
-	@Override
-	String drawDestinationCards(List<DestinationCard> cards, ServerPlayer player) {
-		return "It is not your turn.";
-	}
+    @Override
+    String drawDestinationCards(List<DestinationCard> cards, ServerPlayer player) {
+        return "It is not your turn.";
+    }
 
-	@Override
-	String discardDestinationCard(List<DestinationCard> card, ServerPlayer player) {
-		return "It is not your turn.";
-	}
+    @Override
+    String discardDestinationCard(List<DestinationCard> card, ServerPlayer player) {
+        return "It is not your turn.";
+    }
 
-	@Override
-	String endTurn(ServerPlayer player) {
-		// The game will check if you are the current player. If so, this method will be called.
-		return null;
-	}
+    @Override
+    String endTurn(ServerPlayer player) {
+        // The game will check if you are the current player. If so, this method will be called.
+        return null;
+    }
 }

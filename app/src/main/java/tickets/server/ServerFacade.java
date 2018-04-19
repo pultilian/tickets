@@ -401,6 +401,7 @@ public class ServerFacade implements IServer {
                 daoFacade.addGames(DBGame);
                 daoFacade.addPlayers(game.getServerPlayers());
             } catch (Exception e) {
+                System.out.println(e.toString());
                 return new StartGameResponse(new Exception("Server error."));
             }
 
