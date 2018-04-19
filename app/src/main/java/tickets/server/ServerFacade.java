@@ -113,6 +113,15 @@ public class ServerFacade implements IServer {
     private void loadLobbies() throws Exception {
         List<Lobby> lobbies = daoFacade.getLobbies();
         for (Lobby l : lobbies) {
+            // Process all deltas
+            List<String> IDs = new ArrayList<>();
+            IDs.add(l.getId());
+            List<Command> commands = daoFacade.getDeltas("lobby", IDs);
+            for (Command command : commands) {
+                command.execute(l);
+            }
+
+            // Add up-to-date lobby to server model
             AllLobbies.getInstance().addLobby(l);
         }
         return;
@@ -121,6 +130,15 @@ public class ServerFacade implements IServer {
     private void loadGames() throws Exception {
         List<ServerGame> games = daoFacade.getGames();
         for (ServerGame g : games) {
+            // Process all deltas
+            List<String> IDs = new ArrayList<>();
+            IDs.add(g.getGameId());
+            List<Command> commands = daoFacade.getDeltas("game", IDs);
+            for (Command command : commands) {
+                command.execute(g);
+            }
+
+            // Add up-to-date game to server model
             AllGames.getInstance().addGame(g);
         }
         return;
