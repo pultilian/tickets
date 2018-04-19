@@ -9,6 +9,9 @@ import tickets.common.Game;
 import tickets.common.Lobby;
 import tickets.common.Player;
 import tickets.common.UserData;
+import tickets.server.model.game.ServerGame;
+import tickets.server.model.game.ServerPlayer;
+
 /**
  * Created by Pultilian on 4/10/2018.
  */
@@ -18,9 +21,9 @@ public class Main {
     public static void main(String[] args) {
         try {
             DAOFacade daoFacade = new DAOFacade("File");
-            Game game1 = new Game("1","game1");
-            Game game2 = new Game("2", "game2");
-            Game game3 = new Game("3", "game3");
+            ServerGame game1 = new ServerGame(new Game("1","game1"));
+            ServerGame game2 = new ServerGame(new Game("2", "game2"));
+            ServerGame game3 = new ServerGame(new Game("3", "game3"));
 
             Lobby lobby1 = new Lobby("lobby1", 3);
             lobby1.setId("1");
@@ -29,11 +32,11 @@ public class Main {
             Lobby lobby3 = new Lobby("lobby3", 2);
             lobby3.setId("3");
 
-            Player p1 = new Player("1");
+            ServerPlayer p1 = new ServerPlayer(new Player("1"));
             p1.setName("name1");
-            Player p2 = new Player("2");
+            ServerPlayer p2 = new ServerPlayer(new Player("2"));
             p2.setName("name2");
-            Player p3 = new Player("3");
+            ServerPlayer p3 = new ServerPlayer(new Player("3"));
             p3.setName("name3");
 
             UserData u1 = new UserData("halla", "yolo");
@@ -44,8 +47,8 @@ public class Main {
             u1.setAuthenticationToken("3");
 
             List<Lobby> lobbyList = new ArrayList<>();
-            List<Game> gameList = new ArrayList<>();
-            List<Player> playerList = new ArrayList<>();
+            List<ServerGame> gameList = new ArrayList<>();
+            List<ServerPlayer> playerList = new ArrayList<>();
             List<UserData> userDataList = new ArrayList<>();
             gameList.add(game1);
             gameList.add(game2);

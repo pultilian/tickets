@@ -32,7 +32,7 @@ public class ServerPlayer extends Player {
 	//----------------------------------------------------------------------------------------------
     // *** SET-UP METHODS ***
 
-	ServerPlayer(Player copy) {
+	public ServerPlayer(Player copy) {
 		super(copy);
 		turnState = DrewDestCardsState.getInstance();
 		isLastPlayer = false;

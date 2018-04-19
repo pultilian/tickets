@@ -37,6 +37,7 @@ import tickets.common.response.ResumeGameResponse;
 import tickets.common.response.ResumeLobbyResponse;
 import tickets.common.response.StartGameResponse;
 import tickets.common.response.TrainCardResponse;
+import tickets.server.dataaccess.DAOFacade;
 import tickets.server.model.AllGames;
 import tickets.server.model.AllLobbies;
 import tickets.server.model.AllUsers;
@@ -48,6 +49,12 @@ public class ServerFacade implements IServer {
     private List<ClientProxy> clientsInLobbyList;
     private Map<ClientProxy, Lobby> clientsInALobby;
     private Map<ClientProxy, ServerGame> clientsInAGame;
+
+    private int numGameDeltas;
+    private int numLobbyDeltas;
+    private int deltasBetweenCheckpoints;
+
+    private DAOFacade daoFacade;
 
     //----------------------------------------------------------------------------------------------
     // *** SINGLETON PATTERN ***
@@ -65,6 +72,94 @@ public class ServerFacade implements IServer {
         clientsInLobbyList = new ArrayList<>();
         clientsInALobby = new HashMap<>();
         clientsInAGame = new HashMap<>();
+        numGameDeltas = 0;
+        numLobbyDeltas = 0;
+        deltasBetweenCheckpoints = 0;
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // *** STARTUP ***
+
+    public void startup(String persistenceType, int numCommands, boolean wipeDatabase) {
+        if (daoFacade != null) {
+            return;
+        }
+        try {
+            daoFacade = new DAOFacade(persistenceType);
+            deltasBetweenCheckpoints = numCommands;
+
+            if (wipeDatabase) {
+                daoFacade.deleteAll();
+            }
+            loadUsers();
+            loadLobbies();
+            loadGames();
+            fillMaps();
+        }
+        catch (Exception ex) {
+            System.out.println("An error occurred while starting up server plugin");
+        }
+        return;
+    }
+
+    private void loadUsers() throws Exception {
+        List<UserData> users = daoFacade.getUsers();
+        for (UserData u : users) {
+            AllUsers.getInstance().addUser(u);
+        }
+        return;
+    }
+
+    private void loadLobbies() throws Exception {
+        List<Lobby> lobbies = daoFacade.getLobbies();
+        for (Lobby l : lobbies) {
+            // Process all deltas
+            List<String> IDs = new ArrayList<>();
+            IDs.add(l.getId());
+            List<Command> commands = daoFacade.getDeltas("lobby", IDs);
+            for (Command command : commands) {
+                command.execute(l);
+            }
+
+            // Add up-to-date lobby to server model
+            AllLobbies.getInstance().addLobby(l);
+        }
+        return;
+    }
+
+    private void loadGames() throws Exception {
+        List<ServerGame> games = daoFacade.getGames();
+        for (ServerGame g : games) {
+            // Process all deltas
+            List<String> IDs = new ArrayList<>();
+            IDs.add(g.getGameId());
+            List<Command> commands = daoFacade.getDeltas("game", IDs);
+            for (Command command : commands) {
+                command.execute(g);
+            }
+
+            // Add up-to-date game to server model
+            AllGames.getInstance().addGame(g);
+        }
+        return;
+    }
+
+    private void fillMaps() {
+        List<UserData> users = AllUsers.getInstance().getUsers();
+        for (UserData u : users) {
+            List<ServerGame> userGames = AllGames.getInstance().getServerGamesWithUser(u.getUsername());
+            List<Lobby> userLobbies = AllLobbies.getInstance().getLobbiesWithUser(u.getUsername());
+            if (userGames.size() > 0) {
+                clientsInAGame.put(new ClientProxy(u.getAuthenticationToken()), userGames.get(0));
+            }
+            else if (userLobbies.size() > 0) {
+                clientsInALobby.put(new ClientProxy(u.getAuthenticationToken()), userLobbies.get(0));
+            }
+            else {
+                clientsInLobbyList.add(new ClientProxy(u.getAuthenticationToken()));
+            }
+        }
+        return;
     }
 
     //----------------------------------------------------------------------------------------------
@@ -81,6 +176,16 @@ public class ServerFacade implements IServer {
             for (Lobby lobby : currentLobbies) {
                 allLobbies.remove(lobby);
             }
+
+            // Add this user to the database
+            List<UserData> user = new ArrayList<>();
+            user.add(userData);
+            try {
+                daoFacade.addUsers(user);
+            } catch (Exception e) {
+                return new LoginResponse(new Exception("Server error."));
+            }
+
             LoginResponse response = new LoginResponse(
                     "Welcome, " + userData.getUsername(), authToken, allLobbies);
             response.setCurrentLobbies(currentLobbies);
@@ -101,6 +206,16 @@ public class ServerFacade implements IServer {
         else {
             String authToken = AllUsers.getInstance().addUser(userData);
             clientsInLobbyList.add(new ClientProxy(authToken));
+
+            // Add this user to the database
+            List<UserData> user = new ArrayList<>();
+            user.add(userData);
+            try {
+                daoFacade.addUsers(user);
+            } catch (Exception e) {
+                return new LoginResponse(new Exception("Server error."));
+            }
+
             LoginResponse response = new LoginResponse(
                     "Welcome, " + userData.getUsername(), authToken, AllLobbies.getInstance().getAllLobbies());
             response.setCurrentLobbies(AllLobbies.getInstance().getLobbiesWithUser(userData.getUsername()));
@@ -125,6 +240,30 @@ public class ServerFacade implements IServer {
             player.setName(AllUsers.getInstance().getUsername(authToken));
             lobby.addPlayer(player);
             lobby.assignFaction(player);
+
+            // Add command or checkpoint to database
+            if (numLobbyDeltas < deltasBetweenCheckpoints) {
+                // Add a command
+                Command command = new Command("addPlayer",
+                        new String[]{Player.class.getName()},
+                        new Object[]{player});
+                List<String> additionalInfo = new ArrayList<>();
+                additionalInfo.add(lobbyID);
+                try {
+                    daoFacade.addDelta(command, "lobby", additionalInfo);
+                    numLobbyDeltas++;
+                } catch (Exception e) {
+                    return new JoinLobbyResponse(new Exception("Server database error."));
+                }
+            }
+            else {
+                // Remove all lobby deltas and replace lobbies
+                try {
+                    lobbyCheckpoint();
+                } catch (Exception e) {
+                    return new JoinLobbyResponse(new Exception("Server database error."));
+                }
+            }
 
             // Move current client
             ClientProxy currentClient = getProxy(authToken);
@@ -156,6 +295,15 @@ public class ServerFacade implements IServer {
                 " has created the lobby.");
         lobby.addPlayer(player);
         lobby.assignFaction(player);
+
+        // Add the lobby to the database
+        List<Lobby> DBlobby = new ArrayList<>();
+        DBlobby.add(lobby);
+        try {
+            daoFacade.addLobbies(DBlobby);
+        } catch (Exception e) {
+            return new JoinLobbyResponse(new Exception("Server error."));
+        }
 
         // Move current client
         ClientProxy currentClient = getProxy(authToken);
@@ -245,6 +393,17 @@ public class ServerFacade implements IServer {
             }
             AllGames.getInstance().addGame(game);
 
+            // Add the game and players to the database
+            List<ServerGame> DBGame = new ArrayList<>();
+            DBGame.add(game);
+            try {
+                daoFacade.removeLobby(lobbyID);
+                daoFacade.addGames(DBGame);
+                daoFacade.addPlayers(game.getServerPlayers());
+            } catch (Exception e) {
+                return new StartGameResponse(new Exception("Server error."));
+            }
+
             // Update relevant clients and move clients from lobby to game
             for (ClientProxy client : getClientsInLobby(lobbyID)) {
                 // The current client will receive a start game response instead of this command.
@@ -300,6 +459,30 @@ public class ServerFacade implements IServer {
                 for (ClientProxy client : clientsInLobbyList) {
                     if (!client.getAuthToken().equals(authToken)) client.removePlayerFromLobbyInList(lobby, player);
                 }
+
+                // Add command or checkpoint to database
+                if (numLobbyDeltas < deltasBetweenCheckpoints) {
+                    // Add a command
+                    Command command = new Command("removePlayer",
+                            new String[]{Player.class.getName()},
+                            new Object[]{player});
+                    List<String> additionalInfo = new ArrayList<>();
+                    additionalInfo.add(lobbyID);
+                    try {
+                        daoFacade.addDelta(command, "lobby", additionalInfo);
+                        numLobbyDeltas++;
+                    } catch (Exception e) {
+                        return new LeaveLobbyResponse(new Exception("Server database error."));
+                    }
+                }
+                else {
+                    // Remove all lobby deltas and replace lobbies
+                    try {
+                        lobbyCheckpoint();
+                    } catch (Exception e) {
+                        return new LeaveLobbyResponse(new Exception("Server database error."));
+                    }
+                }
             }
             return new LeaveLobbyResponse("You have left the lobby.", AllLobbies.getInstance().getAllLobbies());
         }
@@ -324,6 +507,30 @@ public class ServerFacade implements IServer {
         // Update server model
         game.addToChat(fullMessage);
 
+        // Add command or checkpoint to database
+        if (numGameDeltas < deltasBetweenCheckpoints) {
+            // Add a command
+            Command command = new Command("addToChat",
+                    new String[]{String.class.getName()},
+                    new Object[]{fullMessage});
+            List<String> additionalInfo = new ArrayList<>();
+            additionalInfo.add(game.getGameId());
+            try {
+                daoFacade.addDelta(command, "game", additionalInfo);
+                numGameDeltas++;
+            } catch (Exception e) {
+                return new AddToChatResponse(new Exception("Server database error."));
+            }
+        }
+        else {
+            // Remove all game deltas and replace games
+            try {
+                gameCheckpoint();
+            } catch (Exception e) {
+                return new AddToChatResponse(new Exception("Server database error."));
+            }
+        }
+
         // Update relevant clients
         for (ClientProxy clientInGame : getClientsInGame(game.getGameId())) {
             clientInGame.addChatMessage(fullMessage);
@@ -344,9 +551,39 @@ public class ServerFacade implements IServer {
             // Any reason for failing here will be thrown as an exception
             TrainCard drawnCard = game.drawTrainCard(authToken);
 
+            // Add command or checkpoint to database
+            if (numGameDeltas < deltasBetweenCheckpoints) {
+                // Add a command
+                Command command = new Command("drawTrainCard",
+                        new String[]{String.class.getName()},
+                        new Object[]{authToken});
+                List<String> additionalInfo = new ArrayList<>();
+                additionalInfo.add(game.getGameId());
+                try {
+                    daoFacade.addDelta(command, "game", additionalInfo);
+                    numGameDeltas++;
+                } catch (Exception e) {
+                    return new TrainCardResponse(new Exception("Server database error."));
+                }
+            }
+            else {
+                // Remove all game deltas and replace games
+                try {
+                    gameCheckpoint();
+                } catch (Exception e) {
+                    return new TrainCardResponse(new Exception("Server database error."));
+                }
+            }
+
             // Update game history
             String historyMessage = currentPlayer.getName() + " drew a resource card.";
             game.addToHistory(historyMessage);
+
+            try {
+                addGameHistoryToDatabase(game, historyMessage);
+            } catch (Exception e) {
+                return new TrainCardResponse(new Exception("Server database error."));
+            }
 
             // Update other clients in the game
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
@@ -374,10 +611,40 @@ public class ServerFacade implements IServer {
             TrainCard drawnCard = game.drawFaceUpCard(position, authToken);
             TrainCard newCard = game.getFaceUpCards().get(position);
 
+            // Add command or checkpoint to database (replace face-up card)
+            if (numGameDeltas < deltasBetweenCheckpoints) {
+                // Add a command
+                Command command = new Command("drawFaceUpCard",
+                        new String[]{Integer.class.getName(), String.class.getName()},
+                        new Object[]{position, authToken});
+                List<String> additionalInfo = new ArrayList<>();
+                additionalInfo.add(game.getGameId());
+                try {
+                    daoFacade.addDelta(command, "game", additionalInfo);
+                    numGameDeltas++;
+                } catch (Exception e) {
+                    return new TrainCardResponse(new Exception("Server database error."));
+                }
+            }
+            else {
+                // Remove all game deltas and replace games
+                try {
+                    gameCheckpoint();
+                } catch (Exception e) {
+                    return new TrainCardResponse(new Exception("Server database error."));
+                }
+            }
+
             // Update game history
             String historyMessage = currentPlayer.getName() + " drew a " +
                     drawnCard.getColor().toString() + " face-up resource card.";
             game.addToHistory(historyMessage);
+
+            try {
+                addGameHistoryToDatabase(game, historyMessage);
+            } catch (Exception e) {
+                return new TrainCardResponse(new Exception("Server database error."));
+            }
 
             // Update other clients in the game
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
@@ -403,12 +670,43 @@ public class ServerFacade implements IServer {
 
             ServerPlayer currentPlayer = game.getCurrentPlayer();
             // Any reason for failing here will be thrown as an exception
-            game.claimRoute(route, cards.getTrainCards(), authToken);
+            game.claimRoute(route, cards, authToken);
+
+            // Add command or checkpoint to database
+            if (numGameDeltas < deltasBetweenCheckpoints) {
+                // Add a command
+                Command command = new Command("claimRoute",
+                        new String[]{Route.class.getName(), TrainCardWrapper.class.getName(), String.class.getName()},
+                        new Object[]{route, cards, authToken});
+                List<String> additionalInfo = new ArrayList<>();
+                additionalInfo.add(game.getGameId());
+                additionalInfo.add(currentPlayer.getName());
+                try {
+                    daoFacade.addDelta(command, "game", additionalInfo);
+                    numGameDeltas++;
+                } catch (Exception e) {
+                    return new ClaimRouteResponse(new Exception("Server database error."));
+                }
+            }
+            else {
+                // Remove all game deltas and replace games
+                try {
+                    gameCheckpoint();
+                } catch (Exception e) {
+                    return new ClaimRouteResponse(new Exception("Server database error."));
+                }
+            }
 
             //update game history
             String historyMessage = currentPlayer.getName() +
                     " claimed a route " + route.toString();
             game.addToHistory(historyMessage);
+
+            try {
+                addGameHistoryToDatabase(game, historyMessage);
+            } catch (Exception e) {
+                return new ClaimRouteResponse(new Exception("Server database error."));
+            }
 
             // Get color of route to be claimed from train card color
             RouteColors color = null;
@@ -422,9 +720,7 @@ public class ServerFacade implements IServer {
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
                 client.addToGameHistory(historyMessage);
                 // The current client will receive a train card response rather than this command.
-//                if (!client.getAuthToken().equals(authToken)) {
                 client.addClaimedRoute(route, color, game.getPlayerColor(authToken));
-//                }
             }
 
             endTurn(game, currentPlayer.getName());
@@ -442,12 +738,45 @@ public class ServerFacade implements IServer {
             ServerGame game = getGameForToken(authToken);
 
             // Any reason for failing here will be thrown as an exception
+            String currentName = game.getCurrentPlayer().getName();
             List<DestinationCard> drawnCards = game.drawDestinationCards(authToken);
+
+            // Add command or checkpoint to database
+            if (numGameDeltas < deltasBetweenCheckpoints) {
+                ChoiceDestinationCards cards = new ChoiceDestinationCards();
+                cards.setDestinationCards(drawnCards);
+                // Add a command
+                Command command = new Command("drawDestinationCards",
+                        new String[]{String.class.getName()},
+                        new Object[]{authToken});
+                List<String> additionalInfo = new ArrayList<>();
+                additionalInfo.add(game.getGameId());
+                try {
+                    daoFacade.addDelta(command, "game", additionalInfo);
+                    numGameDeltas++;
+                } catch (Exception e) {
+                    return new DestinationCardResponse(new Exception("Server database error."));
+                }
+            }
+            else {
+                // Remove all game deltas and replace games
+                try {
+                    gameCheckpoint();
+                } catch (Exception e) {
+                    return new DestinationCardResponse(new Exception("Server database error."));
+                }
+            }
 
             //update game history
             String historyMessage = AllUsers.getInstance().getUsername(authToken) +
                     " drew destination cards.";
             game.addToHistory(historyMessage);
+
+            try {
+                addGameHistoryToDatabase(game, historyMessage);
+            } catch (Exception e) {
+                return new DestinationCardResponse(new Exception("Server database error."));
+            }
 
             //update other game members
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
@@ -468,7 +797,32 @@ public class ServerFacade implements IServer {
 
             ServerPlayer currentPlayer = game.getServerPlayer(authToken);
             // Any reason for failing here will be thrown as an exception
-            List<DestinationCard> keptCards = game.discardDestinationCard(discard.getDestinationCards(), authToken);
+            List<DestinationCard> keptCards = game.discardDestinationCard(discard, authToken);
+
+            // Add command or checkpoint to database
+            if (numGameDeltas < deltasBetweenCheckpoints) {
+                // Add a command
+                Command command = new Command("discardDestinationCard",
+                        new String[]{ChoiceDestinationCards.class.getName()},
+                        new Object[]{discard});
+                List<String> additionalInfo = new ArrayList<>();
+                additionalInfo.add(game.getGameId());
+                additionalInfo.add(currentPlayer.getName());
+                try {
+                    daoFacade.addDelta(command, "player", additionalInfo);
+                    numGameDeltas++;
+                } catch (Exception e) {
+                    return new DestinationCardResponse(new Exception("Server database error."));
+                }
+            }
+            else {
+                // Remove all game deltas and replace games
+                try {
+                    gameCheckpoint();
+                } catch (Exception e) {
+                    return new DestinationCardResponse(new Exception("Server database error."));
+                }
+            }
 
             //update game history
             String historyMessage;
@@ -485,6 +839,12 @@ public class ServerFacade implements IServer {
                         " kept all destination cards.";
             }
             game.addToHistory(historyMessage);
+
+            try {
+                addGameHistoryToDatabase(game, historyMessage);
+            } catch (Exception e) {
+                return new DestinationCardResponse(new Exception("Server database error."));
+            }
 
             //update other game members
             for (ClientProxy client : getClientsInGame(game.getGameId())) {
@@ -623,6 +983,44 @@ public class ServerFacade implements IServer {
         for (ClientProxy client : getClientsInGame(game.getGameId())) {
             client.addToGameHistory(historyMessage);
             client.endCurrentTurn();
+        }
+    }
+
+    private void lobbyCheckpoint() throws Exception {
+        daoFacade.clearDeltas("lobby");
+        List<Lobby> allLobbies = AllLobbies.getInstance().getAllLobbies();
+        for (Lobby lobby: allLobbies) {
+            daoFacade.removeLobby(lobby.getId());
+        }
+        daoFacade.addLobbies(allLobbies);
+        numLobbyDeltas = 0;
+    }
+
+    private void gameCheckpoint() throws Exception {
+        daoFacade.clearDeltas("game");
+        List<ServerGame> allGames = AllGames.getInstance().getAllGames();
+        for (ServerGame game: allGames) {
+            daoFacade.removeGame(game.getGameId());
+        }
+        daoFacade.addGames(allGames);
+        numGameDeltas = 0;
+    }
+
+    private void addGameHistoryToDatabase(ServerGame game, String message) throws Exception {
+        // Add command or checkpoint to database
+        if (numGameDeltas < deltasBetweenCheckpoints) {
+            // Add a command
+            Command command = new Command("addHistoryMessage",
+                    new String[]{String.class.getName()},
+                    new Object[]{message});
+            List<String> additionalInfo = new ArrayList<>();
+            additionalInfo.add(game.getGameId());
+            daoFacade.addDelta(command, "game", additionalInfo);
+            numGameDeltas++;
+        }
+        else {
+            // Remove all game deltas and replace games
+            gameCheckpoint();
         }
     }
 }

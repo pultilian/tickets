@@ -68,8 +68,31 @@ public class ServerCommunicator {
 	}
 
 	public static void main(String[] args) {
+		if (args.length < 2) {
+			usage();
+			return;
+		}
+		else {
+			String persistenceType = args[0];
+			int numCommands = Integer.parseInt(args[1]);
+			boolean wipeDatabase = false;
+			if (args.length == 3) {
+				if (args[3].equals("-wipe")) {
+					wipeDatabase = true;
+				}
+				else {
+					usage();
+					return;
+				}
+			}
+			ServerFacade.getInstance().startup(persistenceType, numCommands, wipeDatabase);
+		}
 		new ServerCommunicator().run();
 		System.out.println("Server running...");
+	}
+
+	public static void usage() {
+		System.out.println("USAGE: ServerCommunicator <persistence_type> <# of commands between checkpoints> -wipe(optional)");
 	}
 
 }
