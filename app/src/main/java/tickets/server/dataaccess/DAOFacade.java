@@ -16,6 +16,7 @@ import tickets.server.dataaccess.interfaces.LobbyDataAccess;
 import tickets.server.dataaccess.interfaces.PlayerDataAccess;
 import tickets.server.dataaccess.interfaces.UserDataAccess;
 import tickets.server.model.game.ServerGame;
+import tickets.server.model.game.ServerPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +152,7 @@ public class DAOFacade {
         usersDA.removeUserData(userID);
     }
 
-    public void addPlayers(List<Player> players) throws Exception{
+    public void addPlayers(List<ServerPlayer> players) throws Exception{
         for(int i = 0; i < players.size(); i++) {
             playersDA.addPlayer(objectToJSON(players.get(i)),
                     players.get(i).getAssociatedAuthToken(),

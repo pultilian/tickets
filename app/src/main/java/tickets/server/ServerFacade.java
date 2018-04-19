@@ -53,6 +53,7 @@ public class ServerFacade implements IServer {
     private Map<ServerGame, Integer> numGameDeltas;
     private Map<ServerPlayer, Integer> numPlayerDeltas;
     private Map<Lobby, Integer> numLobbyDeltas;
+    int deltasBetweenCheckpoints;
 
     private DAOFacade daoFacade;
 
@@ -75,6 +76,7 @@ public class ServerFacade implements IServer {
         numGameDeltas = new HashMap<>();
         numPlayerDeltas = new HashMap<>();
         numLobbyDeltas = new HashMap<>();
+        deltasBetweenCheckpoints = 0;
     }
 
     //----------------------------------------------------------------------------------------------
@@ -86,7 +88,7 @@ public class ServerFacade implements IServer {
         }
         try {
             daoFacade = new DAOFacade(persistenceType);
-            // how do you tell the database how many commands to store before rewriting the blob?
+            deltasBetweenCheckpoints = numCommands;
 
             if (wipeDatabase) {
                 daoFacade.clearAll();
@@ -119,9 +121,9 @@ public class ServerFacade implements IServer {
     }
 
     private void loadGames() throws Exception {
-        List<Game> games = daoFacade.getGames();
-        for (Game g : games) {
-            AllGames.getInstance().addGame(new ServerGame(g));
+        List<ServerGame> games = daoFacade.getGames();
+        for (ServerGame g : games) {
+            AllGames.getInstance().addGame(g);
         }
         return;
     }
@@ -222,6 +224,25 @@ public class ServerFacade implements IServer {
             player.setName(AllUsers.getInstance().getUsername(authToken));
             lobby.addPlayer(player);
             lobby.assignFaction(player);
+
+            // Add command or checkpoint to database
+            int currentDeltas = numLobbyDeltas.get(lobby);
+            if (currentDeltas < deltasBetweenCheckpoints) {
+                Command command = new Command("addPlayerToLobby",
+                        new String[]{Lobby.class.getName(), Player.class.getName()},
+                        new Object[]{lobby, player});
+                List<String> additionalInfo = new ArrayList<>();
+                additionalInfo.add(lobbyID);
+                try {
+                    daoFacade.addDelta(command, "lobby", additionalInfo);
+                    numLobbyDeltas.put(lobby, (currentDeltas + 1));
+                } catch (Exception e) {
+                    return new JoinLobbyResponse(new Exception("Server error."));
+                }
+            }
+            else {
+                daoFacade.
+            }
 
             // Move current client
             ClientProxy currentClient = getProxy(authToken);
@@ -350,6 +371,16 @@ public class ServerFacade implements IServer {
                 clientGame.addPlayer(info);
             }
             AllGames.getInstance().addGame(game);
+
+            // Add the game and players to the database
+            List<ServerGame> DBGame = new ArrayList<>();
+            DBGame.add(game);
+            try {
+                daoFacade.addGames(DBGame);
+                daoFacade.addPlayers(game.getServerPlayers());
+            } catch (Exception e) {
+                return new StartGameResponse(new Exception("Server error."));
+            }
 
             // Update relevant clients and move clients from lobby to game
             for (ClientProxy client : getClientsInLobby(lobbyID)) {

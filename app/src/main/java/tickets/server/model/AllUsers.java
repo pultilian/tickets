@@ -57,4 +57,8 @@ public class AllUsers {
         users.add(user);
         return newAuthToken;
     }
+
+    public List<UserData> getUsers() {
+        return users;
+    }
 }
