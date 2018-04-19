@@ -45,7 +45,7 @@ public class DAOFacade {
 
 
     public String objectToJSON(Game request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
@@ -55,42 +55,42 @@ public class DAOFacade {
     }
 
     public String objectToJSON(Command request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public Command JSONToCommand(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, Command.class);
     }
 
     public String objectToJSON(Player request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public Player JSONToPlayer(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, Player.class);
     }
 
     public String objectToJSON(Lobby request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public Lobby JSONToLobby(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, Lobby.class);
     }
 
     public String objectToJSON(UserData request) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.toJson(request);
     }
 
     public UserData JSONToUserData(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, UserData.class);
     }
 
@@ -231,11 +231,29 @@ public class DAOFacade {
         return retCommands;
     }
 
-    public void clearAll() throws Exception {
-        lobbiesDA.clear();
-        gamesDA.clear();
+    public void clearDeltas(String type)throws Exception{
+        switch (type) {
+            case "player":
+                playersDA.clearDeltas();
+                break;
+            case "lobby":
+                lobbiesDA.clearDeltas();
+                break;
+            case "game":
+                gamesDA.clearDeltas();
+                break;
+            default:
+                throw new Exception(type + " is not a valid delta");
+        }
+    }
+
+    public void deleteAll() throws Exception{
         playersDA.clear();
+        playersDA.clearDeltas();
+        lobbiesDA.clear();
+        lobbiesDA.clearDeltas();
         usersDA.clear();
-        return;
+        gamesDA.clear();
+        gamesDA.clearDeltas();
     }
 }

@@ -2,6 +2,7 @@ package tickets.file_dao;
 
 import java.util.List;
 
+import tickets.common.database.FileAccess;
 import tickets.server.dataaccess.DataAccess;
 import tickets.server.dataaccess.interfaces.GameDataAccess;
 
@@ -44,4 +45,9 @@ public class GameDA_File extends DataAccess implements GameDataAccess {
     public List<String> getDeltas(String gameID) throws Exception {
         return fileAccess.getDeltasForObject("game", gameID);
     }
+
+    public void clearDeltas() throws Exception{
+        return;
+    }
+
 }

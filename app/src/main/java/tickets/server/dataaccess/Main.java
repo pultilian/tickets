@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            DAOFacade daoFacade = new DAOFacade("relational");
+            DAOFacade daoFacade = new DAOFacade("File");
             Game game1 = new Game("1","game1");
             Game game2 = new Game("2", "game2");
             Game game3 = new Game("3", "game3");
@@ -72,20 +72,19 @@ public class Main {
             daoFacade.addPlayers(playerList);
             daoFacade.removeUser("3");
             daoFacade.removePlayer("name1", "1");
+            gameList = daoFacade.getGames();
             userDataList = daoFacade.getUsers();
-            playerList = daoFacade.getPlayers();
 
             List<String> gameid = new ArrayList<>();
-            gameid.add("1");
-            gameid.add("nugget");
+            gameid.add("2");
+            gameid.add("name2");
             daoFacade.addDelta(command1,"player",gameid);
+            daoFacade.addDelta(command2,"player",gameid);
 
             List<Command> newObjects = daoFacade.getDeltas("player", gameid);
 
             gameList = daoFacade.getGames();
             gameList = null;
-
-
         } catch (Exception e) {
             System.out.print(e);
         }

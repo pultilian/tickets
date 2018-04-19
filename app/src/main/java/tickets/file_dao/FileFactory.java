@@ -1,5 +1,6 @@
 package tickets.file_dao;
 
+import tickets.server.dataaccess.DataAccess;
 import tickets.server.dataaccess.interfaces.DAOFactory;
 import tickets.server.dataaccess.interfaces.GameDataAccess;
 import tickets.server.dataaccess.interfaces.LobbyDataAccess;
@@ -11,6 +12,7 @@ import tickets.server.dataaccess.interfaces.UserDataAccess;
  */
 
 public class FileFactory implements DAOFactory {
+    private DataAccess dataAccess;
     private GameDataAccess gameDA;
     private LobbyDataAccess lobbyDA;
     private PlayerDataAccess playerDA;
@@ -18,7 +20,11 @@ public class FileFactory implements DAOFactory {
 
     @Override
     public void createDAOs() throws Exception{
-
+        dataAccess = new DataAccess();
+        gameDA = new GameDA_File();
+        lobbyDA = new LobbyDA_File();
+        playerDA = new PlayerDA_File();
+        userDA = new UserDA_File();
     }
 
     @Override

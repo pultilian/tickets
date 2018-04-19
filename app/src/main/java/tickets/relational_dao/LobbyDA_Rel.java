@@ -96,4 +96,13 @@ public class LobbyDA_Rel extends DataAccess implements LobbyDataAccess {
         closeConnection();
         return newDeltas;
     }
+
+    public void clearDeltas() throws Exception{
+        openConnection();
+        String clear = "delete from lobbydeltas";
+        statement = connection.prepareStatement(clear);
+        statement.executeUpdate();
+        statement.close();
+        closeConnection();
+    }
 }

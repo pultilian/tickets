@@ -83,20 +83,31 @@ public class DestinationFragment extends Fragment {
         card1Location1.setText(destinationCards.get(0).getFirstCity());
         card1Location2.setText(destinationCards.get(0).getSecondCity());
         card1Score.setText(Integer.toString(destinationCards.get(0).getValue()));
-        card2Location1.setText(destinationCards.get(1).getFirstCity());
-        card2Location2.setText(destinationCards.get(1).getSecondCity());
-        card2Score.setText(Integer.toString(destinationCards.get(1).getValue()));
-        card3Location1.setText(destinationCards.get(2).getFirstCity());
-        card3Location2.setText(destinationCards.get(2).getSecondCity());
-        card3Score.setText(Integer.toString(destinationCards.get(2).getValue()));
-
+        if(destinationCards.size() == 1){
+            card2.setAlpha(0);
+            card2.setEnabled(false);
+            card3.setAlpha(0);
+            card3.setEnabled(false);
+        } else {
+            card2Location1.setText(destinationCards.get(1).getFirstCity());
+            card2Location2.setText(destinationCards.get(1).getSecondCity());
+            card2Score.setText(Integer.toString(destinationCards.get(1).getValue()));
+            if (destinationCards.size() == 2) {
+                card3.setAlpha(0);
+                card3.setEnabled(false);
+            } else {
+                card3Location1.setText(destinationCards.get(2).getFirstCity());
+                card3Location2.setText(destinationCards.get(2).getSecondCity());
+                card3Score.setText(Integer.toString(destinationCards.get(2).getValue()));
+            }
+        }
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int check = 0;
                 List<DestinationCard> cardsToDiscard = new ArrayList<>();
 
-                for (int i = 0; i < selectedButtons.length; i++) {
+                for (int i = 0; i < destinationCards.size(); i++) {
                     if (selectedButtons[i] == true) {
                         check++;
                     } else {
