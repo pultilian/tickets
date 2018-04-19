@@ -50,9 +50,9 @@ public class ServerFacade implements IServer {
     private Map<ClientProxy, Lobby> clientsInALobby;
     private Map<ClientProxy, ServerGame> clientsInAGame;
 
-    private Map<ServerGame, Integer> numGameDeltas;
-    private Map<ServerPlayer, Integer> numPlayerDeltas;
-    private Map<Lobby, Integer> numLobbyDeltas;
+    private int numGameDeltas;
+    private int numPlayerDeltas;
+    private int numLobbyDeltas;
     int deltasBetweenCheckpoints;
 
     private DAOFacade daoFacade;
@@ -73,9 +73,9 @@ public class ServerFacade implements IServer {
         clientsInLobbyList = new ArrayList<>();
         clientsInALobby = new HashMap<>();
         clientsInAGame = new HashMap<>();
-        numGameDeltas = new HashMap<>();
-        numPlayerDeltas = new HashMap<>();
-        numLobbyDeltas = new HashMap<>();
+        numGameDeltas = 0;
+        numPlayerDeltas = 0;
+        numLobbyDeltas = 0;
         deltasBetweenCheckpoints = 0;
     }
 
@@ -91,7 +91,7 @@ public class ServerFacade implements IServer {
             deltasBetweenCheckpoints = numCommands;
 
             if (wipeDatabase) {
-                daoFacade.clearAll();
+                daoFacade.deleteAll();
             }
             loadUsers();
             loadLobbies();
@@ -226,22 +226,33 @@ public class ServerFacade implements IServer {
             lobby.assignFaction(player);
 
             // Add command or checkpoint to database
-            int currentDeltas = numLobbyDeltas.get(lobby);
-            if (currentDeltas < deltasBetweenCheckpoints) {
+            if (numLobbyDeltas < deltasBetweenCheckpoints) {
+                // Add a command
                 Command command = new Command("addPlayerToLobby",
-                        new String[]{Lobby.class.getName(), Player.class.getName()},
-                        new Object[]{lobby, player});
+                        new String[]{Player.class.getName()},
+                        new Object[]{player});
                 List<String> additionalInfo = new ArrayList<>();
                 additionalInfo.add(lobbyID);
                 try {
                     daoFacade.addDelta(command, "lobby", additionalInfo);
-                    numLobbyDeltas.put(lobby, (currentDeltas + 1));
+                    numLobbyDeltas++;
                 } catch (Exception e) {
                     return new JoinLobbyResponse(new Exception("Server error."));
                 }
             }
             else {
-                daoFacade.
+                // Remove all lobby deltas and replace lobbies (checkpoint)
+                try {
+                    daoFacade.clearDeltas("lobby");
+                    List<Lobby> allLobbies = AllLobbies.getInstance().getAllLobbies();
+                    for (Lobby modelLobby: allLobbies) {
+                        daoFacade.removeLobby(modelLobby.getId());
+                    }
+                    daoFacade.addLobbies(allLobbies);
+                    numLobbyDeltas = 0;
+                } catch (Exception e) {
+                    return new JoinLobbyResponse(new Exception("Server error."));
+                }
             }
 
             // Move current client
@@ -437,6 +448,36 @@ public class ServerFacade implements IServer {
                 for (ClientProxy client : clientsInLobbyList) {
                     if (!client.getAuthToken().equals(authToken)) client.removePlayerFromLobbyInList(lobby, player);
                 }
+
+                // Add command or checkpoint to database
+                if (numLobbyDeltas < deltasBetweenCheckpoints) {
+                    // Add a command
+                    Command command = new Command("removePlayerFromLobby",
+                            new String[]{Player.class.getName()},
+                            new Object[]{player});
+                    List<String> additionalInfo = new ArrayList<>();
+                    additionalInfo.add(lobbyID);
+                    try {
+                        daoFacade.addDelta(command, "lobby", additionalInfo);
+                        numLobbyDeltas++;
+                    } catch (Exception e) {
+                        return new LeaveLobbyResponse(new Exception("Server database error."));
+                    }
+                }
+                else {
+                    // Remove all lobby deltas and replace lobbies
+                    try {
+                        daoFacade.clearDeltas("lobby");
+                        List<Lobby> allLobbies = AllLobbies.getInstance().getAllLobbies();
+                        for (Lobby modelLobby: allLobbies) {
+                            daoFacade.removeLobby(modelLobby.getId());
+                        }
+                        daoFacade.addLobbies(allLobbies);
+                        numLobbyDeltas = 0;
+                    } catch (Exception e) {
+                        return new LeaveLobbyResponse(new Exception("Server database error."));
+                    }
+                }
             }
             return new LeaveLobbyResponse("You have left the lobby.", AllLobbies.getInstance().getAllLobbies());
         }
@@ -460,6 +501,36 @@ public class ServerFacade implements IServer {
 
         // Update server model
         game.addToChat(fullMessage);
+
+        // Add command or checkpoint to database
+        if (numLobbyDeltas < deltasBetweenCheckpoints) {
+            // Add a command
+            Command command = new Command("addToChat",
+                    new String[]{String.class.getName()},
+                    new Object[]{fullMessage});
+            List<String> additionalInfo = new ArrayList<>();
+            additionalInfo.add(game.getGameId());
+            try {
+                daoFacade.addDelta(command, "game", additionalInfo);
+                numLobbyDeltas++;
+            } catch (Exception e) {
+                return new AddToChatResponse(new Exception("Server database error."));
+            }
+        }
+        else {
+            // Remove all lobby deltas and replace lobbies
+            try {
+                daoFacade.clearDeltas("lobby");
+                List<Lobby> allLobbies = AllLobbies.getInstance().getAllLobbies();
+                for (Lobby modelLobby: allLobbies) {
+                    daoFacade.removeLobby(modelLobby.getId());
+                }
+                daoFacade.addLobbies(allLobbies);
+                numLobbyDeltas = 0;
+            } catch (Exception e) {
+                return new AddToChatResponse(new Exception("Server database error."));
+            }
+        }
 
         // Update relevant clients
         for (ClientProxy clientInGame : getClientsInGame(game.getGameId())) {
