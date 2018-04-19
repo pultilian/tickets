@@ -58,4 +58,8 @@ public class AllGames {
         }
         return result;
     }
+
+    public List<ServerGame> getAllGames() {
+        return games;
+    }
 }

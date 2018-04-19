@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import tickets.common.AllDestinationCards;
+import tickets.common.ChoiceDestinationCards;
 import tickets.common.Game;
 import tickets.common.GameMap;
 import tickets.common.PlayerColor;
@@ -15,6 +16,7 @@ import tickets.common.TrainCard;
 import tickets.common.DestinationCard;
 import tickets.common.Player;
 import tickets.common.Route;
+import tickets.common.TrainCardWrapper;
 import tickets.server.ServerFacade;
 import tickets.server.model.AllUsers;
 
@@ -230,7 +232,7 @@ public class ServerGame extends Game {
         return trainCardArea.drawFaceUpCard(position);
 	}
 
-	public void claimRoute(Route route, List<TrainCard> cards, String authToken) throws Exception {
+	public void claimRoute(Route route, TrainCardWrapper cards, String authToken) throws Exception {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
@@ -240,14 +242,14 @@ public class ServerGame extends Game {
                 throw new Exception("This double route is unavailable (fewer than 4 players)");
         }
 
-        String msg = player.claimRoute(route, cards);
+        String msg = player.claimRoute(route, cards.getTrainCards());
         if (msg != null && !msg.equals(ServerPlayer.LAST_ROUND)) throw new Exception(msg);
 
         // Success! Now update the server model
         else {
             // Get color of route to be claimed from train card color
             RouteColors color = null;
-            for (TrainCard card : cards) {
+            for (TrainCard card : cards.getTrainCards()) {
                 player.removeTrainCard(card.getColor());
                 if (card.getColor() != RouteColors.Wild) {
                     if (color == null) color = card.getColor();
@@ -272,13 +274,13 @@ public class ServerGame extends Game {
         else return destinationDeck.drawCards();
 	}
 
-	public List<DestinationCard> discardDestinationCard(List<DestinationCard> cards, String authToken) throws Exception {
+	public List<DestinationCard> discardDestinationCard(ChoiceDestinationCards cards, String authToken) throws Exception {
         ServerPlayer player = getServerPlayer(authToken);
         if (player == null) throw new Exception("You are not a member of this game!");
 
-        String errorMsg = player.discardDestinationCard(cards);
+        String errorMsg = player.discardDestinationCard(cards.getDestinationCards());
         if (errorMsg != null) throw new Exception(errorMsg);
-        else if (cards != null && !destinationDeck.discardCards(cards))
+        else if (cards != null && !destinationDeck.discardCards(cards.getDestinationCards()))
             throw new Exception("This card is already in the destination deck.");
 
         // Success
