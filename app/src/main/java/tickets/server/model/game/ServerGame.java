@@ -42,7 +42,7 @@ public class ServerGame extends Game {
 
 	private TrainCardArea trainCardArea;
 	private DestinationDeck destinationDeck;
-	private GameMap map;
+	private GameMap mGameMap;
 
 	//----------------------------------------------------------------------------------------------
 	// *** SET-UP METHODS ***
@@ -60,7 +60,7 @@ public class ServerGame extends Game {
 		trainCardArea = new TrainCardArea(allTrainCards);
 		destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
 		initializeAllPlayers();
-		map = new GameMap();
+		mGameMap = new GameMap();
 		playersReady = 0;
 		currentPlayerIndex = 0;
 	}
@@ -84,7 +84,7 @@ public class ServerGame extends Game {
         trainCardArea = new TrainCardArea(allTrainCards);
         destinationDeck = new DestinationDeck(AllDestinationCards.getCards());
         initializeAllPlayers();
-        map = new GameMap();
+        mGameMap = new GameMap();
         playersReady = 0;
         currentPlayerIndex = 0;
     }
@@ -178,8 +178,8 @@ public class ServerGame extends Game {
         return null;
     }
 
-    public GameMap getMap() {
-	    return map;
+    public GameMap getGameMap() {
+	    return mGameMap;
     }
 
     public Game getClientGame() {
@@ -187,7 +187,7 @@ public class ServerGame extends Game {
         for (ServerPlayer player : players) {
             game.addPlayer(player.getInfo());
         }
-        game.setMap(map);
+        game.setMap(mGameMap);
         game.setGameHistory(getGameHistory());
         game.setFaceUpCards(getFaceUpCards());
         game.setCurrentTurn(currentPlayerIndex);
@@ -255,7 +255,7 @@ public class ServerGame extends Game {
                     if (color == null) color = card.getColor();
                 }
             }
-            map.claimRoute(route.getSrc(), route.getDest(), color, player.getPlayerFaction().getColor());
+            mGameMap.claimRoute(route.getSrc(), route.getDest(), color, player.getPlayerFaction().getColor());
             startNextTurn();
             // If it's the last round, everyone (including the current player) gets one more turn.
             if (msg != null && msg.equals(ServerPlayer.LAST_ROUND)) player.becomeLastPlayer();

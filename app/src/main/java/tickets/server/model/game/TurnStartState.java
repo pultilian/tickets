@@ -13,12 +13,13 @@ import tickets.common.Route;
 // Part of the state pattern describing a player's overall turn
 //
 // At this state, the player's turn has begun and they may choose any action.
-class TurnStartState extends PlayerTurnState {
+public class TurnStartState extends PlayerTurnState {
+    private String turnStartStateFlag = "flag";
 
     // Singleton pattern
     private static TurnStartState INSTANCE;
 
-    static TurnStartState getInstance() {
+    public static TurnStartState getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new TurnStartState();
         }
