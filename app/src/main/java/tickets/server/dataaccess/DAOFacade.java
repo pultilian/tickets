@@ -50,7 +50,7 @@ public class DAOFacade {
     }
 
     public ServerGame JSONToGame(String body) throws Exception {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(body, ServerGame.class);
     }
 
