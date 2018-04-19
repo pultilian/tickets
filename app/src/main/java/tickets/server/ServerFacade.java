@@ -121,7 +121,7 @@ public class ServerFacade implements IServer {
     private void loadGames() throws Exception {
         List<Game> games = daoFacade.getGames();
         for (Game g : games) {
-            AllGames.getInstance().addGame(g);
+            AllGames.getInstance().addGame(new ServerGame(g));
         }
         return;
     }
@@ -129,13 +129,13 @@ public class ServerFacade implements IServer {
     private void fillMaps() {
         List<UserData> users = AllUsers.getInstance().getUsers();
         for (UserData u : users) {
-            List<Game> userGames = AllGames.getInstance().getGamesWithUser(u.getUsername());
+            List<ServerGame> userGames = AllGames.getInstance().getServerGamesWithUser(u.getUsername());
             List<Lobby> userLobbies = AllLobbies.getInstance().getLobbiesWithUser(u.getUsername());
             if (userGames.size() > 0) {
-                clientsInAGame.put(new ClientProxy(u.getAuthenticationToken()), userGames[0]);
+                clientsInAGame.put(new ClientProxy(u.getAuthenticationToken()), userGames.get(0));
             }
             else if (userLobbies.size() > 0) {
-                clientsInALobby.put(new ClientProxy(u.getAuthenticationToken()), userLobbies[0]);
+                clientsInALobby.put(new ClientProxy(u.getAuthenticationToken()), userLobbies.get(0));
             }
             else {
                 clientsInLobbyList.add(new ClientProxy(u.getAuthenticationToken()));

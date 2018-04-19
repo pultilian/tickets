@@ -45,4 +45,17 @@ public class AllGames {
         }
         return result;
     }
+
+    public List<ServerGame> getServerGamesWithUser(String username) {
+        List<ServerGame> result = new ArrayList<>();
+        for (ServerGame serverGame : games) {
+            for (ServerPlayer player : serverGame.getServerPlayers()) {
+                if (player.getName().equals(username)) {
+                    result.add(serverGame);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 }
