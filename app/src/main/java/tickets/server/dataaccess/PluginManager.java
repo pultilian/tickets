@@ -21,11 +21,7 @@ public class PluginManager {
         allJars = new ArrayList<>();
         //Get a file object of the directory holding all persistence plugins
         File libs = new File("app/src/main/java/tickets/");
-        try {
-            System.out.print(libs.getCanonicalPath());
-        }catch (Exception e){
 
-        }
         //iterate through all of the files in the tickets/ directory
         //  for each .jar file, create a new URL for it, and add it
         //  to in allJars
